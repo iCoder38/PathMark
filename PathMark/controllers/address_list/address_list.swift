@@ -1,16 +1,16 @@
 //
-//  emergency_contacts.swift
-//  PathMarkDriver
+//  address_list.swift
+//  PathMark
 //
-//  Created by Dishant Rajput on 11/08/23.
+//  Created by Dishant Rajput on 17/08/23.
 //
 
 import UIKit
 import Alamofire
 
-class emergency_contacts: UIViewController {
+class address_list: UIViewController {
 
-    var arr_emergency_number:NSMutableArray! = []
+    var arr_address_list:NSMutableArray! = []
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -26,19 +26,13 @@ class emergency_contacts: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "EMERGENCY CONTACTS"
+            view_navigation_title.text = "ADDRESS LIST"
             view_navigation_title.textColor = .white
         }
     }
     
-    @IBOutlet weak var tbleView: UITableView! {
-        didSet {
-            
-            // tbleView.tableFooterView = UIView.init(frame: CGRect(origin: .zero, size: .zero))
-            tbleView.backgroundColor = .clear
-        }
-    }
     
+    @IBOutlet weak var tbleView:UITableView!
     @IBOutlet weak var btn_add:UIButton!
     
     override func viewDidLoad() {
@@ -47,16 +41,18 @@ class emergency_contacts: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.sideBarMenuClick()
+        
+        
+        
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
-        // login_refresh_token_wb()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        self.arr_emergency_number.removeAllObjects()
-        self.emergency_wb(str_show_loader: "yes")
+        self.arr_address_list.removeAllObjects()
+        self.address_list_wb(str_show_loader: "yes")
     }
     
     @objc func sideBarMenuClick() {
@@ -69,18 +65,13 @@ class emergency_contacts: UIViewController {
         }
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }
-
     @objc func add_contacts_click_method() {
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_contacts_id")
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id")
         self.navigationController?.pushViewController(push, animated: true)
     }
     
     //
-    @objc func emergency_wb(str_show_loader:String) {
+    @objc func address_list_wb(str_show_loader:String) {
 
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -89,7 +80,6 @@ class emergency_contacts: UIViewController {
             if (str_show_loader == "yes") {
                 ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
             }
-            
             
             let x : Int = person["userId"] as! Int
             let myString = String(x)
@@ -100,9 +90,9 @@ class emergency_contacts: UIViewController {
                 let headers: HTTPHeaders = [
                      "token":String(token_id_is),
                 ]
-                
+    
                 parameters = [
-                    "action"    : "emergencylist",
+                    "action"    : "addresslist",
                     "userId"     : String(myString),
                 ]
                 
@@ -127,7 +117,7 @@ class emergency_contacts: UIViewController {
                                 
                                 var ar : NSArray!
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
-                                self.arr_emergency_number.addObjects(from: ar as! [Any])
+                                self.arr_address_list.addObjects(from: ar as! [Any])
 
                                 let str_token = (JSON["AuthToken"] as! String)
                                 UserDefaults.standard.set("", forKey: str_save_last_api_token)
@@ -166,7 +156,6 @@ class emergency_contacts: UIViewController {
                 "email"     : (get_login_details["email"] as! String),
                 "password"  : (get_login_details["password"] as! String),
             ]
-            //        }
             
             print("parameters-------\(String(describing: parameters))")
             
@@ -188,11 +177,9 @@ class emergency_contacts: UIViewController {
                             let str_token = (JSON["AuthToken"] as! String)
                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
-                            
-                            
-                            self.emergency_wb(str_show_loader: "no")
-                            
-                            
+                                                        
+                            self.address_list_wb(str_show_loader: "no")
+ 
                         }
                         else {
                             ERProgressHud.sharedInstance.hide()
@@ -211,14 +198,15 @@ class emergency_contacts: UIViewController {
         }
         
     }
-
+    
+    
     // delete contact
-    @objc func delete_contact(emergency_id:String) {
+    @objc func delete_address(address_id:String) {
 
         var parameters:Dictionary<AnyHashable, Any>!
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            self.arr_emergency_number.removeAllObjects()
+            self.arr_address_list.removeAllObjects()
             
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "deleting...")
             
@@ -233,9 +221,9 @@ class emergency_contacts: UIViewController {
                 ]
                 
                 parameters = [
-                    "action"        : "emergencydelete",
+                    "action"        : "addressdelete",
                     "userId"        : String(myString),
-                    "emergencyId"   : String(emergency_id),
+                    "addressId"   : String(address_id),
                 ]
                 
                 print(headers)
@@ -257,11 +245,11 @@ class emergency_contacts: UIViewController {
                             
                             if strSuccess.lowercased() == "success" {
                                 
-                                let str_token = (JSON["AuthToken"] as! String)
+                                 let str_token = (JSON["AuthToken"] as! String)
                                 UserDefaults.standard.set("", forKey: str_save_last_api_token)
                                 UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                 
-                                self.emergency_wb(str_show_loader: "no")
+                                self.address_list_wb(str_show_loader: "no")
                             }
                             else {
                                 ERProgressHud.sharedInstance.hide()
@@ -280,37 +268,34 @@ class emergency_contacts: UIViewController {
             }
         }
     }
-    
-    
 }
 
-extension emergency_contacts: UITableViewDataSource , UITableViewDelegate {
-    
+
+//MARK:- TABLE VIEW -
+extension address_list: UITableViewDataSource , UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return self.arr_emergency_number.count
+        return self.arr_address_list.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:emergency_contacts_table_cell = tableView.dequeueReusableCell(withIdentifier: "emergency_contacts_table_cell2") as! emergency_contacts_table_cell
-            
+        let cell:address_list_table_cell = tableView.dequeueReusableCell(withIdentifier: "address_list_table_cell") as! address_list_table_cell
+        
+        cell.backgroundColor = .white
+        
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         
-        cell.backgroundColor = .clear
-         
-        let item = self.arr_emergency_number[indexPath.row] as? [String:Any]
-        // print(item as Any)
+        let item = self.arr_address_list[indexPath.row] as? [String:Any]
+        print(item as Any)
         
-        cell.lbl_name.text = (item!["Name"] as! String)
-        cell.lbl_phone.text = (item!["phone"] as! String)
-        cell.lbl_relation.text = "Relation : "+(item!["relation"] as! String)
+        cell.lbl_title.text = (item!["addressType"] as! String)
+        cell.lbl_sub_title.text = (item!["address"] as! String)
         
         cell.btn_setting.tag = indexPath.row
         cell.btn_setting.addTarget(self, action: #selector(setting_click_method), for: .touchUpInside)
@@ -320,25 +305,25 @@ extension emergency_contacts: UITableViewDataSource , UITableViewDelegate {
     
     @objc func setting_click_method(_ sender:UIButton) {
 
-        let item = self.arr_emergency_number[sender.tag] as? [String:Any]
+        let item = self.arr_address_list[sender.tag] as? [String:Any]
         
         let alertController = UIAlertController(title: "Settings", message: "", preferredStyle: .actionSheet)
         
-        let delete_contact = UIAlertAction(title: "Delete contact", style: .destructive) {
+        let delete_contact = UIAlertAction(title: "Delete address", style: .destructive) {
             UIAlertAction in
             NSLog("OK Pressed")
             
             
-            self.delete_contact(emergency_id: "\(item!["emergencyId"]!)" )
+             self.delete_address(address_id: "\(item!["addressId"]!)" )
         }
         
-        let Edit_contact = UIAlertAction(title: "Edit contact", style: .default) {
+        let Edit_contact = UIAlertAction(title: "Edit address", style: .default) {
             UIAlertAction in
             NSLog("OK Pressed")
 
-            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_contacts_id") as? add_contacts
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id") as? add_address
             
-            push!.dict_emergency = (item! as NSDictionary)
+            push!.dict_address = (item! as NSDictionary)
             
             self.navigationController?.pushViewController(push!, animated: true)
             
@@ -373,33 +358,33 @@ extension emergency_contacts: UITableViewDataSource , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView .deselectRow(at: indexPath, animated: true)
-        
-        
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        return 70
+        return UITableView.automaticDimension
     }
     
 }
 
-class emergency_contacts_table_cell: UITableViewCell {
+class address_list_table_cell: UITableViewCell {
     
-    @IBOutlet weak var img_profile:UIImageView! {
+    @IBOutlet weak var view_bg:UIView! {
         didSet {
-            img_profile.backgroundColor = .gray
-            img_profile.layer.cornerRadius = 30
-            img_profile.clipsToBounds = true
+            // shadow
+            view_bg.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            view_bg.layer.shadowOffset = CGSize(width: 0, height: 3)
+            view_bg.layer.shadowOpacity = 1.0
+            view_bg.layer.shadowRadius = 10.0
+            view_bg.layer.masksToBounds = false
+            view_bg.layer.cornerRadius = 12
+            view_bg.backgroundColor = .white
+            
         }
     }
     
-    @IBOutlet weak var lbl_name:UILabel!
-    @IBOutlet weak var lbl_phone:UILabel!
-    @IBOutlet weak var lbl_relation:UILabel!
+    @IBOutlet weak var lbl_title:UILabel!
+    @IBOutlet weak var lbl_sub_title:UILabel!
     
     @IBOutlet weak var btn_setting:UIButton!
-    
 }

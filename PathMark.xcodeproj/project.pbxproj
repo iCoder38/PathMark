@@ -32,6 +32,7 @@
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
 		B96B4B782A5BD13A0038B82F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B772A5BD13A0038B82F /* Utils.swift */; };
+		B9776C622A8E05F10084082F /* address_list.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9776C612A8E05F10084082F /* address_list.swift */; };
 		B97A19532A8CE7FD00D4DAD0 /* add_contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A19522A8CE7FD00D4DAD0 /* add_contacts.swift */; };
 		B97A19562A8CE81300D4DAD0 /* emergency_contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A19552A8CE81300D4DAD0 /* emergency_contacts.swift */; };
 		B97A19582A8CF4DD00D4DAD0 /* car-toy.gif in Resources */ = {isa = PBXBuildFile; fileRef = B97A19572A8CF4DD00D4DAD0 /* car-toy.gif */; };
@@ -120,6 +121,7 @@
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
 		B96B4B742A5BD0F40038B82F /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
 		B96B4B772A5BD13A0038B82F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		B9776C612A8E05F10084082F /* address_list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = address_list.swift; sourceTree = "<group>"; };
 		B97A19522A8CE7FD00D4DAD0 /* add_contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = add_contacts.swift; sourceTree = "<group>"; };
 		B97A19552A8CE81300D4DAD0 /* emergency_contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = emergency_contacts.swift; sourceTree = "<group>"; };
 		B97A19572A8CF4DD00D4DAD0 /* car-toy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "car-toy.gif"; sourceTree = "<group>"; };
@@ -299,10 +301,12 @@
 				B9695DF32A5BE71D00552578 /* registration */,
 				B9C73A332A5BEE47001F0B90 /* verify_phone_number */,
 				B9C73A362A5BFD25001F0B90 /* dashboard */,
+				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
 				B9038DFE2A5D399E0041A5B4 /* map_view */,
 				B9038E142A5D46490041A5B4 /* total_fare_distance_mpa_route */,
 				B97A19542A8CE80A00D4DAD0 /* emergency_contactss */,
 				B97A19512A8CE7E600D4DAD0 /* add_contactss */,
+				B9776C602A8E05BE0084082F /* address_list */,
 				B97A19592A8D086F00D4DAD0 /* add_address */,
 				B9AFE4E92A5BDB6B00C76CE4 /* font */,
 				B96B4B712A5BD0BA0038B82F /* get_started_now.swift */,
@@ -323,6 +327,14 @@
 				B96B4B772A5BD13A0038B82F /* Utils.swift */,
 			);
 			path = utils;
+			sourceTree = "<group>";
+		};
+		B9776C602A8E05BE0084082F /* address_list */ = {
+			isa = PBXGroup;
+			children = (
+				B9776C612A8E05F10084082F /* address_list.swift */,
+			);
+			path = address_list;
 			sourceTree = "<group>";
 		};
 		B97A19512A8CE7E600D4DAD0 /* add_contactss */ = {
@@ -411,7 +423,6 @@
 		B9C73A362A5BFD25001F0B90 /* dashboard */ = {
 			isa = PBXGroup;
 			children = (
-				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
 			);
 			path = dashboard;
 			sourceTree = "<group>";
@@ -785,6 +796,7 @@
 				B903CD932A58018000208E80 /* ViewController.swift in Sources */,
 				B96B4B752A5BD0F40038B82F /* login.swift in Sources */,
 				B9038E102A5D45FB0041A5B4 /* ActionSheetView.swift in Sources */,
+				B9776C622A8E05F10084082F /* address_list.swift in Sources */,
 				B9C73A352A5BEE67001F0B90 /* verify_phone_number.swift in Sources */,
 				B97A195B2A8D087900D4DAD0 /* add_address.swift in Sources */,
 				B9695DF52A5BE73000552578 /* sign_up.swift in Sources */,

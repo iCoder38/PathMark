@@ -13,6 +13,9 @@ import Alamofire
 
 class add_address: UIViewController , CLLocationManagerDelegate {
 
+    var dict_address:NSDictionary!
+    var str_address_id:String!
+    
     let locationManager = CLLocationManager()
     
     // MARK:- SAVE LOCATION STRING -
@@ -124,6 +127,24 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         self.btn_save.addTarget(self, action: #selector(save_as_click_method), for: .touchUpInside)
         self.iAmHereForLocationPermission()
+        
+        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        
+        self.btn_submit.addTarget(self, action: #selector(validate_before_submit), for: .touchUpInside)
+        
+        if (self.dict_address == nil) {
+            print("add contact")
+            self.view_navigation_title.text = "NEW ADDRESS"
+            
+        } else {
+            print("edit contact")
+            self.view_navigation_title.text = "EDIT ADDRESS"
+            
+            self.txt_house_number.text = (self.dict_address["address"] as! String)
+            self.txt_save_as.text = (self.dict_address["addressType"] as! String)
+            
+            self.str_address_id = "\(self.dict_address["addressId"]!)"
+        }
     }
     
     @objc func save_as_click_method() {
@@ -238,6 +259,14 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             self.locationManager.stopUpdatingLocation()
             
             self.lbl_current_address.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
+            
+            if (self.dict_address == nil) {
+                
+                print("add contact")
+                self.txt_house_number.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
+                
+            }
+            
 //
             // print(self.strSaveLatitude as Any)
             // print(self.strSaveLongitude as Any)
@@ -245,11 +274,28 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         }
     }
     
+    @objc func  validate_before_submit() {
+        
+        if (self.dict_address == nil) {
+            print("add contact")
+            self.add_address_WB(str_show_loader: "yes")
+            
+        } else {
+            print("edit contact")
+            self.view_navigation_title.text = "EDIT ADDRESS"
+            
+            self.edit_address_WB(str_show_loader: "yes")
+        }
+    }
     
-    @objc func add_address_WB() {
+    @objc func edit_address_WB(str_show_loader:String) {
         
         // self.show_loading_UI()
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "editing...")
+        }
+        
         
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -268,8 +314,9 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                 parameters = [
                     "action"        : "addressadd",
                     "userId"        : String(myString),
-                    "address"       : String(self.lbl_current_address.text!),
-                    "addressType"   : String(self.txt_enter_name.text!),
+                    "addressId"     : String(self.str_address_id),
+                    "address"       : String(self.txt_house_number.text!),
+                    "addressType"   : String(self.txt_save_as.text!),
                     "coordinate"    : String(self.strSaveLatitude)+","+String(self.strSaveLongitude),
                 ]
                 
@@ -299,12 +346,10 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                                 ERProgressHud.sharedInstance.hide()
                                 self.back_click_method()
                                 
+                            } else {
+                                self.login_refresh_token_wb()
                             }
-                            else {
-                                print("two")
-                                ERProgressHud.sharedInstance.hide()
-                                self.hide_loading_UI()
-                            }
+                            
                             
                         }
                         
@@ -318,6 +363,194 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                 }
             }
         }
+    }
+    
+    @objc func login_refresh_edit_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                               
+                            self.edit_address_WB(str_show_loader: "no")
+                           
+                        }
+                        else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    @objc func add_address_WB(str_show_loader:String) {
+        
+        // self.show_loading_UI()
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "adding...")
+        }
+        
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+
+                parameters = [
+                    "action"        : "addressadd",
+                    "userId"        : String(myString),
+                    "address"       : String(self.txt_house_number.text!),
+                    "addressType"   : String(self.txt_save_as.text!),
+                    "coordinate"    : String(self.strSaveLatitude)+","+String(self.strSaveLongitude),
+                ]
+                
+                print(headers)
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            // self.hide_loading_UI()
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                let str_token = (JSON["AuthToken"] as! String)
+                                UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                
+                                ERProgressHud.sharedInstance.hide()
+                                self.back_click_method()
+                                
+                            } else {
+                                self.login_refresh_token_wb()
+                            }
+                            
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        self.hide_loading_UI()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                               
+                            self.add_address_WB(str_show_loader: "no")
+                           
+                        }
+                        else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
     }
     
 }

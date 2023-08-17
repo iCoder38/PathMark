@@ -180,6 +180,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                         
+                        let indexPath = IndexPath.init(row: 0, section: 0)
+                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
+                                                 "password":cell.txtPassword.text!]
+                        
+                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                        //
+                        
                         self.hide_loading_UI()
                         
                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard

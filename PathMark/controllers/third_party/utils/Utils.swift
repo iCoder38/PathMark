@@ -50,6 +50,8 @@ let URL_HARILOSS_SUPPORT_GROUP  = "https://www.google.co.in"
 let str_save_login_user_data = "keyLoginFullData"
 let str_save_last_api_token = "key_last_api_token"
 
+let str_save_email_password = "key_save_email_password"
+
 // order food fees
 let delivery_fee = "2.5"
 let service_fee = "1.5"
