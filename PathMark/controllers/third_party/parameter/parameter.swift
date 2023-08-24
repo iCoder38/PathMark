@@ -30,6 +30,8 @@ struct payload_registration: Encodable {
     let password:String
     let role: String  //Member    Driver
     let INDNo:String
+    let device:String
+    let deviceToken:String
 }
 
 struct payload_country_list: Encodable {

@@ -10,6 +10,7 @@ import MapKit
 
 // MARK:- LOCATION -
 import CoreLocation
+import ZKCarousel
 
 class dashboard: UIViewController , CLLocationManagerDelegate {
 
@@ -44,11 +45,15 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         didSet {
             tbleView.delegate = self
             tbleView.dataSource = self
+            tbleView.reloadData()
+            
             tbleView.backgroundColor = .clear
         }
     }
     
+    @IBOutlet var carousel: ZKCarousel? = ZKCarousel()
     
+    var arr_banner = ["car_image_name","car_image_name"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +62,12 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.iAmHereForLocationPermission()
         
         self.sideBarMenuClick()
+         // setupCarousel()
     }
+    
+    var _lastContentOffset: CGPoint!
+    var panGesture : UIPanGestureRecognizer!
+    var strIndex:Int! = 0
 
     @objc func please_select_atleast_one_vehicle() {
         
@@ -186,6 +196,35 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         }
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+         _lastContentOffset = scrollView.contentOffset
+      }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+        // var str_count = "0"
+        
+        if _lastContentOffset.y < scrollView.contentOffset.y {
+              NSLog("Scrolled Down")
+            // str_count = "1"
+        }
+
+        else if _lastContentOffset.y > scrollView.contentOffset.y {
+            NSLog("Scrolled Up")
+            
+            // str_count = "1"
+        } else {
+ 
+            let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
+            print(pageNumber)
+
+            self.strIndex = Int(pageNumber)
+            self.tbleView.reloadData()
+        }
+       
+    }
+    
+    
 }
 
 
@@ -208,69 +247,39 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
  
-        let btn_car = UIButton()
-        btn_car.tag = 0
-        btn_car.frame = CGRect(x: 0, y: 0, width: cell.view_select_vehicle.frame.size.width/3, height: 100)
-        btn_car .setBackgroundImage(UIImage(named: "car_image_name"), for: .normal)
-        btn_car.setImage(UIImage(named: "car_image_name"), for: .normal)
-        btn_car.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
-        btn_car.backgroundColor = .systemPurple
-        btn_car.layer.cornerRadius = 14
-        btn_car.clipsToBounds = true
-        
-        btn_car.layer.masksToBounds = false
-        btn_car.layer.shadowColor = UIColor.black.cgColor
-        btn_car.layer.shadowOffset =  CGSize.zero
-        btn_car.layer.shadowOpacity = 0.5
-        btn_car.layer.shadowRadius = 2
-        btn_car.layer.cornerRadius = 12
-        cell.view_select_vehicle.addSubview(btn_car)
-        
-        let btn_bike = UIButton()
-        btn_bike.tag = 0
-        btn_bike.frame = CGRect(x: btn_car.frame.size.width+20, y: 0, width: cell.view_select_vehicle.frame.size.width/3, height: 100)
-        btn_bike .setBackgroundImage(UIImage(named: "bike_with_name"), for: .normal)
-        btn_bike.setImage(UIImage(named: "bike_with_name"), for: .normal)
-        btn_bike.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
-        btn_bike.backgroundColor = .systemPurple
-        btn_bike.layer.cornerRadius = 14
-        btn_bike.clipsToBounds = true
-        
-        btn_bike.layer.masksToBounds = false
-        btn_bike.layer.shadowColor = UIColor.black.cgColor
-        btn_bike.layer.shadowOffset =  CGSize.zero
-        btn_bike.layer.shadowOpacity = 0.5
-        btn_bike.layer.shadowRadius = 2
-        btn_bike.layer.cornerRadius = 12
-        cell.view_select_vehicle.addSubview(btn_bike)
-        
-        let btn_intercity = UIButton()
-        btn_intercity.tag = 0
-        btn_intercity.frame = CGRect(x: btn_car.frame.size.width+20+btn_bike.frame.size.width+20, y: 0, width: cell.view_select_vehicle.frame.size.width/3, height: 100)
-        btn_intercity .setBackgroundImage(UIImage(named: "intercity_with_name"), for: .normal)
-        btn_intercity.setImage(UIImage(named: "intercity_with_name"), for: .normal)
-        btn_intercity.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
-        btn_intercity.backgroundColor = .systemPurple
-        btn_intercity.layer.cornerRadius = 14
-        btn_intercity.clipsToBounds = true
-        
-        btn_intercity.layer.masksToBounds = false
-        btn_intercity.layer.shadowColor = UIColor.black.cgColor
-        btn_intercity.layer.shadowOffset =  CGSize.zero
-        btn_intercity.layer.shadowOpacity = 0.5
-        btn_intercity.layer.shadowRadius = 2
-        btn_intercity.layer.cornerRadius = 12
-        cell.view_select_vehicle.addSubview(btn_intercity)
-        
-        btn_car.addTarget(self, action: #selector(push_to_car_map_click_method), for: .touchUpInside)
-        
-        btn_bike.addTarget(self, action: #selector(push_to_bike_map_click_method), for: .touchUpInside)
-        btn_intercity.addTarget(self, action: #selector(push_to_intercity_map_click_method), for: .touchUpInside)
+        cell.btn_car.addTarget(self, action: #selector(push_to_car_map_click_method), for: .touchUpInside)
+        cell.btn_bike.addTarget(self, action: #selector(push_to_bike_map_click_method), for: .touchUpInside)
+        cell.btn_intercity.addTarget(self, action: #selector(push_to_intercity_map_click_method), for: .touchUpInside)
         
         cell.btn_book_a_ride_now.addTarget(self, action: #selector(please_select_atleast_one_vehicle), for: .touchUpInside)
         cell.btn_push_to_map.addTarget(self, action: #selector(please_select_atleast_one_vehicle), for: .touchUpInside)
         
+        cell.collectionView?.delegate = self
+        cell.collectionView?.dataSource = self
+        
+        cell.page_control.currentPage = self.strIndex
+        
+        cell.btn_next.tag = indexPath.row
+        cell.btn_next.addTarget(self, action: #selector(next_click_method), for: .touchUpInside)
+        cell.btn_previous.addTarget(self, action: #selector(previous_click_method), for: .touchUpInside)
+        
         return cell
+    }
+    
+    @objc func previous_click_method(_ scrollView: UIScrollView) {
+  
+    }
+    
+    @objc func next_click_method(_ scrollView: UIScrollView) {
+        print(scrollView)
+        print(scrollView.tag)
+        
+       
+        
+//        if scrollView.contentOffset.x < scrollView.bounds.width * CGFloat(1) {
+//            scrollView.contentOffset.x +=  scrollView.bounds.width
+//        }
+        
     }
    
     @objc func sign_up_click_method() {
@@ -308,14 +317,165 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 900
+        return 710
     }
     
 }
 
 
+//MARK:- COLLECTION VIEW -
+extension dashboard: UICollectionViewDelegate ,
+                     UICollectionViewDataSource ,
+                     UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return self.arr_banner.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "dashboard_collection_view_cell", for: indexPath as IndexPath) as! dashboard_collection_view_cell
+
+        cell.backgroundColor  = .clear
+        
+        let img_banner = UIImageView()
+        img_banner.frame = CGRect(x: 0, y: 0, width: cell.frame.size.width-10, height: 200)
+        img_banner.image = UIImage(named: self.arr_banner[indexPath.row] )
+        cell.addSubview(img_banner)
+        
+        return cell
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        var sizes: CGSize
+        let result = UIScreen.main.bounds.size
+        NSLog("%f",result.height)
+        sizes = CGSize(width: collectionView.frame.size.width-10, height: 200)
+        
+        return sizes
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout
+                        collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return 10
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    }
+    
+    
+    
+}
+
+class dashboard_collection_view_cell: UICollectionViewCell , UITextFieldDelegate {
+    
+    @IBOutlet weak var img_banner:UIImageView! {
+        didSet {
+            img_banner.layer.cornerRadius = 25
+            img_banner.clipsToBounds = true
+            img_banner.layer.borderWidth = 5
+            img_banner.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1).cgColor
+        }
+    }
+    @IBOutlet weak var img_purple:UIImageView!
+    
+    @IBOutlet weak var lblCarType:UILabel!
+    @IBOutlet weak var lblExtimatedTime:UILabel!
+    
+}
+
 class dashboard_table_cell: UITableViewCell {
 
+    @IBOutlet weak var btn_car:UIButton! {
+        didSet {
+            btn_car .setBackgroundImage(UIImage(named: "car_image_name"), for: .normal)
+            btn_car.setImage(UIImage(named: "car_image_name"), for: .normal)
+            btn_car.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
+            btn_car.backgroundColor = .systemPurple
+            btn_car.layer.cornerRadius = 14
+            btn_car.clipsToBounds = true
+            
+            btn_car.layer.masksToBounds = false
+            btn_car.layer.shadowColor = UIColor.black.cgColor
+            btn_car.layer.shadowOffset =  CGSize.zero
+            btn_car.layer.shadowOpacity = 0.5
+            btn_car.layer.shadowRadius = 2
+            btn_car.layer.cornerRadius = 12
+        }
+    }
+    @IBOutlet weak var btn_bike:UIButton! {
+        didSet {
+            btn_bike .setBackgroundImage(UIImage(named: "bike_with_name"), for: .normal)
+            btn_bike.setImage(UIImage(named: "bike_with_name"), for: .normal)
+            btn_bike.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
+            btn_bike.backgroundColor = .systemPurple
+            btn_bike.layer.cornerRadius = 14
+            btn_bike.clipsToBounds = true
+            
+            btn_bike.layer.masksToBounds = false
+            btn_bike.layer.shadowColor = UIColor.black.cgColor
+            btn_bike.layer.shadowOffset =  CGSize.zero
+            btn_bike.layer.shadowOpacity = 0.5
+            btn_bike.layer.shadowRadius = 2
+            btn_bike.layer.cornerRadius = 12
+        }
+    }
+    @IBOutlet weak var btn_intercity:UIButton! {
+        didSet {
+            btn_intercity .setBackgroundImage(UIImage(named: "intercity_with_name"), for: .normal)
+            btn_intercity.setImage(UIImage(named: "intercity_with_name"), for: .normal)
+            btn_intercity.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
+            btn_intercity.backgroundColor = .systemPurple
+            btn_intercity.layer.cornerRadius = 14
+            btn_intercity.clipsToBounds = true
+            
+            btn_intercity.layer.masksToBounds = false
+            btn_intercity.layer.shadowColor = UIColor.black.cgColor
+            btn_intercity.layer.shadowOffset =  CGSize.zero
+            btn_intercity.layer.shadowOpacity = 0.5
+            btn_intercity.layer.shadowRadius = 2
+            btn_intercity.layer.cornerRadius = 12
+        }
+    }
+    
+    @IBOutlet weak var btn_next:UIButton!
+    @IBOutlet weak var btn_previous:UIButton!
+    
+    @IBOutlet weak var page_control:UIPageControl! {
+           didSet {
+                page_control.currentPage = 0
+               page_control.backgroundColor = .clear
+           }
+       }
+    
+    @IBOutlet weak var collectionView:UICollectionView! {
+        didSet {
+            collectionView.isPagingEnabled = true
+            collectionView.backgroundColor = .clear
+        }
+    }
+    
     @IBOutlet weak var btn_push_to_map:UIButton!
     
     @IBOutlet weak var view_set_name:UIView! {

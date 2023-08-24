@@ -253,6 +253,15 @@ extension MenuControllerVC: UITableViewDataSource {
                     let navigationController = UINavigationController(rootViewController: destinationController!)
                     sw.setFront(navigationController, animated: true)
                     
+                }  else if self.arr_customer_title[indexPath.row] == "Help" {
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                    self.view.window?.rootViewController = sw
+                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "help_id")
+                    let navigationController = UINavigationController(rootViewController: destinationController!)
+                    sw.setFront(navigationController, animated: true)
+                    
                 }
                 
             }

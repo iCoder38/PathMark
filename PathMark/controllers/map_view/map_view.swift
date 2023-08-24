@@ -173,6 +173,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
     }
     
+    var counter = 2
+    var timer:Timer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -197,10 +200,22 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.searchLat = "0"
         self.searchLong = "0"
         
-        self.iAmHereForLocationPermission()
+        self.show_loading_UI()
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        
+    }
+    
+    @objc func updateCounter() {
+        
+        if (counter == 2) {
+            counter -= 1
+        } else if (counter == 1) {
+            counter -= 1
+            self.list_of_all_category_WB()
+        } else if (counter == 0) {
+            timer.invalidate()
+        }
 
-        // print(self.str_user_select_vehicle as Any)
-        self.list_of_all_category_WB()
     }
     
     @objc func current_location_click_method() {
@@ -299,8 +314,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         } else {
         
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
-//
-//
+
             push!.str_get_category_id = String(self.str_category_id)
             push!.str_from_location = String(self.lbl_location_from.text!)
             push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
@@ -310,7 +324,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
 
             push!.searched_place_location_lat = String(self.searchLat)
             push!.searched_place_location_long = String(self.searchLong)
-//
+
             self.navigationController?.pushViewController(push!, animated: true)
             
         }
@@ -367,93 +381,93 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     }*/
     
     @objc func list_of_all_category_WB() {
-        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
-            // let str:String = person["role"] as! String
-            print(token_id_is)
+        //        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+        // let str:String = person["role"] as! String
+        //            print(token_id_is)
+        
+        /*let headers: HTTPHeaders = [
+         "token":String(token_id_is),
+         // "Content-Type":"Application/json"
+         ]*/
+        
+        self.view.endEditing(true)
+        
+        
+        // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        // let params = main_token(body: get_encrpyt_token)
+        let params = payload_vehicle_list(action: "category",
+                                          TYPE: String(self.str_user_select_vehicle))
+        
+        print(params as Any)
+        
+        AF.request(application_base_url,
+                   method: .post,
+                   parameters: params,
+                   encoder: JSONParameterEncoder.default
+                   /*headers: headers*/).responseJSON {  response in
             
-            /*let headers: HTTPHeaders = [
-                "token":String(token_id_is),
-                // "Content-Type":"Application/json"
-            ]*/
+            debugPrint(params)
             
-            self.view.endEditing(true)
-            
-            self.show_loading_UI()
-            // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-            
-            // let params = main_token(body: get_encrpyt_token)
-            let params = payload_vehicle_list(action: "category",
-                                              TYPE: String(self.str_user_select_vehicle))
-            
-            print(params as Any)
-            
-            AF.request(application_base_url,
-                       method: .post,
-                       parameters: params,
-                       encoder: JSONParameterEncoder.default
-                       /*headers: headers*/).responseJSON {  response in
-                
-                debugPrint(params)
-                
-                switch(response.result) {
-                case .success(_):
-                    if let data = response.value {
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    //                        var dict: Dictionary<AnyHashable, Any>
+                    //                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                    
+                    if strSuccess.lowercased() == "success" {
                         
-                        let JSON = data as! NSDictionary
-                        print(JSON)
+                        self.ar = (JSON["data"] as! Array<Any>) as NSArray
                         
-                        var strSuccess : String!
-                        strSuccess = JSON["status"] as? String
-                        
-//                        var dict: Dictionary<AnyHashable, Any>
-//                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
-                        
-                        if strSuccess.lowercased() == "success" {
+                        for indexx in 0..<self.ar.count {
                             
-                            self.ar = (JSON["data"] as! Array<Any>) as NSArray
+                            let item = self.ar[indexx] as? [String:Any]
                             
-                            for indexx in 0..<self.ar.count {
-                                
-                                let item = self.ar[indexx] as? [String:Any]
-                                
-                                let custom_dict = ["id":"\(item!["id"]!)",
-                                                   "name":(item!["name"] as! String),
-                                                   "image":(item!["image"] as! String),
-                                                   "status":"no",
-                                                   "perMile":"\(item!["perMile"]!)",
-                                                   "TYPE":(item!["TYPE"] as! String)]
-                                
-                                self.arr_mut_list_of_category.add(custom_dict)
-                                
-                            }
+                            let custom_dict = ["id":"\(item!["id"]!)",
+                                               "name":(item!["name"] as! String),
+                                               "image":(item!["image"] as! String),
+                                               "status":"no",
+                                               "perMile":"\(item!["perMile"]!)",
+                                               "TYPE":(item!["TYPE"] as! String)]
                             
-                            // self.arr_mut_list_of_category.addObjects(from: ar as! [Any])
-                            
-                            self.collectionView.dataSource = self
-                            self.collectionView.delegate = self
-                            self.collectionView.reloadData()
-                            
-                            self.hide_loading_UI()
+                            self.arr_mut_list_of_category.add(custom_dict)
                             
                         }
-                        else {
-                            self.hide_loading_UI()
-                        }
+                        
+                        // self.arr_mut_list_of_category.addObjects(from: ar as! [Any])
+                        
+                        self.collectionView.dataSource = self
+                        self.collectionView.delegate = self
+                        self.collectionView.reloadData()
+                        
+                        self.hide_loading_UI()
                         
                     }
+                    else {
+                        self.hide_loading_UI()
+                    }
                     
-                case .failure(_):
-                    print("Error message:\(String(describing: response.error))")
-                    self.hide_loading_UI()
-                    self.please_check_your_internet_connection()
-                    
-                    break
                 }
                 
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
             }
-        } else {
-            print("TOKEN NOT SAVED.")
+            
         }
+        //        } else {
+        //            print("TOKEN NOT SAVED.")
+        //        }
     }
     
     func postAction() {

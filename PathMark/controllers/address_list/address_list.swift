@@ -37,15 +37,12 @@ class address_list: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tbleView.separatorColor = .lightGray
+        self.tbleView.separatorColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.sideBarMenuClick()
-        
-        
-        
-        self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
-        
+
+        self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)        
     }
     
     override func viewWillAppear(_ animated: Bool) {

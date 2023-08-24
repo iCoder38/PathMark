@@ -28,6 +28,11 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
+    @IBOutlet weak var btn_back:UIButton! {
+        didSet {
+            btn_back.tintColor = .white
+        }
+    }
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -54,6 +59,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
+        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.get_country_list_WB()
     }
     
@@ -232,7 +238,9 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                                           contactNumber: String(cell.txt_phone_number.text!),
                                           password: String(cell.txtPassword.text!),
                                           role: "Member",
-                                          INDNo: "")
+                                          INDNo: "",
+                                          device: "iOS",
+                                          deviceToken: "")
         
         print(params as Any)
         

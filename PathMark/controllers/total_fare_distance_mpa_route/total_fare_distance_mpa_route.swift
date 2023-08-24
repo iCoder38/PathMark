@@ -9,7 +9,28 @@ import UIKit
 import MapKit
 import Alamofire
 
-class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate {
+// MARK:- LOCATION -
+import CoreLocation
+
+class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
+    
+     
+    
+    let locationManager = CLLocationManager()
+    
+    // MARK:- SAVE LOCATION STRING -
+    var strSaveLatitude:String! = ""
+    var strSaveLongitude:String! = ""
+    var strSaveCountryName:String!
+    var strSaveLocalAddress:String!
+    var strSaveLocality:String!
+    var strSaveLocalAddressMini:String!
+    var strSaveStateName:String!
+    var strSaveZipcodeName:String!
+    
+    
+    var counter = 2
+    var timer:Timer!
     
     var myDeviceTokenIs:String!
     
@@ -36,6 +57,10 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     var str_fetch_duration:String!
     var str_fetch_distance:String!
     var str_fetch_fare_estimated:String!
+    
+    var str_total_distance:String! = ""
+    var str_total_duration:String! = ""
+    var str_total_rupees:String! = ""
     
     // ***************************************************************** // nav
     
@@ -83,22 +108,36 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        // keyboard
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
         self.btnConfirmBooking.addTarget(self, action: #selector(validation_before_confirm_booking), for: .touchUpInside)
         
+        self.show_loading_UI()
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+
+        // self.iAmHereForLocationPermission()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    @objc func updateCounter() {
         
-        /*print(self.str_get_category_id as Any)
-        print(self.my_location_lat as Any)
-        print(self.my_location_long as Any)
-        print(self.searched_place_location_lat as Any)
-        print(self.searched_place_location_long as Any)
-        print(self.str_from_location as Any)
-        print(self.str_to_location as Any)*/
-        
-        self.get_fare_WB()
-        
-        
+        if (counter == 2) {
+            counter -= 1
+        } else if (counter == 1) {
+            counter -= 1
+            self.get_fare_WB()
+        } else if (counter == 0) {
+            timer.invalidate()
+        }
+
     }
     
     
@@ -130,7 +169,14 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
         
+        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+         print(location)
+        
+        self.strSaveLatitude = "\(locValue.latitude)"
+        self.strSaveLongitude = "\(locValue.longitude)"
         
         self.tbleView.delegate = self
         self.tbleView.dataSource = self
@@ -295,45 +341,100 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     // MARK:- GET TOTAL DISTANCE FARE -
     @objc func confirm_booking_WB() {
         
-        // self.arr_cart_list_items.removeAllObjects()
-        
         self.view.endEditing(true)
 
-        /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_invitation_id") as? success_invitation
+        self.find_driver_WB()
+    }
+    
+    
+    @objc func find_driver_WB() {
         
-        let custom_dict = [
-                           "categoryId":String(self.str_get_category_id),
-                           "RequestPickupAddress":String(self.str_from_location),
-                           "RequestPickupLatLong":String(self.my_location_lat)+","+String(self.my_location_long),
-                           "RequestDropAddress":String(self.str_to_location),
-                           "RequestDropLatLong":String(self.searched_place_location_lat)+","+String(self.searched_place_location_long),
-                           "duration":String(self.str_fetch_duration),
-                           "distance":String(self.str_fetch_distance),
-                           "total":String(self.str_fetch_fare_estimated)
-        ]
+        self.show_loading_UI()
         
-        push!.dict_get_all_add_booking_data = custom_dict as NSDictionary
-        
-        self.navigationController?.pushViewController(push!, animated: true)*/
-        
-        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                var parameters:Dictionary<AnyHashable, Any>!
+                
+                parameters = [
+                    
+                    "action"            : "addbooking",
+                    "userId"            : String(myString),
+                    "categoryId"        : String(self.str_get_category_id),
+                    "RequestPickupAddress" : String(self.strSaveLongitude),
+                    "RequestPickupLatLong" : String(self.strSaveLongitude),
+                    "RequestDropAddress" : String(self.searched_place_location_lat),
+                    "RequestDropLatLong" : String(self.searched_place_location_long),
+                    
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                self.hide_loading_UI()
+                                
+                                /*var dict: Dictionary<AnyHashable, Any>
+                                dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                                
+                                self.hide_loading_UI()
+                                self.tbleView.separatorColor = .clear
+                                self.iAmHereForLocationPermission()
+                                
+                                self.str_total_distance = (dict["distance"] as! String)
+                                self.str_total_rupees = "\(dict["total"]!)"
+                                self.str_total_duration = (dict["duration"] as! String)*/
+                                
+                            }
+                            else {
+                                self.hide_loading_UI()
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        self.hide_loading_UI()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            }
+        }
     }
     
     // MARK:- GET TOTAL DISTANCE FARE -
     @objc func get_fare_WB() {
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
         
         if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
             
             let headers: HTTPHeaders = [
-                // "Authorization":String(token_id_is),
                 "token":String(token_id_is),
-                "Content-Type":"Application/json"
             ]
 
-            self.show_loading_UI()
-            
             var parameters:Dictionary<AnyHashable, Any>!
             
             parameters = [
@@ -358,13 +459,18 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                         var strSuccess : String!
                         strSuccess = JSON["status"] as? String
                         
-//                        var dict: Dictionary<AnyHashable, Any>
-//                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
-                        
                         if strSuccess.lowercased() == "success" {
                             
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            
+                            self.hide_loading_UI()
                             self.tbleView.separatorColor = .clear
                             self.iAmHereForLocationPermission()
+                            
+                            self.str_total_distance = (dict["distance"] as! String)
+                            self.str_total_rupees = "\(dict["total"]!)"
+                            self.str_total_duration = (dict["duration"] as! String)
                             
                         }
                         else {
@@ -404,9 +510,10 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         
-        //cell.lbl
+        cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
+        cell.lbl_duration.text = "Duration : "+String(self.str_total_duration)
         
-        // cell.btnSelectPaymentMethod.addTarget(self, action: #selector(payment_method_click_method), for: .touchUpInside)
+        cell.txt_field.delegate = self
         
         return cell
     }
@@ -422,6 +529,24 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
 }
  
 class total_fare_distance_mpa_route_table_cell: UITableViewCell {
+    
+    @IBOutlet weak var txt_field:UITextField! {
+        didSet {
+            txt_field.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
+            
+            txt_field.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            txt_field.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+            txt_field.layer.shadowOpacity = 1.0
+            txt_field.layer.shadowRadius = 15.0
+            txt_field.layer.masksToBounds = false
+            txt_field.backgroundColor = .white
+            txt_field.layer.cornerRadius = 8
+            txt_field.placeholder = "Promo Code"
+            txt_field.setLeftPaddingPoints(60)
+            // txt_field.clipsToBounds = true
+    
+        }
+    }
     
     @IBOutlet weak var mapView:MKMapView!
     
@@ -484,14 +609,10 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
     }
     
     @IBOutlet weak var lblTotalPayableAmount:UILabel!
-    
+     
     @IBOutlet weak var btnFareEstimate:UIButton!
     @IBOutlet weak var btnPromocode:UIButton!
-    @IBOutlet weak var btnSelectPaymentMethod:UIButton! {
-        didSet {
-            // btnSelectPaymentMethod.setTitle(" Payment method", for: <#T##UIControl.State#>)
-        }
-    }
+    @IBOutlet weak var btnSelectPaymentMethod:UIButton!
 
     @IBOutlet weak var lbl_payment_type:UILabel! {
         didSet {

@@ -871,6 +871,7 @@ PODS:
     - StripeCore (= 23.9.2)
   - SwiftGifOrigin (1.7.0)
   - SwiftyJSON (5.0.1)
+  - ZKCarousel (1.1.1)
 
 DEPENDENCIES:
   - Alamofire
@@ -889,6 +890,7 @@ DEPENDENCIES:
   - Stripe
   - SwiftGifOrigin
   - SwiftyJSON
+  - ZKCarousel
 
 SPEC REPOS:
   trunk:
@@ -930,6 +932,7 @@ SPEC REPOS:
     - StripeUICore
     - SwiftGifOrigin
     - SwiftyJSON
+    - ZKCarousel
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
@@ -970,7 +973,8 @@ SPEC CHECKSUMS:
   StripeUICore: 6c614a7d5da3a15b0a9bd898f494611677066e79
   SwiftGifOrigin: fbd6cf37afcfcf97a5c3db996ddc0492e5c5c145
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
+  ZKCarousel: e54940a77f4b635e650ea0361608db836a776feb
 
-PODFILE CHECKSUM: 53bc1cfa3133ea5ed3b2a8f16bfa47ea871e2663
+PODFILE CHECKSUM: d573a6fff3b49065ac4527ac1a5c2219b25c2208
 
 COCOAPODS: 1.12.1

@@ -49,4 +49,7 @@ pod 'OTPFieldView'
 #pod 'CryptoSwift'
 pod 'JWTDecode', '~> 3.1'
 
+pod 'ZKCarousel'
+
+
 end

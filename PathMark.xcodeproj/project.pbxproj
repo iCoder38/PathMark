@@ -28,6 +28,7 @@
 		B903CDA62A58018500208E80 /* PathMarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDA52A58018500208E80 /* PathMarkTests.swift */; };
 		B903CDB02A58018500208E80 /* PathMarkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDAF2A58018500208E80 /* PathMarkUITests.swift */; };
 		B903CDB22A58018500208E80 /* PathMarkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDB12A58018500208E80 /* PathMarkUITestsLaunchTests.swift */; };
+		B9457D212A97840A00C39F66 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B9457D202A97840A00C39F66 /* GoogleService-Info.plist */; };
 		B9695DF52A5BE73000552578 /* sign_up.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9695DF42A5BE73000552578 /* sign_up.swift */; };
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
@@ -39,6 +40,9 @@
 		B97A195B2A8D087900D4DAD0 /* add_address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A195A2A8D087900D4DAD0 /* add_address.swift */; };
 		B982B2512A8C9F9C0091DE1B /* my_custom_loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982B2502A8C9F9C0091DE1B /* my_custom_loader.swift */; };
 		B982B2542A8CA5240091DE1B /* loading_gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = B982B2532A8CA5240091DE1B /* loading_gif.gif */; };
+		B99223122A8E461B005AA868 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223112A8E461B005AA868 /* help.swift */; };
+		B99223162A8E4991005AA868 /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223142A8E4991005AA868 /* CarouselCell.swift */; };
+		B99223172A8E4991005AA868 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223152A8E4991005AA868 /* CarouselView.swift */; };
 		B9AFE5002A5BDB9100C76CE4 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4ED2A5BDB9000C76CE4 /* Poppins-Light.ttf */; };
 		B9AFE5012A5BDB9100C76CE4 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4EE2A5BDB9000C76CE4 /* Poppins-SemiBold.ttf */; };
 		B9AFE5022A5BDB9100C76CE4 /* Poppins-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4EF2A5BDB9000C76CE4 /* Poppins-ExtraBoldItalic.ttf */; };
@@ -117,6 +121,7 @@
 		B903CDAB2A58018500208E80 /* PathMarkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PathMarkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B903CDAF2A58018500208E80 /* PathMarkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMarkUITests.swift; sourceTree = "<group>"; };
 		B903CDB12A58018500208E80 /* PathMarkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMarkUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B9457D202A97840A00C39F66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B9695DF42A5BE73000552578 /* sign_up.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sign_up.swift; sourceTree = "<group>"; };
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
 		B96B4B742A5BD0F40038B82F /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
@@ -128,6 +133,9 @@
 		B97A195A2A8D087900D4DAD0 /* add_address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = add_address.swift; sourceTree = "<group>"; };
 		B982B2502A8C9F9C0091DE1B /* my_custom_loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_custom_loader.swift; sourceTree = "<group>"; };
 		B982B2532A8CA5240091DE1B /* loading_gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_gif.gif; sourceTree = "<group>"; };
+		B99223112A8E461B005AA868 /* help.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = help.swift; sourceTree = "<group>"; };
+		B99223142A8E4991005AA868 /* CarouselCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
+		B99223152A8E4991005AA868 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		B9AFE4ED2A5BDB9000C76CE4 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		B9AFE4EE2A5BDB9000C76CE4 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		B9AFE4EF2A5BDB9000C76CE4 /* Poppins-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
@@ -263,6 +271,7 @@
 				B903CD972A58018400208E80 /* Assets.xcassets */,
 				B903CD992A58018400208E80 /* LaunchScreen.storyboard */,
 				B903CD9C2A58018400208E80 /* Info.plist */,
+				B9457D202A97840A00C39F66 /* GoogleService-Info.plist */,
 			);
 			path = PathMark;
 			sourceTree = "<group>";
@@ -296,12 +305,11 @@
 			isa = PBXGroup;
 			children = (
 				B9E13D462A5C46A20068774A /* third_party */,
+				B99223102A8E4611005AA868 /* help */,
 				B96B4B732A5BD0C50038B82F /* login */,
-				B96B4B742A5BD0F40038B82F /* login.swift */,
 				B9695DF32A5BE71D00552578 /* registration */,
 				B9C73A332A5BEE47001F0B90 /* verify_phone_number */,
 				B9C73A362A5BFD25001F0B90 /* dashboard */,
-				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
 				B9038DFE2A5D399E0041A5B4 /* map_view */,
 				B9038E142A5D46490041A5B4 /* total_fare_distance_mpa_route */,
 				B97A19542A8CE80A00D4DAD0 /* emergency_contactss */,
@@ -317,6 +325,7 @@
 		B96B4B732A5BD0C50038B82F /* login */ = {
 			isa = PBXGroup;
 			children = (
+				B96B4B742A5BD0F40038B82F /* login.swift */,
 			);
 			path = login;
 			sourceTree = "<group>";
@@ -378,6 +387,23 @@
 			path = gif;
 			sourceTree = "<group>";
 		};
+		B99223102A8E4611005AA868 /* help */ = {
+			isa = PBXGroup;
+			children = (
+				B99223112A8E461B005AA868 /* help.swift */,
+			);
+			path = help;
+			sourceTree = "<group>";
+		};
+		B99223132A8E4989005AA868 /* carousel */ = {
+			isa = PBXGroup;
+			children = (
+				B99223142A8E4991005AA868 /* CarouselCell.swift */,
+				B99223152A8E4991005AA868 /* CarouselView.swift */,
+			);
+			path = carousel;
+			sourceTree = "<group>";
+		};
 		B9AFE4E92A5BDB6B00C76CE4 /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -423,6 +449,7 @@
 		B9C73A362A5BFD25001F0B90 /* dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
 			);
 			path = dashboard;
 			sourceTree = "<group>";
@@ -430,6 +457,7 @@
 		B9E13D462A5C46A20068774A /* third_party */ = {
 			isa = PBXGroup;
 			children = (
+				B99223132A8E4989005AA868 /* carousel */,
 				B982B2522A8CA5180091DE1B /* gif */,
 				B982B24F2A8C9F6E0091DE1B /* my_custom_alert */,
 				B96B4B762A5BD12E0038B82F /* utils */,
@@ -609,6 +637,7 @@
 			files = (
 				B9AFE50E2A5BDB9100C76CE4 /* Poppins-Thin.ttf in Resources */,
 				B9AFE5072A5BDB9100C76CE4 /* Poppins-ExtraLightItalic.ttf in Resources */,
+				B9457D212A97840A00C39F66 /* GoogleService-Info.plist in Resources */,
 				B9AFE50C2A5BDB9100C76CE4 /* Poppins-ExtraLight.ttf in Resources */,
 				B9AFE5002A5BDB9100C76CE4 /* Poppins-Light.ttf in Resources */,
 				B9AFE5082A5BDB9100C76CE4 /* Poppins-Medium.ttf in Resources */,
@@ -801,8 +830,11 @@
 				B97A195B2A8D087900D4DAD0 /* add_address.swift in Sources */,
 				B9695DF52A5BE73000552578 /* sign_up.swift in Sources */,
 				B9038E0D2A5D45FB0041A5B4 /* Color.swift in Sources */,
+				B99223122A8E461B005AA868 /* help.swift in Sources */,
 				B9038E0F2A5D45FB0041A5B4 /* LeftPaddingTextField.swift in Sources */,
+				B99223162A8E4991005AA868 /* CarouselCell.swift in Sources */,
 				B9038E132A5D45FB0041A5B4 /* NewYorkAlertController.swift in Sources */,
+				B99223172A8E4991005AA868 /* CarouselView.swift in Sources */,
 				B9038E122A5D45FB0041A5B4 /* NewYorkButton.swift in Sources */,
 				B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */,
 				B9038E0E2A5D45FB0041A5B4 /* UIStackView+Utility.swift in Sources */,
