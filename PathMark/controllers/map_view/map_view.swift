@@ -16,6 +16,13 @@ import CoreLocation
 import CryptoKit
 import JWTDecode
 
+struct Location {
+
+    let title: String
+    let latitude: Double
+    let longitude: Double
+}
+
 class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate {
     
     var str_user_select_vehicle:String!
@@ -51,6 +58,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var str_category_id:String! = "0"
     
     var ar : NSArray!
+    var arr_list_of_all_Drivers : NSArray!
+    
+    var arr_all_locations_pin:NSMutableArray! = []
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -60,7 +70,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Create an account"
+            view_navigation_title.text = "Search"
             view_navigation_title.textColor = .white
         }
     }
@@ -176,6 +186,13 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var counter = 2
     var timer:Timer!
     
+    // dummy places
+    let locations = [
+        ["title": "New York, NY",    "latitude": 40.713054, "longitude": -74.007228],
+        ["title": "Los Angeles, CA", "latitude": 34.052238, "longitude": -118.243344],
+        ["title": "Chicago, IL",     "latitude": 41.883229, "longitude": -87.632398]
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -187,12 +204,14 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.btnRideNow.setTitle("Ride now", for: .normal)
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
         
-        self.current_location_click_method()
+         self.current_location_click_method()
         
         // apple maps
         self.mapView.delegate = self
         self.searchCompleter.delegate = self
         self.searchResultsTableView.isHidden = true
+        
+        self.annotationsOnMap()
         
         self.stateAndCountry = "0"
         self.fullAddress = "0"
@@ -204,6 +223,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
     }
+    
+    
     
     @objc func updateCounter() {
         
@@ -250,58 +271,130 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
     }
     
-    // MARK:- GET CUSTOMER LOCATION -
-    /*func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! PDBagPurchaseTableCell
+    /// **************************************************************
+    /// ************* FIND DRIVERS NEAR MY LOCATION ******************
+    /// **************************************************************
+    @objc func find_driver_WB() {
         
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-        location.fetchCityAndCountry { city, country, zipcode,localAddress,localAddressMini,locality, error in
-            guard let city = city, let country = country,let zipcode = zipcode,let localAddress = localAddress,let localAddressMini = localAddressMini,let locality = locality, error == nil else { return }
+        self.show_loading_UI()
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
             
-            self.strSaveCountryName     = country
-            self.strSaveStateName       = city
-            self.strSaveZipcodeName     = zipcode
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
             
-            self.strSaveLocalAddress     = localAddress
-            self.strSaveLocality         = locality
-            self.strSaveLocalAddressMini = localAddressMini
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                var parameters:Dictionary<AnyHashable, Any>!
+                
+                parameters = [
+                    
+                    "action"    : "finddriver",
+                    "userId"    : String(myString),
+                    "latitude"  : String(self.strSaveLatitude),
+                    "longitude" : String(self.strSaveLongitude),
+                   
+                    
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
+                            
+                            let JSON = data as! NSDictionary
+                            print(JSON)
+                            
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
+                            
+                            if strSuccess.lowercased() == "success" {
+                                
+                                
+                                
+                                let str_token = (JSON["AuthToken"] as! String)
+                                UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                                
+                                self.arr_list_of_all_Drivers = (JSON["data"] as! Array<Any>) as NSArray
+                                
+                                for indexx in 0..<self.arr_list_of_all_Drivers.count {
+                                    
+                                    let item = self.arr_list_of_all_Drivers[indexx] as? [String:Any]
+                                    
+                                    let my_current_location = ["title":(item!["fullName"] as! String),
+                                                               "id":"\(item!["id"]!)",
+                                                               "distance":"\(item!["distance"]!)",
+                                                               "fullName":(item!["fullName"] as! String),
+                                                                "latitude":(item!["latitude"] as! String),
+                                                                "longitude":(item!["longitude"] as! String)
+                                                                // "latitude":"19.0760",
+                                                                // "longitude":"72.8777"
+                                    
+                                    ]
+                                    
+                                    self.arr_all_locations_pin.add(my_current_location)
+                                    
+                                }
+                                
+                                print(self.arr_all_locations_pin as Any)
+                                print(self.arr_all_locations_pin.count as Any)
+                                
+                                self.annotationsOnMap()
+                                
+                            }
+                            else {
+                                self.hide_loading_UI()
+                            }
+                            
+                        }
+                        
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        self.hide_loading_UI()
+                        self.please_check_your_internet_connection()
+                        
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
+    /// **************************************************************
+    /// ************* ALL ANNOTATIONS ON MAP *********************************
+    /// **************************************************************
+    func annotationsOnMap() {
+        
+        for location in 0..<arr_all_locations_pin.count {
+            let item = self.arr_all_locations_pin[location] as? [String:Any]
             
+            let annotation = MKPointAnnotation()
+            annotation.title = (item!["fullName"] as! String)
+            annotation.coordinate = CLLocationCoordinate2D(latitude: Double(item!["latitude"] as! String)! ,
+                                                           longitude: Double(item!["longitude"] as! String)!)
             
-            
-            let doubleLat = locValue.latitude
-            let doubleStringLat = String(doubleLat)
-            
-            let doubleLong = locValue.longitude
-            let doubleStringLong = String(doubleLong)
-            
-            self.strSaveLatitude = String(doubleStringLat)
-            self.strSaveLongitude = String(doubleStringLong)
-            
-            print("local address ==> "+localAddress as Any) // south west delhi
-            print("local address mini ==> "+localAddressMini as Any) // new delhi
-            print("locality ==> "+locality as Any) // sector 10 dwarka
-            
-            print(self.strSaveCountryName as Any) // india
-            print(self.strSaveStateName as Any) // new delhi
-            print(self.strSaveZipcodeName as Any) // 110075
-            
-            /*
-             self.strSaveCountryName     = country
-             self.strSaveStateName       = city
-             */
-            
-            self.txt_location_from.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
-            
-            //MARK:- STOP LOCATION -
-            self.locationManager.stopUpdatingLocation()
-
+            self.mapView.addAnnotation(annotation)
         }
         
-    }*/
+        
+        
+        self.hide_loading_UI()
+        
+    }
     
+    /// **************************************************************
+    /// ************* RIDE NOW CLICK *********************************
+    /// **************************************************************
     @objc func ride_now_click_method() {
         
         if self.str_category_id == "0" {
@@ -332,53 +425,10 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
     }
     
-    /*@objc func convert_country_list_params_into_encode() {
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-        
-        let params = payload_vehicle_list(action: "category",
-                                          TYPE: String(str_user_select_vehicle))
-        
-        
-        let secret = sha_token_api_key
-        let privateKey = SymmetricKey(data: Data(secret.utf8))
-
-        let headerJSONData = try! JSONEncoder().encode(Header())
-        let headerBase64String = headerJSONData.urlSafeBase64EncodedString()
-
-        let payloadJSONData = try! JSONEncoder().encode(params)
-        let payloadBase64String = payloadJSONData.urlSafeBase64EncodedString()
-
-        let toSign = Data((headerBase64String + "." + payloadBase64String).utf8)
-
-        let signature = HMAC<SHA512>.authenticationCode(for: toSign, using: privateKey)
-        let signatureBase64String = Data(signature).urlSafeBase64EncodedString()
-        // print(signatureBase64String)
-        
-        let token = [headerBase64String, payloadBase64String, signatureBase64String].joined(separator: ".")
-        print(token)
-        // ERProgressHud.sharedInstance.hide()
-        
-        // send this token to server
-        
-        
-        // decode
-        do {
-            let jwt = try JWTDecode.decode(jwt: token)
-            print(jwt)
-
-            print(type(of: jwt))
-
-
-            print(jwt["body"])
-            } catch {
-                print("The file could not be loaded")
-         }
-        
-        // send this token to server
-        list_of_all_category_WB(get_encrpyt_token: token)
-        
-        
-    }*/
+    
+    /// **************************************************************
+    /// ************* API - LIST OF ALL CAR CATEGORY *****************
+    /// **************************************************************
     
     @objc func list_of_all_category_WB() {
         //        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
@@ -578,20 +628,47 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             self.lbl_location_from.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
             
             
-            print(manager.location?.coordinate.latitude as Any)
+            /*print(manager.location?.coordinate.latitude as Any)
             print(manager.location?.coordinate.longitude as Any)
             
-            let sourceLocation = CLLocationCoordinate2D(latitude: Double((manager.location?.coordinate.latitude)!), longitude: Double((manager.location?.coordinate.longitude)!))
+            let sourceLocation = CLLocationCoordinate2D(latitude: Double((manager.location?.coordinate.latitude)!), longitude: Double((manager.location?.coordinate.longitude)!))*/
             
-            let sourcePin = customPin(pinTitle: "You", pinSubTitle: "", location: sourceLocation)
+            
+            
+            /*
+             AVGRating = 0;
+             address = "";
+             contactNumber = 8287632345;
+             distance = 0;
+             fullName = iDriver5;
+             id = 13;
+             latitude = "28.587238814653944";
+             longitude = "77.06062328401764";
+             "profile_picture" = "";
+             */
+            var my_current_location = ["title":"You are here",
+                                       "id":"",
+                                       "distance":"",
+                                       "fullName":"",
+                                       "latitude":String(self.strSaveLatitude),
+                                       "longitude":String(self.strSaveLongitude)]
+            
+            self.arr_all_locations_pin.add(my_current_location)
+            // print(self.arr_all_locations_pin)
+            
+            
+            /*let sourcePin = customPin(pinTitle: "You", pinSubTitle: "", location: sourceLocation)
             
             self.mapView.removeAnnotations(self.mapView.annotations)
             
-            self.mapView.addAnnotation(sourcePin)
+            self.mapView.addAnnotation(sourcePin)*/
             
             //MARK:- STOP LOCATION -
             self.locationManager.stopUpdatingLocation()
 
+            self.find_driver_WB()
+
+            
         }
         
     }

@@ -441,6 +441,36 @@
                   endingLineNumber = "390"
                   offsetFromSymbolStart = "536">
                </Location>
+               <Location
+                  uuid = "F4C5A5C2-B49A-42E9-A43A-19F0576E555B - 3711e3bc9ebf68a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.total_fare_distance_mpa_route.find_driver_WB() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Downloads/PathMark/PathMark/controllers/total_fare_distance_mpa_route/total_fare_distance_mpa_route.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "390"
+                  endingLineNumber = "390"
+                  offsetFromSymbolStart = "636">
+               </Location>
+               <Location
+                  uuid = "F4C5A5C2-B49A-42E9-A43A-19F0576E555B - 3711e3bc9ebf68a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.total_fare_distance_mpa_route.find_driver_WB() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Downloads/PathMark/PathMark/controllers/total_fare_distance_mpa_route/total_fare_distance_mpa_route.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "390"
+                  endingLineNumber = "390"
+                  offsetFromSymbolStart = "556">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

@@ -370,7 +370,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "action"            : "addbooking",
                     "userId"            : String(myString),
                     "categoryId"        : String(self.str_get_category_id),
-                    "RequestPickupAddress" : String(self.strSaveLongitude),
+                    "RequestPickupAddress" : String(self.strSaveLatitude),
                     "RequestPickupLatLong" : String(self.strSaveLongitude),
                     "RequestDropAddress" : String(self.searched_place_location_lat),
                     "RequestDropLatLong" : String(self.searched_place_location_long),
@@ -395,6 +395,10 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                             if strSuccess.lowercased() == "success" {
                                 
                                 self.hide_loading_UI()
+                                
+                                let str_token = (JSON["AuthToken"] as! String)
+                                UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                                UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                 
                                 /*var dict: Dictionary<AnyHashable, Any>
                                 dict = JSON["data"] as! Dictionary<AnyHashable, Any>
