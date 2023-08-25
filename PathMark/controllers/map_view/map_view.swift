@@ -32,8 +32,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     let locationManager = CLLocationManager()
     
     // MARK:- SAVE LOCATION STRING -
-    var strSaveLatitude:String!
-    var strSaveLongitude:String!
+    var strSaveLatitude:String! = "0.0"
+    var strSaveLongitude:String! = "0.0"
     var strSaveCountryName:String!
     var strSaveLocalAddress:String!
     var strSaveLocality:String!
@@ -186,12 +186,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var counter = 2
     var timer:Timer!
     
-    // dummy places
-    let locations = [
-        ["title": "New York, NY",    "latitude": 40.713054, "longitude": -74.007228],
-        ["title": "Los Angeles, CA", "latitude": 34.052238, "longitude": -118.243344],
-        ["title": "Chicago, IL",     "latitude": 41.883229, "longitude": -87.632398]
-    ]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -335,10 +330,10 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                                                                "id":"\(item!["id"]!)",
                                                                "distance":"\(item!["distance"]!)",
                                                                "fullName":(item!["fullName"] as! String),
-                                                                "latitude":(item!["latitude"] as! String),
-                                                                "longitude":(item!["longitude"] as! String)
-                                                                // "latitude":"19.0760",
-                                                                // "longitude":"72.8777"
+                                                                // "latitude":(item!["latitude"] as! String),
+                                                                // "longitude":(item!["longitude"] as! String)
+                                                                 "latitude":"28.4595",
+                                                                 "longitude":"77.0266"
                                     
                                     ]
                                     
@@ -386,6 +381,14 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             self.mapView.addAnnotation(annotation)
         }
         
+        
+        let my_lat = String(self.strSaveLatitude)
+        let my_long = String(self.strSaveLongitude)
+        
+        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: Double(my_lat)! ,
+                                                                       longitude: Double(my_long)!)
+                                                                       , span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+        self.mapView.setRegion(region, animated: true)
         
         
         self.hide_loading_UI()
@@ -646,7 +649,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
              longitude = "77.06062328401764";
              "profile_picture" = "";
              */
-            var my_current_location = ["title":"You are here",
+            let my_current_location = ["title":"You are here",
                                        "id":"",
                                        "distance":"",
                                        "fullName":"",
@@ -680,7 +683,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
 
         if annotationView == nil {
-            annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView!.canShowCallout = true
             // annotationView?.removeFromSuperview()
         } else {
@@ -886,6 +889,10 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         if self.mapView.annotations.isEmpty != true {
             self.mapView.removeAnnotation(self.mapView.annotations.last!)
         }
+        
+        
+        // here all prevoius annotations removed before insert new
+        self.mapView.removeAnnotations(self.mapView.annotations)
         
         
         

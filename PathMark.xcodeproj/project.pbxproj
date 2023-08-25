@@ -123,6 +123,7 @@
 		B903CDB12A58018500208E80 /* PathMarkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMarkUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B9457D202A97840A00C39F66 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B9695DF42A5BE73000552578 /* sign_up.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sign_up.swift; sourceTree = "<group>"; };
+		B96B0F142A98844400835208 /* PathMark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PathMark.entitlements; sourceTree = "<group>"; };
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
 		B96B4B742A5BD0F40038B82F /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
 		B96B4B772A5BD13A0038B82F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -263,6 +264,7 @@
 		B903CD8D2A58018000208E80 /* PathMark */ = {
 			isa = PBXGroup;
 			children = (
+				B96B0F142A98844400835208 /* PathMark.entitlements */,
 				B96B4B702A5BD0AC0038B82F /* controllers */,
 				B903CD8E2A58018000208E80 /* AppDelegate.swift */,
 				B903CD902A58018000208E80 /* SceneDelegate.swift */,
@@ -1030,12 +1032,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PathMark/PathMark.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = NHVZESNL9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PathMark;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location. ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "PathMark would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1067,12 +1073,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = PathMark/PathMark.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = NHVZESNL9B;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PathMark;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location. ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "PathMark would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

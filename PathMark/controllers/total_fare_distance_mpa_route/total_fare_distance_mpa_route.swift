@@ -343,13 +343,15 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
         self.view.endEditing(true)
 
-        self.find_driver_WB()
+        self.find_driver_WB(str_show_loader: "yes")
     }
     
     
-    @objc func find_driver_WB() {
-        
-        self.show_loading_UI()
+    @objc func find_driver_WB(str_show_loader:String) {
+
+        if (str_show_loader == "yes") {
+            self.show_loading_UI()
+        }
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -365,15 +367,26 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 
                 var parameters:Dictionary<AnyHashable, Any>!
                 
+                
+                let request_lat = String(self.strSaveLatitude)
+                let request_long = String(self.strSaveLongitude)
+                
+                let drop_lat = String(self.searched_place_location_lat)
+                let drop_long = String(self.searched_place_location_long)
+
                 parameters = [
                     
                     "action"            : "addbooking",
                     "userId"            : String(myString),
                     "categoryId"        : String(self.str_get_category_id),
-                    "RequestPickupAddress" : String(self.strSaveLatitude),
-                    "RequestPickupLatLong" : String(self.strSaveLongitude),
-                    "RequestDropAddress" : String(self.searched_place_location_lat),
-                    "RequestDropLatLong" : String(self.searched_place_location_long),
+                    "RequestPickupAddress" : String(self.str_from_location),
+                    "RequestPickupLatLong" : String(request_lat)+","+String(request_long),
+                    "RequestDropAddress" : String(self.str_to_location),
+                    "RequestDropLatLong" : String(drop_lat)+","+String(drop_long),
+                    
+                    "duration" : String(self.str_total_duration),
+                    "distance" : String(self.str_total_distance),
+                    "estimateAmount": String(self.str_total_rupees)
                     
                 ]
                 
@@ -391,6 +404,9 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                             
                             var strSuccess : String!
                             strSuccess = JSON["status"] as? String
+                            
+                            var message : String!
+                            message = (JSON["msg"] as? String)
                             
                             if strSuccess.lowercased() == "success" {
                                 
@@ -411,9 +427,18 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 self.str_total_rupees = "\(dict["total"]!)"
                                 self.str_total_duration = (dict["duration"] as! String)*/
                                 
+                            } else if message == String(not_authorize_api) {
+                                self.login_refresh_token_wb()
+                                
                             }
                             else {
                                 self.hide_loading_UI()
+                                
+                                let alert = NewYorkAlertController(title: String("Alert"), message: String(message), style: .alert)
+                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                alert.addButtons([cancel])
+                                self.present(alert, animated: true)
+                                
                             }
                             
                         }
@@ -429,6 +454,67 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             }
         }
     }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.find_driver_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     
     // MARK:- GET TOTAL DISTANCE FARE -
     @objc func get_fare_WB() {

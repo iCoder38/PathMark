@@ -26,11 +26,9 @@
 			</array>
 		</dict>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>PathMark would like to access your location for Customer&apos;s current location. </string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>PathMark would like to access your location for Customer&apos;s current location.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>PathMark would like to access your location for Customer&apos;s current location.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>
