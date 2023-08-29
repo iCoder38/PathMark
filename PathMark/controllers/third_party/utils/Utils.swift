@@ -356,7 +356,7 @@ extension UIViewController {
     
     
     // For check Internet Connection
-    class open func IsInternetAvailable () -> Bool {
+    class public func IsInternetAvailable () -> Bool {
         
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))

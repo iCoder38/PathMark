@@ -40,7 +40,7 @@ class MenuControllerVC: UIViewController {
     @IBOutlet weak var imgSidebarMenuImage:UIImageView! {
         didSet {
             imgSidebarMenuImage.backgroundColor = .clear
-            imgSidebarMenuImage.layer.cornerRadius = 35
+            imgSidebarMenuImage.layer.cornerRadius = 14
             imgSidebarMenuImage.clipsToBounds = true
         }
     }
@@ -66,8 +66,8 @@ class MenuControllerVC: UIViewController {
     
     var arr_customer_image = ["home",
                               "home",
-                              "edit2",
-                              "edit2",
+                              "booking",
+                              "emergency_contacts",
                               "trip",
                               "lock_24",
                               "help",
@@ -128,15 +128,17 @@ class MenuControllerVC: UIViewController {
             
              if person["role"] as! String == "Member" {
                 
-                self.lblUserName.text = (person["fullName"] as! String)
-                 self.lblAddress.text = (person["address"] as! String)
+                 self.lblUserName.text = (person["fullName"] as! String)
+                 // self.lblAddress.text = (person["address"] as! String)
+                 
+                 self.imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "logo"))
                  
              } else {
                 
                 self.lblUserName.text = (person["fullName"] as! String)
                 self.lblPhoneNumber.text = (person["contactNumber"] as! String)
                 
-                // imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "logo"))
+                 
             }
              
         }
@@ -262,98 +264,261 @@ extension MenuControllerVC: UITableViewDataSource {
                     let navigationController = UINavigationController(rootViewController: destinationController!)
                     sw.setFront(navigationController, animated: true)
                     
+                } else if self.arr_customer_title [indexPath.row] == "Bookings" {
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                    self.view.window?.rootViewController = sw
+                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "ride_history_id")
+                    let navigationController = UINavigationController(rootViewController: destinationController!)
+                    sw.setFront(navigationController, animated: true)
+                    
+                } else if self.arr_customer_title [indexPath.row] == "Logout" {
+                    
+                    self.validation_before_logout()
                 }
-                
             }
-            
         }
     }
     
     
-    @objc func logoutWB() {
-        self.view.endEditing(true)
+    @objc func validation_before_logout() {
+        self.logoutWB(str_show_loader: "yes")
+    }
+    
+    @objc func logoutWB(str_show_loader:String) {
         
-        /*self.scroll_to_top(table_view: self.tbleView)
-        
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! LoginTableCell
-        
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-        
-        if Login.IsInternetAvailable() == false {
-            self.please_check_your_internet_connection()
-            return
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         }
         
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            // let str:String = person["role"] as! String
+            print(person)
             
             let x : Int = person["userId"] as! Int
             let myString = String(x)
             
-            let parameters = [
-                "action"    : "logout",
-                "userId"    : String(myString),
-            ]
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
             
-            AF.request(application_base_url, method: .post, parameters: parameters)
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
             
-                .response { response in
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"    : "logout",
+                    "userId"    : String(myString),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
                     
-                    do {
-                        if response.error != nil{
-                            print(response.error as Any, terminator: "")
-                        }
+                    switch response.result {
+                    case let .success(value):
                         
-                        if let jsonDict = try JSONSerialization.jsonObject(with: (response.data as Data?)!, options: []) as? [String: AnyObject]{
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
                             
-                            print(jsonDict as Any, terminator: "")
+                            let defaults = UserDefaults.standard
+                            defaults.setValue("", forKey: str_save_login_user_data)
+                            defaults.setValue("", forKey: str_save_last_api_token)
                             
-                            // for status alert
-                            var status_alert : String!
-                            status_alert = (jsonDict["status"] as? String)
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)
                             
-                            // for message alert
-                            var str_data_message : String!
-                            str_data_message = jsonDict["msg"] as? String
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                            self.view.window?.rootViewController = sw
+                            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "login_id")
+                            let navigationController = UINavigationController(rootViewController: destinationController!)
+                            sw.setFront(navigationController, animated: true)
                             
-                            if status_alert.lowercased() == "success" {
-                                
-                                print("=====> yes")
-                                ERProgressHud.sharedInstance.hide()
-                                
-                                let defaults = UserDefaults.standard
-                                defaults.setValue("", forKey: str_save_login_user_data)
-                                defaults.setValue(nil, forKey: str_save_login_user_data)
-                                
-                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginId")
-                                self.navigationController?.pushViewController(push, animated: true)
-                                
-                            } else {
-                                
-                                print("=====> no")
-                                ERProgressHud.sharedInstance.hide()
-                                
-                                let alert = NewYorkAlertController(title: String(status_alert), message: String(str_data_message), style: .alert)
-                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                                alert.addButtons([cancel])
-                                self.present(alert, animated: true)
-                                
-                            }
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
                             
                         } else {
                             
-                            self.please_check_your_internet_connection()
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
                             
-                            return
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
                         }
                         
-                    } catch _ {
-                        print("Exception!")
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
                     }
                 }
-        }*/
+            }
+        }
     }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.logoutWB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
+//    @objc func logoutWB() {
+//        self.view.endEditing(true)
+//
+//        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+//
+//        if Login.IsInternetAvailable() == false {
+//            self.please_check_your_internet_connection()
+//            return
+//        }
+//
+//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+//            // let str:String = person["role"] as! String
+//
+//            let x : Int = person["userId"] as! Int
+//            let myString = String(x)
+//
+//            let parameters = [
+//                "action"    : "logout",
+//                "userId"    : String(myString),
+//            ]
+//
+//            AF.request(application_base_url, method: .post, parameters: parameters)
+//
+//                .response { response in
+//
+//                    do {
+//                        if response.error != nil{
+//                            print(response.error as Any, terminator: "")
+//                        }
+//
+//                        if let jsonDict = try JSONSerialization.jsonObject(with: (response.data as Data?)!, options: []) as? [String: AnyObject]{
+//
+//                            print(jsonDict as Any, terminator: "")
+//
+//                            // for status alert
+//                            var status_alert : String!
+//                            status_alert = (jsonDict["status"] as? String)
+//
+//                            // for message alert
+//                            var str_data_message : String!
+//                            str_data_message = jsonDict["msg"] as? String
+//
+//                            if status_alert.lowercased() == "success" {
+//
+//                                print("=====> yes")
+//                                ERProgressHud.sharedInstance.hide()
+//
+//                                let defaults = UserDefaults.standard
+//                                defaults.setValue("", forKey: str_save_login_user_data)
+//                                defaults.setValue(nil, forKey: str_save_login_user_data)
+//
+//                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "LoginId")
+//                                self.navigationController?.pushViewController(push, animated: true)
+//
+//                            } else {
+//
+//                                print("=====> no")
+//                                ERProgressHud.sharedInstance.hide()
+//
+//                                let alert = NewYorkAlertController(title: String(status_alert), message: String(str_data_message), style: .alert)
+//                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+//                                alert.addButtons([cancel])
+//                                self.present(alert, animated: true)
+//
+//                            }
+//
+//                        } else {
+//
+//                            self.please_check_your_internet_connection()
+//
+//                            return
+//                        }
+//
+//                    } catch _ {
+//                        print("Exception!")
+//                    }
+//                }
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50

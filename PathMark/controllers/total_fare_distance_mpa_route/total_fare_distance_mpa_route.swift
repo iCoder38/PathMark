@@ -267,21 +267,26 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
             print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
             
-            /************************************************************************************/
+            /************************************************************************/
             
             /***************** GENERATE NEW POLYLINE *******************************/
+            
             let route = directionResonse.routes[0]
             cell.mapView.addOverlay(route.polyline, level: .aboveRoads)
             let rect = route.polyline.boundingMapRect
             cell.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
-            /************************************************************************************/
+            
+            /***********************************************************************/
             
         }
+        
         cell.mapView.delegate = self
         
         // self.locManager.stopUpdatingLocation()
         
-        self.locManager.startUpdatingLocation()
+        // self.locManager.startUpdatingLocation()
+        
+        self.locManager.stopUpdatingLocation()
         
         print("=================================")
         print("LOCATION UPDATE")
@@ -299,9 +304,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         return renderer
     }
     
-    
-    
     @objc func payment_method_click_method() {
+        
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
         

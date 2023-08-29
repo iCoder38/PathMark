@@ -219,8 +219,6 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
     }
     
-    
-    
     @objc func updateCounter() {
         
         if (counter == 2) {

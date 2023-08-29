@@ -258,12 +258,10 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
             cell.btn_remember_me.setImage(UIImage(named: "un_check"), for: .normal)
             cell.btn_remember_me.tag = 0
             
-            
         } else {
             
             cell.btn_remember_me.tag = 1
             cell.btn_remember_me.setImage(UIImage(named: "check"), for: .normal)
-            
             
         }
         

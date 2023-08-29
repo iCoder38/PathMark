@@ -59,7 +59,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
-        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        // self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.get_country_list_WB()
     }
     
@@ -114,7 +114,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
     // get country list
     @objc func get_country_list_WB() {
         
-        self.show_loading_UI()
+        // self.show_loading_UI()
         self.view.endEditing(true)
         
         let params = payload_country_list(action: "countrylist")
@@ -139,7 +139,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                 if strSuccess == String("success") {
                     print("yes")
                     
-                    self.hide_loading_UI()
+                    // self.hide_loading_UI()
                     
                 } else {
                     

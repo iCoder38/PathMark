@@ -12,6 +12,8 @@ import MapKit
 import CoreLocation
 import ZKCarousel
 
+import Alamofire
+
 class dashboard: UIViewController , CLLocationManagerDelegate {
 
     let locationManager = CLLocationManager()
@@ -55,6 +57,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     var arr_banner = ["car_image_name","car_image_name"]
     
+    var str_token_id:String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,6 +67,13 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
         self.sideBarMenuClick()
          // setupCarousel()
+        
+        if let device_token = UserDefaults.standard.string(forKey: "key_my_device_token") {
+            
+            self.str_token_id = String(device_token)
+            
+        }
+        
     }
     
     var _lastContentOffset: CGPoint!
@@ -189,10 +200,12 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
             
             cell.lbl_my_full_address.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
-//
+
             print(self.strSaveLatitude as Any)
             print(self.strSaveLongitude as Any)
 
+            self.update_token_WB(str_show_loader: "yes")
+            
         }
     }
     
@@ -225,6 +238,165 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     }
     
     
+    
+    @objc func update_token_WB(str_show_loader:String) {
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"        : "editprofile",
+                    "userId"        : String(myString),
+                    "deviceToken"   : String(self.str_token_id),
+                    "latitude"      : String(self.strSaveLatitude),
+                    "longitude"     : String(self.strSaveLongitude),
+                    "device"        : String("iOS")
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)
+                            
+                            
+                                    /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                                    self.navigationController?.pushViewController(push!, animated: true)*/
+                            
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.update_token_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
 }
 
 

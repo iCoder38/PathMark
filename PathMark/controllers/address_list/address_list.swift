@@ -325,27 +325,14 @@ extension address_list: UITableViewDataSource , UITableViewDelegate {
             self.navigationController?.pushViewController(push!, animated: true)
             
         }
-        
-        let call_contact = UIAlertAction(title: "Call", style: .default) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-            
-            if let url = URL(string: "tel://\(item!["phone"]!)"), UIApplication.shared.canOpenURL(url) {
-                if #available(iOS 10, *) {
-                    UIApplication.shared.open(url)
-                } else {
-                    UIApplication.shared.openURL(url)
-                }
-            }
-            
-        }
+         
         
         let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
             UIAlertAction in
             NSLog("OK Pressed")
         }
 
-        alertController.addAction(call_contact)
+         
         alertController.addAction(Edit_contact)
         alertController.addAction(delete_contact)
         alertController.addAction(dismiss)
