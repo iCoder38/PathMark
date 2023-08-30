@@ -394,6 +394,7 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             }
             
             cell.lbl_status_for_complete.font = UIFont(name:"Poppins-SemiBold", size: 16.0)
+            cell.lbl_date_for_complete.text = "\(item!["created"]!)"
             
             return cell
             
@@ -409,7 +410,11 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
         } else {
             let item = self.arr_mut_dashboard_data[indexPath.row] as? [String:Any]
             
-            self.payment_is_pending_popup(fullData: item! as NSDictionary)
+            // self.payment_is_pending_popup(fullData: item! as NSDictionary)
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_history_details_id") as? ride_history_details
+            push!.dict_get_booking_details = (item! as NSDictionary)
+            self.navigationController?.pushViewController(push!, animated: true)
             
 //            self.payment_is_pending_popup(message: )
         }

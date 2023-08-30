@@ -199,10 +199,19 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             let indexPath = IndexPath.init(row: 0, section: 0)
             let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
             
-            cell.lbl_my_full_address.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
-
-            print(self.strSaveLatitude as Any)
-            print(self.strSaveLongitude as Any)
+            let str_locality = String(self.strSaveLocality)
+            let str_local_address = String(self.strSaveLocalAddress)
+            let str_local_state = String(self.strSaveStateName)
+            let str_local_country = String(self.strSaveCountryName)
+            let str_local_zipcode = String(self.strSaveZipcodeName)
+            
+            cell.lbl_my_full_address.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
+            
+            /*print(self.strSaveLocality as Any)
+            print(self.strSaveLocalAddress as Any)
+            print(self.strSaveLocalAddressMini as Any)
+            print(self.strSaveStateName as Any)
+            print(self.strSaveCountryName as Any)*/
 
             self.update_token_WB(str_show_loader: "yes")
             

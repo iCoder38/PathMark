@@ -512,14 +512,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+
     // MARK:- GET TOTAL DISTANCE FARE -
     @objc func get_fare_WB() {
         

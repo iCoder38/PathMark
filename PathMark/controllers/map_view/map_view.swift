@@ -613,28 +613,31 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             self.strSaveLatitude = String(doubleStringLat)
             self.strSaveLongitude = String(doubleStringLong)
             
-            print("local address ==> "+localAddress as Any) // south west delhi
-            print("local address mini ==> "+localAddressMini as Any) // new delhi
-            print("locality ==> "+locality as Any) // sector 10 dwarka
+            // print("local address ==> "+localAddress as Any) // south west delhi
+            // print("local address mini ==> "+localAddressMini as Any) // new delhi
+            // print("locality ==> "+locality as Any) // sector 10 dwarka
             
-            print(self.strSaveCountryName as Any) // india
-            print(self.strSaveStateName as Any) // new delhi
-            print(self.strSaveZipcodeName as Any) // 110075
+            // print(self.strSaveCountryName as Any) // india
+            // print(self.strSaveStateName as Any) // new delhi
+            // print(self.strSaveZipcodeName as Any) // 110075
             
-            /*
-             self.strSaveCountryName     = country
-             self.strSaveStateName       = city
-             */
+            var str_locality = String(self.strSaveLocality)
+            var str_local_address = String(self.strSaveLocalAddress)
+            var str_local_state = String(self.strSaveStateName)
+            var str_local_country = String(self.strSaveCountryName)
+            let str_local_zipcode = String(self.strSaveZipcodeName)
             
-            self.lbl_location_from.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
+            self.lbl_location_from.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
+            
+//            self.lbl_location_from.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)
+            
+//            self.lbl_location_from.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
             
             
             /*print(manager.location?.coordinate.latitude as Any)
             print(manager.location?.coordinate.longitude as Any)
             
             let sourceLocation = CLLocationCoordinate2D(latitude: Double((manager.location?.coordinate.latitude)!), longitude: Double((manager.location?.coordinate.longitude)!))*/
-            
-            
             
             /*
              AVGRating = 0;
@@ -647,6 +650,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
              longitude = "77.06062328401764";
              "profile_picture" = "";
              */
+            
             let my_current_location = ["title":"You are here",
                                        "id":"",
                                        "distance":"",
@@ -669,7 +673,6 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
 
             self.find_driver_WB()
 
-            
         }
         
     }
