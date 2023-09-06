@@ -58,11 +58,17 @@ class success_payment: UIViewController {
         print("===================================")
         print("===================================")
         
+        self.btn_back.isHidden = true
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard2))
         view.addGestureRecognizer(tap)
+        
+        self.lbl_price.text = "\(self.get_booking_details["FinalFare"]!)"
+        self.lbl_date_time.text = "\(self.get_booking_details["created"]!)"
+        
+        
         
     }
     
@@ -112,12 +118,12 @@ class success_payment: UIViewController {
                 ]
                 
                 parameters = [
-                    "action"    : "submitreview",
+                    "action"        : "submitreview",
                     "reviewFrom"    : String(myString),
-                    "reviewTo"  : "\(self.get_booking_details["userId"]!)",
-                    "star"  : String(cell.lbl_star_count.text!),
-                    "message"  : String(cell.txt_view.text!),
-                    "bookingId"  : "\(self.get_booking_details["bookingId"]!)"
+                    "reviewTo"      : "\(self.get_booking_details["userId"]!)",
+                    "star"          : String(cell.lbl_star_count.text!),
+                    "message"       : String(cell.txt_view.text!),
+                    "bookingId"     : "\(self.get_booking_details["bookingId"]!)"
                 ]
                 
                 print(parameters as Any)
@@ -259,6 +265,9 @@ extension success_payment: UITableViewDataSource , UITableViewDelegate {
         cell.selectedBackgroundView = backgroundView
 
         cell.backgroundColor = .clear
+        
+        cell.lbl_from.text = (self.get_booking_details["RequestPickupAddress"] as! String)
+        cell.lbl_to.text = (self.get_booking_details["RequestDropAddress"] as! String)
         
         cell.btn_star_one.addTarget(self, action: #selector(one_click_method), for: .touchUpInside)
         cell.btn_star_two.addTarget(self, action: #selector(two_click_method), for: .touchUpInside)

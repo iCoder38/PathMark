@@ -375,19 +375,15 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             if "\(item!["paymentStatus"]!)" == "" {
                 
                 if "\(item!["rideStatus"]!)" == "1" {
-                    cell.img_payment_gif.isHidden = true
                     cell.lbl_status_for_complete.text = "Driver accepted"
                     cell.lbl_status_for_complete.textColor = .systemGreen
                 } else if "\(item!["rideStatus"]!)" == "2" {
-                    cell.img_payment_gif.isHidden = true
                     cell.lbl_status_for_complete.text = "Driver picked you up"
                     cell.lbl_status_for_complete.textColor = .systemYellow
                 } else if "\(item!["rideStatus"]!)" == "3" {
-                    cell.img_payment_gif.isHidden = true
                     cell.lbl_status_for_complete.text = "On Going"
                     cell.lbl_status_for_complete.textColor = .systemOrange
                 } else if "\(item!["rideStatus"]!)" == "4" {
-                    cell.img_payment_gif.isHidden = true
                     
                     if "\(item!["paymentStatus"]!)" == "" {
                         cell.lbl_status_for_complete.text = "Payment Pending"
@@ -400,15 +396,12 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                 }  else if "\(item!["rideStatus"]!)" == "5" {
                     
                     if "\(item!["paymentStatus"]!)" == "" {
-                        cell.img_payment_gif.isHidden = true
                         cell.lbl_status_for_complete.text = "Payment Pending"
                         cell.lbl_status_for_complete.textColor = .systemBrown
                     } else {
                         cell.lbl_status_for_complete.text = "Completed"
                         cell.lbl_status_for_complete.textColor = .systemGreen
                         
-                        cell.img_payment_gif.isHidden = true
-                        cell.img_payment_gif.image = UIImage.gif(name: "double-check")
                     }
                     
                 }
@@ -418,15 +411,12 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                 if "\(item!["rideStatus"]!)" == "5" {
                     
                     if "\(item!["paymentStatus"]!)" == "" {
-                        cell.img_payment_gif.isHidden = true
                         cell.lbl_status_for_complete.text = "Payment Pending"
                         cell.lbl_status_for_complete.textColor = .systemBrown
                     } else {
                         cell.lbl_status_for_complete.text = "Completed"
                         cell.lbl_status_for_complete.textColor = .systemGreen
                         
-                        cell.img_payment_gif.isHidden = true
-                        cell.img_payment_gif.image = UIImage.gif(name: "double-check")
                     }
                     
                 }
@@ -533,12 +523,6 @@ class ride_history_upcoming_table_cell: UITableViewCell {
 }
 
 class ride_history_completed_table_cell: UITableViewCell {
-    
-    @IBOutlet weak var img_payment_gif:UIImageView! {
-        didSet {
-            
-        }
-    }
     
     @IBOutlet weak var img_profile_for_complete:UIImageView! {
         didSet {

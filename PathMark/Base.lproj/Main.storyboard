@@ -3608,13 +3608,6 @@
                                                         <constraint firstAttribute="width" constant="20" id="BOn-1H-zCh"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GbI-he-PK4">
-                                                    <rect key="frame" x="353" y="66" width="20" height="20"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="20" id="Hji-AD-UgF"/>
-                                                        <constraint firstAttribute="width" constant="20" id="mf6-1k-me6"/>
-                                                    </constraints>
-                                                </imageView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="WHG-Zc-u7Q" firstAttribute="top" secondItem="ZXp-Hd-4Tq" secondAttribute="topMargin" constant="7" id="1L8-kb-lcF"/>
@@ -3631,8 +3624,6 @@
                                                 <constraint firstItem="wxx-fa-8bV" firstAttribute="top" secondItem="ZXp-Hd-4Tq" secondAttribute="topMargin" constant="-9" id="YnO-bK-Hvb"/>
                                                 <constraint firstItem="tZX-Si-4r8" firstAttribute="top" secondItem="TAQ-m2-2qL" secondAttribute="bottom" constant="9" id="ZOG-kR-HSn"/>
                                                 <constraint firstAttribute="bottom" secondItem="tZX-Si-4r8" secondAttribute="bottom" id="e6K-dK-vP8"/>
-                                                <constraint firstItem="tZX-Si-4r8" firstAttribute="top" secondItem="GbI-he-PK4" secondAttribute="bottom" constant="13" id="f86-Jw-jqD"/>
-                                                <constraint firstItem="GbI-he-PK4" firstAttribute="trailing" secondItem="ZXp-Hd-4Tq" secondAttribute="trailingMargin" id="frm-MQ-wwO"/>
                                                 <constraint firstAttribute="trailing" secondItem="tZX-Si-4r8" secondAttribute="trailing" id="jSK-i4-0VZ"/>
                                                 <constraint firstItem="tZX-Si-4r8" firstAttribute="leading" secondItem="ZXp-Hd-4Tq" secondAttribute="leading" id="l7w-md-HGU"/>
                                                 <constraint firstItem="TAQ-m2-2qL" firstAttribute="top" secondItem="EoP-19-iOU" secondAttribute="bottom" constant="5" id="o4o-zU-53x"/>
@@ -3641,7 +3632,6 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="img_payment_gif" destination="GbI-he-PK4" id="fEh-cb-QHw"/>
                                             <outlet property="img_profile_for_complete" destination="gCF-Mz-OaE" id="JSF-Si-Yke"/>
                                             <outlet property="lbl_address_for_complete" destination="TAQ-m2-2qL" id="SsX-lr-pAa"/>
                                             <outlet property="lbl_car_model_for_complete" destination="EoP-19-iOU" id="Xhf-2o-eea"/>
@@ -3965,7 +3955,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Egc-mW-o8b">
-                                                                    <rect key="frame" x="36" y="7.3333333333333517" width="16" height="15.666666666666666"/>
+                                                                    <rect key="frame" x="36" y="7.3333333333333526" width="16" height="15.666666666666661"/>
                                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="Hdr-DM-il6"/>
@@ -3988,10 +3978,10 @@
                                                                         <constraint firstAttribute="width" constant="16" id="ghr-am-VyW"/>
                                                                     </constraints>
                                                                 </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4.8" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BN7-hG-9Xj">
-                                                                    <rect key="frame" x="91" y="5" width="15" height="23"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4.8" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BN7-hG-9Xj">
+                                                                    <rect key="frame" x="88" y="5" width="21" height="23"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" constant="15" id="2jd-22-0Ma"/>
+                                                                        <constraint firstAttribute="width" constant="21" id="2jd-22-0Ma"/>
                                                                         <constraint firstAttribute="height" constant="23" id="VTY-Ab-IdV"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="10"/>
@@ -4005,7 +3995,7 @@
                                                                 <constraint firstItem="bnj-bU-ovY" firstAttribute="leading" secondItem="Egc-mW-o8b" secondAttribute="trailing" constant="1" id="Cgs-LJ-oTT"/>
                                                                 <constraint firstItem="Egc-mW-o8b" firstAttribute="top" secondItem="QeG-TP-XLT" secondAttribute="top" constant="7.6666666666665897" id="DjE-Xa-Ekg"/>
                                                                 <constraint firstItem="QkU-Ew-6Y7" firstAttribute="leading" secondItem="dT8-kj-sWK" secondAttribute="trailing" constant="1" id="JZO-4q-NCS"/>
-                                                                <constraint firstAttribute="trailing" secondItem="BN7-hG-9Xj" secondAttribute="trailing" constant="3" id="KeH-3y-We3"/>
+                                                                <constraint firstAttribute="trailing" secondItem="BN7-hG-9Xj" secondAttribute="trailing" id="KeH-3y-We3"/>
                                                                 <constraint firstItem="QkU-Ew-6Y7" firstAttribute="top" secondItem="QeG-TP-XLT" secondAttribute="top" constant="7.9999999999999991" id="Lgz-un-4uc"/>
                                                                 <constraint firstItem="BN7-hG-9Xj" firstAttribute="top" secondItem="QeG-TP-XLT" secondAttribute="top" constant="5" id="Uj0-6A-3Q6"/>
                                                                 <constraint firstItem="bnj-bU-ovY" firstAttribute="top" secondItem="QeG-TP-XLT" secondAttribute="top" constant="7.9999999999999991" id="VX5-sh-TP9"/>
