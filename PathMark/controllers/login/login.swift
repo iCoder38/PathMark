@@ -272,9 +272,11 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         // ERProgressHud.sharedInstance.hide()
         
-        self.login_wb()
         
+//        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
+//         self.navigationController?.pushViewController(push!, animated: true)
         
+         self.login_wb()
         
     }
     
