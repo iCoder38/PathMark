@@ -136,7 +136,7 @@ class MenuControllerVC: UIViewController {
              } else {
                 
                 self.lblUserName.text = (person["fullName"] as! String)
-                self.lblPhoneNumber.text = (person["contactNumber"] as! String)
+                // self.lblPhoneNumber.text = (person["contactNumber"] as! String)
                 
                  
             }

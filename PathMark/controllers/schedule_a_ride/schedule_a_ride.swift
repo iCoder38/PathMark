@@ -116,25 +116,25 @@ class schedule_a_ride: UIViewController {
     
     @objc func schedule_a_ride_click_method2() {
         
-//        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_confirm_booking_id") as? schedule_confirm_booking
-//        
-//        push!.str_get_category_id2 = String(self.str_get_category_id)
-//        push!.str_from_location2 = String(self.str_from_location)
-//        push!.str_to_location2 = String(self.str_to_location)
-//
-//        push!.my_location_lat2 = String(self.my_location_lat)
-//        push!.my_location_long2 = String(self.my_location_long)
-//
-//        push!.searched_place_location_lat2 = String(self.searched_place_location_lat)
-//        push!.searched_place_location_long2 = String(self.searched_place_location_long)
-//        
-//        push!.str_date = String(self.str_selected_date)
-//        push!.str_time = String(self.str_selected_time)
-//        
-//        self.navigationController?.pushViewController(push!, animated: true)
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_confirm_booking_id") as? schedule_confirm_booking
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
+        push!.str_get_category_id2 = String(self.str_get_category_id)
+        push!.str_from_location2 = String(self.str_from_location)
+        push!.str_to_location2 = String(self.str_to_location)
+
+        push!.my_location_lat2 = String(self.my_location_lat)
+        push!.my_location_long2 = String(self.my_location_long)
+
+        push!.searched_place_location_lat2 = String(self.searched_place_location_lat)
+        push!.searched_place_location_long2 = String(self.searched_place_location_long)
+        
+        push!.str_date = String(self.str_selected_date)
+        push!.str_time = String(self.str_selected_time)
+        
         self.navigationController?.pushViewController(push!, animated: true)
+        
+        /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
+        self.navigationController?.pushViewController(push!, animated: true)*/
       
     }
     

@@ -6,10 +6,15 @@
 //
 
 import UIKit
+import Alamofire
 
 class schedule_ride_details: UIViewController {
     
     var dict_get_booking_details:NSDictionary!
+    
+    var str_total_distance:String! = ""
+    var str_total_duration:String! = ""
+    var str_total_rupees:String! = ""
     
     @IBOutlet weak var view_driver_info:UIView! {
         didSet {
@@ -63,16 +68,170 @@ class schedule_ride_details: UIViewController {
         print("===================================")
         print("===================================")
         print(self.dict_get_booking_details as Any)
+        /*
+         DriverImage = "https://demo4.evirtualservices.net/pathmark/img/uploads/users/1698962672PLUDIN_1698930400026.png";
+         RequestDropAddress = "Anand Vihar ISBT Anand Vihar ISBT";
+         RequestDropLatLong = "28.648769385019264,77.31538319058018";
+         RequestPickupAddress = "Sector 10 Dwarka, South West Delhi New Delhi, India - 110075";
+         RequestPickupLatLong = "28.587139642806772,77.06051312312718";
+         VehicleColor = red;
+         aps =     {
+             alert = "new2 has confirmed your booling.";
+         };
+         bookingDate = "2023-11-30T00:00:00+0530";
+         bookingId = 114;
+         bookingTime = "18:54";
+         device = Android;
+         deviceToken = "";
+         driverContact = 5623528523;
+         driverId = 92;
+         driverLatitude = "28.6634817";
+         driverName = new2;
+         driverlongitude = "77.3239864";
+         estimatedPrice = "22.2";
+         "gcm.message_id" = 1700141078871064;
+         "google.c.a.e" = 1;
+         "google.c.fid" = "cERsVVQO20uFlSaTcL-Hja";
+         "google.c.sender.id" = 750959835757;
+         message = "new2 has confirmed your booling.";
+         rating = 5;
+         totalTime = "1 hour 4 mins";
+         type = confirm;
+         vehicleNumber = yuw62782;
+         */
         print("===================================")
         print("===================================")
         
-        self.lbl_price.text = "\(self.dict_get_booking_details["FinalFare"]!)"
-        self.lbl_distance.text = "\(self.dict_get_booking_details["totalDistance"]!)"
+         self.lbl_price.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
+         self.lbl_distance.text = "\(self.dict_get_booking_details["distance"]!)"
         
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            // self.find_driver_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
+
+    // MARK:- GET TOTAL DISTANCE FARE -
+    @objc func get_fare_WB() {
+        
+       /*if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+            
+            let headers: HTTPHeaders = [
+                "token":String(token_id_is),
+            ]
+           
+           let fullNameArr = fullName.componentsSeparatedByString(" ")
+           
+           var parameters:Dictionary<AnyHashable, Any>!
+           parameters = [
+                "action"        : "getprice",
+                "pickuplatLong" : String(pickUp),
+                "droplatLong"   : String(drop),
+                "categoryId"    : String(self.str_get_category_id2),
+           ]
+         
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        if strSuccess.lowercased() == "success" {
+                             
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            
+                            self.hide_loading_UI()
+                            self.tbleView.separatorColor = .clear
+                            // self.iAmHereForLocationPermission()
+                            
+                            self.str_total_distance = (dict["distance"] as! String)
+                            self.str_total_rupees = "\(dict["total"]!)"
+                            self.str_total_duration = (dict["duration"] as! String)
+                            
+                        }  else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            self.hide_loading_UI()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    self.hide_loading_UI()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }*/
+    }
 }
 
 extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
@@ -93,6 +252,78 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
+        
+        cell.lbl_from.text = (self.dict_get_booking_details["RequestPickupAddress"] as! String)
+        cell.lbl_to.text = (self.dict_get_booking_details["RequestDropAddress"] as! String)
+        
+        cell.lbl_price_one.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
+        cell.lbl_price_two.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
+        
+        cell.lbl_time.text = (self.dict_get_booking_details["bookingDate"] as! String)
+        
+        // star manage
+        if "\(self.dict_get_booking_details["rating"]!)" == "0" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star")
+            cell.img_star_two.image = UIImage(systemName: "star")
+            cell.img_star_three.image = UIImage(systemName: "star")
+            cell.img_star_four.image = UIImage(systemName: "star")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" > "1" &&
+                    "\(self.dict_get_booking_details["rating"]!)" < "2" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
+            cell.img_star_three.image = UIImage(systemName: "star")
+            cell.img_star_four.image = UIImage(systemName: "star")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" == "2" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.fill")
+            cell.img_star_three.image = UIImage(systemName: "star")
+            cell.img_star_four.image = UIImage(systemName: "star")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" > "2" &&
+                    "\(self.dict_get_booking_details["rating"]!)" < "3" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.fill")
+            cell.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
+            cell.img_star_four.image = UIImage(systemName: "star")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" == "3" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.fill")
+            cell.img_star_three.image = UIImage(systemName: "star.fill")
+            cell.img_star_four.image = UIImage(systemName: "star")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" > "3" &&
+                    "\(self.dict_get_booking_details["rating"]!)" < "4" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.fill")
+            cell.img_star_three.image = UIImage(systemName: "star.fill")
+            cell.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
+            cell.img_star_five.image = UIImage(systemName: "star")
+            
+        } else if "\(self.dict_get_booking_details["rating"]!)" == "5" {
+            
+            cell.img_star_one.image = UIImage(systemName: "star.fill")
+            cell.img_star_two.image = UIImage(systemName: "star.fill")
+            cell.img_star_three.image = UIImage(systemName: "star.fill")
+            cell.img_star_four.image = UIImage(systemName: "star.fill")
+            cell.img_star_five.image = UIImage(systemName: "star.fill")
+            
+        }
+        
+        cell.lbl_driver_name.text = (self.dict_get_booking_details["driverName"] as! String)
         
         /*cell.lbl_car_driver_name.text = (self.dict_get_booking_details["fullName"] as! String)
         
@@ -150,67 +381,7 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             cell.img_gif.isHidden = true
         }*/
         
-        // star manage
-       /* if "\(self.dict_get_booking_details["AVGRating"]!)" == "0" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star")
-            cell.img_star_two.image = UIImage(systemName: "star")
-            cell.img_star_three.image = UIImage(systemName: "star")
-            cell.img_star_four.image = UIImage(systemName: "star")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" > "1" &&
-                    "\(self.dict_get_booking_details["AVGRating"]!)" < "2" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
-            cell.img_star_three.image = UIImage(systemName: "star")
-            cell.img_star_four.image = UIImage(systemName: "star")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" == "2" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.fill")
-            cell.img_star_three.image = UIImage(systemName: "star")
-            cell.img_star_four.image = UIImage(systemName: "star")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" > "2" &&
-                    "\(self.dict_get_booking_details["AVGRating"]!)" < "3" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.fill")
-            cell.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
-            cell.img_star_four.image = UIImage(systemName: "star")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" == "3" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.fill")
-            cell.img_star_three.image = UIImage(systemName: "star.fill")
-            cell.img_star_four.image = UIImage(systemName: "star")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" > "3" &&
-                    "\(self.dict_get_booking_details["AVGRating"]!)" < "4" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.fill")
-            cell.img_star_three.image = UIImage(systemName: "star.fill")
-            cell.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
-            cell.img_star_five.image = UIImage(systemName: "star")
-            
-        } else if "\(self.dict_get_booking_details["AVGRating"]!)" == "5" {
-            
-            cell.img_star_one.image = UIImage(systemName: "star.fill")
-            cell.img_star_two.image = UIImage(systemName: "star.fill")
-            cell.img_star_three.image = UIImage(systemName: "star.fill")
-            cell.img_star_four.image = UIImage(systemName: "star.fill")
-            cell.img_star_five.image = UIImage(systemName: "star.fill")
-            
-        }*/
+       
         
         cell.backgroundColor = .clear
         
@@ -299,6 +470,17 @@ class schedule_ride_details_table_cell: UITableViewCell {
     @IBOutlet weak var lbl_car_driver_name:UILabel!
     @IBOutlet weak var lbl_car_number:UILabel!
     @IBOutlet weak var lbl_car_color:UILabel!
+    
+    @IBOutlet weak var lbl_time:UILabel!
+    
+    @IBOutlet weak var lbl_driver_name:UILabel!
+    
+    @IBOutlet weak var lbl_price_one:UILabel!
+    @IBOutlet weak var lbl_price_two:UILabel! {
+        didSet {
+            lbl_price_two.textColor = .systemOrange
+        }
+    }
     
     @IBOutlet weak var img_car_image:UIImageView! {
         didSet {

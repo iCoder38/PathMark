@@ -388,8 +388,14 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                     "RequestDropLatLong" : String(drop_lat)+","+String(drop_long),
                     
                     "duration" : String(self.str_total_duration),
+                    // "totalTime" : String(self.str_total_duration),
+                    
                     "distance" : String(self.str_total_distance),
+                    // "totalTime" : String(self.str_total_distance),
+                    
                     "estimateAmount": String(self.str_total_rupees),
+                    // "estimatedPrice": String(self.str_total_rupees),
+                    
                     "bookingDate":String(self.str_date),
                     "bookingTime":String(self.str_time),
                     
@@ -529,21 +535,11 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
            var parameters:Dictionary<AnyHashable, Any>!
            parameters = [
                "action"        : "getprice",
-                "pickuplatLong" : String(pickUp),
-                "droplatLong"   : String(drop),
+               "pickuplatLong" : String(pickUp),
+               "droplatLong"   : String(drop),
                "categoryId"    : String(self.str_get_category_id2),
            ]
-           
-           
-           
-           
-           
-           
-           
-           
-
-            
-            
+         
             print("parameters-------\(String(describing: parameters))")
             
             AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
