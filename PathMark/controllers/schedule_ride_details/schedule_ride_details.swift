@@ -261,6 +261,8 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
         
         cell.lbl_time.text = (self.dict_get_booking_details["bookingDate"] as! String)
         
+        cell.lbl_driver_name.text = (self.dict_get_booking_details["driverName"] as! String)
+        
         // star manage
         if "\(self.dict_get_booking_details["rating"]!)" == "0" {
             
@@ -322,8 +324,6 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             cell.img_star_five.image = UIImage(systemName: "star.fill")
             
         }
-        
-        cell.lbl_driver_name.text = (self.dict_get_booking_details["driverName"] as! String)
         
         /*cell.lbl_car_driver_name.text = (self.dict_get_booking_details["fullName"] as! String)
         
