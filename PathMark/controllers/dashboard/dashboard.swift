@@ -115,6 +115,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     @objc func push_to_car_map_click_method() {
         
         self.str_vehicle_type = "CAR"
+        self.tbleView.reloadData()
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
         push!.str_user_select_vehicle = "CAR"
         self.navigationController?.pushViewController(push!, animated: true)*/
@@ -124,7 +125,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     @objc func push_to_bike_map_click_method() {
         
         self.str_vehicle_type = "BIKE"
-        
+        self.tbleView.reloadData()
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
         push!.str_user_select_vehicle = "BIKE"
         self.navigationController?.pushViewController(push!, animated: true)*/
@@ -134,7 +135,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     @objc func push_to_intercity_map_click_method() {
         
         self.str_vehicle_type = "INTERCITY"
-        
+        self.tbleView.reloadData()
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
         push!.str_user_select_vehicle = "INTERCITY"
         self.navigationController?.pushViewController(push!, animated: true)*/
@@ -483,12 +484,27 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         if (self.str_vehicle_type == "CAR") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
+            //
+            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+            cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
+            cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+            //
         } else if (self.str_vehicle_type == "BIKE") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
+            //
+            cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
+            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+            cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+            //
         } else if (self.str_vehicle_type == "INTERCITY") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
+            //
+            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+            cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
+            //
         }
         
         if (self.str_select_option == "schedule") {
@@ -660,7 +676,7 @@ class dashboard_table_cell: UITableViewCell {
     @IBOutlet weak var btn_car:UIButton! {
         didSet {
             btn_car .setBackgroundImage(UIImage(named: "car_image_name"), for: .normal)
-            btn_car.setImage(UIImage(named: "car_image_name"), for: .normal)
+            btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
             btn_car.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_car.backgroundColor = .systemPurple
             btn_car.layer.cornerRadius = 14
@@ -677,7 +693,7 @@ class dashboard_table_cell: UITableViewCell {
     @IBOutlet weak var btn_bike:UIButton! {
         didSet {
             btn_bike .setBackgroundImage(UIImage(named: "bike_with_name"), for: .normal)
-            btn_bike.setImage(UIImage(named: "bike_with_name"), for: .normal)
+            btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
             btn_bike.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_bike.backgroundColor = .systemPurple
             btn_bike.layer.cornerRadius = 14
@@ -694,7 +710,7 @@ class dashboard_table_cell: UITableViewCell {
     @IBOutlet weak var btn_intercity:UIButton! {
         didSet {
             btn_intercity .setBackgroundImage(UIImage(named: "intercity_with_name"), for: .normal)
-            btn_intercity.setImage(UIImage(named: "intercity_with_name"), for: .normal)
+            btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
             btn_intercity.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_intercity.backgroundColor = .systemPurple
             btn_intercity.layer.cornerRadius = 14

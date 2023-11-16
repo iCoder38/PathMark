@@ -28,6 +28,7 @@
 		B903CDA62A58018500208E80 /* PathMarkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDA52A58018500208E80 /* PathMarkTests.swift */; };
 		B903CDB02A58018500208E80 /* PathMarkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDAF2A58018500208E80 /* PathMarkUITests.swift */; };
 		B903CDB22A58018500208E80 /* PathMarkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903CDB12A58018500208E80 /* PathMarkUITestsLaunchTests.swift */; };
+		B91F4ACF2B06339300A587B5 /* schedule_ride_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F4ACE2B06339300A587B5 /* schedule_ride_details.swift */; };
 		B9695DF52A5BE73000552578 /* sign_up.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9695DF42A5BE73000552578 /* sign_up.swift */; };
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
@@ -129,6 +130,7 @@
 		B903CDAB2A58018500208E80 /* PathMarkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PathMarkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B903CDAF2A58018500208E80 /* PathMarkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMarkUITests.swift; sourceTree = "<group>"; };
 		B903CDB12A58018500208E80 /* PathMarkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMarkUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B91F4ACE2B06339300A587B5 /* schedule_ride_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = schedule_ride_details.swift; sourceTree = "<group>"; };
 		B9695DF42A5BE73000552578 /* sign_up.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sign_up.swift; sourceTree = "<group>"; };
 		B96B0F142A98844400835208 /* PathMark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PathMark.entitlements; sourceTree = "<group>"; };
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
@@ -311,6 +313,14 @@
 			path = PathMarkUITests;
 			sourceTree = "<group>";
 		};
+		B91F4ACD2B06337100A587B5 /* schedule_ride_details */ = {
+			isa = PBXGroup;
+			children = (
+				B91F4ACE2B06339300A587B5 /* schedule_ride_details.swift */,
+			);
+			path = schedule_ride_details;
+			sourceTree = "<group>";
+		};
 		B9695DF32A5BE71D00552578 /* registration */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +332,7 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B91F4ACD2B06337100A587B5 /* schedule_ride_details */,
 				B9CC75B32B05EDF400446959 /* schedule_a_ride */,
 				B9E13D462A5C46A20068774A /* third_party */,
 				B996591A2AA74EEA009A2D93 /* payment */,
@@ -928,6 +939,7 @@
 				B9038E192A5D46ED0041A5B4 /* RPicker.swift in Sources */,
 				B980DD172A9DC98900F7CD07 /* ride_status.swift in Sources */,
 				B9038E0C2A5D45FB0041A5B4 /* AlertView.swift in Sources */,
+				B91F4ACF2B06339300A587B5 /* schedule_ride_details.swift in Sources */,
 				B9038E162A5D465A0041A5B4 /* total_fare_distance_mpa_route.swift in Sources */,
 				B903CD8F2A58018000208E80 /* AppDelegate.swift in Sources */,
 				B903CD912A58018000208E80 /* SceneDelegate.swift in Sources */,

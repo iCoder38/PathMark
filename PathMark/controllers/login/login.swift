@@ -94,7 +94,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
             } else {
                 
                 // DRIVER
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "DPDashboardId")
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id")
                 self.navigationController?.pushViewController(push, animated: true)
                 
             }

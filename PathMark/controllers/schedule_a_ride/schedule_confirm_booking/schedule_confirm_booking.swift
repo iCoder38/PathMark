@@ -14,7 +14,8 @@ import CoreLocation
 
 class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
-    
+    var str_date:String!
+    var str_time:String!
     
     let locationManager = CLLocationManager()
     
@@ -260,7 +261,7 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
             let distanceFloat: Double = (distanceInMeters as Any as! Double)
             
             // cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
-            cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
+            // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
             
             print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
             print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
@@ -388,7 +389,9 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                     
                     "duration" : String(self.str_total_duration),
                     "distance" : String(self.str_total_distance),
-                    "estimateAmount": String(self.str_total_rupees)
+                    "estimateAmount": String(self.str_total_rupees),
+                    "bookingDate":String(self.str_date),
+                    "bookingTime":String(self.str_time),
                     
                 ]
                 
@@ -520,8 +523,8 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                 "token":String(token_id_is),
             ]
            
-           var pickUp = String(self.my_location_lat2)+","+String(self.my_location_long2)
-           var drop = String(self.searched_place_location_lat2)+","+String(self.searched_place_location_long2)
+           let pickUp = String(self.my_location_lat2)+","+String(self.my_location_long2)
+           let drop = String(self.searched_place_location_lat2)+","+String(self.searched_place_location_long2)
            
            var parameters:Dictionary<AnyHashable, Any>!
            parameters = [
@@ -609,8 +612,15 @@ extension schedule_confirm_booking: UITableViewDataSource , UITableViewDelegate 
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         
-        cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
-        cell.lbl_duration.text = "Duration : "+String(self.str_total_duration)
+        // cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
+        // cell.lbl_duration.text = "Duration : "+String(self.str_total_duration)
+        
+        cell.lbl_amount.text = str_bangladesh_currency_symbol+" "+String(self.str_total_rupees)+"\nAmount"
+         cell.lbl_arrived.text = String(self.str_total_duration)+"\nArrived"
+         cell.lbl_distance.text = String(self.str_total_distance)+"\nDistance"
+        
+        cell.lbl_date.text = String(str_date)
+        cell.lbl_time.text = String(str_time)
         
         cell.txt_field.delegate = self
         
@@ -655,14 +665,14 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
         didSet {
             view_cell_big.layer.cornerRadius = 8
             view_cell_big.clipsToBounds = true
-            view_cell_big.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
+            // view_cell_big.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
             
             view_cell_big.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
             view_cell_big.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
             view_cell_big.layer.shadowOpacity = 1.0
             view_cell_big.layer.shadowRadius = 15.0
             view_cell_big.layer.masksToBounds = false
-            view_cell_big.backgroundColor = .white
+            // view_cell_big.backgroundColor = .white
             
     
         }
@@ -679,7 +689,7 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
             view_cell_amount.layer.shadowOpacity = 1.0
             view_cell_amount.layer.shadowRadius = 15.0
             view_cell_amount.layer.masksToBounds = false
-            view_cell_amount.backgroundColor = .white
+            // view_cell_amount.backgroundColor = .white
             
     
         }
@@ -696,7 +706,7 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
             view_cell_arrived.layer.shadowOpacity = 1.0
             view_cell_arrived.layer.shadowRadius = 15.0
             view_cell_arrived.layer.masksToBounds = false
-            view_cell_arrived.backgroundColor = .white
+            // view_cell_arrived.backgroundColor = .white
             
     
         }
@@ -713,15 +723,56 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
             view_cell_distance.layer.shadowOpacity = 1.0
             view_cell_distance.layer.shadowRadius = 15.0
             view_cell_distance.layer.masksToBounds = false
-            view_cell_distance.backgroundColor = .white
+            // view_cell_distance.backgroundColor = .white
+            
+    
+        }
+    }
+    
+    @IBOutlet weak var view_cell_date:UIView! {
+        didSet {
+            view_cell_date.layer.cornerRadius = 8
+            view_cell_date.clipsToBounds = true
+            // view_cell_distance.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
+            
+            view_cell_date.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            view_cell_date.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+            view_cell_date.layer.shadowOpacity = 1.0
+            view_cell_date.layer.shadowRadius = 15.0
+            view_cell_date.layer.masksToBounds = false
+            // view_cell_distance.backgroundColor = .white
+            
+    
+        }
+    }
+    
+    @IBOutlet weak var view_cell_time:UIView! {
+        didSet {
+            view_cell_time.layer.cornerRadius = 8
+            view_cell_time.clipsToBounds = true
+            // view_cell_distance.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
+            
+            view_cell_time.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            view_cell_time.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+            view_cell_time.layer.shadowOpacity = 1.0
+            view_cell_time.layer.shadowRadius = 15.0
+            view_cell_time.layer.masksToBounds = false
+            // view_cell_distance.backgroundColor = .white
             
     
         }
     }
     
     
+    @IBOutlet weak var lbl_amount:UILabel!
+    @IBOutlet weak var lbl_arrived:UILabel!
+    @IBOutlet weak var lbl_distance:UILabel!
     
+    @IBOutlet weak var lbl_from:UILabel!
+    @IBOutlet weak var lbl_to:UILabel!
     
+    @IBOutlet weak var lbl_date:UILabel!
+    @IBOutlet weak var lbl_time:UILabel!
 
     @IBOutlet weak var btnStarting:UIButton!{
         didSet{
@@ -737,45 +788,7 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
     @IBOutlet weak var lblStartingLocation:UILabel!
     @IBOutlet weak var lblEndLocation:UILabel!
     
-    @IBOutlet weak var lbl_duration:UILabel! {
-        didSet {
-            lbl_duration.textColor = .black
-        }
-    }
-    @IBOutlet weak var lbl_distance:UILabel! {
-        didSet {
-            lbl_distance.textColor = .black
-        }
-    }
-    
-    @IBOutlet weak var lblTotalPayableAmount:UILabel!
-    
-    @IBOutlet weak var view_big:UIView! {
-        didSet {
-            view_big.backgroundColor = .white
-        }
-    }
-    
-    @IBOutlet weak var btn_distance:UIButton! {
-        didSet {
-            btn_distance.setTitleColor(.white, for: .normal)
-            btn_distance.layer.cornerRadius = 14
-            btn_distance.clipsToBounds = true
-            btn_distance.backgroundColor = UIColor.init(red: 227.0/255.0, green: 230.0/255.0, blue: 244.0/255.0, alpha: 1)
-        }
-    }
-    @IBOutlet weak var btn_est_earn:UIButton! {
-        didSet {
-            btn_est_earn.setTitleColor(.white, for: .normal)
-            btn_est_earn.layer.cornerRadius = 14
-            btn_est_earn.clipsToBounds = true
-            btn_est_earn.backgroundColor = UIColor.init(red: 227.0/255.0, green: 230.0/255.0, blue: 244.0/255.0, alpha: 1)
-        }
-    }
-    
-    @IBOutlet weak var lbl_from:UILabel!
-    @IBOutlet weak var lbl_to:UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

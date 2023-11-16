@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print(dict as Any)
         
         // if user send request
-        /*if (dict["type"] == nil) {
+        if (dict["type"] == nil) {
             print("NOTIFICATION FROM SOMEWHERE ELSE")
         } else if (dict["type"] as! String) == "confirm" { // when driver confirm booking
             
@@ -211,7 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             window?.makeKeyAndVisible()
             
-        }*/
+        }
     }
     
     

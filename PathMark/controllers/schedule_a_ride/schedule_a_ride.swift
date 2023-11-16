@@ -53,6 +53,8 @@ class schedule_a_ride: UIViewController {
     }
     
     var str_selected_date:String! = ""
+    var str_selected_time:String! = ""
+    
     @IBOutlet weak var lbl_selected_date:UILabel! {
         didSet {
             lbl_selected_date.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1)
@@ -114,26 +116,33 @@ class schedule_a_ride: UIViewController {
     
     @objc func schedule_a_ride_click_method2() {
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_confirm_booking_id") as? schedule_confirm_booking
+//        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_confirm_booking_id") as? schedule_confirm_booking
+//        
+//        push!.str_get_category_id2 = String(self.str_get_category_id)
+//        push!.str_from_location2 = String(self.str_from_location)
+//        push!.str_to_location2 = String(self.str_to_location)
+//
+//        push!.my_location_lat2 = String(self.my_location_lat)
+//        push!.my_location_long2 = String(self.my_location_long)
+//
+//        push!.searched_place_location_lat2 = String(self.searched_place_location_lat)
+//        push!.searched_place_location_long2 = String(self.searched_place_location_long)
+//        
+//        push!.str_date = String(self.str_selected_date)
+//        push!.str_time = String(self.str_selected_time)
+//        
+//        self.navigationController?.pushViewController(push!, animated: true)
         
-        push!.str_get_category_id2 = String(self.str_get_category_id)
-        push!.str_from_location2 = String(self.str_from_location)
-        push!.str_to_location2 = String(self.str_to_location)
-
-        push!.my_location_lat2 = String(self.my_location_lat)
-        push!.my_location_long2 = String(self.my_location_long)
-
-        push!.searched_place_location_lat2 = String(self.searched_place_location_lat)
-        push!.searched_place_location_long2 = String(self.searched_place_location_long)
-        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
         self.navigationController?.pushViewController(push!, animated: true)
-        
+      
     }
     
     @objc func select_time_click_method() {
         RPicker.selectDate(title: "Select Time", cancelText: "Cancel", datePickerMode: .time, didSelectDate: { (selectedDate) in
             // TODO: Your implementation for date
             self.btn_select_time.setTitle(selectedDate.dateString("HH:mm"), for: .normal)
+            self.str_selected_time = selectedDate.dateString("HH:mm")
         })
     }
     
