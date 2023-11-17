@@ -11,10 +11,20 @@ import AudioToolbox
 
 class before_payment: UIViewController {
     
-    var str_get_total_amount:String!
-
+    // parse
+    var get_full_data_for_payment2:NSDictionary!
+    
+    var str_get_total_price2:String!
+    var str_booking_id2:String!
+    
+    var str_user_select_offer:Int!
+    var str_final_amount:String!
+    
+    var str_discount_amount2:String! = "0"
     
     var arr_coupon_list:NSMutableArray! = []
+    
+    var str_coupon_code2:String!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -75,6 +85,16 @@ class before_payment: UIViewController {
         }
     }
     
+    @IBOutlet weak var btn_submit:UIButton! {
+        didSet {
+            btn_submit.backgroundColor = .systemGreen
+            btn_submit.layer.cornerRadius = 12
+            btn_submit.clipsToBounds = true
+        }
+    }
+    
+    var str_cash_type:String! = "0"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -82,10 +102,16 @@ class before_payment: UIViewController {
         self.btn_cash.addTarget(self, action: #selector(cash_click_method), for: .touchUpInside)
         self.btn_bkash.addTarget(self, action: #selector(bkash_click_method), for: .touchUpInside)
         
+        self.btn_submit.addTarget(self, action: #selector(submit_click_method), for: .touchUpInside)
+        
+        self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+        
         self.couponListWB(str_show_loader: "yes")
     }
     
     @objc func cash_click_method() {
+        self.str_cash_type = "1"
+        
         // AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         let generator = UIImpactFeedbackGenerator(style: .soft)
         generator.impactOccurred()
@@ -95,6 +121,8 @@ class before_payment: UIViewController {
     }
     
     @objc func bkash_click_method() {
+        self.str_cash_type = "2"
+        
         let generator = UIImpactFeedbackGenerator(style: .soft)
         generator.impactOccurred()
         
@@ -249,6 +277,32 @@ class before_payment: UIViewController {
         
     }
     
+    @objc func submit_click_method() {
+        print(self.str_cash_type as Any)
+        
+        if (self.str_cash_type == "0") {
+            
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select a payment option"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+            
+        } else {
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
+            
+            push!.str_booking_id = self.str_booking_id2
+            push!.str_get_total_price = self.str_get_total_price2
+            push!.get_full_data_for_payment = self.get_full_data_for_payment2
+            push!.str_discounted_amount = self.str_discount_amount2
+            push!.str_coupon_code = self.str_coupon_code2
+            
+            self.navigationController?.pushViewController(push!, animated: true)
+        }
+        
+        
+        
+    }
+    
 }
 
 extension before_payment: UITableViewDataSource , UITableViewDelegate {
@@ -273,15 +327,13 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         cell.backgroundColor = .clear
          
         let item = self.arr_coupon_list[indexPath.row] as? [String:Any]
-        print(item as Any)
-//
-//        cell.lbl_name.text = (item!["Name"] as! String)
-//        cell.lbl_phone.text = (item!["phone"] as! String)
-//        cell.lbl_relation.text = "Relation : "+(item!["relation"] as! String)
-//        
-//        cell.btn_setting.tag = indexPath.row
-//        cell.btn_setting.addTarget(self, action: #selector(setting_click_method), for: .touchUpInside)
-//        
+        // print(item as Any)
+
+        cell.lbl_tag.text = " "+(item!["couponCode"] as! String)+" "
+        cell.lbl_off.text = "\(item!["discount"]!) % off"
+        cell.lbl_message.text = (item!["description"] as! String)
+        cell.lbl_expire.text = (item!["endDate"] as! String)
+        
         return cell
     }
     
@@ -290,29 +342,68 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView .deselectRow(at: indexPath, animated: true)
      
+        let item = self.arr_coupon_list[indexPath.row] as? [String:Any]
+        
+        self.str_coupon_code2 = (item!["description"] as! String)
+        
+        // print(self.str_get_total_amount as Any)
+        // print("\(item!["discount"]!)")
+        
+        // calculate
+        var str_discount = "\(item!["discount"]!)"
+        
+        // let a: Int? = Int("\(item!["discount"]!)")
+        // print(a as Any)
+        
+        let double_off = Double("\(item!["discount"]!)")!
+        let double_total = Double(self.str_get_total_price2)!
+        
+        // var discount = (double_off/100)
+        
+        
+        var cal = (double_off/100)*double_total
+         print(cal)
+        self.str_discount_amount2 = "\(cal)"
+        
+        var final_cal = double_total - cal
+        // print(final_cal)
+        
+        self.lbl_total_payable.text = "Total Payable Amount : \(str_bangladesh_currency_symbol)\(final_cal)"
+        
+        self.str_final_amount = "\(final_cal)"
+        
+        self.str_user_select_offer = indexPath.row
+        self.tbleView.reloadData()
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return 70
+        return 150
     }
     
 }
 
 class before_payment_table_cell: UITableViewCell {
     
-    @IBOutlet weak var img_profile:UIImageView! {
+    @IBOutlet weak var view_payment:UIView! {
         didSet {
-            img_profile.backgroundColor = .gray
-            img_profile.layer.cornerRadius = 30
-            img_profile.clipsToBounds = true
+            view_payment.layer.masksToBounds = false
+            view_payment.layer.shadowColor = UIColor.black.cgColor
+            view_payment.layer.shadowOffset =  CGSize.zero
+            view_payment.layer.shadowOpacity = 0.5
+            view_payment.layer.shadowRadius = 2
+            view_payment.backgroundColor = .white
         }
     }
     
-    @IBOutlet weak var lbl_name:UILabel!
-    @IBOutlet weak var lbl_phone:UILabel!
-    @IBOutlet weak var lbl_relation:UILabel!
-    
-    @IBOutlet weak var btn_setting:UIButton!
-    
+    @IBOutlet weak var lbl_tag:UILabel! {
+        didSet {
+            //  lbl_tag.backgroundColor = .systemRed
+            // lbl_tag.textColor = .red
+        }
+    }
+    @IBOutlet weak var lbl_off:UILabel!
+    @IBOutlet weak var lbl_message:UILabel!
+    @IBOutlet weak var lbl_expire:UILabel!
 }

@@ -657,7 +657,11 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                 if "\(item!["paymentStatus"]!)" == "" {
                     
                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                    push!.str_get_total_amount = "\(item!["FinalFare"]!)"
+                    
+                    push!.str_booking_id2 = "\(item!["bookingId"]!)"
+                    push!.str_get_total_price2 = "\(item!["FinalFare"]!)"
+                    push!.get_full_data_for_payment2 = (item! as NSDictionary)
+                    
                     self.navigationController?.pushViewController(push!, animated: true)
                     
                 }
@@ -671,14 +675,23 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                 
                 if "\(item!["paymentStatus"]!)" == "" {
                     
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                    
+                    push!.str_booking_id2 = "\(item!["bookingId"]!)"
+                    push!.str_get_total_price2 = "\(item!["FinalFare"]!)"
+                    push!.get_full_data_for_payment2 = (item! as NSDictionary)
+                    
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                    /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
                     
                     push!.str_booking_id = "\(item!["bookingId"]!)"
                     push!.str_get_total_price = "\(item!["FinalFare"]!)"
                     
                     push!.get_full_data_for_payment = (item! as NSDictionary)
+                    push!.str_coupon_code = ""
                     
-                    self.navigationController?.pushViewController(push!, animated: true)
+                    self.navigationController?.pushViewController(push!, animated: true)*/
                     
                 } else {
                     

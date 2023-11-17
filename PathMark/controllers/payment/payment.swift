@@ -17,6 +17,8 @@ class payment: UIViewController, UITextFieldDelegate {
     
     var str_discounted_amount:String!
     
+    var str_coupon_code:String!
+    
     @IBOutlet weak var navigationBar:UIView! {
         didSet {
             navigationBar.backgroundColor = navigation_color
@@ -69,9 +71,9 @@ class payment: UIViewController, UITextFieldDelegate {
             self.alert_popup_appear()
         } else if (cell.txt_card_cvv.text == "") {
             self.alert_popup_appear()
-        }  else if (cell.txt_tip.text == "") {
+        }/*  else if (cell.txt_tip.text == "") {
             self.alert_popup_appear()
-        } else {
+        } */else {
             self.payment_WB(str_show_loader: "yes")
         }
     }
@@ -134,8 +136,8 @@ class payment: UIViewController, UITextFieldDelegate {
                     "transactionId"  : String("dummy_transaction_id"),
                     "totalAmount"   : String(self.str_get_total_price),
                     "TIP"           : String(cell.txt_tip.text!),
-                    "discountAmount"    : String(""),
-                    "couponCode"    : String(cell.txt_coupon.text!),
+                    "discountAmount"    : String(self.str_discounted_amount),
+                    "couponCode"    : String(self.str_coupon_code),
                     "paymentMethod" : String("Credit Card"),
                 ]
                 
