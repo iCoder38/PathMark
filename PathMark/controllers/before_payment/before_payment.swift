@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import AudioToolbox
 
 class before_payment: UIViewController {
     
@@ -53,8 +54,16 @@ class before_payment: UIViewController {
         }
     }
     
-    @IBOutlet weak var btn_cash_tick:UIButton!
-    @IBOutlet weak var btn_bkash_tick:UIButton!
+    @IBOutlet weak var btn_cash_tick:UIButton! {
+        didSet {
+            btn_cash_tick.isHidden = true
+        }
+    }
+    @IBOutlet weak var btn_bkash_tick:UIButton! {
+        didSet {
+            btn_bkash_tick.isHidden = true
+        }
+    }
     
     @IBOutlet weak var tbleView:UITableView! {
         didSet {
@@ -70,7 +79,28 @@ class before_payment: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        self.btn_cash.addTarget(self, action: #selector(cash_click_method), for: .touchUpInside)
+        self.btn_bkash.addTarget(self, action: #selector(bkash_click_method), for: .touchUpInside)
+        
         self.couponListWB(str_show_loader: "yes")
+    }
+    
+    @objc func cash_click_method() {
+        // AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        let generator = UIImpactFeedbackGenerator(style: .soft)
+        generator.impactOccurred()
+        self.btn_cash_tick.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        self.btn_cash_tick.isHidden = false
+        self.btn_bkash_tick.isHidden = true
+    }
+    
+    @objc func bkash_click_method() {
+        let generator = UIImpactFeedbackGenerator(style: .soft)
+        generator.impactOccurred()
+        
+        self.btn_bkash_tick.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        self.btn_bkash_tick.isHidden = false
+        self.btn_cash_tick.isHidden = true
     }
 
     @objc func couponListWB(str_show_loader:String) {
@@ -84,13 +114,7 @@ class before_payment: UIViewController {
         
         var parameters:Dictionary<AnyHashable, Any>!
         
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            print(person)
-            
-            let x : Int = person["userId"] as! Int
-            let myString = String(x)
-            
-            
+        
             if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
                 print(token_id_is as Any)
                 
@@ -169,7 +193,7 @@ class before_payment: UIViewController {
                     }
                 }
             }
-        }
+       
     }
     
     @objc func login_refresh_token_for_upcoming_ride_wb() {
