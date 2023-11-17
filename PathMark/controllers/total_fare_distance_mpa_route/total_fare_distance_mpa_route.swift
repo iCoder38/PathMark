@@ -604,6 +604,8 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         
         cell.txt_field.delegate = self
         
+        cell.lbl_curreny_symbol.text = String(str_bangladesh_currency_symbol)
+        
         return cell
     }
     
@@ -733,6 +735,8 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
             btn_est_earn.backgroundColor = UIColor.init(red: 227.0/255.0, green: 230.0/255.0, blue: 244.0/255.0, alpha: 1)
         }
     }
+    
+    @IBOutlet weak var lbl_curreny_symbol:UILabel!
     
     @IBOutlet weak var lbl_from:UILabel!
     @IBOutlet weak var lbl_to:UILabel!

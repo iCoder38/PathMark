@@ -65,11 +65,14 @@ class success_payment: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard2))
         view.addGestureRecognizer(tap)
         
-        self.lbl_price.text = "\(self.get_booking_details["FinalFare"]!)"
-        self.lbl_date_time.text = "\(self.get_booking_details["created"]!)"
+        self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.get_booking_details["FinalFare"]!)"
         
-        
-        
+        if (self.get_booking_details["created"]) == nil {
+            self.lbl_date_time.text = ""
+        } else {
+            self.lbl_date_time.text = "\(self.get_booking_details["created"]!)"
+        }
+      
     }
     
     //Calls this function when the tap is recognized.
@@ -77,8 +80,6 @@ class success_payment: UIViewController {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
-    
-    
     
     @objc func validate_before_submit_wb() {
         
@@ -120,7 +121,7 @@ class success_payment: UIViewController {
                 parameters = [
                     "action"        : "submitreview",
                     "reviewFrom"    : String(myString),
-                    "reviewTo"      : "\(self.get_booking_details["userId"]!)",
+                    "reviewTo"      : "\(self.get_booking_details["driverId"]!)",
                     "star"          : String(cell.lbl_star_count.text!),
                     "message"       : String(cell.txt_view.text!),
                     "bookingId"     : "\(self.get_booking_details["bookingId"]!)"

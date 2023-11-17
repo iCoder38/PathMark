@@ -1593,8 +1593,8 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Est. Earn" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="03n-eG-Eij">
-                                                            <rect key="frame" x="295" y="71" width="49" height="10"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Est. amount" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="03n-eG-Eij">
+                                                            <rect key="frame" x="295" y="71" width="70.666666666666686" height="10"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="10" id="1Vu-b5-PS9"/>
                                                             </constraints>
@@ -1701,6 +1701,7 @@
                                             <outlet property="lblEndLocation" destination="279-YT-mkf" id="8VO-rv-2hy"/>
                                             <outlet property="lblStartingLocation" destination="5Bf-za-jY2" id="wb4-bY-jw9"/>
                                             <outlet property="lblTotalPayableAmount" destination="u0Q-Rt-5be" id="CbY-2q-vgX"/>
+                                            <outlet property="lbl_curreny_symbol" destination="Mjg-mT-PWh" id="isT-jY-aHb"/>
                                             <outlet property="lbl_distance" destination="oZW-Ej-1n4" id="Wqk-vx-sM4"/>
                                             <outlet property="lbl_duration" destination="NJY-Q8-jYR" id="tcQ-6c-eRl"/>
                                             <outlet property="lbl_from" destination="puH-Ex-lId" id="JB8-4e-zpr"/>
@@ -4392,26 +4393,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b9i-qE-OZf">
-                                                    <rect key="frame" x="20" y="628" width="353" height="60"/>
-                                                    <color key="backgroundColor" red="0.86595924609999997" green="0.86595924609999997" blue="0.86595924609999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="60" id="iM2-dP-RpL"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Coupon" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Dj-eq-skt">
-                                                    <rect key="frame" x="20" y="599" width="353" height="21"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="rWg-a3-pFy"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lpe-j9-E9g">
-                                                    <rect key="frame" x="20" y="696" width="353" height="60"/>
+                                                    <rect key="frame" x="20" y="599" width="353" height="60"/>
                                                     <color key="backgroundColor" red="0.88627451660000001" green="0.46666663889999999" blue="0.40784314269999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="60" id="XwG-6z-VaO"/>
@@ -4433,11 +4416,9 @@
                                                 <constraint firstItem="Lpe-j9-E9g" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="AhI-Q8-fi4"/>
                                                 <constraint firstItem="Mt8-UI-6MP" firstAttribute="top" secondItem="le6-wL-nfg" secondAttribute="bottom" constant="20" id="Aj5-MV-N63"/>
                                                 <constraint firstItem="uwI-A5-eYq" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="Ccj-SM-uFh"/>
-                                                <constraint firstItem="6Dj-eq-skt" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="DeR-Pz-cKo"/>
                                                 <constraint firstItem="xfL-on-ZRG" firstAttribute="top" secondItem="hp2-PA-WCu" secondAttribute="bottom" constant="8" symbolic="YES" id="EB0-KZ-gYb"/>
                                                 <constraint firstItem="hp2-PA-WCu" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="EPd-Mj-tAJ"/>
                                                 <constraint firstItem="qlz-EO-8EO" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="FPR-4v-Kz2"/>
-                                                <constraint firstItem="6Dj-eq-skt" firstAttribute="top" secondItem="V2Z-X4-Q38" secondAttribute="bottom" constant="8" symbolic="YES" id="Hyy-al-TT1"/>
                                                 <constraint firstItem="hp2-PA-WCu" firstAttribute="top" secondItem="f47-Hd-fjq" secondAttribute="bottom" constant="8" symbolic="YES" id="IWV-ns-OKc"/>
                                                 <constraint firstItem="pMv-te-NAL" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="Ijl-HO-wdf"/>
                                                 <constraint firstItem="uwI-A5-eYq" firstAttribute="top" secondItem="xfL-on-ZRG" secondAttribute="bottom" constant="8" symbolic="YES" id="Jzh-4y-xSd"/>
@@ -4448,7 +4429,6 @@
                                                 <constraint firstItem="V2Z-X4-Q38" firstAttribute="top" secondItem="Mt8-UI-6MP" secondAttribute="bottom" constant="8" symbolic="YES" id="Q0d-I3-LYN"/>
                                                 <constraint firstItem="BjH-Cw-Tda" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="SwN-Vy-kvR"/>
                                                 <constraint firstItem="xfL-on-ZRG" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="Th1-bi-xHD"/>
-                                                <constraint firstItem="6Dj-eq-skt" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="UOb-AP-NGf"/>
                                                 <constraint firstItem="Mt8-UI-6MP" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="ViW-SA-pQS"/>
                                                 <constraint firstItem="uwI-A5-eYq" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="XYB-2f-V1b"/>
                                                 <constraint firstItem="pMv-te-NAL" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="aDx-5q-GZu"/>
@@ -4456,18 +4436,15 @@
                                                 <constraint firstItem="pMv-te-NAL" firstAttribute="top" secondItem="BjH-Cw-Tda" secondAttribute="bottom" constant="8" symbolic="YES" id="aVH-FU-q0w"/>
                                                 <constraint firstItem="hp2-PA-WCu" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="ab6-jm-kWI"/>
                                                 <constraint firstItem="f47-Hd-fjq" firstAttribute="top" secondItem="5Hn-XI-OCV" secondAttribute="bottom" constant="8" symbolic="YES" id="e4A-1A-h6l"/>
-                                                <constraint firstItem="b9i-qE-OZf" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="fnO-9F-PT5"/>
                                                 <constraint firstItem="5Hn-XI-OCV" firstAttribute="top" secondItem="pMv-te-NAL" secondAttribute="bottom" constant="8" symbolic="YES" id="gBs-f8-D5T"/>
                                                 <constraint firstItem="Mt8-UI-6MP" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="hbn-4v-MRp"/>
                                                 <constraint firstItem="xfM-ae-XmT" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="ieS-vy-uXg"/>
-                                                <constraint firstItem="b9i-qE-OZf" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="jpD-DT-oCC"/>
                                                 <constraint firstItem="BjH-Cw-Tda" firstAttribute="top" secondItem="qlz-EO-8EO" secondAttribute="bottom" constant="8" symbolic="YES" id="lSS-89-hzr"/>
                                                 <constraint firstItem="xfM-ae-XmT" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="lpx-uN-2E9"/>
-                                                <constraint firstItem="b9i-qE-OZf" firstAttribute="top" secondItem="6Dj-eq-skt" secondAttribute="bottom" constant="8" symbolic="YES" id="lxF-po-CQN"/>
                                                 <constraint firstItem="le6-wL-nfg" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="mG4-dB-8MJ"/>
                                                 <constraint firstItem="f47-Hd-fjq" firstAttribute="trailing" secondItem="NA2-Ml-l2a" secondAttribute="trailingMargin" id="tOF-Me-mCt"/>
                                                 <constraint firstItem="qlz-EO-8EO" firstAttribute="leading" secondItem="NA2-Ml-l2a" secondAttribute="leadingMargin" id="tre-CX-8NT"/>
-                                                <constraint firstItem="Lpe-j9-E9g" firstAttribute="top" secondItem="le6-wL-nfg" secondAttribute="bottom" constant="214" id="xL9-tM-nhX"/>
+                                                <constraint firstItem="Lpe-j9-E9g" firstAttribute="top" secondItem="le6-wL-nfg" secondAttribute="bottom" constant="117" id="xL9-tM-nhX"/>
                                                 <constraint firstItem="le6-wL-nfg" firstAttribute="top" secondItem="xfM-ae-XmT" secondAttribute="bottom" constant="8" symbolic="YES" id="xuW-EF-xAr"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -4479,7 +4456,6 @@
                                             <outlet property="txt_card_expiry_year" destination="uwI-A5-eYq" id="UeF-1L-ary"/>
                                             <outlet property="txt_card_holder_name" destination="BjH-Cw-Tda" id="dLx-yw-949"/>
                                             <outlet property="txt_card_number" destination="5Hn-XI-OCV" id="l0Y-60-d2e"/>
-                                            <outlet property="txt_coupon" destination="b9i-qE-OZf" id="gbz-PZ-0nr"/>
                                             <outlet property="txt_tip" destination="V2Z-X4-Q38" id="Vhn-kc-S4i"/>
                                         </connections>
                                     </tableViewCell>

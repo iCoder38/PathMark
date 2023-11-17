@@ -287,7 +287,12 @@ class before_payment: UIViewController {
             alert.addButtons([cancel])
             self.present(alert, animated: true)
             
+        } else if (self.str_cash_type == "1") {
+            
+            self.cash_payment_WB(str_show_loader: "yes")
+            
         } else {
+            
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
             
             push!.str_booking_id = self.str_booking_id2
@@ -297,12 +302,173 @@ class before_payment: UIViewController {
             push!.str_coupon_code = self.str_coupon_code2
             
             self.navigationController?.pushViewController(push!, animated: true)
+            
         }
-        
-        
         
     }
     
+    @objc func cash_payment_WB(str_show_loader:String) {
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! payment_table_cell
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"        : "updatepayment",
+                    "userId"        : String(myString),
+                    "bookingId"     : String(self.str_booking_id2),
+                    "transactionId"  : String("cash_dummy_transaction_id"),
+                    "totalAmount"   : String(self.str_get_total_price2),
+                    "TIP"           : String("0"),
+                    "discountAmount"    : String(""),
+                    "couponCode"    : String(""),
+                    "paymentMethod" : String("Cash"),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            // self.back_click_method()
+                            
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
+                            
+                            push!.get_booking_details = self.get_full_data_for_payment2
+                            
+                            self.navigationController?.pushViewController(push!, animated: true)
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.cash_payment_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
 }
 
 extension before_payment: UITableViewDataSource , UITableViewDelegate {
@@ -350,7 +516,7 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         // print("\(item!["discount"]!)")
         
         // calculate
-        var str_discount = "\(item!["discount"]!)"
+        // var str_discount = "\(item!["discount"]!)"
         
         // let a: Int? = Int("\(item!["discount"]!)")
         // print(a as Any)
@@ -361,11 +527,11 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         // var discount = (double_off/100)
         
         
-        var cal = (double_off/100)*double_total
-         print(cal)
+        let cal = (double_off/100)*double_total
+        print(cal)
         self.str_discount_amount2 = "\(cal)"
         
-        var final_cal = double_total - cal
+        let final_cal = double_total - cal
         // print(final_cal)
         
         self.lbl_total_payable.text = "Total Payable Amount : \(str_bangladesh_currency_symbol)\(final_cal)"

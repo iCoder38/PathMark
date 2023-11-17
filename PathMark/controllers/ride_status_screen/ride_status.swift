@@ -159,7 +159,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         self.tbleView.dataSource = self
         
         self.tbleView.reloadData()
-        // self.iAmHereForLocationPermission()
+        
         
         /*
          DriverImage = "";
@@ -194,22 +194,25 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
                 
                 self.lblNavigationTitle.text = "Confirmed"
-                self.navigationBar.backgroundColor = UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
+                self.navigationBar.backgroundColor = navigation_color
+                // UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
                 
             } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
                 
                 self.lblNavigationTitle.text = "Driver has arrived at your location"
-                self.navigationBar.backgroundColor = .systemOrange
+                self.navigationBar.backgroundColor = navigation_color
                 
             }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
                 
                 self.lblNavigationTitle.text = "On Trip"
-                self.navigationBar.backgroundColor = .systemPurple
+                self.navigationBar.backgroundColor = navigation_color
+                self.btn_cancel_ride.isHidden = true
                 
-            }   else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
+            }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
                 
                 self.lblNavigationTitle.text = "Ride Complete - Please pay"
-                self.navigationBar.backgroundColor = .systemPurple
+                self.navigationBar.backgroundColor = navigation_color
+                self.btn_cancel_ride.isHidden = true
                 
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                 self.navigationController?.pushViewController(push!, animated: true)
@@ -230,13 +233,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.present(alert, animated: true)
             }
             
-            print("=========================================")
-            print("=========================================")
+            print("=============================================")
+            print("=============================================")
             print(self.dict_get_all_data_from_notification as Any)
-            print("=========================================")
-            print("=========================================")
-            
-            
+            print("=============================================")
+            print("=============================================")
             
             self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
             
@@ -307,6 +308,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             }
         }
         
+        //
+        self.iAmHereForLocationPermission()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -379,15 +382,24 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         // print(self.str_from_location as Any)
         // print(self.str_to_location as Any)
         
-        cell.lbl_from.text = String(self.str_from_location)
-        cell.lbl_to.text = String(self.str_to_location)
+        // cell.lbl_from.text = String(self.str_from_location)
+        // cell.lbl_to.text = String(self.str_to_location)
         
         print("**********************")
         
-        let restaurantLatitudeDouble    = Double(self.searched_place_location_lat)
-        let restaurantLongitudeDouble   = Double(self.searched_place_location_long)
-        let driverLatitudeDouble        = Double(self.my_location_lat)
-        let driverLongitudeDouble       = Double(self.my_location_long)
+        let pickUp_lat_long = (self.dict_get_all_data_from_notification["RequestPickupLatLong"] as! String)
+        let drop_lat_long = (self.dict_get_all_data_from_notification["RequestDropLatLong"] as! String)
+        
+        let pickUp = pickUp_lat_long.components(separatedBy: ",")
+        let drop = drop_lat_long.components(separatedBy: ",")
+        
+        print(pickUp)
+        print(drop)
+        
+        let restaurantLatitudeDouble    = Double(pickUp[0])
+        let restaurantLongitudeDouble   = Double(pickUp[1])
+        let driverLatitudeDouble        = Double(drop[0])
+        let driverLongitudeDouble       = Double(drop[1])
         
         let coordinate₀ = CLLocation(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
         let coordinate₁ = CLLocation(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)

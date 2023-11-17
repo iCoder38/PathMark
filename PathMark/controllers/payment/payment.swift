@@ -117,18 +117,6 @@ class payment: UIViewController, UITextFieldDelegate {
                     "token":String(token_id_is),
                 ]
                 
-                /*
-                 action:updatepayment
-                 userId:
-                 bookingId:
-                 transactionId:
-                 totalAmount:
-                 TIP:
-                 discountAmount:
-                 couponCode:
-                 paymentMethod:   Credit Card', 'Paypal', 'Cash'
-                 */
-                
                 parameters = [
                     "action"        : "updatepayment",
                     "userId"        : String(myString),
@@ -501,7 +489,7 @@ class payment_table_cell: UITableViewCell {
             txt_tip.layer.shadowOffset =  CGSize.zero
             txt_tip.layer.shadowOpacity = 0.5
             txt_tip.layer.shadowRadius = 2
-            txt_tip.isSecureTextEntry = true
+            txt_tip.isSecureTextEntry = false
         }
     }
     
