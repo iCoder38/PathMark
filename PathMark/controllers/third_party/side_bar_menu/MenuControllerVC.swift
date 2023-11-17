@@ -59,8 +59,10 @@ class MenuControllerVC: UIViewController {
                               "Edit profile",
                               "Bookings",
                               "Emergency Contacts",
-                              "Address",
-                              "Change Password",
+                              "Manage Address",
+                              "Review & Rating",
+                              "FAQ(s)",
+                              "Shared booking",
                               "Help",
                               "Logout"]
     
@@ -71,12 +73,9 @@ class MenuControllerVC: UIViewController {
                               "trip",
                               "lock_24",
                               "help",
+                              "help",
+                              "help",
                               "logout"]
-    
-    // driver
-    var arr_driver_title = ["Dashboard", "Edit profile","Order History", "New Orders" , "Go4Card" , "Review & Rating" , "Earnings" , "Cashout" , "Invite Friends($5)" ,"Change password" , "Logout" ]
-    var arr_driver_image = ["home","edit2","trip","lock","help","logout"]
-    
     
     @IBOutlet weak var lblUserName:UILabel! {
         didSet {
@@ -123,26 +122,12 @@ class MenuControllerVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.view.backgroundColor = navigation_color
-        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            self.lblUserName.text = (person["fullName"] as! String)
+            // self.lblAddress.text = (person["address"] as! String)
             
-             if person["role"] as! String == "Member" {
-                
-                 self.lblUserName.text = (person["fullName"] as! String)
-                 // self.lblAddress.text = (person["address"] as! String)
-                 
-                 self.imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "logo"))
-                 
-             } else {
-                
-                self.lblUserName.text = (person["fullName"] as! String)
-                // self.lblPhoneNumber.text = (person["contactNumber"] as! String)
-                
-                 
-            }
-             
+            self.imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "logo"))
         }
-        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -168,65 +153,31 @@ extension MenuControllerVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-        
-            if person["role"] as! String == "Member" {
-                return arr_customer_title.count
-            } else {
-                return self.arr_driver_title.count
-            }
-            
-        } else {
-            return 0
-        }
-        
+        return arr_customer_title.count
+   
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:MenuControllerVCTableCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! MenuControllerVCTableCell
         
         cell.backgroundColor = .clear
-      
+        
         cell.separatorInset = UIEdgeInsets.zero
         cell.layoutMargins = UIEdgeInsets.zero
         
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
         
-            if person["role"] as! String == "Member" {
-            
-         cell.lblName.text = self.arr_customer_title[indexPath.row]
-         cell.lblName.textColor = .white
-         
-         cell.imgProfile.image = UIImage(named: self.arr_customer_image[indexPath.row])
-         cell.imgProfile.backgroundColor = .clear
-         
-            } else {
-                
-                cell.lblName.text = self.arr_driver_title[indexPath.row]
-                cell.lblName.textColor = .white
-                
-                // cell.imgProfile.image = UIImage(named: self.arr_customer_image[indexPath.row])
-                // cell.imgProfile.backgroundColor = .clear
- 
-            }
-            
-        } else {
+        cell.lblName.text = self.arr_customer_title[indexPath.row]
+        cell.lblName.textColor = .white
         
-            // temp
+        cell.imgProfile.image = UIImage(named: self.arr_customer_image[indexPath.row])
+        cell.imgProfile.backgroundColor = .clear
         
-        
-         }
-        
-        
-                
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            if person["role"] as! String == "Member" {
+         
                 
                 if self.arr_customer_title[indexPath.row] == "Emergency Contacts" {
                     
@@ -246,7 +197,7 @@ extension MenuControllerVC: UITableViewDataSource {
                     let navigationController = UINavigationController(rootViewController: destinationController!)
                     sw.setFront(navigationController, animated: true)
                     
-                } else if self.arr_customer_title[indexPath.row] == "Address" {
+                } else if self.arr_customer_title[indexPath.row] == "Manage Address" {
                     
                     let storyboard = UIStoryboard(name: "Main", bundle: nil)
                     let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -273,12 +224,21 @@ extension MenuControllerVC: UITableViewDataSource {
                     let navigationController = UINavigationController(rootViewController: destinationController!)
                     sw.setFront(navigationController, animated: true)
                     
+                } else if self.arr_customer_title [indexPath.row] == "Edit Profile" {
+                    
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                    self.view.window?.rootViewController = sw
+                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "edit_profile_id") as? edit_profile
+                    let navigationController = UINavigationController(rootViewController: destinationController!)
+                    sw.setFront(navigationController, animated: true)
+                    
                 } else if self.arr_customer_title [indexPath.row] == "Logout" {
                     
                     self.validation_before_logout()
                 }
-            }
-        }
+            
+      
     }
     
     

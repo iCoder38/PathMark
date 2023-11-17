@@ -47,7 +47,7 @@ class schedule_ride_details: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Schedulae ride details"
+            view_navigation_title.text = "Schedule ride details"
             view_navigation_title.textColor = .white
         }
     }
@@ -61,6 +61,12 @@ class schedule_ride_details: UIViewController {
         }
     }
     
+    @IBOutlet weak var btn_home:UIButton! {
+        didSet {
+            btn_home.tintColor = .white
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tbleView.separatorColor = .clear
@@ -68,6 +74,9 @@ class schedule_ride_details: UIViewController {
         print("===================================")
         print("===================================")
         print(self.dict_get_booking_details as Any)
+        
+        //
+        self.btn_home.addTarget(self, action: #selector(home_click_methodd), for: .touchUpInside)
         /*
          DriverImage = "https://demo4.evirtualservices.net/pathmark/img/uploads/users/1698962672PLUDIN_1698930400026.png";
          RequestDropAddress = "Anand Vihar ISBT Anand Vihar ISBT";
@@ -103,12 +112,20 @@ class schedule_ride_details: UIViewController {
         print("===================================")
         
          self.lbl_price.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
-         self.lbl_distance.text = "\(self.dict_get_booking_details["distance"]!)"
+         self.lbl_distance.text = "\(self.dict_get_booking_details["totalDistance"]!)"
         
-        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        // self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
+    
+    @objc func home_click_methodd() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
     @objc func login_refresh_token_wb() {
         
         var parameters:Dictionary<AnyHashable, Any>!
@@ -256,8 +273,8 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
         cell.lbl_from.text = (self.dict_get_booking_details["RequestPickupAddress"] as! String)
         cell.lbl_to.text = (self.dict_get_booking_details["RequestDropAddress"] as! String)
         
-        cell.lbl_price_one.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
-        cell.lbl_price_two.text = "\(self.dict_get_booking_details["estimatedPrice"]!)"
+        cell.lbl_price_one.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
+        cell.lbl_price_two.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
         
         cell.lbl_time.text = (self.dict_get_booking_details["bookingDate"] as! String)
         
@@ -288,6 +305,7 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             cell.img_star_three.image = UIImage(systemName: "star")
             cell.img_star_four.image = UIImage(systemName: "star")
             cell.img_star_five.image = UIImage(systemName: "star")
+            
             
         } else if "\(self.dict_get_booking_details["rating"]!)" > "2" &&
                     "\(self.dict_get_booking_details["rating"]!)" < "3" {
@@ -381,8 +399,6 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             cell.img_gif.isHidden = true
         }*/
         
-       
-        
         cell.backgroundColor = .clear
         
         return cell
@@ -475,6 +491,21 @@ class schedule_ride_details_table_cell: UITableViewCell {
     
     @IBOutlet weak var lbl_driver_name:UILabel!
     
+    @IBOutlet weak var btn_call:UIButton! {
+        didSet {
+            btn_call.layer.cornerRadius = 12
+            btn_call.clipsToBounds = true
+            btn_call.setTitleColor(.white, for: .normal)
+        }
+    }
+    @IBOutlet weak var btn_cancel:UIButton! {
+        didSet {
+            btn_cancel.layer.cornerRadius = 12
+            btn_cancel.clipsToBounds = true
+            btn_cancel.setTitleColor(.white, for: .normal)
+        }
+    }
+    
     @IBOutlet weak var lbl_price_one:UILabel!
     @IBOutlet weak var lbl_price_two:UILabel! {
         didSet {
@@ -489,12 +520,12 @@ class schedule_ride_details_table_cell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var img_driver_profile:UIImageView! {
+    /*@IBOutlet weak var img_driver_profile:UIImageView! {
         didSet {
             img_car_image.layer.cornerRadius = 25
             img_car_image.clipsToBounds = true
         }
-    }
+    }*/
  
     @IBOutlet weak var img_gif:UIImageView!
     
