@@ -56,7 +56,7 @@ class MenuControllerVC: UIViewController {
     
     // Member
     var arr_customer_title = ["Dashboard",
-                              "Edit profile",
+                              "Edit Profile",
                               "Bookings",
                               "Emergency Contacts",
                               "Manage Address",
@@ -177,68 +177,92 @@ extension MenuControllerVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-         
-                
-                if self.arr_customer_title[indexPath.row] == "Emergency Contacts" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "emergency_contacts_id")
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                } else if self.arr_customer_title[indexPath.row] == "Dashboard" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "dashboard_id")
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                } else if self.arr_customer_title[indexPath.row] == "Manage Address" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "address_list_id")
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                }  else if self.arr_customer_title[indexPath.row] == "Help" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "help_id")
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                } else if self.arr_customer_title [indexPath.row] == "Bookings" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "ride_history_id")
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                } else if self.arr_customer_title [indexPath.row] == "Edit Profile" {
-                    
-                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
-                    self.view.window?.rootViewController = sw
-                    let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "edit_profile_id") as? edit_profile
-                    let navigationController = UINavigationController(rootViewController: destinationController!)
-                    sw.setFront(navigationController, animated: true)
-                    
-                } else if self.arr_customer_title [indexPath.row] == "Logout" {
-                    
-                    self.validation_before_logout()
-                }
+        
+        
+        if self.arr_customer_title[indexPath.row] == "Emergency Contacts" {
             
-      
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "emergency_contacts_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        } else if self.arr_customer_title[indexPath.row] == "Dashboard" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "dashboard_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        } else if self.arr_customer_title[indexPath.row] == "Manage Address" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "address_list_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        }  else if self.arr_customer_title[indexPath.row] == "Help" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "help_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        } else if self.arr_customer_title [indexPath.row] == "Bookings" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "ride_history_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        }  else if self.arr_customer_title [indexPath.row] == "Help" {
+            
+            let obj = self.storyboard?.instantiateViewController(withIdentifier: "help_id") as! help
+            let navController = UINavigationController(rootViewController: obj)
+            navController.setViewControllers([obj], animated:true)
+            self.revealViewController().setFront(navController, animated: true)
+            self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
+            
+        } else if self.arr_customer_title [indexPath.row] == "Edit Profile" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "edit_profile_id") as? edit_profile
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        } else if arr_customer_title [indexPath.row] == "FAQ(s)" {
+            
+            let obj = self.storyboard?.instantiateViewController(withIdentifier: "faq_id") as! faq
+            let navController = UINavigationController(rootViewController: obj)
+            navController.setViewControllers([obj], animated:true)
+            self.revealViewController().setFront(navController, animated: true)
+            self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
+            
+        } else if arr_customer_title [indexPath.row] == "Review & Rating" {
+            
+            let obj = self.storyboard?.instantiateViewController(withIdentifier: "rating_review_id") as! rating_review
+            let navController = UINavigationController(rootViewController: obj)
+            navController.setViewControllers([obj], animated:true)
+            self.revealViewController().setFront(navController, animated: true)
+            self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
+            
+    } else if self.arr_customer_title [indexPath.row] == "Logout" {
+            
+            self.validation_before_logout()
+        }
+        
+        
     }
     
     

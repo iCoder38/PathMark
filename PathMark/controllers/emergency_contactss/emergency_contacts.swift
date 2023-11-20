@@ -26,7 +26,7 @@ class emergency_contacts: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "EMERGENCY CONTACTS"
+            view_navigation_title.text = "Emergency Contact"
             view_navigation_title.textColor = .white
         }
     }
@@ -297,7 +297,7 @@ extension emergency_contacts: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:emergency_contacts_table_cell = tableView.dequeueReusableCell(withIdentifier: "emergency_contacts_table_cell2") as! emergency_contacts_table_cell
+        let cell:emergency_contacts_table_cell = tableView.dequeueReusableCell(withIdentifier: "emergency_contacts_table_cell") as! emergency_contacts_table_cell
             
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
@@ -403,3 +403,4 @@ class emergency_contacts_table_cell: UITableViewCell {
     @IBOutlet weak var btn_setting:UIButton!
     
 }
+

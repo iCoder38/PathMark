@@ -193,6 +193,9 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                         
                         self.hide_loading_UI()
                         
+                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        // self.navigationController?.pushViewController(push!, animated: true)
+                        
                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                         self.navigationController?.pushViewController(push!, animated: true)
                         

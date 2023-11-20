@@ -222,7 +222,7 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
     
     @objc func sign_up_WB() {
         let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! sign_up_table_cell
+        let cell = self.tbleView.cellForRow(at: indexPath) as! edit_profile_table_cell
         
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -243,6 +243,13 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                 parameters = [
                     "action"    : "editProfile",
                     "userId"     : String(myString),
+                    
+                    "fullName":String(cell.txt_full_name.text!),
+                    "email":String(cell.txtEmailAddress.text!),
+                    "countryCode":String(cell.txt_phone_number.text!),
+                    "contactNumber":String(cell.txt_phone_number.text!),
+                    "role":"Member",
+                    "device":"iOS",
                 ]
                 
                 /*editProfile
@@ -338,7 +345,7 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell:sign_up_table_cell = tableView.dequeueReusableCell(withIdentifier: "sign_up_table_cell") as! sign_up_table_cell
+        let cell:edit_profile_table_cell = tableView.dequeueReusableCell(withIdentifier: "edit_profile_table_cell") as! edit_profile_table_cell
         
         cell.backgroundColor = .clear
         
@@ -347,12 +354,12 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
         cell.selectedBackgroundView = backgroundView
         
         cell.txtEmailAddress.delegate = self
-        cell.txtPassword.delegate = self
+        //cell.txtPassword.delegate = self
         cell.txt_address.delegate = self
         cell.txt_full_name.delegate = self
         cell.txt_address.delegate = self
         
-        cell.btn_accept_terms.addTarget(self, action: #selector(accept_terms_click_method), for: .touchUpInside)
+        /// cell.btn_accept_terms.addTarget(self, action: #selector(accept_terms_click_method), for: .touchUpInside)
         
         cell.btnSignUp.addTarget(self, action: #selector(sign_up_click_method), for: .touchUpInside)
         

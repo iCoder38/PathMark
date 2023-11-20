@@ -94,7 +94,6 @@ class success_payment: UIViewController {
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         }
         
-        
         self.view.endEditing(true)
         
         var parameters:Dictionary<AnyHashable, Any>!
