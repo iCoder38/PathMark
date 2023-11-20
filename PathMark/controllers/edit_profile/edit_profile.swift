@@ -289,6 +289,12 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                             let defaults = UserDefaults.standard
                             defaults.setValue(dict, forKey: str_save_login_user_data)
                             
+                            // save email and password
+                            /*let custom_email_pass = ["email":cell.txtEmailAddress.text!,
+                                                     "password":cell.txtPassword.text!]
+                            
+                            UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)*/
+                            
                             let alert = NewYorkAlertController(title: String("Success").uppercased(), message: (JSON["msg"] as! String), style: .alert)
                             let cancel = NewYorkButton(title: "Ok", style: .cancel)
                             alert.addButtons([cancel])
