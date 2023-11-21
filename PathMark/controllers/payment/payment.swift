@@ -298,7 +298,7 @@ class payment: UIViewController, UITextFieldDelegate {
             // make sure the result is under 16 characters
             return updatedText.count <= 3
             
-        }   else {
+        }  else {
             
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }

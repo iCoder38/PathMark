@@ -77,13 +77,13 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "712"
-            endingLineNumber = "712"
+            startingLineNumber = "714"
+            endingLineNumber = "714"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c8a"
+                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c6b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -93,12 +93,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "712"
-                  endingLineNumber = "712"
-                  offsetFromSymbolStart = "388">
+                  startingLineNumber = "713"
+                  endingLineNumber = "713"
+                  offsetFromSymbolStart = "860">
                </Location>
                <Location
-                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c8a"
+                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c44"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -108,8 +108,8 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "712"
-                  endingLineNumber = "712"
+                  startingLineNumber = "714"
+                  endingLineNumber = "714"
                   offsetFromSymbolStart = "716">
                </Location>
             </Locations>
@@ -125,13 +125,13 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
+            startingLineNumber = "710"
+            endingLineNumber = "710"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6cef"
+                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6ca9"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -141,12 +141,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "709"
-                  endingLineNumber = "709"
-                  offsetFromSymbolStart = "248">
+                  startingLineNumber = "711"
+                  endingLineNumber = "711"
+                  offsetFromSymbolStart = "704">
                </Location>
                <Location
-                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6d0e"
+                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6cc8"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -156,8 +156,8 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "708"
-                  endingLineNumber = "708"
+                  startingLineNumber = "710"
+                  endingLineNumber = "710"
                   offsetFromSymbolStart = "500">
                </Location>
             </Locations>

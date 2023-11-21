@@ -116,13 +116,15 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     @IBOutlet weak var btn_call_driver:UIButton! {
         didSet {
-            btn_call_driver.backgroundColor = .systemGreen
+            btn_call_driver.backgroundColor = .clear
+            btn_call_driver.setTitleColor(.black, for: .normal)
         }
     }
     
     @IBOutlet weak var btn_cancel_ride:UIButton! {
         didSet {
-            btn_cancel_ride.backgroundColor = .systemRed
+            btn_cancel_ride.backgroundColor = .clear
+            btn_cancel_ride.setTitleColor(.black, for: .normal)
         }
     }
     
@@ -137,6 +139,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @IBOutlet weak var img_star_three:UIImageView!
     @IBOutlet weak var img_star_four:UIImageView!
     @IBOutlet weak var img_star_five:UIImageView!
+    
+    @IBOutlet weak var btn_booking_confirmed:UIButton!
+    @IBOutlet weak var lbl_message:UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -193,20 +198,30 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
              
             if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
                 
-                self.lblNavigationTitle.text = "Confirmed"
+                self.btn_booking_confirmed.setTitle("Booking Confirmed", for: .normal)
+                self.lblNavigationTitle.text = "Your ride is on its way."
                 self.navigationBar.backgroundColor = navigation_color
                 // UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
                 
+                self.btn_booking_confirmed.isHidden = false
+                self.lbl_message.isHidden = false
+                
             } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
                 
-                self.lblNavigationTitle.text = "Driver has arrived at your location"
+                self.lblNavigationTitle.text = "Driver has arrived"
                 self.navigationBar.backgroundColor = navigation_color
+                
+                self.btn_booking_confirmed.isHidden = true
+                self.lbl_message.isHidden = true
                 
             }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
                 
-                self.lblNavigationTitle.text = "On Trip"
+                self.lblNavigationTitle.text = "Enjoy your ride"
                 self.navigationBar.backgroundColor = navigation_color
                 self.btn_cancel_ride.isHidden = true
+                
+                self.btn_booking_confirmed.isHidden = true
+                self.lbl_message.isHidden = true
                 
             }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
                 
@@ -214,8 +229,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.navigationBar.backgroundColor = navigation_color
                 self.btn_cancel_ride.isHidden = true
                 
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                self.navigationController?.pushViewController(push!, animated: true)
+                self.btn_booking_confirmed.isHidden = true
+                self.lbl_message.isHidden = true
                 
                 let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
                 let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
@@ -228,7 +243,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     
                     self.navigationController?.pushViewController(push!, animated: true)
                 }
-                let cancel = NewYorkButton(title: "Home", style: .cancel)
+                let cancel = NewYorkButton(title: "Home", style: .default) {
+                    _ in
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                    self.navigationController?.pushViewController(push!, animated: true)
+                }
                 alert.addButtons([pay,cancel])
                 self.present(alert, animated: true)
             }

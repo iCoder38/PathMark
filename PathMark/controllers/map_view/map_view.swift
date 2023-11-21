@@ -75,7 +75,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             view_navigation_title.textColor = .white
         }
     }
-    
+    @IBOutlet weak var search_place:UISearchBar!
     @IBOutlet weak var searchResultsTableView: UITableView! {
         didSet {
             searchResultsTableView.delegate = self
@@ -177,6 +177,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             btnRideNow.backgroundColor = .systemGreen
         }
     }
+    
+    
     
     @IBOutlet weak var btn_get_current_location:UIButton! {
         didSet {
@@ -922,6 +924,9 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         
         print(completion.title as Any)
         print(completion.subtitle as Any)
+        
+        self.search_place.text = ""
+        self.search_place.text = completion.title+" "+completion.subtitle
         
         UserDefaults.standard.synchronize()
         
