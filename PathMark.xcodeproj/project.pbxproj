@@ -46,6 +46,7 @@
 		B980DD1A2A9DDB2800F7CD07 /* ride_history.swift in Sources */ = {isa = PBXBuildFile; fileRef = B980DD192A9DDB2800F7CD07 /* ride_history.swift */; };
 		B982B2512A8C9F9C0091DE1B /* my_custom_loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B982B2502A8C9F9C0091DE1B /* my_custom_loader.swift */; };
 		B982B2542A8CA5240091DE1B /* loading_gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = B982B2532A8CA5240091DE1B /* loading_gif.gif */; };
+		B98F3A2F2B0CC029001DFF25 /* map_view_add_address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98F3A2E2B0CC029001DFF25 /* map_view_add_address.swift */; };
 		B99223122A8E461B005AA868 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223112A8E461B005AA868 /* help.swift */; };
 		B99223162A8E4991005AA868 /* CarouselCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223142A8E4991005AA868 /* CarouselCell.swift */; };
 		B99223172A8E4991005AA868 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223152A8E4991005AA868 /* CarouselView.swift */; };
@@ -153,6 +154,7 @@
 		B980DD192A9DDB2800F7CD07 /* ride_history.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ride_history.swift; sourceTree = "<group>"; };
 		B982B2502A8C9F9C0091DE1B /* my_custom_loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = my_custom_loader.swift; sourceTree = "<group>"; };
 		B982B2532A8CA5240091DE1B /* loading_gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading_gif.gif; sourceTree = "<group>"; };
+		B98F3A2E2B0CC029001DFF25 /* map_view_add_address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = map_view_add_address.swift; sourceTree = "<group>"; };
 		B99223112A8E461B005AA868 /* help.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = help.swift; sourceTree = "<group>"; };
 		B99223142A8E4991005AA868 /* CarouselCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselCell.swift; sourceTree = "<group>"; };
 		B99223152A8E4991005AA868 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
@@ -429,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				B97A195A2A8D087900D4DAD0 /* add_address.swift */,
+				B98F3A2D2B0CC014001DFF25 /* map_view_add_address */,
 			);
 			path = add_address;
 			sourceTree = "<group>";
@@ -473,6 +476,14 @@
 				B97A19572A8CF4DD00D4DAD0 /* car-toy.gif */,
 			);
 			path = gif;
+			sourceTree = "<group>";
+		};
+		B98F3A2D2B0CC014001DFF25 /* map_view_add_address */ = {
+			isa = PBXGroup;
+			children = (
+				B98F3A2E2B0CC029001DFF25 /* map_view_add_address.swift */,
+			);
+			path = map_view_add_address;
 			sourceTree = "<group>";
 		};
 		B99223102A8E4611005AA868 /* help */ = {
@@ -1001,6 +1012,7 @@
 				B9CC75B52B05EE0B00446959 /* schedule_a_ride.swift in Sources */,
 				B9038E112A5D45FB0041A5B4 /* NewYorkAlertViewType.swift in Sources */,
 				B9FE54662A5FED30005583C2 /* MenuControllerVCTableCell.swift in Sources */,
+				B98F3A2F2B0CC029001DFF25 /* map_view_add_address.swift in Sources */,
 				B97AE2022AA85089005EE5FF /* success_payment.swift in Sources */,
 				B9FE54682A5FED30005583C2 /* MenuControllerVC.swift in Sources */,
 				B9CEA28C2B0B5F7B00CC2340 /* rating_review.swift in Sources */,
@@ -1188,9 +1200,9 @@
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Customer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location. ";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "PathMark would like to access your location for Customer's current location.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location. ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Zarib would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -1230,9 +1242,9 @@
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Customer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location. ";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "PathMark would like to access your location for Customer's current location.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "PathMark would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location. ";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Zarib would like to access your location for Customer's current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

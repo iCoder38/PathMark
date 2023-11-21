@@ -29,7 +29,7 @@ class rating_review: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Earnings"
+            view_navigation_title.text = "Review & Rating"
             view_navigation_title.textColor = .white
         }
     }
@@ -270,7 +270,10 @@ extension rating_review: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_earnings[indexPath.row] as? [String:Any]
         cell.lbl_user_name.text = "\(item!["userName"]!)"
         // cell.lbl_distance.text = "\(item!["totalDistance"]!)"
-         cell.lbl_time.text = "\(item!["message"]!)"
+        cell.lbl_time.text = (item!["message"] as! String)
+        cell.lbl_time.textColor = .black
+        cell.lbl_time.isHidden = false
+        cell.lbl_time.backgroundColor = .clear
         
         cell.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_profile.sd_setImage(with: URL(string: (item!["profile_picture"] as! String)), placeholderImage: UIImage(named: "logo33"))
@@ -351,7 +354,12 @@ extension rating_review: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView .deselectRow(at: indexPath, animated: true)
- 
+        let item = self.arr_earnings[indexPath.row] as? [String:Any]
+        
+        let alert = NewYorkAlertController(title: String("Message").uppercased(), message: "\(item!["message"]!)", style: .alert)
+        let cancel = NewYorkButton(title: "OK", style: .cancel)
+        alert.addButtons([cancel])
+        self.present(alert, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

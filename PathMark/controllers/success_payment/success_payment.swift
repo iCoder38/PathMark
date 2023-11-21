@@ -103,6 +103,7 @@ class success_payment: UIViewController {
             
             let x : Int = person["userId"] as! Int
             let myString = String(x)
+            print(myString as Any)
             
             var ar : NSArray!
             ar = (person["carinfromation"] as! Array<Any>) as NSArray
@@ -117,10 +118,24 @@ class success_payment: UIViewController {
                     "token":String(token_id_is),
                 ]
                 
+//                if (self.get_booking_details["created"]) == nil {
+//                    self.lbl_date_time.text = ""
+//                } else {
+//                    self.lbl_date_time.text = "\(self.get_booking_details["created"]!)"
+//                }
+                
+                var reviewTo:String!
+                
+                if (self.get_booking_details["driverId"] == nil) {
+                    reviewTo = "\(self.get_booking_details["userId"]!)"
+                } else {
+                    reviewTo = "\(self.get_booking_details["driverId"]!)"
+                }
+                
                 parameters = [
                     "action"        : "submitreview",
                     "reviewFrom"    : String(myString),
-                    "reviewTo"      : "\(self.get_booking_details["driverId"]!)",
+                    "reviewTo"      : String(reviewTo),
                     "star"          : String(cell.lbl_star_count.text!),
                     "message"       : String(cell.txt_view.text!),
                     "bookingId"     : "\(self.get_booking_details["bookingId"]!)"

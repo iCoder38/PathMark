@@ -10,13 +10,17 @@ class customPin: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
+    var image: UIImage?
     
-    init(pinTitle:String, pinSubTitle:String, location:CLLocationCoordinate2D) {
+    init(pinTitle:String, pinSubTitle:String, location:CLLocationCoordinate2D,image:UIImage) {
         self.title = pinTitle
         self.subtitle = pinSubTitle
         self.coordinate = location
+        self.image = image
     }
 }
+
+ 
 
 // MARK:- BASE URL -
 let application_base_url = "https://demo4.evirtualservices.net/pathmark/services/index"

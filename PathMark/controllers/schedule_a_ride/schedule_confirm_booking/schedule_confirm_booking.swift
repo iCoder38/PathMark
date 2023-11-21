@@ -218,9 +218,9 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
         //print(sourceLocation)
         //print(destinationLocation)
         
-        let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation)
+        let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation,image:UIImage(systemName: "car")!)
          
-        let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation)
+        let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation,image:UIImage(systemName: "car")!)
         
         /***************** REMOVE PREVIUOS ANNOTATION TO GENERATE NEW ANNOTATION *******************************************/
         cell.mapView.removeAnnotations(cell.mapView.annotations)
@@ -301,6 +301,42 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
         renderer.strokeColor = UIColor.blue
         renderer.lineWidth = 4.0
         return renderer
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // Don't want to show a custom image if the annotation is the user's location.
+        guard !(annotation is MKUserLocation) else {
+            return nil
+        }
+
+        // Better to make this class property
+        let annotationIdentifier = "AnnotationIdentifier"
+
+        var annotationView: MKAnnotationView?
+        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+            annotationView = dequeuedAnnotationView
+            annotationView?.annotation = annotation
+        }
+        else {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+
+        if let annotationView = annotationView {
+            // Configure your annotation view here
+            annotationView.canShowCallout = true
+            
+            if(annotation.title == "Drop Location") {
+                annotationView.image = UIImage(systemName: "car")
+            } else {
+                annotationView.image = UIImage(systemName: "person")
+            }
+            annotationView.tintColor = .systemBlue
+            
+            
+        }
+
+        return annotationView
     }
     
     @objc func payment_method_click_method() {

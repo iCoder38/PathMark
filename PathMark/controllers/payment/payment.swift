@@ -19,6 +19,8 @@ class payment: UIViewController, UITextFieldDelegate {
     
     var str_coupon_code:String!
     
+    var str_final_price_to_pay:String!
+    
     @IBOutlet weak var navigationBar:UIView! {
         didSet {
             navigationBar.backgroundColor = navigation_color
@@ -122,7 +124,7 @@ class payment: UIViewController, UITextFieldDelegate {
                     "userId"        : String(myString),
                     "bookingId"     : String(self.str_booking_id),
                     "transactionId"  : String("dummy_transaction_id"),
-                    "totalAmount"   : String(self.str_get_total_price),
+                    "totalAmount"   : String(self.str_final_price_to_pay),
                     "TIP"           : String(cell.txt_tip.text!),
                     "discountAmount"    : String(self.str_discounted_amount),
                     "couponCode"    : String(self.str_coupon_code),
@@ -296,7 +298,7 @@ class payment: UIViewController, UITextFieldDelegate {
             // make sure the result is under 16 characters
             return updatedText.count <= 3
             
-        } else {
+        }   else {
             
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return false }
@@ -305,15 +307,34 @@ class payment: UIViewController, UITextFieldDelegate {
             // make sure the result is under 16 characters
             return updatedText.count <= 30
             
+        } 
+        
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! payment_table_cell
+        
+        print(textField.text as Any)
+        //
+        if (textField.text == "") {
+            self.str_final_price_to_pay = String(self.str_get_total_price)
+            cell.btn_submit.setTitle("Pay : \(self.str_final_price_to_pay!)", for: .normal)
+        } else {
+            let double_total_price = Double(self.str_get_total_price)!
+            let double_tip = Double(textField.text!)!
+            //
+            let calculate = double_total_price+double_tip
+            print(calculate)
+            //
+            self.str_final_price_to_pay = "\(calculate)"
+            cell.btn_submit.setTitle("Pay : \(calculate)", for: .normal)
         }
         
     }
     
 }
 
-/*
- 
- */
 //MARK:- TABLE VIEW -
 extension payment: UITableViewDataSource , UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -339,11 +360,16 @@ extension payment: UITableViewDataSource , UITableViewDelegate {
         cell.txt_card_expiry_year.delegate = self
         cell.txt_card_cvv.delegate = self
         cell.txt_card_number.delegate = self
+        cell.txt_tip.delegate = self
         
         self.str_discounted_amount = String(self.str_get_total_price)
         
+        self.str_final_price_to_pay = String(self.str_get_total_price)
+        
         cell.btn_submit.setTitle("Pay "+String(self.str_get_total_price), for: .normal)
         cell.btn_submit.addTarget(self, action: #selector(validation_before_submit), for: .touchUpInside)
+        
+        cell.txt_tip.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         return cell
     }
@@ -401,7 +427,7 @@ class payment_table_cell: UITableViewCell {
             txt_card_number.layer.shadowOffset =  CGSize.zero
             txt_card_number.layer.shadowOpacity = 0.5
             txt_card_number.layer.shadowRadius = 2
-            txt_card_number.isSecureTextEntry = true
+            txt_card_number.isSecureTextEntry = false
         }
     }
     

@@ -77,6 +77,11 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             
         }
         
+        //
+        // let settingsVCId = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
+        // self.navigationController?.pushViewController(settingsVCId!, animated: true)
+        //
+        
     }
     
     var _lastContentOffset: CGPoint!

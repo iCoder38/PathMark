@@ -272,25 +272,15 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
     
     @objc func home_click_method() {
         
-        // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-        // ERProgressHud.sharedInstance.hide()
-        
-        
-//        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
-//         self.navigationController?.pushViewController(push!, animated: true)
-        
          self.login_wb()
         
     }
     
     @objc func btnForgotPasswordPress() {
-        
-
-        
+       
     }
     
     @objc func signInClickMethod() {
-        
         
     }
     

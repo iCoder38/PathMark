@@ -122,12 +122,19 @@ class MenuControllerVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.view.backgroundColor = navigation_color
+        
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             self.lblUserName.text = (person["fullName"] as! String)
             // self.lblAddress.text = (person["address"] as! String)
             
-            self.imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "logo"))
+            self.imgSidebarMenuImage.layer.cornerRadius = 60
+            self.imgSidebarMenuImage.clipsToBounds = true
+            
+            self.imgSidebarMenuImage.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            self.imgSidebarMenuImage.sd_setImage(with: URL(string: (person["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+
         }
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

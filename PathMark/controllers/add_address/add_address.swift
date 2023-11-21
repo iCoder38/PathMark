@@ -101,7 +101,13 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         }
     }
     
+    @IBOutlet weak var btnCompleteAddress:UIButton!
+    
     @IBOutlet weak var btn_save:UIButton!
+    
+    var str_save_lat:String!
+    var str_save_long:String!
+    var str_save_address:String!
     
     @IBOutlet weak var btn_submit:UIButton! {
         didSet {
@@ -131,6 +137,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
         self.btn_submit.addTarget(self, action: #selector(validate_before_submit), for: .touchUpInside)
+        self.btnCompleteAddress.addTarget(self, action: #selector(map_view_click_method), for: .touchUpInside)
         
         if (self.dict_address == nil) {
             print("add contact")
@@ -139,12 +146,57 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         } else {
             print("edit contact")
             self.view_navigation_title.text = "EDIT ADDRESS"
+            print(self.dict_address as Any)
             
             self.txt_house_number.text = (self.dict_address["address"] as! String)
             self.txt_save_as.text = (self.dict_address["addressType"] as! String)
             
             self.str_address_id = "\(self.dict_address["addressId"]!)"
         }
+    }
+    
+    @objc func map_view_click_method() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_add_address_id") as? map_view_add_address
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        /*
+         UserDefaults.standard.set(String(self.searchLat), forKey: "key_save_lat_for_address")
+         UserDefaults.standard.set(String(self.searchLong), forKey: "key_save_long_for_address")
+         UserDefaults.standard.set(completion.title+","+completion.subtitle, forKey: "key_save_full_address_for_address")
+         */
+        // latitude
+        if let load_latitude = UserDefaults.standard.string(forKey: "key_save_lat_for_address") {
+            print(load_latitude)
+            
+            self.str_save_lat = load_latitude
+           
+        }
+        
+        // longitude
+        if let load_longitude = UserDefaults.standard.string(forKey: "key_save_long_for_address") {
+            print(load_longitude)
+            
+            self.str_save_long = load_longitude
+           
+        }
+        
+        // address
+        if let load_address = UserDefaults.standard.string(forKey: "key_save_full_address_for_address") {
+            print(load_address)
+            
+            self.str_save_address = load_address
+            self.txt_house_number.text = String(self.str_save_address)
+            
+        }
+        UserDefaults.standard.set("", forKey: "key_save_lat_for_address")
+        UserDefaults.standard.set("", forKey: "key_save_long_for_address")
+        UserDefaults.standard.set("", forKey: "key_save_full_address_for_address")
     }
     
     @objc func save_as_click_method() {
@@ -263,11 +315,10 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             if (self.dict_address == nil) {
                 
                 print("add contact")
-                self.txt_house_number.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
+                // self.txt_house_number.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
                 
             }
             
-//
             // print(self.strSaveLatitude as Any)
             // print(self.strSaveLongitude as Any)
 
@@ -290,12 +341,9 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     
     @objc func edit_address_WB(str_show_loader:String) {
         
-        // self.show_loading_UI()
-        
         if (str_show_loader == "yes") {
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "editing...")
         }
-        
         
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -317,7 +365,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "addressId"     : String(self.str_address_id),
                     "address"       : String(self.txt_house_number.text!),
                     "addressType"   : String(self.txt_save_as.text!),
-                    "coordinate"    : String(self.strSaveLatitude)+","+String(self.strSaveLongitude),
+                    "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
                 ]
                 
                 print(headers)
@@ -450,7 +498,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "userId"        : String(myString),
                     "address"       : String(self.txt_house_number.text!),
                     "addressType"   : String(self.txt_save_as.text!),
-                    "coordinate"    : String(self.strSaveLatitude)+","+String(self.strSaveLongitude),
+                    "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
                 ]
                 
                 print(headers)
