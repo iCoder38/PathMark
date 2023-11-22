@@ -73,6 +73,7 @@
 		B9AFE5112A5BDB9100C76CE4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */; };
 		B9AFE5122A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */; };
 		B9C530802B0DD2FF00DB37B0 /* decline_request.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */; };
+		B9C530832B0DF62C00DB37B0 /* cancel_your_ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C530822B0DF62C00DB37B0 /* cancel_your_ride.swift */; };
 		B9C73A352A5BEE67001F0B90 /* verify_phone_number.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */; };
 		B9C73A382A5BFD2E001F0B90 /* dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C73A372A5BFD2E001F0B90 /* dashboard.swift */; };
 		B9CC75B52B05EE0B00446959 /* schedule_a_ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CC75B42B05EE0B00446959 /* schedule_a_ride.swift */; };
@@ -182,6 +183,7 @@
 		B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = decline_request.swift; sourceTree = "<group>"; };
+		B9C530822B0DF62C00DB37B0 /* cancel_your_ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cancel_your_ride.swift; sourceTree = "<group>"; };
 		B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = verify_phone_number.swift; sourceTree = "<group>"; };
 		B9C73A372A5BFD2E001F0B90 /* dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dashboard.swift; sourceTree = "<group>"; };
 		B9CC75B42B05EE0B00446959 /* schedule_a_ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = schedule_a_ride.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B9C530812B0DF60C00DB37B0 /* cancel_your_ride */,
 				B9C5307E2B0DD2DF00DB37B0 /* decline_page */,
 				B9E13D462A5C46A20068774A /* third_party */,
 				B9CEA28A2B0B5F6900CC2340 /* rating_review */,
@@ -562,6 +565,14 @@
 				B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */,
 			);
 			path = decline_page;
+			sourceTree = "<group>";
+		};
+		B9C530812B0DF60C00DB37B0 /* cancel_your_ride */ = {
+			isa = PBXGroup;
+			children = (
+				B9C530822B0DF62C00DB37B0 /* cancel_your_ride.swift */,
+			);
+			path = cancel_your_ride;
 			sourceTree = "<group>";
 		};
 		B9C73A332A5BEE47001F0B90 /* verify_phone_number */ = {
@@ -1005,6 +1016,7 @@
 				B934EC832B0744B300908C0D /* edit_profile.swift in Sources */,
 				B9038E0E2A5D45FB0041A5B4 /* UIStackView+Utility.swift in Sources */,
 				B9FE54672A5FED30005583C2 /* SWRevealViewController.m in Sources */,
+				B9C530832B0DF62C00DB37B0 /* cancel_your_ride.swift in Sources */,
 				B9038E192A5D46ED0041A5B4 /* RPicker.swift in Sources */,
 				B980DD172A9DC98900F7CD07 /* ride_status.swift in Sources */,
 				B9038E0C2A5D45FB0041A5B4 /* AlertView.swift in Sources */,

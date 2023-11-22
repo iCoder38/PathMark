@@ -114,17 +114,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // print("User Info dishu = ",notification.request.content.userInfo)
         
         let dict = notification.request.content.userInfo
-        // print(dict as Any)
-        /*
-         [AnyHashable("CustomerImage"): , AnyHashable("RequestPickupAddress"): Sector 10 Dwarka, South West Delhi New Delhi, India - 110075, AnyHashable("message"): New booking request for Confir or Cancel., AnyHashable("RequestDropAddress"): Anand Vihar ISBT Anand Vihar ISBT, AnyHashable("CustomerPhone"): 6867675443, AnyHashable("aps"): {
-             alert = "New booking request for Confir or Cancel.";
-         }, AnyHashable("bookingTime"): 18:47, AnyHashable("gcm.message_id"): 1700140690230914, AnyHashable("google.c.a.e"): 1, AnyHashable("deviceToken"): cERsVVQO20uFlSaTcL-Hja:APA91bESSOIVSib7_WIotOESPOMLXZb9UI9VyGgveP__TOMJvSQp3l7a8wf2mC-eOWPpGtRbTDjc68YS9J_7-kWNKpEdFHvn21ct8dy2NKTeGlUacspwELD6wMQ24oy11sZHYv0kPoj9, AnyHashable("RequestPickupLatLong"): 28.587281349489444,77.06067711805619, AnyHashable("CustomerName"): p driver 128, AnyHashable("google.c.sender.id"): 750959835757, AnyHashable("distance"): 22.2, AnyHashable("type"): request, AnyHashable("google.c.fid"): cERsVVQO20uFlSaTcL-Hja, AnyHashable("device"): iOS, AnyHashable("bookingId"): 112, AnyHashable("RequestDropLatLong"): 28.648769385019264,77.31538319058018, AnyHashable("bookingDate"): 2023-11-30]
-         */
-        /*
-         User Info dishu =  [AnyHashable("rating"): 5, AnyHashable("google.c.fid"): cERsVVQO20uFlSaTcL-Hja, AnyHashable("bookingTime"): 18:47, AnyHashable("driverName"): new2, AnyHashable("estimatedPrice"): 22.2, AnyHashable("driverId"): 92, AnyHashable("RequestPickupLatLong"): 28.587281349489444,77.06067711805619, AnyHashable("RequestDropAddress"): Anand Vihar ISBT Anand Vihar ISBT, AnyHashable("bookingId"): 112, AnyHashable("RequestDropLatLong"): 28.648769385019264,77.31538319058018, AnyHashable("aps"): {
-             alert = "new2 has confirmed your booling.";
-         }, AnyHashable("type"): confirm, AnyHashable("VehicleColor"): red, AnyHashable("DriverImage"): https://demo4.evirtualservices.net/pathmark/img/uploads/users/1698962672PLUDIN_1698930400026.png, AnyHashable("vehicleNumber"): yuw62782, AnyHashable("driverContact"): 5623528523, AnyHashable("totalTime"): 1 hour 4 mins, AnyHashable("RequestPickupAddress"): Sector 10 Dwarka, South West Delhi New Delhi, India - 110075, AnyHashable("google.c.sender.id"): 750959835757, AnyHashable("driverLatitude"): 28.6634817, AnyHashable("driverlongitude"): 77.3239864, AnyHashable("device"): Android, AnyHashable("gcm.message_id"): 1700140731959982, AnyHashable("google.c.a.e"): 1, AnyHashable("deviceToken"): cdYXssAaRRuDle5VfXQQnK:APA91bHvqhYwVtzlSTTWvL2W1d-Bs7Vm9z4SIKjI57ST3HvRX-y12IcBdqBcSeeBVTVdgoQdjXCZcpKhRQ_uyxJUPfcbI6zP1Fb3joHcyzpFsr7q1lzolQM4ZQv_azgBsHKZJ-Oh2ldw, AnyHashable("message"): new2 has confirmed your booling., AnyHashable("bookingDate"): 2023-11-30T00:00:00+0530]
-         */
+        print(dict as Any)
+        
         // if user send request
         if (dict["type"] == nil) {
             print("NOTIFICATION FROM SOMEWHERE ELSE")
@@ -251,6 +242,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             window?.makeKeyAndVisible()
             
         }
+        else if (dict["type"] as! String) == "cancel" { // when driver cancel your ride
+          
+          let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+          let destinationController = storyboard.instantiateViewController(withIdentifier:"cancel_your_ride_id") as? cancel_your_ride
+            destinationController?.dict_get_data_from_notification = dict as NSDictionary
+          let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+
+          let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+
+          let mainRevealController = SWRevealViewController()
+
+          mainRevealController.rearViewController = rearViewController
+          mainRevealController.frontViewController = frontNavigationController
+          
+          DispatchQueue.main.async {
+              UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+          }
+          
+          window?.makeKeyAndVisible()
+          
+      }
     }
     
     

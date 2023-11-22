@@ -7456,6 +7456,82 @@
             </objects>
             <point key="canvasLocation" x="17226.717557251908" y="-118.30985915492958"/>
         </scene>
+        <!--Cancel your ride-->
+        <scene sceneID="d4y-Sj-f7d">
+            <objects>
+                <viewController storyboardIdentifier="cancel_your_ride_id" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ieb-66-gi7" customClass="cancel_your_ride" customModule="PathMark" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Jhf-Oa-WID">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Irc-1U-YsJ">
+                                <rect key="frame" x="16" y="341" width="361" height="170"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cancelled Ride" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qCi-gk-pgc">
+                                        <rect key="frame" x="8" y="8" width="345" height="23"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="23" id="F3H-1c-QUR"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Db-9w-rwB">
+                                        <rect key="frame" x="0.0" y="38" width="361" height="1"/>
+                                        <color key="backgroundColor" systemColor="systemGray2Color"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="98f-Jt-xpE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your ride has been cancelled by driver." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JgL-Yd-6Of">
+                                        <rect key="frame" x="8" y="47" width="345" height="68"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JBe-zz-p4x">
+                                        <rect key="frame" x="8" y="123" width="345" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemRedColor"/>
+                                        <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="14"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" title="CANCEL"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                <constraints>
+                                    <constraint firstItem="qCi-gk-pgc" firstAttribute="leading" secondItem="Irc-1U-YsJ" secondAttribute="leading" constant="8" id="8nc-WI-Td4"/>
+                                    <constraint firstItem="qCi-gk-pgc" firstAttribute="top" secondItem="Irc-1U-YsJ" secondAttribute="top" constant="8" id="94l-LJ-ZSp"/>
+                                    <constraint firstAttribute="trailing" secondItem="1Db-9w-rwB" secondAttribute="trailing" id="9vq-DU-F2W"/>
+                                    <constraint firstAttribute="height" constant="170" id="EHD-bS-Vbx"/>
+                                    <constraint firstItem="1Db-9w-rwB" firstAttribute="leading" secondItem="Irc-1U-YsJ" secondAttribute="leading" id="cKr-Nd-DS6"/>
+                                    <constraint firstAttribute="width" constant="361" id="mcb-lq-jVa"/>
+                                    <constraint firstItem="1Db-9w-rwB" firstAttribute="top" secondItem="qCi-gk-pgc" secondAttribute="bottom" constant="7" id="uK6-wq-9cT"/>
+                                    <constraint firstAttribute="trailing" secondItem="qCi-gk-pgc" secondAttribute="trailing" constant="8" id="ySq-5l-0Vp"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ilw-SC-7Ph"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Irc-1U-YsJ" firstAttribute="centerX" secondItem="ilw-SC-7Ph" secondAttribute="centerX" id="83Y-mf-s2S"/>
+                            <constraint firstItem="Irc-1U-YsJ" firstAttribute="centerY" secondItem="ilw-SC-7Ph" secondAttribute="centerY" constant="-12.5" id="BUv-08-xa6"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btn_dismiss" destination="JBe-zz-p4x" id="d9z-Vd-Bhi"/>
+                        <outlet property="lbl_one" destination="JgL-Yd-6Of" id="jlH-ZP-bYS"/>
+                        <outlet property="view_bg" destination="Irc-1U-YsJ" id="gIf-I9-rrE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cP4-sp-kon" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="17858.778625954197" y="-118.30985915492958"/>
+        </scene>
     </scenes>
     <resources>
         <image name="1024" width="1024" height="1024"/>
