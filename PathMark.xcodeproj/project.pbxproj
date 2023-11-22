@@ -72,6 +72,7 @@
 		B9AFE5102A5BDB9100C76CE4 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FD2A5BDB9000C76CE4 /* Poppins-BoldItalic.ttf */; };
 		B9AFE5112A5BDB9100C76CE4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */; };
 		B9AFE5122A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */; };
+		B9C530802B0DD2FF00DB37B0 /* decline_request.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */; };
 		B9C73A352A5BEE67001F0B90 /* verify_phone_number.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */; };
 		B9C73A382A5BFD2E001F0B90 /* dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C73A372A5BFD2E001F0B90 /* dashboard.swift */; };
 		B9CC75B52B05EE0B00446959 /* schedule_a_ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CC75B42B05EE0B00446959 /* schedule_a_ride.swift */; };
@@ -180,6 +181,7 @@
 		B9AFE4FD2A5BDB9000C76CE4 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = decline_request.swift; sourceTree = "<group>"; };
 		B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = verify_phone_number.swift; sourceTree = "<group>"; };
 		B9C73A372A5BFD2E001F0B90 /* dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dashboard.swift; sourceTree = "<group>"; };
 		B9CC75B42B05EE0B00446959 /* schedule_a_ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = schedule_a_ride.swift; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B9C5307E2B0DD2DF00DB37B0 /* decline_page */,
 				B9E13D462A5C46A20068774A /* third_party */,
 				B9CEA28A2B0B5F6900CC2340 /* rating_review */,
 				B9CEA2872B0B5E8A00CC2340 /* faq */,
@@ -551,6 +554,14 @@
 				B9AFE4F22A5BDB9000C76CE4 /* Poppins-ThinItalic.ttf */,
 			);
 			path = Poppins;
+			sourceTree = "<group>";
+		};
+		B9C5307E2B0DD2DF00DB37B0 /* decline_page */ = {
+			isa = PBXGroup;
+			children = (
+				B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */,
+			);
+			path = decline_page;
 			sourceTree = "<group>";
 		};
 		B9C73A332A5BEE47001F0B90 /* verify_phone_number */ = {
@@ -971,6 +982,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B97A19562A8CE81300D4DAD0 /* emergency_contacts.swift in Sources */,
+				B9C530802B0DD2FF00DB37B0 /* decline_request.swift in Sources */,
 				B903CD932A58018000208E80 /* ViewController.swift in Sources */,
 				B934EC862B0763F500908C0D /* before_payment.swift in Sources */,
 				B96B4B752A5BD0F40038B82F /* login.swift in Sources */,

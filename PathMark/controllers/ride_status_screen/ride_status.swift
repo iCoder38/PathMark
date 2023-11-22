@@ -165,6 +165,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         self.tbleView.reloadData()
         
+        self.btn_cancel_ride.addTarget(self, action: #selector(cancancel_ride_click_method), for: .touchUpInside)
         
         /*
          DriverImage = "";
@@ -212,7 +213,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.isHidden = true
+                self.lbl_message.text = "Driver has arrived"
                 
             }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
                 
@@ -221,7 +222,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.btn_cancel_ride.isHidden = true
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.isHidden = true
+                self.lbl_message.text = "Enjoy your ride"
                 
             }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
                 
@@ -230,7 +231,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.btn_cancel_ride.isHidden = true
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.isHidden = true
+                self.lbl_message.text = "Ride Complete - Please pay"
                 
                 let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
                 let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
@@ -329,6 +330,15 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         //
         self.iAmHereForLocationPermission()
+    }
+    
+    @objc func cancancel_ride_click_method() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let myAlert = storyboard.instantiateViewController(withIdentifier: "decline_request_id") as? decline_request
+        myAlert!.dict_booking_details = self.dict_get_all_data_from_notification
+        myAlert!.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+        myAlert!.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+        present(myAlert!, animated: true, completion: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

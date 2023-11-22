@@ -157,8 +157,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     }
     
     @objc func book_a_ride_click_method() {
-        self.str_select_option = "book"
-        self.tbleView.reloadData()
+         self.str_select_option = "book"
+         self.tbleView.reloadData()
+        
     }
     
     @objc func sideBarMenuClick() {
