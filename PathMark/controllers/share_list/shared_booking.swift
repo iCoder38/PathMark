@@ -257,7 +257,21 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
         cell.img_car_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         cell.img_car_profile.sd_setImage(with: URL(string: (item!["driver_image"] as! String)), placeholderImage: UIImage(named: "1024"))
         
+        cell.btn_call.tag = indexPath.row
+        cell.btn_call.addTarget(self, action: #selector(call), for: .touchUpInside)
+        
         return cell
+    }
+    
+    @objc func call(sender:UIButton) {
+        print(sender as Any)
+        
+        let item = self.arr_shared_booking[sender.tag] as? [String:Any]
+        
+        if let url = URL(string: "tel://\(item!["contactNumber"] as! String)") {
+            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+         }
+        
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -266,7 +280,7 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_shared_booking[indexPath.row] as? [String:Any]
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "share_track_id") as? share_track
-        push!.dict_get_all_shared_booking_details = item as! NSDictionary
+        push!.dict_get_all_shared_booking_details = (item! as NSDictionary)
         self.navigationController?.pushViewController(push!, animated: true)
         
     }

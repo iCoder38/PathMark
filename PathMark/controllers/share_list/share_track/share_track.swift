@@ -116,7 +116,17 @@ class share_track: UIViewController, CLLocationManagerDelegate , MKMapViewDelega
         self.img_car_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
         self.img_car_profile.sd_setImage(with: URL(string: (self.dict_get_all_shared_booking_details["driver_image"] as! String)), placeholderImage: UIImage(named: "1024"))
         
+        self.btn_call.addTarget(self, action: #selector(call), for: .touchUpInside)
+        
         self.iAmHereForLocationPermission()
+    }
+    
+    @objc func call() {
+        
+        if let url = URL(string: "tel://\(self.dict_get_all_shared_booking_details["contactNumber"] as! String)") {
+            UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+         }
+        
     }
     
     @objc func iAmHereForLocationPermission() {
@@ -292,9 +302,9 @@ class share_track: UIViewController, CLLocationManagerDelegate , MKMapViewDelega
         
         // self.locManager.stopUpdatingLocation()
         
-        // self.locManager.startUpdatingLocation()
+         self.locManager.startUpdatingLocation()
         
-        self.locManager.stopUpdatingLocation()
+        // self.locManager.stopUpdatingLocation()
         
         print("=================================")
         print("LOCATION UPDATE")
