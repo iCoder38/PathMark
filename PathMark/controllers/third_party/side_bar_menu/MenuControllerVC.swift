@@ -204,6 +204,15 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
+        } else if self.arr_customer_title[indexPath.row] == "Shared booking" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "shared_booking_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+             
         } else if self.arr_customer_title[indexPath.row] == "Manage Address" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
