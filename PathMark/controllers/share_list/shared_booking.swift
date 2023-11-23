@@ -236,43 +236,7 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         
-        /*
-         "Drivber_userId" = 107;
-         FinalFare = 1;
-         RequestDropAddress = "Morena, Madhya Pradesh 476001, India";
-         RequestDropLatLong = "26.4947172,77.9940222";
-         RequestPickupAddress = "65P6+J6P, Sheel Nagar, Gwalior, Madhya Pradesh 474008, India ";
-         RequestPickupLatLong = "26.2363658,78.1608951";
-         VehicleColor = red;
-         bookingDate = "2023-11-09";
-         bookingId = 59;
-         bookingTime = "";
-         "car_image" = "https://demo4.evirtualservices.net/pathmark/img/uploads/cars/1690351421_bike.png";
-         "car_name" = "BIKE RIDE";
-         contactNumber = 9999999999;
-         device = Android;
-         deviceToken = "";
-         "driver_AVGRating" = 5;
-         "driver_contactNumber" = 9966696666;
-         "driver_email" = "driver@gmail.com";
-         "driver_fullName" = ffgg;
-         "driver_image" = "https://demo4.evirtualservices.net/pathmark/img/uploads/users/1699486400PLUDIN_1699454004466.png";
-         "driver_zipCode" = "";
-         email = "nik222@mailinator.com";
-         estimatedPrice = "";
-         fullName = nik;
-         image = "https://demo4.evirtualservices.net/pathmark/img/uploads/users/1699486114PLUDIN_1699453804676.png";
-         paymentMethod = Cash;
-         paymentStatus = 1;
-         rideStatus = 5;
-         shareTo = 111;
-         shreFrom = 106;
-         totalAmount = 1;
-         totalDistance = 1;
-         transactionId = "Cash_1699884464892";
-         vehicleNumber = hjjjj;
-         vehicleType = 2;
-         */
+        
         
         let item = self.arr_shared_booking[indexPath.row] as? [String:Any]
         print(item as Any)
@@ -298,6 +262,13 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let item = self.arr_shared_booking[indexPath.row] as? [String:Any]
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "share_track_id") as? share_track
+        push!.dict_get_all_shared_booking_details = item as! NSDictionary
+        self.navigationController?.pushViewController(push!, animated: true)
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
