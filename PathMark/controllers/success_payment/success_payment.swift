@@ -82,8 +82,26 @@ class success_payment: UIViewController {
     }
     
     @objc func validate_before_submit_wb() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! success_payment_table_cell
+        if (cell.lbl_star_count.text != "5") {
+            
+            if (cell.txt_view.text == "") {
+                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter some comment"), style: .alert)
+                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                alert.addButtons([cancel])
+                self.present(alert, animated: true)
+            } else {
+                self.submit_review_WB(str_show_loader: "yes")
+            }
+            
+            
+            
+        } else {
+            self.submit_review_WB(str_show_loader: "yes")
+        }
         
-        self.submit_review_WB(str_show_loader: "yes")
+        
     }
     
     @objc func submit_review_WB(str_show_loader:String) {

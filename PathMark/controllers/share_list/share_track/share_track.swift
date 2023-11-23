@@ -86,7 +86,7 @@ class share_track: UIViewController, CLLocationManagerDelegate , MKMapViewDelega
     var locManager = CLLocationManager()
     var currentLocation: CLLocation!
     
-    @IBOutlet weak var  mapView:MKMapView!
+    @IBOutlet weak var mapView:MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,7 +100,21 @@ class share_track: UIViewController, CLLocationManagerDelegate , MKMapViewDelega
     
     @objc func parse_all_value() {
     
-        self.lbl_address_name.text = (self.dict_get_all_shared_booking_details["fullName"] as! String)
+        
+        
+        print(self.dict_get_all_shared_booking_details as Any)
+        
+        if "\(self.dict_get_all_shared_booking_details["rideStatus"]!)" == "1" {
+            self.lbl_address_name.text = (self.dict_get_all_shared_booking_details["fullName"] as! String)+"( Driver accepted )"
+        } else if "\(self.dict_get_all_shared_booking_details["rideStatus"]!)" == "2" {
+            self.lbl_address_name.text = (self.dict_get_all_shared_booking_details["fullName"] as! String)+"( Picked you up )"
+        } else if "\(self.dict_get_all_shared_booking_details["rideStatus"]!)" == "3" {
+            self.lbl_address_name.text = (self.dict_get_all_shared_booking_details["fullName"] as! String)+"( On the way )"
+        } else {
+            self.lbl_address_name.text = (self.dict_get_all_shared_booking_details["fullName"] as! String)+"( Driver accepted )"
+        }
+        
+        
         
         self.lbl_from.text = (self.dict_get_all_shared_booking_details["RequestPickupAddress"] as! String)
         self.lbl_to.text = (self.dict_get_all_shared_booking_details["RequestDropAddress"] as! String)
@@ -117,6 +131,7 @@ class share_track: UIViewController, CLLocationManagerDelegate , MKMapViewDelega
         self.img_car_profile.sd_setImage(with: URL(string: (self.dict_get_all_shared_booking_details["driver_image"] as! String)), placeholderImage: UIImage(named: "1024"))
         
         self.btn_call.addTarget(self, action: #selector(call), for: .touchUpInside)
+        
         
         self.iAmHereForLocationPermission()
     }

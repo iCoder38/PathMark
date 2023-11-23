@@ -10,13 +10,43 @@ import CoreLocation
 import MapKit
 import Alamofire
 import SDWebImage
+ 
+import GoogleMaps
+import GooglePlaces
 
 // MARK:- LOCATION -
 import CoreLocation
 import CryptoKit
 import JWTDecode
 
-class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate {
+class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate, UIGestureRecognizerDelegate {
+    /*func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        print("Place name: \(place.name!)")
+        
+        // print("Place name: \(place.latitude!)")
+        // print("Place name: \(place.longitude!)")
+        
+            print("Place address: \(place.formattedAddress ?? "null")")
+            self.txt_search.text = place.formattedAddress
+            print("Place attributions: \(String(describing: place.attributions))")
+
+            self.dismiss(animated: true, completion: nil)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        print("Autocomplete was cancelled.")
+            self.dismiss(animated: true, completion: nil)
+    }*/
+    
+    
+    let newPin = MKPointAnnotation()
+    var str_count:String! = "1"
+    var set_new_lat:Double!
+    var set_new_long:Double!
     
     var str_user_select_vehicle:String!
     var str_user_option:String!
@@ -55,6 +85,8 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     var arr_list_of_all_Drivers : NSArray!
     
     var arr_all_locations_pin:NSMutableArray! = []
+    
+    @IBOutlet weak var txt_search:UITextField!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -156,24 +188,26 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     var counter = 2
     var timer:Timer!
     
-    
+    var str_save_full_address:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.lbl_location_from.text = ""
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
-         self.current_location_click_method()
+        // self.txt_search.delegate = self
+        
+          self.current_location_click_method()
         
         // apple maps
         self.mapView.delegate = self
         self.searchCompleter.delegate = self
         self.searchResultsTableView.isHidden = true
         
-        self.annotationsOnMap()
+        // self.annotationsOnMap()
         
         self.stateAndCountry = "0"
         self.fullAddress = "0"
@@ -181,10 +215,14 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         self.searchLat = "0"
         self.searchLong = "0"
         
+        let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
+          // lpgr.minimumPressDuration = 0.5
+           lpgr.delaysTouchesBegan = true
+          lpgr.delegate = self
+          self.mapView.addGestureRecognizer(lpgr)
+        
     }
-    
-   
-    
+
     @objc func current_location_click_method() {
         
          self.iAmHereForLocationPermission()
@@ -222,7 +260,7 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     /// **************************************************************
     /// ************* ALL ANNOTATIONS ON MAP *********************************
     /// **************************************************************
-    func annotationsOnMap() {
+    /*func annotationsOnMap() {
         
         for location in 0..<arr_all_locations_pin.count {
             let item = self.arr_all_locations_pin[location] as? [String:Any]
@@ -247,12 +285,12 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         
         self.hide_loading_UI()
         
-    }
+    }*/
     
     /// **************************************************************
     /// ************* RIDE NOW CLICK *********************************
     /// **************************************************************
-    @objc func ride_now_click_method() {
+    /*@objc func ride_now_click_method() {
         
         if self.str_category_id == "0" {
             
@@ -300,14 +338,14 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         }
         
         
-    }
+    }*/
     
     
     /// **************************************************************
     /// ************* API - LIST OF ALL CAR CATEGORY *****************
     /// **************************************************************
     
-    @objc func list_of_all_category_WB() {
+    /*@objc func list_of_all_category_WB() {
         //        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
         // let str:String = person["role"] as! String
         //            print(token_id_is)
@@ -389,9 +427,9 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         //        } else {
         //            print("TOKEN NOT SAVED.")
         //        }
-    }
+    }*/
     
-    func postAction() {
+    /*func postAction() {
         let Url = String(format: application_base_url)
         guard let serviceUrl = URL(string: Url) else { return }
         let parameterDictionary = ["username" : "Test", "password" : "123456"]
@@ -446,7 +484,7 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
       }
 
       return payload
-    }
+    }*/
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -455,125 +493,153 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     
     
     // apple maps
+    
+    
+//    @nonobjc func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+//        guard annotation is MKPointAnnotation else { return nil }
+//
+//        let identifier = "Annotation"
+//        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+//
+//        if annotationView == nil {
+//            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+//            annotationView!.canShowCallout = true
+//            // annotationView?.removeFromSuperview()
+//        } else {
+//            annotationView!.annotation = annotation
+//        }
+//
+//        return annotationView
+//    }
+    
+//    @nonobjc func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+//        let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+//        self.mapView.setRegion(region, animated: true)
+//    }
+    
+    
+    
+    @objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
+        if gestureReconizer.state != UIGestureRecognizer.State.ended {
+        let touchLocation = gestureReconizer.location(in: self.mapView)
+        let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
+        print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
+        return
+      }
+        if gestureReconizer.state != UIGestureRecognizer.State.began {
+            print("begin")
+            let touchLocation = gestureReconizer.location(in: self.mapView)
+            let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
+            print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
+            //
+            self.str_count = "2"
+            self.set_new_lat = locationCoordinate.latitude
+            self.set_new_long = locationCoordinate.longitude
+            
+            UserDefaults.standard.set(String(self.set_new_lat), forKey: "key_save_lat_for_address")
+            UserDefaults.standard.set(String(self.set_new_long), forKey: "key_save_long_for_address")
+            
+            
+            convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        return
+      }
+    }
+    
+    func convertLatLongToAddress(latitude:Double,longitude:Double){
+        
+        let geoCoder = CLGeocoder()
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        print(location)
+        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
+            
+            // Place details
+            var placeMark: CLPlacemark!
+            placeMark = placemarks?[0]
+            
+            // Location name
+            if let locationName = placeMark.location {
+                print(locationName)
+            }
+            // Street address
+            if let street = placeMark.thoroughfare {
+                print(street)
+            }
+            // City
+            if let city = placeMark.locality {
+                print(city)
+            }
+            // State
+            if let state = placeMark.administrativeArea {
+                print(state)
+            }
+            
+            var save_sub_locality:String!
+            var save_name:String!
+            var save_subAdministrativeArea:String!
+            var save_zipCode:String!
+            
+            // Zip code
+            if let zipCode = placeMark.postalCode {
+                print(zipCode)
+                save_zipCode = zipCode
+            }
+            // Country
+            if let country = placeMark.country {
+                print(country)
+            }
+            
+            
+            // Country
+            if let subLocality = placeMark.subLocality {
+                print(subLocality)
+                save_sub_locality = subLocality
+            }
+            
+            // Country
+            if let name = placeMark.name {
+                print(name)
+                save_name = name
+            }
+            // Country
+            if let subAdministrativeArea = placeMark.subAdministrativeArea {
+                print(subAdministrativeArea)
+                save_subAdministrativeArea = subAdministrativeArea
+            }
+            self.lbl_location_from.numberOfLines = 0
+            
+            let one = save_name+","+save_sub_locality
+            let two = save_subAdministrativeArea+","+save_zipCode
+            
+            self.lbl_location_from.text = one+","+two
+            UserDefaults.standard.set(self.lbl_location_from.text, forKey: "key_save_full_address_for_address")
+            
+        })
+        
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! PDBagPurchaseTableCell
+        mapView.removeAnnotation(newPin)
         
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-        location.fetchCityAndCountry { city, country, zipcode,localAddress,localAddressMini,locality, error in
-            guard let city = city, let country = country,let zipcode = zipcode,let localAddress = localAddress,let localAddressMini = localAddressMini,let locality = locality, error == nil else { return }
-            
-            self.strSaveCountryName     = country
-            self.strSaveStateName       = city
-            self.strSaveZipcodeName     = zipcode
-            
-            self.strSaveLocalAddress     = localAddress
-            self.strSaveLocality         = locality
-            self.strSaveLocalAddressMini = localAddressMini
-
-            let doubleLat = locValue.latitude
-            let doubleStringLat = String(doubleLat)
-            
-            let doubleLong = locValue.longitude
-            let doubleStringLong = String(doubleLong)
-            
-            self.strSaveLatitude = String(doubleStringLat)
-            self.strSaveLongitude = String(doubleStringLong)
-            
-            // print("local address ==> "+localAddress as Any) // south west delhi
-            // print("local address mini ==> "+localAddressMini as Any) // new delhi
-            // print("locality ==> "+locality as Any) // sector 10 dwarka
-            
-            // print(self.strSaveCountryName as Any) // india
-            // print(self.strSaveStateName as Any) // new delhi
-            // print(self.strSaveZipcodeName as Any) // 110075
-            
-            var str_locality = String(self.strSaveLocality)
-            var str_local_address = String(self.strSaveLocalAddress)
-            var str_local_state = String(self.strSaveStateName)
-            var str_local_country = String(self.strSaveCountryName)
-            let str_local_zipcode = String(self.strSaveZipcodeName)
-            
-            self.lbl_location_from.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
-            
-//            self.lbl_location_from.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)
-            
-//            self.lbl_location_from.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
-            
-            
-            /*print(manager.location?.coordinate.latitude as Any)
-            print(manager.location?.coordinate.longitude as Any)
-            
-            let sourceLocation = CLLocationCoordinate2D(latitude: Double((manager.location?.coordinate.latitude)!), longitude: Double((manager.location?.coordinate.longitude)!))*/
-            
-            /*
-             AVGRating = 0;
-             address = "";
-             contactNumber = 8287632345;
-             distance = 0;
-             fullName = iDriver5;
-             id = 13;
-             latitude = "28.587238814653944";
-             longitude = "77.06062328401764";
-             "profile_picture" = "";
-             */
-            
-            let my_current_location = ["title":"You are here",
-                                       "id":"",
-                                       "distance":"",
-                                       "fullName":"",
-                                       "latitude":String(self.strSaveLatitude),
-                                       "longitude":String(self.strSaveLongitude)]
-            
-            self.arr_all_locations_pin.add(my_current_location)
-            // print(self.arr_all_locations_pin)
-            
-            
-            /*let sourcePin = customPin(pinTitle: "You", pinSubTitle: "", location: sourceLocation)
-            
-            self.mapView.removeAnnotations(self.mapView.annotations)
-            
-            self.mapView.addAnnotation(sourcePin)*/
-            
-            //MARK:- STOP LOCATION -
-            self.locationManager.stopUpdatingLocation()
-
-            
-
-        }
+        let location = locations.last! as CLLocation
         
-    }
-    
-    @nonobjc func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard annotation is MKPointAnnotation else { return nil }
-
-        let identifier = "Annotation"
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-
-        if annotationView == nil {
-            annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            annotationView!.canShowCallout = true
-            // annotationView?.removeFromSuperview()
+        if (self.str_count == "1") {
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            mapView.setRegion(region, animated: true)
+            newPin.coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            mapView.addAnnotation(newPin)
         } else {
-            annotationView!.annotation = annotation
+            let center = CLLocationCoordinate2D(latitude: set_new_lat, longitude: set_new_long)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            mapView.setRegion(region, animated: true)
+            newPin.coordinate = CLLocationCoordinate2D(latitude: set_new_lat, longitude: set_new_long)
+            mapView.addAnnotation(newPin)
         }
+        
+    }
 
-        return annotationView
-    }
-    
-    @nonobjc func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-        self.mapView.setRegion(region, animated: true)
-    }
-    
-    
 }
-
-
-
 
 extension map_view_add_address: UISearchBarDelegate {
     
@@ -669,6 +735,8 @@ extension map_view_add_address: UITableViewDataSource , UITableViewDelegate {
             UserDefaults.standard.set(String(self.searchLat), forKey: "key_save_lat_for_address")
             UserDefaults.standard.set(String(self.searchLong), forKey: "key_save_long_for_address")
             UserDefaults.standard.set(completion.title+","+completion.subtitle, forKey: "key_save_full_address_for_address")
+            
+            self.lbl_location_from.text = completion.title+","+completion.subtitle
             
             /*UserDefaults.standard.set(completion.title, forKey: "keySaveLocation")
             UserDefaults.standard.set(fullAddress, forKey: "keySaveFullAddress")

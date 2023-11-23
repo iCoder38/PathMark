@@ -30,6 +30,7 @@ pod 'Stripe'
 #maps
 pod 'GoogleMaps'
 pod 'GooglePlaces'
+pod 'Google-Maps-iOS-Utils', '3.4.0'
 
 pod 'Firebase'
 pod 'Firebase/Auth'

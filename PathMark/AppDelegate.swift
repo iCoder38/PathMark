@@ -10,7 +10,8 @@ import UIKit
 import Firebase
 
 import UserNotifications
-
+import GoogleMaps
+import GooglePlaces
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -20,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Override point for customization after application launch.
         
         FirebaseApp.configure()
+        
+        GMSPlacesClient.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
+        GMSServices.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
         
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)

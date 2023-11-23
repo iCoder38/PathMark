@@ -352,8 +352,12 @@ class decline_request: UIViewController {
     }
     
     @objc func decline_ride_WB(str_show_loader:String) {
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        self.dismiss(animated: true)
         
-        if (str_show_loader == "yes") {
+        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
+        
+        /*if (str_show_loader == "yes") {
             ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
         }
         
@@ -465,7 +469,62 @@ class decline_request: UIViewController {
                 }
             }
         }
+         */
     }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.decline_ride_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
     @objc func updateCounter() {
         
         if (counter == 2) {
@@ -473,19 +532,17 @@ class decline_request: UIViewController {
         } else if (counter == 1) {
             counter -= 1
             timer.invalidate()
-            //
-            // ERProgressHud.sharedInstance.hide()
-            //
-            // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-            // self.navigationController?.pushViewController(push!, animated: true)
-            
+            ERProgressHud.sharedInstance.hide()
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  
-            let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+
+            let destinationController = storyboard.instantiateViewController(withIdentifier:"pay_after_cancel_id") as? pay_after_cancel
                 
-            // destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
-                
+            destinationController?.str_booking_id =  "\(self.dict_booking_details["bookingId"]!)"
+               
+            destinationController?.str_reason_select2 = String(self.str_reason_select)
+            destinationController?.txt_view2 = String(self.txt_view.text)
+            
             let frontNavigationController = UINavigationController(rootViewController: destinationController!)
 
             let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
@@ -541,57 +598,6 @@ class decline_request: UIViewController {
         }
 
     }
-    @objc func login_refresh_token_wb() {
-        
-        var parameters:Dictionary<AnyHashable, Any>!
-        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
-            print(get_login_details as Any)
-            
-            parameters = [
-                "action"    : "login",
-                "email"     : (get_login_details["email"] as! String),
-                "password"  : (get_login_details["password"] as! String),
-            ]
-            
-            print("parameters-------\(String(describing: parameters))")
-            
-            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
-                response in
-                
-                switch(response.result) {
-                case .success(_):
-                    if let data = response.value {
-                        
-                        let JSON = data as! NSDictionary
-                        print(JSON)
-                        
-                        var strSuccess : String!
-                        strSuccess = JSON["status"] as? String
-                        
-                        if strSuccess.lowercased() == "success" {
-                            
-                            let str_token = (JSON["AuthToken"] as! String)
-                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
-                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
-                            
-                            self.decline_ride_WB(str_show_loader: "no")
-                            
-                        } else {
-                            ERProgressHud.sharedInstance.hide()
-                        }
-                        
-                    }
-                    
-                case .failure(_):
-                    print("Error message:\(String(describing: response.error))")
-                    ERProgressHud.sharedInstance.hide()
-                    self.please_check_your_internet_connection()
-                    
-                    break
-                }
-            }
-        }
-        
-    }
+    
     
 }

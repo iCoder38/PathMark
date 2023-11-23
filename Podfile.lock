@@ -737,6 +737,22 @@ PODS:
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - FSCalendar (2.8.4)
+  - Google-Maps-iOS-Utils (3.4.0):
+    - Google-Maps-iOS-Utils/Clustering (= 3.4.0)
+    - Google-Maps-iOS-Utils/Geometry (= 3.4.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.4.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.4.0)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (3.4.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (3.4.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (3.4.0):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (3.4.0):
+    - GoogleMaps
   - GoogleAppMeasurement (10.17.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.17.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -895,6 +911,7 @@ DEPENDENCIES:
   - Firebase/Storage
   - FirebaseFirestore
   - FSCalendar
+  - Google-Maps-iOS-Utils (= 3.4.0)
   - GoogleMaps
   - GooglePlaces
   - JWTDecode (~> 3.1)
@@ -926,6 +943,7 @@ SPEC REPOS:
     - FirebaseSharedSwift
     - FirebaseStorage
     - FSCalendar
+    - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleMaps
@@ -971,6 +989,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: e8fe8d63d434266a1b2c7f02807d5b64462e1851
   FirebaseStorage: 4af6f9ea67b6a8e4e3cbd75e006b4776a50e8b12
   FSCalendar: 2d1d0d9398f12d439f55c1fe0f01525b151b8260
+  Google-Maps-iOS-Utils: 2b4971019b7e9b3c92b4635d218552d9e093df4b
   GoogleAppMeasurement: 4dcddfc7f102825c1c4e6422cb35567b101881a7
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleMaps: 081f2547b60a1c0870a8f49166a653900e5055d5
@@ -996,6 +1015,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   ZKCarousel: e54940a77f4b635e650ea0361608db836a776feb
 
-PODFILE CHECKSUM: daa30d69e4a6a2354e43277d87f2678d64cc9145
+PODFILE CHECKSUM: 0394ed5843921f673d3831cbad85284bde671b5a
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3

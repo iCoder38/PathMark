@@ -62,6 +62,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     var str_total_duration:String! = ""
     var str_total_rupees:String! = ""
     
+    var str_user_save_phone_number:String! = ""
+    
     // ***************************************************************** // nav
     
     @IBOutlet weak var navigationBar:UIView! {
@@ -89,6 +91,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     let cellReuseIdentifier = "dFareDistanceTableViewCell"
     
     @IBOutlet weak var tbleView:UITableView!
+    
+    @IBOutlet weak var btn_share:UIButton!
     
     @IBOutlet weak var btnConfirmBooking:UIButton! {
         didSet {
@@ -154,6 +158,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        self.btn_share.addTarget(self, action: #selector(share_click_method), for: .touchUpInside)
         
         // self.btnConfirmBooking.addTarget(self, action: #selector(validation_before_confirm_booking), for: .touchUpInside)
         
@@ -592,6 +597,176 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         self.view.endEditing(true)
 
+    }
+    
+    @objc func share_click_method() {
+        let alertController = UIAlertController(title: "Share your ride", message: "", preferredStyle: UIAlertController.Style.alert)
+        
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "enter phone number"
+            textField.keyboardType = .numberPad
+        }
+        let saveAction = UIAlertAction(title: "Send", style: UIAlertAction.Style.default, handler: { alert -> Void in
+            let firstTextField = alertController.textFields![0] as UITextField
+            
+            self.str_user_save_phone_number = String(firstTextField.text!)
+            self.share_to_my_friend_WB(str_show_loader: "yes")
+        })
+         
+        alertController.addAction(saveAction)
+         
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func share_to_my_friend_WB(str_show_loader:String) {
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+               
+                parameters = [
+                    "action"        : "shareride",
+                    "shreFrom"        : String(myString),
+                    "mobilenumber"   : String(self.str_user_save_phone_number),
+                    "bookingId"      : "\(self.dict_get_all_data_from_notification["bookingId"]!)",
+                    
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.share_to_my_friend_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
     }
     
 }

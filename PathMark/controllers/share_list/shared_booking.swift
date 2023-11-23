@@ -87,8 +87,8 @@ class shared_booking: UIViewController {
                 
                 parameters = [
                     "action"        : "sharelist",
-                    // "userId"        : String(myString),
-                    "userId"        : String("111"),
+                    "userId"        : String(myString),
+                    // "userId"        : String("111"),
                     
                 ]
                 
@@ -235,14 +235,22 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
-        
-        
-        
+        //
+        //
         let item = self.arr_shared_booking[indexPath.row] as? [String:Any]
         print(item as Any)
         
-        cell.lbl_address_name.text = (item!["fullName"] as! String)
-        
+        if "\(item!["rideStatus"]!)" == "1" { 
+            cell.lbl_address_name.text = (item!["fullName"] as! String)+" ( Driver accepted )"
+        } else if "\(item!["rideStatus"]!)" == "2" {
+            cell.lbl_address_name.text = (item!["fullName"] as! String)+" ( Picked you up )"
+        } else if "\(item!["rideStatus"]!)" == "3" {
+            cell.lbl_address_name.text = (item!["fullName"] as! String)+" ( On the way )"
+        } else {
+            cell.lbl_address_name.text = (item!["fullName"] as! String)+" ( Driver accepted )"
+        }
+        //
+        //
         cell.lbl_from.text = (item!["RequestPickupAddress"] as! String)
         cell.lbl_to.text = (item!["RequestDropAddress"] as! String)
         
@@ -279,9 +287,23 @@ extension shared_booking: UITableViewDataSource , UITableViewDelegate {
         
         let item = self.arr_shared_booking[indexPath.row] as? [String:Any]
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "share_track_id") as? share_track
-        push!.dict_get_all_shared_booking_details = (item! as NSDictionary)
-        self.navigationController?.pushViewController(push!, animated: true)
+        if "\(item!["rideStatus"]!)" == "4" {
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride ended"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+        } else if "\(item!["rideStatus"]!)" == "5" {
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride ended"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+        } else {
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "share_track_id") as? share_track
+            push!.dict_get_all_shared_booking_details = (item! as NSDictionary)
+            self.navigationController?.pushViewController(push!, animated: true)
+        }
+        
+        
         
     }
     
