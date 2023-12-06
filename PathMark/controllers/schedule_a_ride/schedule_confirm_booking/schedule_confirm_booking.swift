@@ -15,7 +15,9 @@ import CoreLocation
 class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
     var str_date:String!
+    var str_date2:String!
     var str_time:String!
+    var str_time2:String!
     
     let locationManager = CLLocationManager()
     
@@ -651,8 +653,8 @@ extension schedule_confirm_booking: UITableViewDataSource , UITableViewDelegate 
          cell.lbl_arrived.text = String(self.str_total_duration)+"\nArrived"
          cell.lbl_distance.text = String(self.str_total_distance)+"\nDistance"
         
-        cell.lbl_date.text = String(str_date)
-        cell.lbl_time.text = String(str_time)
+        cell.lbl_date.text = String(str_date2)
+        cell.lbl_time.text = String(str_time2)
         
         cell.txt_field.delegate = self
         

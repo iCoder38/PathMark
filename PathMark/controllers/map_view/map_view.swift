@@ -23,7 +23,11 @@ struct Location {
     let longitude: Double
 }
 
-class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate {
+class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate, UIGestureRecognizerDelegate {
+    
+    var str_get_user_current_full_address:String!
+    var str_get_login_user_lat:String!
+    var str_get_login_user_long:String!
     
     var str_user_select_vehicle:String!
     var str_user_option:String!
@@ -62,6 +66,14 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var arr_list_of_all_Drivers : NSArray!
     
     var arr_all_locations_pin:NSMutableArray! = []
+    
+    // click on map
+    let newPin = MKPointAnnotation()
+    var str_count:String! = "1"
+    var set_new_lat:Double!
+    var set_new_long:Double!
+    
+    @IBOutlet weak var search_text_field:UISearchTextField!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -202,6 +214,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.btnRideNow.setTitle("Ride now", for: .normal)
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
         
+        self.strSaveLatitude = String(str_get_login_user_lat)
+        self.strSaveLongitude = String(str_get_login_user_long)
+        
          self.current_location_click_method()
         
         // apple maps
@@ -217,16 +232,17 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.searchLat = "0"
         self.searchLong = "0"
         
+        self.lbl_location_from.text = String(self.str_get_user_current_full_address)
+        
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
-        // print(self.str_user_select_vehicle as Any)
-        // print(self.str_user_option as Any)
+        let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
+          // lpgr.minimumPressDuration = 0.5
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        self.mapView.addGestureRecognizer(lpgr)
         
-        /*
-         push!.str_user_select_vehicle = self.str_vehicle_type
-         push!.str_user_option = self.str_select_option
-         */
     }
     
     @objc func updateCounter() {
@@ -240,6 +256,140 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             timer.invalidate()
         }
 
+    }
+    
+    @objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
+        if gestureReconizer.state != UIGestureRecognizer.State.ended {
+        let touchLocation = gestureReconizer.location(in: self.mapView)
+        let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
+        print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
+        return
+      }
+        if gestureReconizer.state != UIGestureRecognizer.State.began {
+            print("begin")
+            let touchLocation = gestureReconizer.location(in: self.mapView)
+            let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
+            print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
+            //
+            self.str_count = "2"
+            self.set_new_lat = locationCoordinate.latitude
+            self.set_new_long = locationCoordinate.longitude
+            
+            
+            // push!.my_location_lat = String(self.strSaveLatitude)
+            // push!.my_location_long = String(self.strSaveLongitude)
+            
+            UserDefaults.standard.set(String(self.set_new_lat), forKey: "key_save_lat_for_address")
+            UserDefaults.standard.set(String(self.set_new_long), forKey: "key_save_long_for_address")
+            
+            
+            convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        return
+      }
+    }
+    
+    func convertLatLongToAddress(latitude:Double,longitude:Double){
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        
+        let geoCoder = CLGeocoder()
+        let location = CLLocation(latitude: latitude, longitude: longitude)
+        print(location)
+        
+        self.searchLat = "\(latitude)"
+        self.searchLong = "\(longitude)"
+        
+        geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
+            
+            // Place details
+            var placeMark: CLPlacemark!
+            placeMark = placemarks?[0]
+            
+            // Location name
+            if let locationName = placeMark.location {
+                print(locationName)
+            }
+            // Street address
+            if let street = placeMark.thoroughfare {
+                print(street)
+            }
+            // City
+            if let city = placeMark.locality {
+                print(city)
+            }
+            // State
+            if let state = placeMark.administrativeArea {
+                print(state)
+            }
+            
+            var save_sub_locality:String!
+            var save_name:String!
+            var save_subAdministrativeArea:String!
+            var save_zipCode:String!
+            
+            // Zip code
+            if let zipCode = placeMark.postalCode {
+                print(zipCode)
+                save_zipCode = zipCode
+            }
+            // Country
+            if let country = placeMark.country {
+                print(country)
+            }
+            
+            
+            // Country
+            if let subLocality = placeMark.subLocality {
+                print(subLocality)
+                save_sub_locality = subLocality
+            }
+            
+            // Country
+            if let name = placeMark.name {
+                print(name)
+                save_name = name
+            }
+            // Country
+            if let subAdministrativeArea = placeMark.subAdministrativeArea {
+                print(subAdministrativeArea)
+                save_subAdministrativeArea = subAdministrativeArea
+            }
+            self.lbl_location_from.numberOfLines = 0
+            
+            let one = save_name+","+save_sub_locality
+            let two = save_subAdministrativeArea+","+save_zipCode
+            
+            self.stateAndCountry = one
+            self.fullAddress = two
+            
+            self.search_text_field.text = one+","+two
+            // UserDefaults.standard.set(self.lbl_location_from.text, forKey: "key_save_full_address_for_map_search")
+            
+            //
+            // self.find_driver_WB()
+        })
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        mapView.removeAnnotation(newPin)
+        
+        let location = locations.last! as CLLocation
+        
+        if (self.str_count == "1") {
+            let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            mapView.setRegion(region, animated: true)
+            newPin.coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            mapView.addAnnotation(newPin)
+        } else {
+            let center = CLLocationCoordinate2D(latitude: set_new_lat, longitude: set_new_long)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+            mapView.setRegion(region, animated: true)
+            newPin.coordinate = CLLocationCoordinate2D(latitude: set_new_lat, longitude: set_new_long)
+            mapView.addAnnotation(newPin)
+        }
+        
     }
     
     @objc func current_location_click_method() {
@@ -617,7 +767,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     
     // apple maps
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    /*func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         print("locations = \(locValue.latitude) \(locValue.longitude)")
@@ -707,7 +857,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
 
         }
         
-    }
+    }*/
     
     @nonobjc func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is MKPointAnnotation else { return nil }

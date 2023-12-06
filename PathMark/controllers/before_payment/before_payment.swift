@@ -106,6 +106,8 @@ class before_payment: UIViewController {
         
         self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
         
+        self.str_final_amount = String(self.str_get_total_price2)
+        
         self.couponListWB(str_show_loader: "yes")
     }
     
@@ -296,7 +298,7 @@ class before_payment: UIViewController {
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
             
             push!.str_booking_id = self.str_booking_id2
-            push!.str_get_total_price = self.str_get_total_price2
+            push!.str_get_total_price = String(self.str_final_amount)// self.str_get_total_price2
             push!.get_full_data_for_payment = self.get_full_data_for_payment2
             push!.str_discounted_amount = self.str_discount_amount2
             push!.str_coupon_code = self.str_coupon_code2

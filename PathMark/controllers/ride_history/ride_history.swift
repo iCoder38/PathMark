@@ -367,7 +367,11 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             
             cell.lbl_date.text = (item!["bookingDate"] as! String)
             
-            if "\(item!["rideStatus"]!)" == "4" {
+            if "\(item!["rideStatus"]!)" == "1" {
+                cell.lbl_status.text = "Accepted"
+                cell.lbl_status.textColor = .systemGreen
+            }
+             else if "\(item!["rideStatus"]!)" == "4" {
                 
                 if "\(item!["paymentStatus"]!)" == "" {
                     cell.lbl_status.backgroundColor = .systemOrange
@@ -429,58 +433,63 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             cell.lbl_car_model_for_complete.text = (item!["CarName"] as! String)
             cell.lbl_address_for_complete.text = (item!["RequestDropAddress"] as! String)
             
-            
-            // if payment is empty
-            if "\(item!["paymentStatus"]!)" == "" {
-                
-                if "\(item!["rideStatus"]!)" == "1" {
-                    cell.lbl_status_for_complete.text = "Driver accepted"
-                    cell.lbl_status_for_complete.textColor = .systemGreen
-                } else if "\(item!["rideStatus"]!)" == "2" {
-                    cell.lbl_status_for_complete.text = "Driver picked you up"
-                    cell.lbl_status_for_complete.textColor = .systemYellow
-                } else if "\(item!["rideStatus"]!)" == "3" {
-                    cell.lbl_status_for_complete.text = "On Going"
-                    cell.lbl_status_for_complete.textColor = .systemOrange
-                } else if "\(item!["rideStatus"]!)" == "4" {
-                    
-                    if "\(item!["paymentStatus"]!)" == "" {
-                        cell.lbl_status_for_complete.text = "Payment Pending"
-                        cell.lbl_status_for_complete.textColor = .systemBrown
-                    } else {
-                        cell.lbl_status_for_complete.text = "Completed"
-                        cell.lbl_status_for_complete.textColor = .systemGreen
-                    }
-                    
-                }  else if "\(item!["rideStatus"]!)" == "5" {
-                    
-                    if "\(item!["paymentStatus"]!)" == "" {
-                        cell.lbl_status_for_complete.text = "Payment Pending"
-                        cell.lbl_status_for_complete.textColor = .systemBrown
-                    } else {
-                        cell.lbl_status_for_complete.text = "Completed"
-                        cell.lbl_status_for_complete.textColor = .systemGreen
-                        
-                    }
-                    
-                }
-                
+            if "\(item!["rideStatus"]!)" == "7" {
+                cell.lbl_status_for_complete.text = "Cancelled"
+                cell.lbl_status_for_complete.textColor = .systemRed
             } else {
-                // if payment done
-                if "\(item!["rideStatus"]!)" == "5" {
+                // if payment is empty
+                if "\(item!["paymentStatus"]!)" == "" {
                     
-                    if "\(item!["paymentStatus"]!)" == "" {
-                        cell.lbl_status_for_complete.text = "Payment Pending"
-                        cell.lbl_status_for_complete.textColor = .systemBrown
-                    } else {
-                        cell.lbl_status_for_complete.text = "Completed"
+                    if "\(item!["rideStatus"]!)" == "1" {
+                        cell.lbl_status_for_complete.text = "Driver accepted"
                         cell.lbl_status_for_complete.textColor = .systemGreen
+                    } else if "\(item!["rideStatus"]!)" == "2" {
+                        cell.lbl_status_for_complete.text = "Driver picked you up"
+                        cell.lbl_status_for_complete.textColor = .systemYellow
+                    } else if "\(item!["rideStatus"]!)" == "3" {
+                        cell.lbl_status_for_complete.text = "On Going"
+                        cell.lbl_status_for_complete.textColor = .systemOrange
+                    } else if "\(item!["rideStatus"]!)" == "4" {
+                        
+                        if "\(item!["paymentStatus"]!)" == "" {
+                            cell.lbl_status_for_complete.text = "Payment Pending"
+                            cell.lbl_status_for_complete.textColor = .systemBrown
+                        } else {
+                            cell.lbl_status_for_complete.text = "Completed"
+                            cell.lbl_status_for_complete.textColor = .systemGreen
+                        }
+                        
+                    }  else if "\(item!["rideStatus"]!)" == "5" {
+                        
+                        if "\(item!["paymentStatus"]!)" == "" {
+                            cell.lbl_status_for_complete.text = "Payment Pending"
+                            cell.lbl_status_for_complete.textColor = .systemBrown
+                        } else {
+                            cell.lbl_status_for_complete.text = "Completed"
+                            cell.lbl_status_for_complete.textColor = .systemGreen
+                            
+                        }
+                        
+                    }
+                    
+                } else {
+                    // if payment done
+                    if "\(item!["rideStatus"]!)" == "5" {
+                        
+                        if "\(item!["paymentStatus"]!)" == "" {
+                            cell.lbl_status_for_complete.text = "Payment Pending"
+                            cell.lbl_status_for_complete.textColor = .systemBrown
+                        } else {
+                            cell.lbl_status_for_complete.text = "Completed"
+                            cell.lbl_status_for_complete.textColor = .systemGreen
+                            
+                        }
                         
                     }
                     
                 }
-                
             }
+            
             
             cell.lbl_status_for_complete.font = UIFont(name:"Poppins-SemiBold", size: 16.0)
             cell.lbl_date_for_complete.text = "\(item!["bookingDate"]!)"
@@ -670,6 +679,11 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                     self.navigationController?.pushViewController(push!, animated: true)
                     
                 }
+            } else {
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
+                  push!.dict_get_booking_details = (item! as NSDictionary)
+                push!.str_from_history = "yes"
+                self.navigationController?.pushViewController(push!, animated: true)
             }
             
         } else {

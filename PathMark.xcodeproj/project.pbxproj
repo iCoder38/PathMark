@@ -378,8 +378,8 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B96EE4782B205DFE0077C746 /* about */,
 				B9E13D462A5C46A20068774A /* third_party */,
+				B96EE4782B205DFE0077C746 /* about */,
 				B90540A22B0F8FA000283AF8 /* pay_after_cancel */,
 				B9F377CD2B0F30E6007F6CEB /* share_list */,
 				B9C530812B0DF60C00DB37B0 /* cancel_your_ride */,

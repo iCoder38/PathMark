@@ -134,7 +134,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 let destinationController = storyboard.instantiateViewController(withIdentifier:"schedule_ride_details_id") as? schedule_ride_details
                     
                 destinationController?.dict_get_booking_details = dict as NSDictionary
-                    
+                destinationController?.str_from_history = "no"
                 let frontNavigationController = UINavigationController(rootViewController: destinationController!)
 
                 let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC

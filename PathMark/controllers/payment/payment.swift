@@ -55,6 +55,8 @@ class payment: UIViewController, UITextFieldDelegate {
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        self.str_final_price_to_pay = String(self.str_get_total_price)
+        
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
     }
@@ -164,6 +166,7 @@ class payment: UIViewController, UITextFieldDelegate {
                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
                             
                             push!.get_booking_details = get_full_data_for_payment
+                            push!.str_show_total_price = String(self.str_final_price_to_pay)
                             
                             self.navigationController?.pushViewController(push!, animated: true)
                             

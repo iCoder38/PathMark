@@ -10,6 +10,8 @@ import Alamofire
 
 class success_payment: UIViewController {
 
+    var str_show_total_price:String!
+    
     var get_booking_details:NSDictionary!
     
     @IBOutlet weak var btn_back:UIButton! {
@@ -65,7 +67,12 @@ class success_payment: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard2))
         view.addGestureRecognizer(tap)
         
-        self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.get_booking_details["FinalFare"]!)"
+        if (self.str_show_total_price == nil) {
+            self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.get_booking_details["FinalFare"]!)"
+        } else {
+            self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.str_show_total_price!)"
+        }
+        
         
         if (self.get_booking_details["created"]) == nil {
             self.lbl_date_time.text = ""

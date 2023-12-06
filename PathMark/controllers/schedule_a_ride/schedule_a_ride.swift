@@ -53,7 +53,10 @@ class schedule_a_ride: UIViewController {
     }
     
     var str_selected_date:String! = ""
+    var str_selected_date2:String! = ""
+    
     var str_selected_time:String! = ""
+    var str_selected_time2:String! = ""
     
     @IBOutlet weak var lbl_selected_date:UILabel! {
         didSet {
@@ -129,7 +132,10 @@ class schedule_a_ride: UIViewController {
         push!.searched_place_location_long2 = String(self.searched_place_location_long)
         
         push!.str_date = String(self.str_selected_date)
+        push!.str_date2 = String(self.str_selected_date2)
         push!.str_time = String(self.str_selected_time)
+        
+        push!.str_time2 = String(self.str_selected_time2)
         
         self.navigationController?.pushViewController(push!, animated: true)
         
@@ -143,6 +149,152 @@ class schedule_a_ride: UIViewController {
             // TODO: Your implementation for date
             self.btn_select_time.setTitle(selectedDate.dateString("HH:mm"), for: .normal)
             self.str_selected_time = selectedDate.dateString("HH:mm")
+            
+            print(self.str_selected_time as Any)
+            
+            let fullName    = String(self.str_selected_time)
+            let fullNameArr = fullName.components(separatedBy: ":")
+
+            let hour    = fullNameArr[0]
+            let minute = fullNameArr[1]
+            
+            var str_am:String! = " am"
+            var str_pm:String! = " pm"
+            
+            
+            
+            if (hour == "00") {
+                
+                self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                
+            } else if (hour == "01") {
+                
+                self.str_selected_time2 = "1:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("1:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "02") {
+                
+                self.str_selected_time2 = "2:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("2:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "03") {
+                
+                self.str_selected_time2 = "3:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("3:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "04") {
+                
+                self.str_selected_time2 = "4:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("4:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "05") {
+                
+                self.str_selected_time2 = "5:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("5:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "06") {
+                
+                self.str_selected_time2 = "6:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("6:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "07") {
+                
+                self.str_selected_time2 = "7:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("7:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "08") {
+                
+                self.str_selected_time2 = "8:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("8:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "09") {
+                
+                self.str_selected_time2 = "9:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("9:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "10") {
+                
+                self.str_selected_time2 = "10:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("10:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "11") {
+                
+                self.str_selected_time2 = "11:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("11:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "12") {
+                
+                self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                
+            }else if (hour == "13") {
+                
+                self.str_selected_time2 = "1:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("1:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "14") {
+                
+                self.str_selected_time2 = "2:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("2:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "15") {
+                
+                self.str_selected_time2 = "3:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("3:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "16") {
+                
+                self.str_selected_time2 = "4:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("4:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "17") {
+                
+                self.str_selected_time2 = "5:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("5:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "18") {
+                
+                self.str_selected_time2 = "6:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("6:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "19") {
+                
+                self.str_selected_time2 = "7:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("7:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "20") {
+                
+                self.str_selected_time2 = "8:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("8:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "21") {
+                
+                self.str_selected_time2 = "9:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("9:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "22") {
+                
+                self.str_selected_time2 = "10:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("10:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "23") {
+                
+                self.str_selected_time2 = "11:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("11:\(minute)\(str_pm!)", for: .normal)
+                
+            } else if (hour == "24") {
+                
+                self.str_selected_time2 = "12:\(minute)\(str_pm!)"
+                self.btn_select_time.setTitle("12:\(minute)\(str_pm!)", for: .normal)
+                
+            } else {
+                
+                self.btn_select_time.setTitle(selectedDate.dateString("HH:mm")+str_am, for: .normal)
+                self.str_selected_time = selectedDate.dateString("HH:mm")
+                
+            }
+            
         })
     }
     
@@ -180,6 +332,7 @@ class schedule_a_ride: UIViewController {
         print("Selected Date: " + resultString)
         
         self.str_selected_date = resultString
+        self.str_selected_date2 = resultString2
         self.lbl_selected_date.text = "Selected Date: " + resultString2
         
         // self.get_calendar_date_WB(str_date: resultString)

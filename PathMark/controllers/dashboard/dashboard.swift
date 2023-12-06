@@ -92,6 +92,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var strIndex:Int! = 0
 
     @objc func please_select_atleast_one_vehicle() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
         
         if (self.str_vehicle_type == "0") {
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
@@ -111,16 +113,34 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
                     push!.str_user_select_vehicle = "CAR"
                     push!.str_user_option = self.str_select_option
+                    
+                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+                    
+                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
+                    push!.str_get_login_user_long = String(self.strSaveLongitude)
+                    
                     self.navigationController?.pushViewController(push!, animated: true)
                 } else if (self.str_vehicle_type == "INTERCITY") {
                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
                     push!.str_user_select_vehicle = "CAR"
                     push!.str_user_option = self.str_select_option
+                    
+                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+                    
+                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
+                    push!.str_get_login_user_long = String(self.strSaveLongitude)
+                    
                     self.navigationController?.pushViewController(push!, animated: true)
                 } else {
                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
                     push!.str_user_select_vehicle = self.str_vehicle_type
                     push!.str_user_option = self.str_select_option
+                    
+                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+                    
+                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
+                    push!.str_get_login_user_long = String(self.strSaveLongitude)
+                    
                     self.navigationController?.pushViewController(push!, animated: true)
                 }
                 

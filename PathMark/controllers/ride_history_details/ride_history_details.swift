@@ -67,7 +67,8 @@ class ride_history_details: UIViewController {
         print("===================================")
         print("===================================")
         
-        self.lbl_price.text = "\(self.dict_get_booking_details["FinalFare"]!)"
+        self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.dict_get_booking_details["totalAmount"]!)"
+        
         self.lbl_distance.text = "\(self.dict_get_booking_details["totalDistance"]!)"
         
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
@@ -120,7 +121,14 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
             i_am_promotion = "\(self.dict_get_booking_details["discountAmount"]!)"
         }
         
-        let double_fare = Double("\(self.dict_get_booking_details["FinalFare"]!)")
+        //
+        let double_fare:Double!
+        if "\(self.dict_get_booking_details["FinalFare"]!)" == "" {
+            double_fare = Double(0.0)
+        } else {
+             double_fare = Double("\(self.dict_get_booking_details["FinalFare"]!)")
+        }
+        
         let double_tip = Double(i_am_tip)
         let double_promotion = Double(i_am_promotion)
         

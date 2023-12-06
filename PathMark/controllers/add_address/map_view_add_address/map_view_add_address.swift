@@ -217,9 +217,9 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         
         let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
           // lpgr.minimumPressDuration = 0.5
-           lpgr.delaysTouchesBegan = true
-          lpgr.delegate = self
-          self.mapView.addGestureRecognizer(lpgr)
+        lpgr.delaysTouchesBegan = true
+        lpgr.delegate = self
+        self.mapView.addGestureRecognizer(lpgr)
         
     }
 
