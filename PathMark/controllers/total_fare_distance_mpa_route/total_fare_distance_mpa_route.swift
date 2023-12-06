@@ -14,7 +14,7 @@ import CoreLocation
 
 class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
-     
+    var str_vehicle_type:String!
     
     let locationManager = CLLocationManager()
     
@@ -121,6 +121,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
 
+        print(self.str_vehicle_type as Any)
+        
         // self.iAmHereForLocationPermission()
     }
     
@@ -326,7 +328,12 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             annotationView.canShowCallout = true
             
             if(annotation.title == "Drop Location") {
-                annotationView.image = UIImage(systemName: "car")
+                if (self.str_vehicle_type == "BIKE") {
+                    annotationView.image = UIImage(systemName: "bicycle")
+                } else {
+                    annotationView.image = UIImage(systemName: "car")
+                }
+                
             } else {
                 annotationView.image = UIImage(systemName: "person")
             }

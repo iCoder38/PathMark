@@ -11,7 +11,7 @@ import Alamofire
 class add_contacts: UIViewController , UITextFieldDelegate {
 
     var dict_emergency:NSDictionary!
-    
+    var arr_country_array:NSArray!
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
             btn_back.tintColor = .white
@@ -29,7 +29,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             view_navigation_title.textColor = .white
         }
     }
-    
+    @IBOutlet weak var btn_country:UIButton!
     @IBOutlet weak var txt_full_name:UITextField! {
         didSet {
             // shadow
@@ -101,6 +101,40 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         }
     }
     
+    @IBOutlet weak var txt_country:UITextField! {
+        didSet {
+            // shadow
+            txt_country.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            txt_country.layer.shadowOffset = CGSize(width: 0, height: 3)
+            txt_country.layer.shadowOpacity = 1.0
+            txt_country.layer.shadowRadius = 10.0
+            txt_country.layer.masksToBounds = false
+            txt_country.layer.cornerRadius = 12
+            txt_country.backgroundColor = .white
+            txt_country.keyboardType = .numberPad
+            
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20 , height: txt_country.frame.height))
+            txt_country.leftView = paddingView
+            txt_country.leftViewMode = UITextField.ViewMode.always
+        }
+    }
+    @IBOutlet weak var txt_phone_code:UITextField! {
+        didSet {
+            // shadow
+            txt_phone_code.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            txt_phone_code.layer.shadowOffset = CGSize(width: 0, height: 3)
+            txt_phone_code.layer.shadowOpacity = 1.0
+            txt_phone_code.layer.shadowRadius = 10.0
+            txt_phone_code.layer.masksToBounds = false
+            txt_phone_code.layer.cornerRadius = 12
+            txt_phone_code.backgroundColor = .white
+            txt_phone_code.keyboardType = .numberPad
+            
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20 , height: txt_phone_code.frame.height))
+            txt_phone_code.leftView = paddingView
+            txt_phone_code.leftViewMode = UITextField.ViewMode.always
+        }
+    }
     @IBOutlet weak var btn_submit:UIButton! {
         didSet {
             btn_submit.setTitle("SUBMIT", for: .normal)
@@ -127,6 +161,10 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         
         self.btn_submit.addTarget(self, action: #selector(check_validate), for: .touchUpInside)
         
+        self.btn_country.addTarget(self, action: #selector(before_open_popup), for: .touchUpInside)
+        self.txt_country.text = "Bangladesh"
+        self.txt_phone_code.text = "+880"
+        
         if (self.dict_emergency == nil) {
             print("add contact")
             self.view_navigation_title.text = "NEW CONTACTS"
@@ -144,7 +182,50 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         self.btn_relation.addTarget(self, action: #selector(open_relation_drop_down), for: .touchUpInside)
         
     }
-    
+    @objc func before_open_popup() {
+        self.get_country_list_WB()
+    }
+    @objc func country_click_method() {
+         
+        print(self.arr_country_array as Any)
+        
+        var arr_mut:NSMutableArray = []
+        
+        for index in 0..<self.arr_country_array.count {
+            
+            // print(self.arr_country_array[index])
+            
+            let item = self.arr_country_array[index] as? [String:Any]
+            print(item as Any)
+            
+            arr_mut.add(item!["name"] as! String)
+            
+        }
+        
+        if let swiftArray = arr_mut as NSArray as? [String] {
+            ERProgressHud.sharedInstance.hide()
+            RPicker.selectOption(title: "Select", cancelText: "Cancel", dataArray: swiftArray, selectedIndex: 0) { (selctedText, atIndex) in
+                self.txt_country.text = String(selctedText)
+                
+                //
+                for indexx in 0..<self.arr_country_array.count {
+                    
+                    let item = self.arr_country_array[indexx] as? [String:Any]
+                    // print(item as Any)
+                    
+                    if (self.txt_country.text! == (item!["name"] as! String)) {
+                        print("yes matched")
+                        self.txt_phone_code.text = (item!["phonecode"] as! String)
+                    }
+                    
+                }
+                
+                
+            }
+            
+        }
+        
+    }
     @objc func open_relation_drop_down() {
         var arr_relation = ["Friend", "Family", "Other"]
         
@@ -314,6 +395,65 @@ class add_contacts: UIViewController , UITextFieldDelegate {
                         break
                     }
                 }
+            }
+        }
+    }
+    
+    // get country list
+    @objc func get_country_list_WB() {
+        
+        self.view.endEditing(true)
+        
+         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        
+        let params = payload_country_list(action: "countrylist")
+        
+        print(params as Any)
+        
+        AF.request(application_base_url,
+                   method: .post,
+                   parameters: params,
+                   encoder: JSONParameterEncoder.default).responseJSON { response in
+            // debugPrint(response.result)
+            
+            switch response.result {
+            case let .success(value):
+                
+                let JSON = value as! NSDictionary
+                print(JSON as Any)
+                
+                var strSuccess : String!
+                strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                
+                print(strSuccess as Any)
+                if strSuccess == String("success") {
+                    print("yes")
+                    
+                    self.arr_country_array = (JSON["data"] as! NSArray)
+                    
+                    self.country_click_method()
+                    
+                } else {
+                    
+                    print("no")
+                    ERProgressHud.sharedInstance.hide()
+                    
+                    var strSuccess2 : String!
+                    strSuccess2 = JSON["msg"]as Any as? String
+                    
+                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    self.present(alert, animated: true)
+                    
+                }
+                
+            case let .failure(error):
+                print(error)
+                ERProgressHud.sharedInstance.hide()
+                
+                self.please_check_your_internet_connection()
+                
             }
         }
     }

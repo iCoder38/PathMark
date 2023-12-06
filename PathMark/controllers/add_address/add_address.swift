@@ -310,7 +310,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             //MARK:- STOP LOCATION -
             self.locationManager.stopUpdatingLocation()
             
-            self.lbl_current_address.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
+            // self.lbl_current_address.text = String(self.strSaveLocality)+" "+String(self.strSaveLocalAddress)+" "+String(self.strSaveLocalAddressMini)+","+String(self.strSaveStateName)+","+String(self.strSaveCountryName)
             
             if (self.dict_address == nil) {
                 

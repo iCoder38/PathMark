@@ -70,102 +70,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/map_view/map_view.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "714"
-            endingLineNumber = "714"
-            landmarkName = "mapView(_:viewFor:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c6b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.mapView(_: __C.MKMapView, viewFor: __C.MKAnnotation) -&gt; Swift.Optional&lt;__C.MKAnnotationView&gt;"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "713"
-                  endingLineNumber = "713"
-                  offsetFromSymbolStart = "860">
-               </Location>
-               <Location
-                  uuid = "833011EC-1721-447B-BA86-F3D4B1AC17A5 - ab2e635d361d6c44"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.mapView(_: __C.MKMapView, viewFor: __C.MKAnnotation) -&gt; Swift.Optional&lt;__C.MKAnnotationView&gt;"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "714"
-                  endingLineNumber = "714"
-                  offsetFromSymbolStart = "716">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/map_view/map_view.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "710"
-            endingLineNumber = "710"
-            landmarkName = "mapView(_:viewFor:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6ca9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.mapView(_: __C.MKMapView, viewFor: __C.MKAnnotation) -&gt; Swift.Optional&lt;__C.MKAnnotationView&gt;"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "711"
-                  endingLineNumber = "711"
-                  offsetFromSymbolStart = "704">
-               </Location>
-               <Location
-                  uuid = "40D043B1-F0CC-4D31-9041-D71A228B38FC - ab2e635d361d6cc8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.mapView(_: __C.MKMapView, viewFor: __C.MKAnnotation) -&gt; Swift.Optional&lt;__C.MKAnnotationView&gt;"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "710"
-                  endingLineNumber = "710"
-                  offsetFromSymbolStart = "500">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "66AE8729-9D9D-461E-A35E-4ADE5AF92E1F"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -176,6 +80,22 @@
             startingLineNumber = "149"
             endingLineNumber = "149"
             landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "010B6337-D0CF-406A-8C5E-135FE9EC171F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PathMark/controllers/map_view/map_view.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "799"
+            endingLineNumber = "799"
+            landmarkName = "centerItemsInCollectionView(cellWidth:numberOfItems:spaceBetweenCell:collectionView:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

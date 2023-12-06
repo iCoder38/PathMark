@@ -14,6 +14,8 @@ import CoreLocation
 
 class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
+    var str_vehicle_type:String!
+    
     var dict_get_all_data_from_notification:NSDictionary!
     
     let locationManager = CLLocationManager()

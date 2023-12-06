@@ -46,7 +46,7 @@ class schedule_a_ride: UIViewController {
     
     @IBOutlet weak var lblNavigationTitle:UILabel! {
         didSet {
-            lblNavigationTitle.text = "Payment"
+            lblNavigationTitle.text = "Schedule a ride"
             lblNavigationTitle.textColor = NAVIGATION_TITLE_COLOR
             lblNavigationTitle.backgroundColor = .clear
         }
@@ -154,47 +154,33 @@ class schedule_a_ride: UIViewController {
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         
         let foramtter = DateFormatter()
-        
+        let foramtter2 = DateFormatter()
+        // foramtter.dateFormat = "yyyy-MM-dd"
         foramtter.dateFormat = "yyyy-MM-dd"
+        foramtter2.dateFormat = "MM-dd-yyy"
         
-        let date = foramtter.string(from: date)
+        let date1 = foramtter.string(from: date)
+        let date2 = foramtter2.string(from: date)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        let date_set = dateFormatter.date(from: date)
+        let date_set = dateFormatter.date(from: date1)
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let resultString = dateFormatter.string(from: date_set!)
         // cell.lblSelectedDate.text = "Selected Date: " + resultString
         
+        // # 2
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "MM-dd-yyyy"
+        let date_set2 = dateFormatter2.date(from: date2)
+        dateFormatter2.dateFormat = "MM-dd-yyyy"
+        let resultString2 = dateFormatter2.string(from: date_set2!)
+        
+        
         print("Selected Date: " + resultString)
         
         self.str_selected_date = resultString
-        self.lbl_selected_date.text = "Selected Date: " + resultString
-        
-        /*if self.datesWithEvent.contains(resultString) {
-            print("yes")
-            
-            for i in 0..<self.arr_dates.count {
-                let item = self.arr_dates[i] as? [String:Any]
-                print(item as Any)
-                
-                if (resultString == item!["eventDate"] as! String) {
-                    print("yes open browser")
-                    
-                    if let url = URL(string: item!["URL"] as! String) {
-                        UIApplication.shared.open(url)
-                    }
-                    return
-                }
-                
-                
-                
-                
-            }
-        } else {
-            print("no")
-        }*/
-        
+        self.lbl_selected_date.text = "Selected Date: " + resultString2
         
         // self.get_calendar_date_WB(str_date: resultString)
     }

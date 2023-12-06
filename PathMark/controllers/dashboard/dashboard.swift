@@ -45,9 +45,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet weak var tbleView:UITableView! {
         didSet {
-            tbleView.delegate = self
-            tbleView.dataSource = self
-            tbleView.reloadData()
+           
             
             tbleView.backgroundColor = .clear
         }
@@ -55,7 +53,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet var carousel: ZKCarousel? = ZKCarousel()
     
-    var arr_banner = ["car_image_name","car_image_name"]
+    // var arr_banner = ["car_image_name","car_image_name"]
+    
+    var arr_banner:NSMutableArray! = []
     
     var str_token_id:String!
     
@@ -64,6 +64,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tbleView.delegate = self
+        self.tbleView.dataSource = self
         
         // location
         self.iAmHereForLocationPermission()
@@ -103,10 +106,24 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 self.present(alert, animated: true)
             } else {
                 // push to next screen
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-                push!.str_user_select_vehicle = self.str_vehicle_type
-                push!.str_user_option = self.str_select_option
-                self.navigationController?.pushViewController(push!, animated: true)
+                
+                if (self.str_vehicle_type == "CAR") {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+                    push!.str_user_select_vehicle = "CAR"
+                    push!.str_user_option = self.str_select_option
+                    self.navigationController?.pushViewController(push!, animated: true)
+                } else if (self.str_vehicle_type == "INTERCITY") {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+                    push!.str_user_select_vehicle = "CAR"
+                    push!.str_user_option = self.str_select_option
+                    self.navigationController?.pushViewController(push!, animated: true)
+                } else {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+                    push!.str_user_select_vehicle = self.str_vehicle_type
+                    push!.str_user_option = self.str_select_option
+                    self.navigationController?.pushViewController(push!, animated: true)
+                }
+                
                 
             }
         }
@@ -256,6 +273,10 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             
             cell.lbl_my_full_address.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
             
+            UserDefaults.standard.set(self.strSaveLatitude, forKey: "key_current_latitude")
+            UserDefaults.standard.set(self.strSaveLongitude, forKey: "key_current_latitude")
+            UserDefaults.standard.set(locality+","+localAddress+","+localAddressMini, forKey: "key_current_address")
+            
             /*print(self.strSaveLocality as Any)
             print(self.strSaveLocalAddress as Any)
             print(self.strSaveLocalAddressMini as Any)
@@ -365,8 +386,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                             
-                            ERProgressHud.sharedInstance.hide()
-                            self.dismiss(animated: true)
+                            self.show_banner_WB()
+                            
+                            
                             
                             
                                     /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
@@ -456,6 +478,110 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
     }
     
+    @objc func show_banner_WB() {
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+             if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                 print(token_id_is as Any)
+                
+                  let headers: HTTPHeaders = [
+                     "token":String(token_id_is),
+                 ]
+                
+                parameters = [
+                    "action"        : "couponlist",
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            var ar : NSArray!
+                            ar = (JSON["data"] as! Array<Any>) as NSArray
+                            self.arr_banner.addObjects(from: ar as! [Any])
+                            
+                            self.tbleView.reloadData()
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)
+                            
+                            /*let defaults = UserDefaults.standard
+                            defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)*/
+                            
+                            
+                                    /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                                    self.navigationController?.pushViewController(push!, animated: true)*/
+                            
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+             }
+        }
+    }
    
 }
 
@@ -526,8 +652,10 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         
         cell.collectionView?.delegate = self
         cell.collectionView?.dataSource = self
+        cell.collectionView?.reloadData()
         
         cell.page_control.currentPage = self.strIndex
+        cell.page_control.numberOfPages = self.arr_banner.count
         
         cell.btn_next.tag = indexPath.row
         cell.btn_next.addTarget(self, action: #selector(next_click_method), for: .touchUpInside)
@@ -589,7 +717,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 710
+        return 660
     }
     
 }
@@ -611,10 +739,30 @@ extension dashboard: UICollectionViewDelegate ,
 
         cell.backgroundColor  = .clear
         
-        let img_banner = UIImageView()
-        img_banner.frame = CGRect(x: 0, y: 0, width: cell.frame.size.width-10, height: 200)
-        img_banner.image = UIImage(named: self.arr_banner[indexPath.row] )
-        cell.addSubview(img_banner)
+        let item = self.arr_banner[indexPath.row] as? [String:Any]
+        
+        cell.backgroundColor = .clear
+        cell.layer.cornerRadius = 12
+        cell.clipsToBounds = true
+        
+        cell.lbl_type.text = (item!["couponCode"] as! String)
+        cell.lbl_off.text = "\(item!["discount"]!)% off"
+        cell.lbl_off.textAlignment = .center
+        cell.lbl_off.backgroundColor = .systemGreen
+        cell.lbl_off.layer.cornerRadius = 6
+        cell.lbl_off.clipsToBounds = true
+        
+        cell.lbl_off_right_text.text = (item!["couponCode"] as! String)
+        cell.lbl_description.text = (item!["description"] as! String)
+        cell.lbl_expired.text = "Expire : "+(item!["endDate"] as! String)
+        
+        cell.lbl_type.textColor = .white
+        cell.lbl_off.textColor = .white
+        cell.lbl_off_right_text.textColor = .white
+        cell.lbl_description.textColor = .blue
+        cell.lbl_expired.textColor = .white
+        
+        
         
         return cell
         
@@ -631,7 +779,7 @@ extension dashboard: UICollectionViewDelegate ,
         var sizes: CGSize
         let result = UIScreen.main.bounds.size
         NSLog("%f",result.height)
-        sizes = CGSize(width: collectionView.frame.size.width-10, height: 200)
+        sizes = CGSize(width: collectionView.frame.size.width-20, height: 136)
         
         return sizes
     }
@@ -656,24 +804,36 @@ extension dashboard: UICollectionViewDelegate ,
         return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
-    
-    
 }
 
 class dashboard_collection_view_cell: UICollectionViewCell , UITextFieldDelegate {
     
-    @IBOutlet weak var img_banner:UIImageView! {
+    @IBOutlet weak var view_bg:UIView! {
         didSet {
-            img_banner.layer.cornerRadius = 25
-            img_banner.clipsToBounds = true
-            img_banner.layer.borderWidth = 5
-            img_banner.layer.borderColor = UIColor(red: 220.0/255.0, green: 220.0/255.0, blue: 220.0/255.0, alpha: 1).cgColor
+            view_bg.layer.cornerRadius = 12
+            view_bg.clipsToBounds = true
+            // view_bg.backgroundColor = UIColor.init(red: 86.0/255.0, green: 86.0/255.0, blue: 86.0/255.0, alpha: 1)
+            
+            /*view_bg.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            view_bg.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+            view_bg.layer.shadowOpacity = 1.0
+            view_bg.layer.shadowRadius = 15.0
+            view_bg.layer.masksToBounds = false*/
         }
     }
-    @IBOutlet weak var img_purple:UIImageView!
     
-    @IBOutlet weak var lblCarType:UILabel!
-    @IBOutlet weak var lblExtimatedTime:UILabel!
+    @IBOutlet weak var img_view:UIImageView! {
+        didSet {
+            img_view.layer.cornerRadius = 12
+            img_view.clipsToBounds = true
+        }
+    }
+    
+    @IBOutlet weak var lbl_type:UILabel!
+    @IBOutlet weak var lbl_off:UILabel!
+    @IBOutlet weak var lbl_off_right_text:UILabel!
+    @IBOutlet weak var lbl_description:UILabel!
+    @IBOutlet weak var lbl_expired:UILabel!
     
 }
 

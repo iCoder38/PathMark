@@ -36,6 +36,7 @@
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
 		B96B4B782A5BD13A0038B82F /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B772A5BD13A0038B82F /* Utils.swift */; };
+		B96EE47A2B205E060077C746 /* about_us.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96EE4792B205E060077C746 /* about_us.swift */; };
 		B9776C622A8E05F10084082F /* address_list.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9776C612A8E05F10084082F /* address_list.swift */; };
 		B97A19532A8CE7FD00D4DAD0 /* add_contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A19522A8CE7FD00D4DAD0 /* add_contacts.swift */; };
 		B97A19562A8CE81300D4DAD0 /* emergency_contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A19552A8CE81300D4DAD0 /* emergency_contacts.swift */; };
@@ -149,6 +150,7 @@
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
 		B96B4B742A5BD0F40038B82F /* login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = login.swift; sourceTree = "<group>"; };
 		B96B4B772A5BD13A0038B82F /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		B96EE4792B205E060077C746 /* about_us.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = about_us.swift; sourceTree = "<group>"; };
 		B9776C612A8E05F10084082F /* address_list.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = address_list.swift; sourceTree = "<group>"; };
 		B97A19522A8CE7FD00D4DAD0 /* add_contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = add_contacts.swift; sourceTree = "<group>"; };
 		B97A19552A8CE81300D4DAD0 /* emergency_contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = emergency_contacts.swift; sourceTree = "<group>"; };
@@ -376,11 +378,12 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B96EE4782B205DFE0077C746 /* about */,
+				B9E13D462A5C46A20068774A /* third_party */,
 				B90540A22B0F8FA000283AF8 /* pay_after_cancel */,
 				B9F377CD2B0F30E6007F6CEB /* share_list */,
 				B9C530812B0DF60C00DB37B0 /* cancel_your_ride */,
 				B9C5307E2B0DD2DF00DB37B0 /* decline_page */,
-				B9E13D462A5C46A20068774A /* third_party */,
 				B9CEA28A2B0B5F6900CC2340 /* rating_review */,
 				B9CEA2872B0B5E8A00CC2340 /* faq */,
 				B934EC842B0763D700908C0D /* before_payment */,
@@ -423,6 +426,14 @@
 				B96B4B772A5BD13A0038B82F /* Utils.swift */,
 			);
 			path = utils;
+			sourceTree = "<group>";
+		};
+		B96EE4782B205DFE0077C746 /* about */ = {
+			isa = PBXGroup;
+			children = (
+				B96EE4792B205E060077C746 /* about_us.swift */,
+			);
+			path = about;
 			sourceTree = "<group>";
 		};
 		B9776C602A8E05BE0084082F /* address_list */ = {
@@ -1032,6 +1043,7 @@
 				B96B4B752A5BD0F40038B82F /* login.swift in Sources */,
 				B9038E102A5D45FB0041A5B4 /* ActionSheetView.swift in Sources */,
 				B9776C622A8E05F10084082F /* address_list.swift in Sources */,
+				B96EE47A2B205E060077C746 /* about_us.swift in Sources */,
 				B9C73A352A5BEE67001F0B90 /* verify_phone_number.swift in Sources */,
 				B980DD1A2A9DDB2800F7CD07 /* ride_history.swift in Sources */,
 				B996591C2AA74F03009A2D93 /* payment.swift in Sources */,
@@ -1268,6 +1280,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1310,6 +1323,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

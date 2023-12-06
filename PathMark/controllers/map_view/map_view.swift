@@ -220,6 +220,13 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
+        // print(self.str_user_select_vehicle as Any)
+        // print(self.str_user_option as Any)
+        
+        /*
+         push!.str_user_select_vehicle = self.str_vehicle_type
+         push!.str_user_option = self.str_select_option
+         */
     }
     
     @objc func updateCounter() {
@@ -430,6 +437,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
 
+                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                
                 push!.str_get_category_id = String(self.str_category_id)
                 push!.str_from_location = String(self.lbl_location_from.text!)
                 push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
@@ -740,7 +749,8 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         
         
         let item = self.arr_mut_list_of_category[indexPath.row] as? [String:Any]
-
+        print(item as Any)
+        
         // cell.imgCarType.image = UIImage(named: "foodPlaceholder")
         cell.lblCarType.text = (item!["name"] as! String)
         // cell.lblExtimatedTime.text = (item!["name"] as! String)
@@ -772,11 +782,28 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             
         }
         
+        if (self.str_user_select_vehicle == "BIKE") {
+            cell.lbl_total_seats.text = "1 person per ride"
+        } else {
+            cell.lbl_total_seats.text = "4 person per ride"
+        }
+         
+        
         cell.backgroundColor  = .clear
         
         return cell
         
     }
+    
+    func centerItemsInCollectionView(cellWidth: Double, numberOfItems: Double, spaceBetweenCell: Double, collectionView: UICollectionView) -> UIEdgeInsets {
+        let totalWidth = cellWidth * numberOfItems
+        let totalSpacingWidth = spaceBetweenCell * (numberOfItems - 1)
+        let leftInset = (collectionView.frame.width - CGFloat(totalWidth + totalSpacingWidth)) / 2
+        let rightInset = leftInset
+        return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
+    }
+    
+     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.arr_mut_list_of_category.removeAllObjects()
@@ -847,7 +874,14 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        let cellWidth : CGFloat = collectionView.frame.size.width
+        
+        let numberOfCells = floor(collectionView.frame.size.width / cellWidth)
+        let edgeInsets = (collectionView.frame.size.width - (numberOfCells * cellWidth)) / (numberOfCells + 1)
+        
+        return UIEdgeInsets(top: 10, left: edgeInsets, bottom: 10, right: edgeInsets)
+        
+        // return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
     
@@ -893,6 +927,9 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
         cell.textLabel?.text = searchResult.title
         cell.detailTextLabel?.text = searchResult.subtitle
+        
+         
+        
         return cell
         
     }
@@ -995,6 +1032,6 @@ class map_view_collection_view_cell: UICollectionViewCell , UITextFieldDelegate 
     @IBOutlet weak var lblCarType:UILabel!
     @IBOutlet weak var lblExtimatedTime:UILabel!
     
-    
+    @IBOutlet weak var lbl_total_seats:UILabel!
     
 }

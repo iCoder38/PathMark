@@ -61,6 +61,7 @@ class MenuControllerVC: UIViewController {
                               "Emergency Contacts",
                               "Manage Address",
                               "Review & Rating",
+                              "About Zarib",
                               "FAQ(s)",
                               "Shared booking",
                               "Help",
@@ -72,6 +73,7 @@ class MenuControllerVC: UIViewController {
                               "emergency_contacts",
                               "trip",
                               "lock_24",
+                              "logo-white",
                               "help",
                               "help",
                               "help",
@@ -113,6 +115,7 @@ class MenuControllerVC: UIViewController {
 
         self.view.backgroundColor = .white
         
+        self.btn_panic.addTarget(self, action: #selector(panic_click_method), for: .touchUpInside)
         self.sideBarMenuClick()
     }
     
@@ -150,6 +153,181 @@ class MenuControllerVC: UIViewController {
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
           }
     }
+    
+    @objc func panic_click_method() {
+        self.panic_sos_WB(str_show_loader: "yes")
+    }
+     
+    
+    @objc func panic_sos_WB(str_show_loader:String) {
+        
+        if (str_show_loader == "yes") {
+            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var str_lat:String!
+            var str_long:String!
+            var str_address:String!
+            
+            let userDefaults = UserDefaults.standard
+            let myString2 = userDefaults.string(forKey: "key_current_latitude")
+            let myString3 = userDefaults.string(forKey: "key_current_latitude")
+            let myString4 = userDefaults.string(forKey: "key_current_address")
+            
+            str_lat = myString2
+            str_long = myString3
+            str_address = myString4
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                parameters = [
+                    "action"            : "panic",
+                    "userId"            : String(myString),
+                    "panicAddress"      : String(str_address),
+                    "panicLatLong"      : String(str_lat)+","+String(str_long),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            /*let defaults = UserDefaults.standard
+                            defaults.setValue("", forKey: str_save_login_user_data)
+                            defaults.setValue("", forKey: str_save_last_api_token)*/
+                            
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            self.dismiss(animated: true)
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(message), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                            /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                            self.view.window?.rootViewController = sw
+                            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "login_id")
+                            let navigationController = UINavigationController(rootViewController: destinationController!)
+                            sw.setFront(navigationController, animated: true)*/
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_2_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_2_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : (get_login_details["email"] as! String),
+                "password"  : (get_login_details["password"] as! String),
+            ]
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.panic_sos_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
 }
 
 extension MenuControllerVC: UITableViewDataSource {
@@ -179,6 +357,8 @@ extension MenuControllerVC: UITableViewDataSource {
         cell.imgProfile.image = UIImage(named: self.arr_customer_image[indexPath.row])
         cell.imgProfile.backgroundColor = .clear
         
+        
+        
         return cell
     }
     
@@ -195,7 +375,15 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        } else if self.arr_customer_title[indexPath.row] == "Dashboard" {
+        }  else if arr_customer_title [indexPath.row] == "About Zarib" {
+            
+            let obj = self.storyboard?.instantiateViewController(withIdentifier: "about_us_id") as! about_us
+            let navController = UINavigationController(rootViewController: obj)
+            navController.setViewControllers([obj], animated:true)
+            self.revealViewController().setFront(navController, animated: true)
+            self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
+             
+    } else if self.arr_customer_title[indexPath.row] == "Dashboard" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController

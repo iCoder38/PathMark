@@ -592,7 +592,10 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         cell.txt_address.delegate = self
         // cell.txt_nid_number.delegate = self
         
+        cell.txt_country.delegate = self
+        cell.txt_country.text = "Bangladesh"
         
+        cell.txt_phone_code.text = "+880"
         
         cell.btn_accept_terms.addTarget(self, action: #selector(accept_terms_click_method), for: .touchUpInside)
         
@@ -716,7 +719,7 @@ class sign_up_table_cell: UITableViewCell {
                               tfAppearance: .dark,
                               tfKeyboardType: .emailAddress,
                               tfBackgroundColor: .white,
-                              tfPlaceholderText: "Country")
+                              tfPlaceholderText: "Bangladesh")
             
             txt_country.layer.masksToBounds = false
             txt_country.layer.shadowColor = UIColor.black.cgColor
@@ -827,7 +830,7 @@ class sign_up_table_cell: UITableViewCell {
                               tfAppearance: .dark,
                               tfKeyboardType: .numberPad,
                               tfBackgroundColor: .white,
-                              tfPlaceholderText: "+91")
+                              tfPlaceholderText: "+880")
             
             txt_phone_code.layer.masksToBounds = false
             txt_phone_code.layer.shadowColor = UIColor.black.cgColor

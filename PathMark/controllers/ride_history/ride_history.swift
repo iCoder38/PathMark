@@ -42,7 +42,7 @@ class ride_history: UIViewController {
             btn_upcoming_ride.setTitleColor(.black, for: .normal)
             btn_upcoming_ride.tag = 0
             btn_upcoming_ride.backgroundColor = UIColor.init(red: 250.0/255.0, green: 218.0/255.0, blue: 78.0/255.0, alpha: 1)
-            btn_upcoming_ride.setTitle("Upcoming Ride", for: .normal)
+            btn_upcoming_ride.setTitle("Upcoming", for: .normal)
         }
     }
     
@@ -379,7 +379,12 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                     cell.lbl_status.textColor = .white
                 }
                 
-            } else {
+            }  else if "\(item!["rideStatus"]!)" == "7" {
+                
+                cell.lbl_status.text = "Cancelled"
+                cell.lbl_status.textColor = .systemRed
+                
+            }  else {
                 // compare date
                 let dateString = (item!["bookingDate"] as! String)
                 
@@ -478,7 +483,7 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             }
             
             cell.lbl_status_for_complete.font = UIFont(name:"Poppins-SemiBold", size: 16.0)
-            cell.lbl_date_for_complete.text = "\(item!["created"]!)"
+            cell.lbl_date_for_complete.text = "\(item!["bookingDate"]!)"
             
             return cell
             
