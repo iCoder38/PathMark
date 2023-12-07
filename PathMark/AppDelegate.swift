@@ -155,7 +155,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
                     
                 destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
-                    
+                destinationController?.str_from_history = "no"
+                
                 let frontNavigationController = UINavigationController(rootViewController: destinationController!)
 
                 let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC

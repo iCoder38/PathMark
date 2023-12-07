@@ -284,42 +284,47 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
         cell.lbl_price_one.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
         cell.lbl_price_two.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
         
-        let fullName    = (self.dict_get_booking_details["bookingTime"] as! String)
-        let fullNameArr = fullName.components(separatedBy: ":")
-
-        let hour    = fullNameArr[0]
-        let minute = fullNameArr[1]
-        
-        var str_am:String! = "am"
-        var str_pm:String! = "pm"
-        
-        if (hour == "13") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 1:"+minute+str_pm
-        } else if (hour == "14") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 2:"+minute+str_pm
-        } else if (hour == "15") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 3:"+minute+str_pm
-        } else if (hour == "16") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 4:"+minute+str_pm
-        } else if (hour == "17") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 5:"+minute+str_pm
-        } else if (hour == "18") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 6:"+minute+str_pm
-        } else if (hour == "19") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 7:"+minute+str_pm
-        } else if (hour == "20") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 8:"+minute+str_pm
-        } else if (hour == "21") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 9:"+minute+str_pm
-        } else if (hour == "22") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 10:"+minute+str_pm
-        } else if (hour == "23") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 11:"+minute+str_pm
-        } else if (hour == "24") {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 12:"+minute+str_pm
+        if (self.dict_get_booking_details["bookingTime"] as! String) == "" {
+            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
         } else {
-            cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
+            let fullName    = (self.dict_get_booking_details["bookingTime"] as! String)
+            let fullNameArr = fullName.components(separatedBy: ":")
+
+            let hour    = fullNameArr[0]
+            let minute = fullNameArr[1]
+            
+            var str_am:String! = "am"
+            var str_pm:String! = "pm"
+            
+            if (hour == "13") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 1:"+minute+str_pm
+            } else if (hour == "14") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 2:"+minute+str_pm
+            } else if (hour == "15") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 3:"+minute+str_pm
+            } else if (hour == "16") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 4:"+minute+str_pm
+            } else if (hour == "17") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 5:"+minute+str_pm
+            } else if (hour == "18") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 6:"+minute+str_pm
+            } else if (hour == "19") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 7:"+minute+str_pm
+            } else if (hour == "20") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 8:"+minute+str_pm
+            } else if (hour == "21") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 9:"+minute+str_pm
+            } else if (hour == "22") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 10:"+minute+str_pm
+            } else if (hour == "23") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 11:"+minute+str_pm
+            } else if (hour == "24") {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | 12:"+minute+str_pm
+            } else {
+                cell.lbl_time.text = "Booking Date and Time : "+(self.dict_get_booking_details["bookingDate"] as! String)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
+            }
         }
+        
         
         
         

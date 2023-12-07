@@ -93,42 +93,10 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "949"
-            endingLineNumber = "949"
+            startingLineNumber = "954"
+            endingLineNumber = "954"
             landmarkName = "centerItemsInCollectionView(cellWidth:numberOfItems:spaceBetweenCell:collectionView:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "010B6337-D0CF-406A-8C5E-135FE9EC171F - 1ac1f7453082e411"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.centerItemsInCollectionView(cellWidth: Swift.Double, numberOfItems: Swift.Double, spaceBetweenCell: Swift.Double, collectionView: __C.UICollectionView) -&gt; __C.UIEdgeInsets"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "949"
-                  endingLineNumber = "949"
-                  offsetFromSymbolStart = "108">
-               </Location>
-               <Location
-                  uuid = "010B6337-D0CF-406A-8C5E-135FE9EC171F - 1ac1f7453082e411"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.map_view.centerItemsInCollectionView(cellWidth: Swift.Double, numberOfItems: Swift.Double, spaceBetweenCell: Swift.Double, collectionView: __C.UICollectionView) -&gt; __C.UIEdgeInsets"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/map_view/map_view.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "949"
-                  endingLineNumber = "949"
-                  offsetFromSymbolStart = "92">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

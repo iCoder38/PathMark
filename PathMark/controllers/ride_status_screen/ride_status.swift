@@ -14,6 +14,8 @@ import CoreLocation
 
 class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
+    var str_from_history:String!
+    
     var str_vehicle_type:String!
     
     var dict_get_all_data_from_notification:NSDictionary!
@@ -198,81 +200,49 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
          rating = 0;
          type = confirm;
          vehicleNumber = dl007;
+         // str_from_history
          */
+        print("=============================================")
+        print("=============================================")
+        print(self.dict_get_all_data_from_notification as Any)
+        print("=============================================")
+        print("=============================================")
         
-        if (self.dict_get_all_data_from_notification == nil) {
+        if (self.str_from_history == "yes") {
             
-        } else {
-             
-            if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
-                
-                self.btn_booking_confirmed.setTitle("Booking Confirmed", for: .normal)
-                self.lblNavigationTitle.text = "Your ride is on its way."
+            if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "3") {
+                self.lblNavigationTitle.text = "Enjoy your ride"
                 self.navigationBar.backgroundColor = navigation_color
-                // UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
                 
-                self.btn_booking_confirmed.isHidden = false
-                self.lbl_message.isHidden = false
+                self.btn_booking_confirmed.isHidden = true
+                self.lbl_message.text = "Enjoy your ride"
                 
-            } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
                 
+            } else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "2") {
                 self.lblNavigationTitle.text = "Driver has arrived"
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
                 self.lbl_message.text = "Driver has arrived"
                 
-            }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
                 
-                self.lblNavigationTitle.text = "Enjoy your ride"
+            }  else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "1") {
+                self.lblNavigationTitle.text = "Booking Confirmed"
                 self.navigationBar.backgroundColor = navigation_color
-                self.btn_cancel_ride.isHidden = true
                 
-                self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.text = "Enjoy your ride"
+                self.btn_booking_confirmed.isHidden = false
+                self.lbl_message.text = "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ . وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ"
                 
-            }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
-                
-                self.lblNavigationTitle.text = "Ride Complete - Please pay"
-                self.navigationBar.backgroundColor = navigation_color
-                self.btn_cancel_ride.isHidden = true
-                
-                self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.text = "Ride Complete - Please pay"
-                
-                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
-                let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                    _ in
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                    
-                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                    
-                    self.navigationController?.pushViewController(push!, animated: true)
-                }
-                let cancel = NewYorkButton(title: "Home", style: .default) {
-                    _ in
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                    self.navigationController?.pushViewController(push!, animated: true)
-                }
-                alert.addButtons([pay,cancel])
-                self.present(alert, animated: true)
             }
-            
-            print("=============================================")
-            print("=============================================")
-            print(self.dict_get_all_data_from_notification as Any)
-            print("=============================================")
-            print("=============================================")
             
             self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
             
-            self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["driverName"] as! String)
-            self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["rating"]!)"
+            self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["fullName"] as! String)
+            self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["AVGRating"]!)"
             
+            //
             // star manage
-            if "\(self.dict_get_all_data_from_notification["rating"]!)" == "0" {
+            if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "0" {
                 
                 self.img_star_one.image = UIImage(systemName: "star")
                 self.img_star_two.image = UIImage(systemName: "star")
@@ -280,8 +250,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_four.image = UIImage(systemName: "star")
                 self.img_star_five.image = UIImage(systemName: "star")
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "1" &&
-                        "\(self.dict_get_all_data_from_notification["rating"]!)" < "2" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "1" &&
+                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "2" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
@@ -289,7 +259,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_four.image = UIImage(systemName: "star")
                 self.img_star_five.image = UIImage(systemName: "star")
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "2" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "2" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.fill")
@@ -298,8 +268,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_five.image = UIImage(systemName: "star")
                 
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "2" &&
-                        "\(self.dict_get_all_data_from_notification["rating"]!)" < "3" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "2" &&
+                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "3" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.fill")
@@ -307,7 +277,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_four.image = UIImage(systemName: "star")
                 self.img_star_five.image = UIImage(systemName: "star")
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "3" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "3" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.fill")
@@ -315,8 +285,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_four.image = UIImage(systemName: "star")
                 self.img_star_five.image = UIImage(systemName: "star")
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "3" &&
-                        "\(self.dict_get_all_data_from_notification["rating"]!)" < "4" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "3" &&
+                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "4" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.fill")
@@ -324,7 +294,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
                 self.img_star_five.image = UIImage(systemName: "star")
                 
-            } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "5" {
+            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "5" {
                 
                 self.img_star_one.image = UIImage(systemName: "star.fill")
                 self.img_star_two.image = UIImage(systemName: "star.fill")
@@ -333,7 +303,140 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.img_star_five.image = UIImage(systemName: "star.fill")
                 
             }
+            
+        } else {
+            if (self.dict_get_all_data_from_notification == nil) {
+                
+            } else {
+                 
+                if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
+                    
+                    self.btn_booking_confirmed.setTitle("Booking Confirmed", for: .normal)
+                    self.lblNavigationTitle.text = "Your ride is on its way."
+                    self.navigationBar.backgroundColor = navigation_color
+                    // UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
+                    
+                    self.btn_booking_confirmed.isHidden = false
+                    self.lbl_message.isHidden = false
+                    
+                } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
+                    
+                    self.lblNavigationTitle.text = "Driver has arrived"
+                    self.navigationBar.backgroundColor = navigation_color
+                    
+                    self.btn_booking_confirmed.isHidden = true
+                    self.lbl_message.text = "Driver has arrived"
+                    
+                }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
+                    
+                    self.lblNavigationTitle.text = "Enjoy your ride"
+                    self.navigationBar.backgroundColor = navigation_color
+                    self.btn_cancel_ride.isHidden = true
+                    
+                    self.btn_booking_confirmed.isHidden = true
+                    self.lbl_message.text = "Enjoy your ride"
+                    
+                }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
+                    
+                    self.lblNavigationTitle.text = "Ride Complete - Please pay"
+                    self.navigationBar.backgroundColor = navigation_color
+                    self.btn_cancel_ride.isHidden = true
+                    
+                    self.btn_booking_confirmed.isHidden = true
+                    self.lbl_message.text = "Ride Complete - Please pay"
+                    
+                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
+                    let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                        _ in
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                        
+                        push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                        push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                        push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                        
+                        self.navigationController?.pushViewController(push!, animated: true)
+                    }
+                    let cancel = NewYorkButton(title: "Home", style: .default) {
+                        _ in
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        self.navigationController?.pushViewController(push!, animated: true)
+                    }
+                    alert.addButtons([pay,cancel])
+                    self.present(alert, animated: true)
+                }
+                
+                
+                
+                self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
+                
+                self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["driverName"] as! String)
+                self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["rating"]!)"
+                
+                // star manage
+                if "\(self.dict_get_all_data_from_notification["rating"]!)" == "0" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star")
+                    self.img_star_two.image = UIImage(systemName: "star")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "1" &&
+                            "\(self.dict_get_all_data_from_notification["rating"]!)" < "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "2" &&
+                            "\(self.dict_get_all_data_from_notification["rating"]!)" < "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" > "3" &&
+                            "\(self.dict_get_all_data_from_notification["rating"]!)" < "4" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["rating"]!)" == "5" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.fill")
+                    self.img_star_five.image = UIImage(systemName: "star.fill")
+                    
+                }
+            }
         }
+        
         
         //
         self.iAmHereForLocationPermission()

@@ -211,7 +211,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
-        self.btnRideNow.setTitle("Ride now", for: .normal)
+        if (self.str_user_option == "schedule") {
+            self.btnRideNow.setTitle("Continue to Book", for: .normal)
+        } else {
+            self.btnRideNow.setTitle("Ride now", for: .normal)
+        }
+        
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
         
         self.strSaveLatitude = String(str_get_login_user_lat)

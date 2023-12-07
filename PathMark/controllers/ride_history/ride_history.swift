@@ -370,6 +370,9 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             if "\(item!["rideStatus"]!)" == "1" {
                 cell.lbl_status.text = "Accepted"
                 cell.lbl_status.textColor = .systemGreen
+            }  else if "\(item!["rideStatus"]!)" == "3" {
+                cell.lbl_status.text = "On Going"
+                cell.lbl_status.textColor = .systemOrange
             }
              else if "\(item!["rideStatus"]!)" == "4" {
                 
@@ -720,6 +723,13 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                     
                 }
                 
+            } else if "\(item!["rideStatus"]!)" == "3" || "\(item!["rideStatus"]!)" == "1" {
+                
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                push!.dict_get_all_data_from_notification = (item! as NSDictionary)
+                push!.str_from_history = "yes"
+                
+                self.navigationController?.pushViewController(push!, animated: true)
             }
             
             
