@@ -122,6 +122,40 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @IBOutlet weak var lbl_driver_name:UILabel!
     @IBOutlet weak var lbl_driver_rating:UILabel!
     
+    @IBOutlet weak var txt_write_message:UITextField! {
+        didSet {
+            Utils.textFieldUI(textField: txt_write_message,
+                              tfName: txt_write_message.text!,
+                              tfCornerRadius: 12,
+                              tfpadding: 20,
+                              tfBorderWidth: 0,
+                              tfBorderColor: .clear,
+                              tfAppearance: .dark,
+                              tfKeyboardType: .default,
+                              tfBackgroundColor: .white,
+                              tfPlaceholderText: "write a message")
+            
+            txt_write_message.layer.masksToBounds = false
+            txt_write_message.layer.shadowColor = UIColor.black.cgColor
+            txt_write_message.layer.shadowOffset =  CGSize.zero
+            txt_write_message.layer.shadowOpacity = 0.5
+            txt_write_message.layer.shadowRadius = 2
+            txt_write_message.isSecureTextEntry = false
+        }
+    }
+    
+    @IBOutlet weak var btn_send:UIButton! {
+        didSet {
+            btn_send.setTitleColor(.systemOrange, for: .normal)
+        }
+    }
+    
+    @IBOutlet weak var btn_chat:UIButton! {
+        didSet {
+            btn_chat.backgroundColor = .red
+        }
+    }
+    
     @IBOutlet weak var btn_call_driver:UIButton! {
         didSet {
             btn_call_driver.backgroundColor = .clear
@@ -164,6 +198,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.btn_share.addTarget(self, action: #selector(share_click_method), for: .touchUpInside)
         
+        self.btn_chat.backgroundColor = .clear
+        self.btn_chat.addTarget(self, action: #selector(chat_click_method), for: .touchUpInside)
+        
         // self.btnConfirmBooking.addTarget(self, action: #selector(validation_before_confirm_booking), for: .touchUpInside)
         
         self.show_loading_UI()
@@ -202,6 +239,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
          vehicleNumber = dl007;
          // str_from_history
          */
+        
         print("=============================================")
         print("=============================================")
         print(self.dict_get_all_data_from_notification as Any)
@@ -442,6 +480,19 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         self.iAmHereForLocationPermission()
     }
     
+    @objc func chat_click_method() {
+        
+        print(self.dict_get_all_data_from_notification as Any)
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChatId") as? BooCheckChat
+        // push!.str_get_user_id = "\(self.dict_get_all_data_from_notification["userId"]!)"
+        
+        // push!.str_driver_id = "\(self.dict_get_all_data_from_notification["userId"]!)"
+        push!.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
+        
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
+    
     @objc func cancancel_ride_click_method() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let myAlert = storyboard.instantiateViewController(withIdentifier: "decline_request_id") as? decline_request
@@ -496,6 +547,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             }
         }
     }
+    
+    
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }

@@ -666,6 +666,7 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView .deselectRow(at: indexPath, animated: true)
         let item = self.arr_mut_dashboard_data[indexPath.row] as? [String:Any]
+        print(item as Any)
         
         if self.str_which_panel_select == "0" {
             
@@ -723,7 +724,7 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                     
                 }
                 
-            } else if "\(item!["rideStatus"]!)" == "3" || "\(item!["rideStatus"]!)" == "1" {
+            } else if "\(item!["rideStatus"]!)" == "3" || "\(item!["rideStatus"]!)" == "1" || "\(item!["rideStatus"]!)" == "2" {
                 
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
                 push!.dict_get_all_data_from_notification = (item! as NSDictionary)

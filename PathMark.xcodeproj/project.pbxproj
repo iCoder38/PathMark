@@ -32,6 +32,8 @@
 		B91F4ACF2B06339300A587B5 /* schedule_ride_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91F4ACE2B06339300A587B5 /* schedule_ride_details.swift */; };
 		B934EC832B0744B300908C0D /* edit_profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B934EC822B0744B300908C0D /* edit_profile.swift */; };
 		B934EC862B0763F500908C0D /* before_payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B934EC852B0763F500908C0D /* before_payment.swift */; };
+		B943FE532B26EA03000A20FA /* BooCheckTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B943FE512B26EA02000A20FA /* BooCheckTableCell.swift */; };
+		B943FE542B26EA03000A20FA /* BooCheckChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B943FE522B26EA03000A20FA /* BooCheckChat.swift */; };
 		B9695DF52A5BE73000552578 /* sign_up.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9695DF42A5BE73000552578 /* sign_up.swift */; };
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
@@ -145,6 +147,8 @@
 		B91F4ACE2B06339300A587B5 /* schedule_ride_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = schedule_ride_details.swift; sourceTree = "<group>"; };
 		B934EC822B0744B300908C0D /* edit_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = edit_profile.swift; sourceTree = "<group>"; };
 		B934EC852B0763F500908C0D /* before_payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = before_payment.swift; sourceTree = "<group>"; };
+		B943FE512B26EA02000A20FA /* BooCheckTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckTableCell.swift; sourceTree = "<group>"; };
+		B943FE522B26EA03000A20FA /* BooCheckChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckChat.swift; sourceTree = "<group>"; };
 		B9695DF42A5BE73000552578 /* sign_up.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sign_up.swift; sourceTree = "<group>"; };
 		B96B0F142A98844400835208 /* PathMark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PathMark.entitlements; sourceTree = "<group>"; };
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
@@ -367,6 +371,15 @@
 			path = before_payment;
 			sourceTree = "<group>";
 		};
+		B943FE502B26E9EB000A20FA /* single_chat */ = {
+			isa = PBXGroup;
+			children = (
+				B943FE522B26EA03000A20FA /* BooCheckChat.swift */,
+				B943FE512B26EA02000A20FA /* BooCheckTableCell.swift */,
+			);
+			path = single_chat;
+			sourceTree = "<group>";
+		};
 		B9695DF32A5BE71D00552578 /* registration */ = {
 			isa = PBXGroup;
 			children = (
@@ -378,6 +391,7 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B943FE502B26E9EB000A20FA /* single_chat */,
 				B9E13D462A5C46A20068774A /* third_party */,
 				B96EE4782B205DFE0077C746 /* about */,
 				B90540A22B0F8FA000283AF8 /* pay_after_cancel */,
@@ -1053,6 +1067,7 @@
 				B9038E0D2A5D45FB0041A5B4 /* Color.swift in Sources */,
 				B99223122A8E461B005AA868 /* help.swift in Sources */,
 				B9038E0F2A5D45FB0041A5B4 /* LeftPaddingTextField.swift in Sources */,
+				B943FE542B26EA03000A20FA /* BooCheckChat.swift in Sources */,
 				B99223162A8E4991005AA868 /* CarouselCell.swift in Sources */,
 				B9038E132A5D45FB0041A5B4 /* NewYorkAlertController.swift in Sources */,
 				B99223172A8E4991005AA868 /* CarouselView.swift in Sources */,
@@ -1084,6 +1099,7 @@
 				B9038E112A5D45FB0041A5B4 /* NewYorkAlertViewType.swift in Sources */,
 				B9FE54662A5FED30005583C2 /* MenuControllerVCTableCell.swift in Sources */,
 				B98F3A2F2B0CC029001DFF25 /* map_view_add_address.swift in Sources */,
+				B943FE532B26EA03000A20FA /* BooCheckTableCell.swift in Sources */,
 				B97AE2022AA85089005EE5FF /* success_payment.swift in Sources */,
 				B9FE54682A5FED30005583C2 /* MenuControllerVC.swift in Sources */,
 				B9F377CF2B0F30FE007F6CEB /* shared_booking.swift in Sources */,

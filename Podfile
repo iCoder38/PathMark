@@ -54,4 +54,6 @@ pod 'ZKCarousel'
 
 pod 'FSCalendar'
 
+pod 'GrowingTextView'
+
 end
