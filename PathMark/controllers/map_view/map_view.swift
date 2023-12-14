@@ -25,6 +25,9 @@ struct Location {
 
 class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate, UIGestureRecognizerDelegate {
     
+    var db:DBHelper = DBHelper()
+    var persons:[Person] = []
+    
     var str_get_user_current_full_address:String!
     var str_get_login_user_lat:String!
     var str_get_login_user_long:String!
@@ -142,6 +145,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
     }
     
+    @IBOutlet weak var btn_search:UIButton! {
+        didSet {
+            btn_search.setTitle("recent", for: .normal)
+        }
+    }
+    
     @IBOutlet weak var txt_location_to:UITextField! {
         didSet {
             txt_location_to.delegate = self
@@ -189,9 +198,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             btnRideNow.backgroundColor = .systemGreen
         }
     }
-    
-    
-    
+   
     @IBOutlet weak var btn_get_current_location:UIButton! {
         didSet {
             
@@ -201,10 +208,21 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var counter = 2
     var timer:Timer!
     
-    
+    var  set_lat:String!
+    var  set_long:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let kUserDefault = UserDefaults.standard
+        kUserDefault.set(["1","2"], forKey: "nameArray")
+        kUserDefault.synchronize()
+        
+        db.insert(id: 1, name: "i am name", age: 2, lat_long: "lat_long i am")
+        persons = db.read()
+        
+        //
+        // print(persons[0].name)
         
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -218,6 +236,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
         
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
+        self.btn_search.addTarget(self, action: #selector(search_click_method), for: .touchUpInside)
         
         self.strSaveLatitude = String(str_get_login_user_lat)
         self.strSaveLongitude = String(str_get_login_user_long)
@@ -247,6 +266,13 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)
+        
+    }
+    
+    @objc func search_click_method() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        self.navigationController?.pushViewController(push!, animated: true)
         
     }
     
@@ -291,6 +317,44 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
         return
       }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        
+        
+        if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+            print(load_latitude)
+            
+            // self.str_save_lat = load_latitude
+            let fullName    = load_latitude
+            let fullNameArr = fullName.components(separatedBy: ",")
+
+            let name    = fullNameArr[0]
+            let surname = fullNameArr[1]
+            
+            set_lat = String(name)
+            set_long = String(surname)
+        }
+        
+        // longitude
+        if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+            print(address)
+            self.search_text_field.text = String(address)
+            // self.str_save_long = load_longitude
+           
+            //
+            UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+            UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+            
+            UserDefaults.standard.set("", forKey: "key_map_view_address")
+            UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+            //
+            convertLatLongToAddress(latitude: Double(set_lat!)!, longitude: Double(set_long!)! )
+        }
+        
+        
     }
     
     func convertLatLongToAddress(latitude:Double,longitude:Double){
@@ -1141,6 +1205,29 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
             self.searchLat = String(coordinate!.latitude)
             self.searchLong = String(coordinate!.longitude)
             
+            var array1: [NSString] = [NSString]()
+            array1.append(self.stateAndCountry! as NSString)
+            // array1.append(String(self.fullAddress))
+            // array1.append(String(self.stateAndCountry))
+            // array1.append(String(self.stateAndCountry))
+
+            //save
+            var defaults = UserDefaults.standard
+            defaults.set(array1, forKey: "key")
+            // defaults.synchronize()
+            
+            //read
+            
+            
+//            let custom = ["name":self.stateAndCountry+", "+self.fullAddress,
+//                          "lat":String(self.searchLat),
+//                          "long":String(self.searchLong)]
+            
+            // let defaults = UserDefaults.standard
+            defaults.set(["\(self.searchLat), \(self.searchLong), \(self.stateAndCountry), \(self.fullAddress)"], forKey: "key_saved_address_and_lat")
+            
+            //
+            
             /*UserDefaults.standard.set(completion.title, forKey: "keySaveLocation")
             UserDefaults.standard.set(fullAddress, forKey: "keySaveFullAddress")
             UserDefaults.standard.set(Double(coordinate!.latitude), forKey: "keySaveLatitude")
@@ -1188,5 +1275,143 @@ class map_view_collection_view_cell: UICollectionViewCell , UITextFieldDelegate 
     @IBOutlet weak var lblExtimatedTime:UILabel!
     
     @IBOutlet weak var lbl_total_seats:UILabel!
+    
+}
+
+class Person
+{
+    
+    var name: String = ""
+    var lat_long: String = ""
+    var age: Int = 0
+    var id: Int = 0
+    
+    init(id:Int, name:String, lat_long:String, age:Int)
+    {
+        self.id = id
+        self.name = name
+        self.lat_long = lat_long
+        self.age = age
+    }
+    
+}
+
+import Foundation
+import SQLite3
+
+class DBHelper
+{
+    init()
+    {
+        db = openDatabase()
+        createTable()
+    }
+
+    let dbPath: String = "myDb.sqlite"
+    var db:OpaquePointer?
+
+    func openDatabase() -> OpaquePointer?
+    {
+        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            .appendingPathComponent(dbPath)
+        var db: OpaquePointer? = nil
+        if sqlite3_open(fileURL.path, &db) != SQLITE_OK
+        {
+            print("error opening database")
+            return nil
+        }
+        else
+        {
+            print("Successfully opened connection to database at \(dbPath)")
+            return db
+        }
+    }
+    
+    func createTable() {
+        let createTableString = "CREATE TABLE IF NOT EXISTS person(Id INTEGER PRIMARY KEY,name TEXT,age INTEGER);"
+        var createTableStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK
+        {
+            if sqlite3_step(createTableStatement) == SQLITE_DONE
+            {
+                print("person table created.")
+            } else {
+                print("person table could not be created.")
+            }
+        } else {
+            print("CREATE TABLE statement could not be prepared.")
+        }
+        sqlite3_finalize(createTableStatement)
+    }
+    
+    
+    func insert(id:Int, name:String, age:Int, lat_long:String)
+    {
+        let persons = read()
+        for p in persons
+        {
+            if p.id == id
+            {
+                return
+            }
+        }
+        let insertStatementString = "INSERT INTO person (Id, name, lat_long, age) VALUES (?, ?, ?);"
+        var insertStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
+            sqlite3_bind_int(insertStatement, 1, Int32(id))
+            sqlite3_bind_text(insertStatement, 2, (name as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStatement, 3, (name as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStatement, 4, Int32(age))
+            
+            if sqlite3_step(insertStatement) == SQLITE_DONE {
+                print("Successfully inserted row.")
+            } else {
+                print("Could not insert row.")
+            }
+        } else {
+            print("INSERT statement could not be prepared.")
+        }
+        sqlite3_finalize(insertStatement)
+    }
+    
+    func read() -> [Person] {
+        let queryStatementString = "SELECT * FROM person;"
+        var queryStatement: OpaquePointer? = nil
+        var psns : [Person] = []
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let id = sqlite3_column_int(queryStatement, 0)
+                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 1)))
+                let lat_long = String(describing: String(cString: sqlite3_column_text(queryStatement, 2)))
+                let year = sqlite3_column_int(queryStatement, 3)
+                // psns.append(Person(id: Int(id), name: name, age: Int(year)))
+                // psns.append(Person(id: Int(id), name: name, lat_long: lat_long, age: Int(year)))
+                psns.append(Person(id: 1, name:name, lat_long: lat_long, age: 1))
+                print("Query Result:")
+                 
+                print("\(id) | \(name) | \(lat_long) | \(year)")
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        return psns
+    }
+    
+    func deleteByID(id:Int) {
+        let deleteStatementStirng = "DELETE FROM person WHERE Id = ?;"
+        var deleteStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
+            sqlite3_bind_int(deleteStatement, 1, Int32(id))
+            if sqlite3_step(deleteStatement) == SQLITE_DONE {
+                print("Successfully deleted row.")
+            } else {
+                print("Could not delete row.")
+            }
+        } else {
+            print("DELETE statement could not be prepared")
+        }
+        sqlite3_finalize(deleteStatement)
+    }
     
 }

@@ -270,7 +270,6 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
     // new
     func get_chat_data_for_room_id() {
         
-        
 //        let newMessagesRef = Firestore.firestore().collection("mode/test/message/India/private_chats")
 //            .whereField("room_id", isEqualTo: String(self.room_id))
 //            .order(by: "time_stamp",descending: false)

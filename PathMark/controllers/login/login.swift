@@ -164,10 +164,12 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                     var strSuccess : String!
                     strSuccess = JSON["status"] as? String
                     
-                    var dict: Dictionary<AnyHashable, Any>
-                    dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                    
                     
                     if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
                         
                         let defaults = UserDefaults.standard
                         defaults.setValue(dict, forKey: str_save_login_user_data)
@@ -201,7 +203,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                         
                     }
                     else {
+                        
                         self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
                     }
                     
                 }
