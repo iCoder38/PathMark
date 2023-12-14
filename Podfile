@@ -55,5 +55,6 @@ pod 'ZKCarousel'
 pod 'FSCalendar'
 
 pod 'GrowingTextView'
+pod 'GoogleSignIn'
 
 end

@@ -218,11 +218,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         kUserDefault.set(["1","2"], forKey: "nameArray")
         kUserDefault.synchronize()
         
-        db.insert(id: 1, name: "i am name", age: 2, lat_long: "lat_long i am")
-        persons = db.read()
         
-        //
+        
+        
+        
         // print(persons[0].name)
+        // print(persons[1].name)
         
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -322,7 +323,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
         
+        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
         
         if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
             print(load_latitude)
@@ -1204,17 +1209,14 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
             
             self.searchLat = String(coordinate!.latitude)
             self.searchLong = String(coordinate!.longitude)
+             
+            let randomCGFloat = Int.random(in: 1...1000)
+            print(randomCGFloat as Any)
             
-            var array1: [NSString] = [NSString]()
-            array1.append(self.stateAndCountry! as NSString)
-            // array1.append(String(self.fullAddress))
-            // array1.append(String(self.stateAndCountry))
-            // array1.append(String(self.stateAndCountry))
-
-            //save
-            var defaults = UserDefaults.standard
-            defaults.set(array1, forKey: "key")
-            // defaults.synchronize()
+            db.insert(id: randomCGFloat, name: "\(completion.title), \(completion.subtitle)", lat_long: "\(self.searchLat!),\(self.searchLong!)", age: 2)
+            // persons = db.read()
+            
+            
             
             //read
             
@@ -1224,7 +1226,7 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
 //                          "long":String(self.searchLong)]
             
             // let defaults = UserDefaults.standard
-            defaults.set(["\(self.searchLat), \(self.searchLong), \(self.stateAndCountry), \(self.fullAddress)"], forKey: "key_saved_address_and_lat")
+            // defaults.set(["\(self.searchLat), \(self.searchLong), \(self.stateAndCountry), \(self.fullAddress)"], forKey: "key_saved_address_and_lat")
             
             //
             
@@ -1307,7 +1309,7 @@ class DBHelper
         createTable()
     }
 
-    let dbPath: String = "myDb.sqlite"
+    let dbPath: String = "myDb4.sqlite"
     var db:OpaquePointer?
 
     func openDatabase() -> OpaquePointer?
@@ -1328,7 +1330,7 @@ class DBHelper
     }
     
     func createTable() {
-        let createTableString = "CREATE TABLE IF NOT EXISTS person(Id INTEGER PRIMARY KEY,name TEXT,age INTEGER);"
+        let createTableString = "CREATE TABLE IF NOT EXISTS person(Id INTEGER PRIMARY KEY,name TEXT,lat_long TEXT,age INTEGER);"
         var createTableStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK
         {
@@ -1345,7 +1347,7 @@ class DBHelper
     }
     
     
-    func insert(id:Int, name:String, age:Int, lat_long:String)
+    func insert(id:Int, name:String, lat_long:String, age:Int)
     {
         let persons = read()
         for p in persons
@@ -1355,12 +1357,15 @@ class DBHelper
                 return
             }
         }
-        let insertStatementString = "INSERT INTO person (Id, name, lat_long, age) VALUES (?, ?, ?);"
+        
+        let insertStatementString = "INSERT INTO person (Id, name, lat_long, age) VALUES (?, ?, ?, ?);"
+        
         var insertStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
+            
             sqlite3_bind_int(insertStatement, 1, Int32(id))
             sqlite3_bind_text(insertStatement, 2, (name as NSString).utf8String, -1, nil)
-            sqlite3_bind_text(insertStatement, 3, (name as NSString).utf8String, -1, nil)
+            sqlite3_bind_text(insertStatement, 3, (lat_long as NSString).utf8String, -1, nil)
             sqlite3_bind_int(insertStatement, 4, Int32(age))
             
             if sqlite3_step(insertStatement) == SQLITE_DONE {

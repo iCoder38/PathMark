@@ -12,6 +12,9 @@ class search_location: UIViewController {
 
     var arr_address_list:NSMutableArray! = []
     
+    var db:DBHelper = DBHelper()
+    var persons:[Person] = []
+    
     // ***************************************************************** // nav
     
     @IBOutlet weak var navigationBar:UIView! {
@@ -140,7 +143,21 @@ class search_location: UIViewController {
                                 let myarray = defaults.stringArray(forKey: "key_saved_address_and_lat") ?? [String]()
                                 print(myarray as Any)
                                 
+                                self.persons = self.db.read()
+                                print(self.persons.count as Any)
                                 
+                                for indexxx in 0..<self.persons.count {
+                                    print(self.persons[indexxx].name)
+                                    
+                                    let custom = [
+                                        "address_type":self.persons[indexxx].name,
+                                        "address":self.persons[indexxx].name,
+                                        "lat_long":self.persons[indexxx].lat_long,
+                                        "type":"3"
+                                     ]
+                                    self.arr_address_list.add(custom)
+                                    
+                                }
                                 
                                 print(self.arr_address_list as Any)
                                 self.tbleView.delegate = self
@@ -274,7 +291,7 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             cell.lbl_recent_address.text = "Recent Address"
             
             return cell
-        } else {
+        } else if (item!["type"] as! String) == "1" {
             let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "search_location_table_cell") as! search_location_table_cell
                 
             let backgroundView = UIView()
@@ -288,6 +305,22 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             
             cell.lbl_title.text = (item!["address_type"] as! String)
             cell.lbl_sub_title.text = (item!["address"] as! String)
+            
+            return cell
+        } else {
+            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "three") as! search_location_table_cell
+                
+            let backgroundView = UIView()
+            backgroundView.backgroundColor = .clear
+            cell.selectedBackgroundView = backgroundView
+            
+            cell.backgroundColor = .clear
+             
+            let item = self.arr_address_list[indexPath.row] as? [String:Any]
+            print(item as Any)
+            
+            cell.lbl_recent_address2.text = (item!["address"] as! String)
+             
             
             return cell
         }
@@ -307,6 +340,11 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
             self.navigationController?.popViewController(animated: true)
         }
+        else if (item!["type"] as! String) == "3" {
+            UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
+            UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
+            self.navigationController?.popViewController(animated: true)
+        }
         
     }
     
@@ -314,7 +352,9 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_address_list[indexPath.row] as? [String:Any]
         print(item as Any)
         
-        if (item!["type"] as! String) == "1" {
+        if (item!["type"] as! String) == "1"  {
+            return UITableView.automaticDimension
+        } else  if (item!["type"] as! String) == "3"  {
             return UITableView.automaticDimension
         } else {
             return 70
@@ -348,5 +388,20 @@ class search_location_table_cell: UITableViewCell {
     
     @IBOutlet weak var btn_setting:UIButton!
     
+    @IBOutlet weak var view_bg2:UIView! {
+        didSet {
+            // shadow
+            view_bg2.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
+            view_bg2.layer.shadowOffset = CGSize(width: 0, height: 3)
+            view_bg2.layer.shadowOpacity = 1.0
+            view_bg2.layer.shadowRadius = 10.0
+            view_bg2.layer.masksToBounds = false
+            view_bg2.layer.cornerRadius = 12
+            view_bg2.backgroundColor = .white
+            
+        }
+    }
+    
+    @IBOutlet weak var lbl_recent_address2:UILabel!
 }
 

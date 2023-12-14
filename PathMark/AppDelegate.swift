@@ -12,6 +12,10 @@ import Firebase
 import UserNotifications
 import GoogleMaps
 import GooglePlaces
+
+import GoogleSignIn
+import FacebookCore
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -25,6 +29,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GMSPlacesClient.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
         GMSServices.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
         
+//        // 1
+//        GIDSignIn.sharedInstance.clientID = "750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com"
+//        // 2
+//        GIDSignIn.sharedInstance.delegate = self
+//        // 3
+//        GIDSignIn.sharedInstance.restorePreviousSignIn()
+            //.
+        
+        
+        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+            if error != nil || user == nil {
+              // Show the app's signed-out state.
+            } else {
+              // Show the app's signed-in state.
+            }
+          }
+        
+        // GIDSignIn.cl = "YOUR_CLIENT_ID"
+       
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
@@ -47,6 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         return true
     }
+    
+   
     
     // MARK:- FIREBASE NOTIFICATION -
     @objc func fetchDeviceToken() {
@@ -303,8 +328,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if (GIDSignIn.sharedInstance.handle(url)) {
+                return true
+            } else if (ApplicationDelegate.shared.application(app, open: url, options: options)) {
+                return true
+            }
 
+            return false
+        }
 
 }
+
+
 
 

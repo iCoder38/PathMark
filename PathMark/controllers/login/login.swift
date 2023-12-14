@@ -14,6 +14,10 @@ import JWTDecode
 // MARK:- LOCATION -
 import CoreLocation
 import Alamofire
+import GoogleSignIn
+
+import FacebookCore
+import FacebookLogin
 
 class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate {
 
@@ -64,6 +68,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
 //        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "verify_phone_number_id") as? verify_phone_number
 //        self.navigationController?.pushViewController(push!, animated: true)
 
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
          
         self.iAmHereForLocationPermission()
@@ -72,6 +77,143 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
         
     }
     
+    @objc func signInViaGoogle() {
+        // let gIdConfiguration = GIDConfiguration(clientID: "clientID", serverClientID: "serverClientID")
+         let gIdConfiguration  = GIDConfiguration(clientID: "750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com")
+        // ledt gIdConfiguration  = GIDConfiguration(clientID: "com.googleusercontent.apps.750959835757-m69poiuvdmji91uqku55em8o3cljarke")
+        
+        GIDSignIn.sharedInstance.configuration = gIdConfiguration
+//
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+            guard error == nil else { return }
+            guard let signInResult = signInResult else { return }
+
+            let user = signInResult.user
+
+            let emailAddress = user.profile?.email
+
+            let fullName = user.profile?.name
+            let givenName = user.profile?.givenName
+            let familyName = user.profile?.familyName
+            let social_id = user.userID
+
+            let profilePicUrl = user.profile?.imageURL(withDimension: 320)
+            
+            print(emailAddress as Any)
+            print(fullName as Any)
+            print(givenName as Any)
+            print(familyName as Any)
+            print(profilePicUrl as Any)
+            
+            
+            
+            self.socia_login_wb(name: fullName!, social_id: "\(social_id!)", email: emailAddress!, profile_picture: "\(profilePicUrl!)")
+        }
+        
+        
+    }
+    
+    @objc func socia_login_wb(name:String,social_id:String,email:String,profile_picture:String) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+//            let x : Int = (person["userId"] as! Int)
+//            let myString = String(x)
+            
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("google"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String(profile_picture)
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        let indexPath = IndexPath.init(row: 0, section: 0)
+                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
+                                                 "password":""]
+                        
+                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                        //
+                        
+                        self.hide_loading_UI()
+                        
+                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        // self.navigationController?.pushViewController(push!, animated: true)
+                        
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        self.navigationController?.pushViewController(push!, animated: true)
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
     @objc func remember_me() {
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
@@ -89,7 +231,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                     let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
                     
                     cell.txtEmailAddress.text = (person["email"] as! String)
-                    cell.txtPassword.text = "123456"
+                    // cell.txtPassword.text = "123456"
                 }
             } else {
                 
@@ -145,7 +287,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
             parameters = [
                 "action"    : "login",
                 "email"     : String(cell.txtEmailAddress.text!),
-                "password"  : String(cell.txtPassword.text!)
+                "password"  : String("")
             ]
 //        }
         
@@ -188,7 +330,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                         // save email and pass
                         // email
                         let custom_email_pass = ["email":cell.txtEmailAddress.text!,
-                                                 "password":cell.txtPassword.text!]
+                                                 "password":""]
                         
                         UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
                         //
@@ -229,6 +371,77 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
     }
     
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+    }
+ 
+    @objc func signInViaFacebook() {
+        Settings.shared.appID = "1035864164317944"
+        
+        let fbLoginManager : LoginManager = LoginManager()
+        
+        fbLoginManager.logIn(permissions:["email","public_profile"], from: self, handler: {(result, error) -> Void in
+            
+            print("\n\n result: \(String(describing: result))")
+            print("\n\n Error: \(String(describing: error))")
+            
+            if (error == nil)
+            {
+                if let fbloginresult = result
+                {
+                    if(fbloginresult.isCancelled)
+                    {
+                        //Show Cancel alert to the user
+                        let alert = UIAlertController(title: "Facebook login", message: "User pressed cancel button", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {    (action:UIAlertAction!) in
+                            //print("you have pressed the ok button")
+                            
+                        }))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    else
+                    
+                    {
+                        print("going to getFBLoggedInUserData.. ")
+                        // self.getFBLoggedInUserData()
+                        
+                    }
+                }
+                
+            }
+        })
+    }
+    
+    //We get here required data from facebook SDK
+          /* func getFBLoggedInUserData()
+    {
+        let graphRequest : GraphRequest = GraphRequest(graphPath: "me", parameters: ["fields":"email,first_name,name,picture.type(normal)"])
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+            if ((error) != nil)
+            {
+                // Process error
+                print("\n\n Error: \(String(describing: error))")
+            }
+            else if let resultDic = result as? [String:Any]
+            {
+                print("\n\n  fetched user: \(String(describing: result))")
+                if resultDic["name"] != nil
+                {
+                    //make API call here for sending data to server or navigate to different screen from here
+                    /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    if let detailsVc:UserDataViewController = storyboard.instantiateViewController(withIdentifier: "userDataVc")as? UserDataViewController
+                    {
+                        detailsVc.userData = resultDic
+                        self.navigationController?.pushViewController(detailsVc, animated: true)
+                    }*/
+                    
+                }
+                
+            }
+        })
+    }*/
+    
 }
 
 extension login: UITableViewDataSource  , UITableViewDelegate{
@@ -251,11 +464,13 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         cell.selectedBackgroundView = backgroundView
         
         cell.txtEmailAddress.delegate = self
-        cell.txtPassword.delegate = self
+        // cell.txtPassword.delegate = self
         
         cell.btnSignIn.addTarget(self, action: #selector(home_click_method), for: .touchUpInside)
         cell.btnDontHaveAnAccount.addTarget(self, action: #selector(dontHaveAntAccountClickMethod), for: .touchUpInside)
         cell.btn_remember_me.addTarget(self, action: #selector(remember_me_click_method), for: .touchUpInside)
+        cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
+        cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
         
         return cell
     }
@@ -315,7 +530,8 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
 
 class login_table_cell: UITableViewCell {
 
-     
+    @IBOutlet weak var btn_google:UIButton!
+    @IBOutlet weak var btn_facebook:UIButton!
     
     @IBOutlet weak var bgColor:UIImageView!
     
