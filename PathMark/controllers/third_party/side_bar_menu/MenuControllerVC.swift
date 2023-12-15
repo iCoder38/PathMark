@@ -9,6 +9,8 @@
 import UIKit
 import Alamofire
 import SDWebImage
+import GoogleSignIn
+import FacebookLogin
 
 class MenuControllerVC: UIViewController {
 
@@ -281,11 +283,18 @@ class MenuControllerVC: UIViewController {
         if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
             print(get_login_details as Any)
             
-            parameters = [
-                "action"    : "login",
-                "email"     : (get_login_details["email"] as! String),
-                "password"  : (get_login_details["password"] as! String),
-            ]
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : "Member"
+                ]
+            }
             
             print("parameters-------\(String(describing: parameters))")
             
@@ -471,7 +480,36 @@ extension MenuControllerVC: UITableViewDataSource {
     
     
     @objc func validation_before_logout() {
-        self.logoutWB(str_show_loader: "yes")
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+        
+            if ((person["socialType"] as! String) == "google") {
+                GIDSignIn.sharedInstance.signOut()
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                self.view.window?.rootViewController = sw
+                let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "login_id")
+                let navigationController = UINavigationController(rootViewController: destinationController!)
+                sw.setFront(navigationController, animated: true)
+                
+            } else if ((person["socialType"] as! String) == "facebook") {
+                LoginManager().logOut()
+                
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+                self.view.window?.rootViewController = sw
+                let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "login_id")
+                let navigationController = UINavigationController(rootViewController: destinationController!)
+                sw.setFront(navigationController, animated: true)
+                
+            } else {
+                self.logoutWB(str_show_loader: "yes")
+            }
+            
+        }
+        
     }
     
     @objc func logoutWB(str_show_loader:String) {
@@ -581,11 +619,18 @@ extension MenuControllerVC: UITableViewDataSource {
         if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
             print(get_login_details as Any)
             
-            parameters = [
-                "action"    : "login",
-                "email"     : (get_login_details["email"] as! String),
-                "password"  : (get_login_details["password"] as! String),
-            ]
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : "Member"
+                ]
+            }
             
             print("parameters-------\(String(describing: parameters))")
             

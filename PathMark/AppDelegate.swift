@@ -15,6 +15,7 @@ import GooglePlaces
 
 import GoogleSignIn
 import FacebookCore
+import AuthenticationServices
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -40,10 +41,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if error != nil || user == nil {
                 // Show the app's signed-out state.
+                
+                let token = AccessToken.current?.tokenString
+                print(token as Any)
+                if (token != nil) {
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+          
+                    let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                        
+                    let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+
+                    let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+
+                    let mainRevealController = SWRevealViewController()
+
+                    mainRevealController.rearViewController = rearViewController
+                    mainRevealController.frontViewController = frontNavigationController
+                    
+                    DispatchQueue.main.async {
+                        UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                    }
+                    
+                    self.window?.makeKeyAndVisible()
+                }
             } else {
                 // Show the app's signed-in state.
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+      
+                let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                    
+                let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+
+                let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+
+                let mainRevealController = SWRevealViewController()
+
+                mainRevealController.rearViewController = rearViewController
+                mainRevealController.frontViewController = frontNavigationController
+                
+                DispatchQueue.main.async {
+                    UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                }
+                
+                self.window?.makeKeyAndVisible()
             }
         }
+        
+//        let appleIDProvider = ASAuthorizationAppleIDProvider()
+//         appleIDProvider.getCredentialState(forUserID: KeychainItem.currentUserIdentifier) { (credentialState, error) in
+//             switch credentialState {
+//             case .authorized:
+//                 // The Apple ID credential is valid.
+//                 break
+//             case .revoked:
+//                 // The Apple ID credential is revoked.
+//                 break
+//             case .notFound:
+//                 // No credential was found, so show the sign-in UI.
+//                 break
+//             default:
+//                 break
+//             }
+//         }
         
         // notification
         if #available(iOS 10.0, *) {

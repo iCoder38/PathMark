@@ -45,9 +45,9 @@ class search_location: UIViewController {
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.tbleView.separatorColor = .clear
         
-        let kUserDefault = UserDefaults.standard
+        /*let kUserDefault = UserDefaults.standard
         let data = kUserDefault.array(forKey: "nameArray")! as? [String] ?? [String]()
-        print(data)
+        print(data)*/
         
     }
     
@@ -183,11 +183,7 @@ class search_location: UIViewController {
     }
     
     @objc func login_refresh_token_wb() {
-//        let defaults = UserDefaults.standard
-//        if let testArray : AnyObject? = defaults.objectForKey("key") {
-//            var readArray : [NSString] = testArray! as [NSString]
-//            print(readArray as Any)
-//        }
+
         var parameters:Dictionary<AnyHashable, Any>!
         if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
             print(get_login_details as Any)

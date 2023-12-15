@@ -24,7 +24,7 @@ import AuthenticationServices
 
 class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate, ASAuthorizationControllerDelegate {
     
-    
+    var window: UIWindow?
 
     let locationManager = CLLocationManager()
     
@@ -119,16 +119,13 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
     }
     
     @objc func socia_login_wb(name:String,social_id:String,email:String,profile_picture:String) {
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
         
         self.show_loading_UI()
         
         var parameters:Dictionary<AnyHashable, Any>!
-//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-//            let x : Int = (person["userId"] as! Int)
-//            let myString = String(x)
-            
+
             parameters = [
                 "action"        :   "socialLoginAction",
                 "email"         :   String(email),
@@ -174,24 +171,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
                         
-                        let indexPath = IndexPath.init(row: 0, section: 0)
-                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
                         
                         // save email and pass
                         // email
-                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
-                                                 "password":""]
-                        
-                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                        self.save_email(email: String(email))
                         //
                         
                         self.hide_loading_UI()
                         
-                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        // self.navigationController?.pushViewController(push!, animated: true)
-                        
-                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        self.navigationController?.pushViewController(push!, animated: true)
+                        self.push_to_dashboard()
                         
                     }
                     else {
@@ -219,18 +209,14 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             }
         }
     }
+    
     @objc func remember_me() {
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person as Any)
             
             if person["role"] as! String == "Member" {
-                
-                // CUSTOMER
-//                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as! dashboard
-//                self.navigationController?.pushViewController(push, animated: true)
-                
-                
+                 
                 if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
                     let indexPath = IndexPath.init(row: 0, section: 0)
                     let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
@@ -320,33 +306,25 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         let defaults = UserDefaults.standard
                         defaults.setValue(dict, forKey: str_save_login_user_data)
-                        
-                        // save token
-                        // print("\(JSON["AuthToken"]!)")
-                        // print(type(of: JSON["AuthToken"]))
-                        
+                         
                         let str_token = (JSON["AuthToken"] as! String)
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                         
+                        // self.save_email(email: String(email))
+                        //
                         let indexPath = IndexPath.init(row: 0, section: 0)
                         let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
                         
                         // save email and pass
                         // email
-                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
-                                                 "password":""]
+                        let custom_email_pass = ["email":String(cell.txtEmailAddress.text!)]
                         
                         UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
                         //
-                        
                         self.hide_loading_UI()
                         
-                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        // self.navigationController?.pushViewController(push!, animated: true)
-                        
-                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        self.navigationController?.pushViewController(push!, animated: true)
+                        self.push_to_dashboard()
                         
                     }
                     else {
@@ -489,24 +467,18 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
                         UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
                         
-                        let indexPath = IndexPath.init(row: 0, section: 0)
-                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
                         
+                        self.save_email(email: String(email))
                         // save email and pass
                         // email
-                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
-                                                 "password":""]
                         
-                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
                         //
                         
                         self.hide_loading_UI()
                         
-                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        // self.navigationController?.pushViewController(push!, animated: true)
-                        
-                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                        self.navigationController?.pushViewController(push!, animated: true)
+                        self.push_to_dashboard()
                         
                     }
                     else {
@@ -534,52 +506,31 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             }
         }
     }
-    
-    //We get here required data from facebook SDK
-          /* func getFBLoggedInUserData()
-    {
-        let graphRequest : GraphRequest = GraphRequest(graphPath: "me", parameters: ["fields":"email,first_name,name,picture.type(normal)"])
-        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
-            if ((error) != nil)
-            {
-                // Process error
-                print("\n\n Error: \(String(describing: error))")
-            }
-            else if let resultDic = result as? [String:Any]
-            {
-                print("\n\n  fetched user: \(String(describing: result))")
-                if resultDic["name"] != nil
-                {
-                    //make API call here for sending data to server or navigate to different screen from here
-                    /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                    if let detailsVc:UserDataViewController = storyboard.instantiateViewController(withIdentifier: "userDataVc")as? UserDataViewController
-                    {
-                        detailsVc.userData = resultDic
-                        self.navigationController?.pushViewController(detailsVc, animated: true)
-                    }*/
-                    
-                }
-                
-            }
-        })
-    }*/
-    
-    func setUpSignInAppleButton() {
-      
-    }
-    /*func performExistingAccountSetupFlows() {
-        // Prepare requests for both Apple ID and password providers.
-        let requests = [ASAuthorizationAppleIDProvider().createRequest(),
-                        ASAuthorizationPasswordProvider().createRequest()]
+     
+    @objc func save_email(email:String) {
         
-        // Create an authorization controller with the given requests.
-        let authorizationController = ASAuthorizationController(authorizationRequests: requests)
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
-    }*/
-
+        let custom_email_pass = ["email":String(email)]
+        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+    }
     
+    @objc func push_to_dashboard() {
+        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+        // self.navigationController?.pushViewController(push!, animated: true)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        let mainRevealController = SWRevealViewController()
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
 }
 
 /*extension login: ASAuthorizationControllerDelegate {
@@ -661,12 +612,195 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
             let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
             print("User id is \(userIdentifier) \n Full Name is \(String(describing: fullName)) \n Email id is \(String(describing: email))")
+            
+            if (email == nil) {
+                print("second")
+                self.social_login_via_apple_two(social_id: userIdentifier)
+            } else {
+                self.social_login_via_apple_one(social_id: userIdentifier, email: "\(String(describing: email))", name: "\(String(describing: fullName))")
+            }
+            
         }
         /*
          User id is 001171.b152c5c0628f4f92b62199a247481a17.0707
           Full Name is Optional(givenName: Manju familyName: Rajput )
           Email id is Optional("tdx2mhbpfq@privaterelay.appleid.com")
          */
+        
+    }
+    
+    @objc func social_login_via_apple_two(social_id:String) {
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+
+            parameters = [
+                "action"        :   "socialLoginAction",
+            // "email"         :   String(""),
+                "socialId"      :   String(social_id),
+            // "fullName"      :   String(""),
+                "socialType"    :   String("apple"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String("")
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        // self.save_email(email: String(email))
+                        //
+                        
+                        self.hide_loading_UI()
+                         
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    
+    @objc func social_login_via_apple_one(social_id:String,email:String,name:String) {
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("apple"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String("")
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        self.save_email(email: String(email))
+                        
+                        self.hide_loading_UI()
+                        
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {

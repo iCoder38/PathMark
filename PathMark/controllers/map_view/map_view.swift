@@ -323,11 +323,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        /*UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
         UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
         
         UserDefaults.standard.set("", forKey: "key_map_view_address")
-        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_address")*/
         
         if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
             print(load_latitude)
@@ -429,6 +429,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             }
             self.lbl_location_from.numberOfLines = 0
             
+            if (save_name == nil) {
+                save_name = "0"
+            } else if (save_sub_locality == nil) {
+                save_sub_locality = "0"
+            }
             let one = save_name+","+save_sub_locality
             let two = save_subAdministrativeArea+","+save_zipCode
             
@@ -1310,23 +1315,37 @@ class DBHelper
     }
 
     let dbPath: String = "myDb4.sqlite"
+    
+   
+    
     var db:OpaquePointer?
 
     func openDatabase() -> OpaquePointer?
     {
-        let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            .appendingPathComponent(dbPath)
-        var db: OpaquePointer? = nil
-        if sqlite3_open(fileURL.path, &db) != SQLITE_OK
-        {
-            print("error opening database")
-            return nil
+        var db_name:String!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            db_name = String(myString)+".sqlite"
         }
-        else
-        {
-            print("Successfully opened connection to database at \(dbPath)")
-            return db
-        }
+            let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                .appendingPathComponent(db_name)
+            var db: OpaquePointer? = nil
+            if sqlite3_open(fileURL.path, &db) != SQLITE_OK
+            {
+                print("error opening database")
+                return nil
+            }
+            else
+            {
+                print("Successfully opened connection to database at \(db_name!)")
+                return db
+            }
+       
+        
     }
     
     func createTable() {
