@@ -24,33 +24,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        // firebase
         FirebaseApp.configure()
         
+        // google : places
         GMSPlacesClient.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
         GMSServices.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
         
-//        // 1
-//        GIDSignIn.sharedInstance.clientID = "750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com"
-//        // 2
-//        GIDSignIn.sharedInstance.delegate = self
-//        // 3
-//        GIDSignIn.sharedInstance.restorePreviousSignIn()
-            //.
+        // facebook
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        // Settings.shared.appID = "fb1035864164317944"
+        // Settings.shared.displayName = "Zarib"
         
-        
+        // google : login
         GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
             if error != nil || user == nil {
-              // Show the app's signed-out state.
+                // Show the app's signed-out state.
             } else {
-              // Show the app's signed-in state.
+                // Show the app's signed-in state.
             }
-          }
+        }
         
-        // GIDSignIn.cl = "YOUR_CLIENT_ID"
-       
+        // notification
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
             UNUserNotificationCenter.current().delegate = self
+            
             
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(

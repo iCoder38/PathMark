@@ -19,7 +19,12 @@ import GoogleSignIn
 import FacebookCore
 import FacebookLogin
 
-class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate {
+// apple
+import AuthenticationServices
+
+class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate, ASAuthorizationControllerDelegate {
+    
+    
 
     let locationManager = CLLocationManager()
     
@@ -376,7 +381,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
     }
  
     @objc func signInViaFacebook() {
-        Settings.shared.appID = "1035864164317944"
+        // Settings.shared.appID = "fb1035864164317944"
+        // Settings.shared.displayName = "Zarib"
         
         let fbLoginManager : LoginManager = LoginManager()
         
@@ -400,17 +406,133 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
                         
                         self.present(alert, animated: true, completion: nil)
                     }
-                    else
-                    
-                    {
+                    else {
                         print("going to getFBLoggedInUserData.. ")
                         // self.getFBLoggedInUserData()
+                        /*print("\(Profile.current?.userID)")
+                        print("\(Profile.current?.firstName)")
+                        print("\(Profile.current?.email)")
+                         print("\(Profile.current?.imageURL)")*/
+                        
+                        if let url = URL(string: "\(Profile.current?.imageURL!)") {
+                            print(url)
+                            // print(String(contentsOf: url))
+                            var myUrlStr : String = url.absoluteString
+                            print(url)
+                            
+                            
+                            
+                            self.socia_login_fb_wb(name: (Profile.current?.firstName)!, social_id: Profile.current!.userID, email: (Profile.current?.email)!, profile_picture: "")
+                        }
+                            
                         
                     }
                 }
                 
             }
         })
+    }
+    
+    @objc func socia_login_fb_wb(name:String,social_id:String,email:String,profile_picture:String) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+//            let x : Int = (person["userId"] as! Int)
+//            let myString = String(x)
+            
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("facebook"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String(profile_picture)
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        let indexPath = IndexPath.init(row: 0, section: 0)
+                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
+                                                 "password":""]
+                        
+                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                        //
+                        
+                        self.hide_loading_UI()
+                        
+                        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        // self.navigationController?.pushViewController(push!, animated: true)
+                        
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                        self.navigationController?.pushViewController(push!, animated: true)
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
     }
     
     //We get here required data from facebook SDK
@@ -442,7 +564,37 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
         })
     }*/
     
+    func setUpSignInAppleButton() {
+      
+    }
+    /*func performExistingAccountSetupFlows() {
+        // Prepare requests for both Apple ID and password providers.
+        let requests = [ASAuthorizationAppleIDProvider().createRequest(),
+                        ASAuthorizationPasswordProvider().createRequest()]
+        
+        // Create an authorization controller with the given requests.
+        let authorizationController = ASAuthorizationController(authorizationRequests: requests)
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }*/
+
+    
 }
+
+/*extension login: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+         //here is credentials .
+        }
+    }
+}
+
+extension login: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+}*/
 
 extension login: UITableViewDataSource  , UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -472,9 +624,54 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
         cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
         
+        // facebook
+        /*let loginButton = FBLoginButton()
+        loginButton.center = cell.center
+        cell.addSubview(loginButton)*/
+        
+        if let token = AccessToken.current,
+                !token.isExpired {
+                // User is logged in, do work such as go to next view controller.
+            }
+        
+        // apple
+         // func setUpSignInAppleButton() {
+        let authorizationButton = ASAuthorizationAppleIDButton()
+        authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest), for: .touchUpInside)
+        authorizationButton.cornerRadius = 10
+        // authorizationButton.center = cell.view_apple.center
+          //Add button on some view or stack
+        cell.view_apple.addSubview(authorizationButton)
+         // }
+        
         return cell
     }
+    @objc func handleAppleIdRequest() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.performRequests()
+    }
     
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as?  ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            print("User id is \(userIdentifier) \n Full Name is \(String(describing: fullName)) \n Email id is \(String(describing: email))")
+        }
+        /*
+         User id is 001171.b152c5c0628f4f92b62199a247481a17.0707
+          Full Name is Optional(givenName: Manju familyName: Rajput )
+          Email id is Optional("tdx2mhbpfq@privaterelay.appleid.com")
+         */
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
+    }
     // 989013037178
     // VLMBIP
     
@@ -532,6 +729,9 @@ class login_table_cell: UITableViewCell {
 
     @IBOutlet weak var btn_google:UIButton!
     @IBOutlet weak var btn_facebook:UIButton!
+    @IBOutlet weak var btn_apple:UIButton!
+    
+    @IBOutlet weak var view_apple:UIView!
     
     @IBOutlet weak var bgColor:UIImageView!
     

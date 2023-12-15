@@ -4,14 +4,14 @@
 <dict>
 	<key>BUNDLE_ID</key>
 	<string>com.evs.dev.PathMark</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb1035864164317944</string>
+				<string>fb384099320856520</string>
 			</array>
 		</dict>
 		<dict>
@@ -23,10 +23,12 @@
 			</array>
 		</dict>
 	</array>
+	<key>CLIENT_ID</key>
+	<string>750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com</string>
 	<key>FacebookAppID</key>
-	<string>1035864164317944</string>
+	<string>384099320856520</string>
 	<key>FacebookClientToken</key>
-	<string>9f2faa62c47a64cdc44c1c1436e1b4e1</string>
+	<string>68848f0de517fa634b18f877801afd0e</string>
 	<key>FacebookDisplayName</key>
 	<string>Zarib</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -46,8 +48,6 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 	</array>
-	<key>CLIENT_ID</key>
-	<string>750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
