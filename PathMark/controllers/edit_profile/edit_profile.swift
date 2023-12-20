@@ -38,6 +38,8 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
     // device token
     var str_token_id:String!
     
+    var str_country_id:String!
+    
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
             view_navigation_bar.backgroundColor = navigation_color
@@ -230,6 +232,7 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                 if (cell.txt_country.text! == (item!["name"] as! String)) {
                     print("yes matched")
                     phone_number_code = (item!["phonecode"] as! String)
+                    self.str_country_id   = "\(item!["id"]!)"
                 }
                 
             }
@@ -296,6 +299,8 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                 parameterDict.setValue(String(cell.txt_phone_number.text!), forKey: "contactNumber")
                 parameterDict.setValue("iOS", forKey: "device")
                 parameterDict.setValue(String(self.str_token_id), forKey: "deviceToken")
+                
+                parameterDict.setValue(String(self.str_country_id), forKey: "countryId")
                 
                 print(parameterDict as Any)
                 
@@ -524,6 +529,7 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                     if (cell.txt_country.text! == (item!["name"] as! String)) {
                         print("yes matched")
                         cell.txt_phone_code.text = (item!["phonecode"] as! String)
+                        self.str_country_id   = "\(item!["id"]!)"
                     }
                     
                 }
@@ -621,6 +627,8 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                     "fullName"      : String(cell.txt_full_name.text!),
                     "countryCode"   : String(cell.txt_phone_code.text!),
                     "contactNumber" : String(cell.txt_phone_number.text!),
+                    "countryId" : String(self.str_country_id),
+                    
                     "role"          : "Member",
                     "device"        : "iOS",
                     "deviceToken"   : String(self.str_token_id)
@@ -862,7 +870,9 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
             
             cell.txt_full_name.text     = (person["fullName"] as! String)
             cell.txt_phone_number.text  = (person["contactNumber"] as! String)
-            cell.txt_phone_code.text    = (person["countryCode"] as! String)
+            cell.txt_phone_code.text    = "+\(person["countryCode"]!)"
+            
+            cell.txt_country.text  = (person["countryName"] as! String)
             
             // print(cell.txt_phone_code.text as Any)
             // print((person["countryCode"] as! String))
@@ -872,9 +882,10 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
                 let item = self.arr_country_array[index] as? [String:Any]
                 // print(item as Any)
                  
-                if (item!["phonecode"] as! String == (person["countryCode"] as! String)) {
+                if (item!["phonecode"] as! String == "\(person["countryCode"]!)") {
                     // print("yes matched")
                     cell.txt_country.text   = (item!["name"] as! String)
+                    self.str_country_id   = "\(item!["id"]!)"
                 }
              
             }

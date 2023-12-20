@@ -58,11 +58,28 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
     
     @IBOutlet weak var btn_back:UIButton!
     
+    var str_country_id:String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         self.btn_back.addTarget(self, action: #selector(back_click_method_3), for: .touchUpInside)
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! sign_up_table_cell
+        self.tbleView.reloadData()
+        
+    }
+    
+    @objc func terms_condition_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "terms_and_conditions_id") as? terms_and_conditions
+        self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func back_click_method_3() {
@@ -152,7 +169,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         
         
         var phone_number_code : String!
-        
+        print(cell.txt_phone_number.text!.count)
         if (cell.txt_full_name.text! == "") {
             
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter full name"), style: .alert)
@@ -233,19 +250,74 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             return
             
+        } else if (cell.txt_phone_number.text!.count != 10) {
+            
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+            ERProgressHud.sharedInstance.hide()
+            
+            return
+            
         } else {
             
-            for indexx in 0..<self.arr_country_array.count {
+            if (cell.txt_phone_number.text!.count == 10) {
                 
-                let item = self.arr_country_array[indexx] as? [String:Any]
-                print(item as Any)
-                
-                if (cell.txt_country.text! == (item!["name"] as! String)) {
-                    print("yes matched")
-                    phone_number_code = (item!["phonecode"] as! String)
+                if (self.arr_country_array == nil) {
+                    phone_number_code = "+880"
+                    self.str_country_id = "18"
+                    
+                } else {
+                    for indexx in 0..<self.arr_country_array.count {
+                        
+                        let item = self.arr_country_array[indexx] as? [String:Any]
+                        print(item as Any)
+                        
+                        if (cell.txt_country.text! == (item!["name"] as! String)) {
+                            print("yes matched")
+                            phone_number_code = (item!["phonecode"] as! String)
+                            self.str_country_id = "\(item!["id"]!)"
+                        }
+                        
+                    }
                 }
                 
+            }  else if (cell.txt_phone_number.text!.count == 11) {
+                
+                if (self.arr_country_array == nil) {
+                    phone_number_code = "+880"
+                    self.str_country_id = "18"
+                } else {
+                    for indexx in 0..<self.arr_country_array.count {
+                        
+                        let item = self.arr_country_array[indexx] as? [String:Any]
+                        print(item as Any)
+                        
+                        if (cell.txt_country.text! == (item!["name"] as! String)) {
+                            print("yes matched")
+                            phone_number_code = (item!["phonecode"] as! String)
+                            self.str_country_id = "\(item!["id"]!)"
+                        }
+                        
+                    }
+                }
+                
+            } else {
+                
+                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
+                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                alert.addButtons([cancel])
+                self.present(alert, animated: true)
+                ERProgressHud.sharedInstance.hide()
+
+                return
+                
             }
+            
+            
+           
+            
             
         }
         
@@ -284,6 +356,8 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             parameterDict.setValue(String(phone_number_code), forKey: "countryCode")
             parameterDict.setValue(String(cell.txt_phone_number.text!), forKey: "contactNumber")
             parameterDict.setValue(String(cell.txtPassword.text!), forKey: "password")
+            parameterDict.setValue(String(cell.txt_country.text!), forKey: "countryName")
+            parameterDict.setValue(String(self.str_country_id), forKey: "countryId")
             parameterDict.setValue("Member", forKey: "role")
             
             parameterDict.setValue(String(cell.txt_address.text!), forKey: "address")
@@ -564,6 +638,34 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         self.str_user_select_image = "1"
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! sign_up_table_cell
+
+        
+        if (textField == cell.txt_phone_number) {
+            
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+            // make sure the result is under 16 characters
+            return updatedText.count <= 11
+            
+        
+        }  else {
+            
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+            // make sure the result is under 16 characters
+            return updatedText.count <= 30
+            
+        }
+        
+    }
 }
 
 extension sign_up: UITableViewDataSource  , UITableViewDelegate {
@@ -590,6 +692,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         cell.txt_address.delegate = self
         cell.txt_full_name.delegate = self
         cell.txt_address.delegate = self
+        cell.txt_phone_number.delegate = self
         // cell.txt_nid_number.delegate = self
         
         cell.txt_country.delegate = self
@@ -597,7 +700,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         
         cell.txt_phone_code.text = "+880"
         
-        cell.btn_accept_terms.addTarget(self, action: #selector(accept_terms_click_method), for: .touchUpInside)
+        //  cell.btn_accept_terms.addTarget(self, action: #selector(accept_terms_click_method), for: .touchUpInside)
         
         cell.btnSignUp.addTarget(self, action: #selector(sign_up_click_method), for: .touchUpInside)
         
@@ -610,6 +713,26 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         cell.img_upload.isUserInteractionEnabled = true
         cell.img_upload.addGestureRecognizer(tapGestureRecognizer)
         
+        cell.btn_terms_and_condition.addTarget(self, action: #selector(terms_condition_click_method), for: .touchUpInside)
+        
+        if let loadedString = UserDefaults.standard.string(forKey: "key_accept_term") {
+            print(loadedString)
+            
+            // let string = "yes_terms"
+            UserDefaults.standard.set("", forKey: "key_accept_term")
+            UserDefaults.standard.set(nil, forKey: "key_accept_term")
+            
+            // cell.btn_accept_terms.tag = 1
+            cell.btn_accept_terms.setImage(UIImage(named: "check"), for: .normal)
+            cell.btnSignUp.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1)
+            cell.btnSignUp.isUserInteractionEnabled = true
+        } else {
+            cell.btn_accept_terms.setImage(UIImage(named: "un_check"), for: .normal)
+            // cell.btn_accept_terms.tag = 0
+            cell.btnSignUp.backgroundColor = .lightGray
+            cell.btnSignUp.isUserInteractionEnabled = false
+        }
+        
         return cell
     }
     
@@ -617,6 +740,10 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
     // VLMBIP
     
     @objc func sign_up_click_method() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! sign_up_table_cell
+        
+        
         
         self.sign_up_WB()
     }
@@ -1001,6 +1128,8 @@ class sign_up_table_cell: UITableViewCell {
             btn_eyes_two.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         }
     }
+    
+    @IBOutlet weak var btn_terms_and_condition:UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

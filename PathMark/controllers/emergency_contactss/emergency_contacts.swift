@@ -315,6 +315,7 @@ extension emergency_contacts: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_emergency_number[indexPath.row] as? [String:Any]
         // print(item as Any)
         
+         
         cell.lbl_name.text = (item!["Name"] as! String)
         cell.lbl_phone.text = (item!["phone"] as! String)
         cell.lbl_relation.text = "Relation : "+(item!["relation"] as! String)

@@ -1017,7 +1017,6 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             cell.lbl_total_seats.text = "4 person per ride"
         }
          
-        
         cell.backgroundColor  = .clear
         
         return cell
@@ -1032,7 +1031,16 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
     }
     
-     
+    /*func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+
+        let totalCellWidth = 400 * 3
+        let totalSpacingWidth = 12 * (3 - 1)
+
+        let leftInset = (600 - CGFloat(totalCellWidth + totalSpacingWidth)) / 2
+        let rightInset = leftInset
+
+        return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
+    }*/
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.arr_mut_list_of_category.removeAllObjects()
@@ -1095,10 +1103,7 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
     func collectionView(_ collectionView: UICollectionView, layout
                         collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        
         return 10
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -1108,15 +1113,16 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         let numberOfCells = floor(collectionView.frame.size.width / cellWidth)
         let edgeInsets = (collectionView.frame.size.width - (numberOfCells * cellWidth)) / (numberOfCells + 1)
         
-        return UIEdgeInsets(top: 10, left: edgeInsets, bottom: 10, right: edgeInsets)
+        if (self.str_user_select_vehicle == "BIKE") {
+            return UIEdgeInsets(top: 10, left: 140, bottom: 10, right: edgeInsets)
+        } else {
+            return UIEdgeInsets(top: 10, left: edgeInsets, bottom: 10, right: edgeInsets)
+        }
         
         // return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
     
-    
-    
 }
-
 
 extension map_view: UISearchBarDelegate {
     
@@ -1157,10 +1163,7 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         cell.textLabel?.text = searchResult.title
         cell.detailTextLabel?.text = searchResult.subtitle
         
-         
-        
         return cell
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

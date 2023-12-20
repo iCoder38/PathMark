@@ -92,6 +92,7 @@
 		B9E13D4A2A5C474B0068774A /* ERProgressHud.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E13D492A5C474B0068774A /* ERProgressHud.swift */; };
 		B9F377CF2B0F30FE007F6CEB /* shared_booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F377CE2B0F30FE007F6CEB /* shared_booking.swift */; };
 		B9F377D22B0F3CB3007F6CEB /* share_track.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F377D12B0F3CB3007F6CEB /* share_track.swift */; };
+		B9F6F7312B3071EA009BAA2F /* terms_and_conditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F6F7302B3071EA009BAA2F /* terms_and_conditions.swift */; };
 		B9FE545C2A5FD8CE005583C2 /* parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FE545B2A5FD8CE005583C2 /* parameter.swift */; };
 		B9FE54662A5FED30005583C2 /* MenuControllerVCTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FE54602A5FED30005583C2 /* MenuControllerVCTableCell.swift */; };
 		B9FE54672A5FED30005583C2 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9FE54632A5FED30005583C2 /* SWRevealViewController.m */; };
@@ -209,6 +210,7 @@
 		B9E13D492A5C474B0068774A /* ERProgressHud.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ERProgressHud.swift; sourceTree = "<group>"; };
 		B9F377CE2B0F30FE007F6CEB /* shared_booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shared_booking.swift; sourceTree = "<group>"; };
 		B9F377D12B0F3CB3007F6CEB /* share_track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = share_track.swift; sourceTree = "<group>"; };
+		B9F6F7302B3071EA009BAA2F /* terms_and_conditions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = terms_and_conditions.swift; sourceTree = "<group>"; };
 		B9FE545B2A5FD8CE005583C2 /* parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = parameter.swift; sourceTree = "<group>"; };
 		B9FE545F2A5FED2F005583C2 /* PathMark-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PathMark-Bridging-Header.h"; sourceTree = "<group>"; };
 		B9FE54602A5FED30005583C2 /* MenuControllerVCTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuControllerVCTableCell.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 			isa = PBXGroup;
 			children = (
 				B9695DF42A5BE73000552578 /* sign_up.swift */,
+				B9F6F72F2B3071CC009BAA2F /* terms_and_condition */,
 			);
 			path = registration;
 			sourceTree = "<group>";
@@ -715,6 +718,14 @@
 				B9F377D12B0F3CB3007F6CEB /* share_track.swift */,
 			);
 			path = share_track;
+			sourceTree = "<group>";
+		};
+		B9F6F72F2B3071CC009BAA2F /* terms_and_condition */ = {
+			isa = PBXGroup;
+			children = (
+				B9F6F7302B3071EA009BAA2F /* terms_and_conditions.swift */,
+			);
+			path = terms_and_condition;
 			sourceTree = "<group>";
 		};
 		B9FE545A2A5FD895005583C2 /* parameter */ = {
@@ -1105,6 +1116,7 @@
 				B934EC832B0744B300908C0D /* edit_profile.swift in Sources */,
 				B9038E0E2A5D45FB0041A5B4 /* UIStackView+Utility.swift in Sources */,
 				B9FE54672A5FED30005583C2 /* SWRevealViewController.m in Sources */,
+				B9F6F7312B3071EA009BAA2F /* terms_and_conditions.swift in Sources */,
 				B9C530832B0DF62C00DB37B0 /* cancel_your_ride.swift in Sources */,
 				B9038E192A5D46ED0041A5B4 /* RPicker.swift in Sources */,
 				B980DD172A9DC98900F7CD07 /* ride_status.swift in Sources */,

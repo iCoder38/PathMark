@@ -85,7 +85,8 @@ class faq: UIViewController {
                 ]
                 
                 parameters = [
-                    "action"    : "faq"
+                    "action"    : "faq",
+                    "type"      : "User"
                 ]
                 
                 print(parameters as Any)

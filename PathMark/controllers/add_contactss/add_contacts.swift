@@ -164,6 +164,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         self.btn_country.addTarget(self, action: #selector(before_open_popup), for: .touchUpInside)
         self.txt_country.text = "Bangladesh"
         self.txt_phone_code.text = "+880"
+        self.txt_phone.delegate = self
         
         if (self.dict_emergency == nil) {
             print("add contact")
@@ -244,10 +245,33 @@ class add_contacts: UIViewController , UITextFieldDelegate {
     @objc func check_validate() {
         if (self.dict_emergency == nil) {
             print("add contact")
-            self.add_emergency_phone()
+            
+            if (self.txt_phone.text!.count == 10) {
+                self.add_emergency_phone()
+            } else if (self.txt_phone.text!.count == 11) {
+                self.add_emergency_phone()
+            } else {
+                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
+                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                alert.addButtons([cancel])
+                self.present(alert, animated: true)
+                ERProgressHud.sharedInstance.hide()
+            }
+            
         } else {
             print("edit contact")
-            self.check_edit_or_add_contact_WB()
+            
+            if (self.txt_phone.text!.count == 10) {
+                self.check_edit_or_add_contact_WB()
+            } else if (self.txt_phone.text!.count == 11) {
+                self.check_edit_or_add_contact_WB()
+            } else {
+                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
+                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                alert.addButtons([cancel])
+                self.present(alert, animated: true)
+                ERProgressHud.sharedInstance.hide()
+            }
         }
     }
     @objc func check_edit_or_add_contact_WB() {
@@ -457,6 +481,29 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             }
         }
     }
-    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField == self.txt_phone) {
+            
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+            // make sure the result is under 16 characters
+            return updatedText.count <= 11
+            
+        
+        }  else {
+            
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+            // make sure the result is under 16 characters
+            return updatedText.count <= 30
+            
+        }
+        
+    }
 }
 

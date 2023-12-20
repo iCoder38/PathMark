@@ -297,8 +297,6 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                     var strSuccess : String!
                     strSuccess = JSON["status"] as? String
                     
-                    
-                    
                     if strSuccess.lowercased() == "success" {
                         
                         var dict: Dictionary<AnyHashable, Any>
@@ -388,8 +386,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         print("going to getFBLoggedInUserData.. ")
                         // self.getFBLoggedInUserData()
                         /*print("\(Profile.current?.userID)")
-                        print("\(Profile.current?.firstName)")
-                        print("\(Profile.current?.email)")
+                         print("\(Profile.current?.firstName)")
+                         print("\(Profile.current?.email)")
                          print("\(Profile.current?.imageURL)")*/
                         
                         if let url = URL(string: "\(Profile.current?.imageURL!)") {
@@ -398,11 +396,9 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                             var myUrlStr : String = url.absoluteString
                             print(url)
                             
-                            
-                            
                             self.socia_login_fb_wb(name: (Profile.current?.firstName)!, social_id: Profile.current!.userID, email: (Profile.current?.email)!, profile_picture: "")
-                        }
                             
+                        }
                         
                     }
                 }
@@ -581,9 +577,9 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         cell.addSubview(loginButton)*/
         
         if let token = AccessToken.current,
-                !token.isExpired {
-                // User is logged in, do work such as go to next view controller.
-            }
+           !token.isExpired {
+            // User is logged in, do work such as go to next view controller.
+        }
         
         // apple
          // func setUpSignInAppleButton() {
@@ -597,6 +593,7 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         
         return cell
     }
+    
     @objc func handleAppleIdRequest() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()

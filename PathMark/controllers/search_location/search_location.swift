@@ -40,6 +40,8 @@ class search_location: UIViewController {
     
     @IBOutlet weak var tbleView:UITableView!
     
+    @IBOutlet weak var btn_add:UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
@@ -48,6 +50,8 @@ class search_location: UIViewController {
         /*let kUserDefault = UserDefaults.standard
         let data = kUserDefault.array(forKey: "nameArray")! as? [String] ?? [String]()
         print(data)*/
+        
+        self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
     }
     
@@ -241,6 +245,11 @@ class search_location: UIViewController {
             }
         }
         
+    }
+    
+    @objc func add_contacts_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id")
+        self.navigationController?.pushViewController(push, animated: true)
     }
     
 }
