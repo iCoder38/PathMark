@@ -18,6 +18,7 @@ import Foundation
     case sourceCreation = "stripeios.source_creationn"
 
     case paymentMethodCreation = "stripeios.payment_method_creation"
+    case paymentMethodUpdate = "stripeios.payment_method_update"
     case paymentMethodIntentCreation = "stripeios.payment_intent_confirmation"
     case setupIntentConfirmationAttempt = "stripeios.setup_intent_confirmation"
 
@@ -177,4 +178,27 @@ import Foundation
     // MARK: - PaymentSheet checkout
     case paymentSheetCarouselPaymentMethodTapped = "mc_carousel_payment_method_tapped"
     case paymentSheetConfirmButtonTapped = "mc_confirm_button_tapped"
+
+    // MARK: - v1/elements/session
+    case paymentSheetElementsSessionLoadFailed = "mc_elements_session_load_failed"
+    case paymentSheetElementsSessionEPMLoadFailed = "mc_elements_session_epms_load_failed"
+
+    // MARK: - PaymentSheet card brand choice
+    case paymentSheetDisplayCardBrandDropdownIndicator = "mc_display_cbc_dropdown"
+    case paymentSheetOpenCardBrandDropdown = "mc_open_cbc_dropdown"
+    case paymentSheetCloseCardBrandDropDown = "mc_close_cbc_dropdown"
+    case paymentSheetOpenCardBrandEditScreen = "mc_open_edit_screen"
+    case paymentSheetUpdateCardBrand = "mc_update_card"
+    case paymentSheetUpdateCardBrandFailed = "mc_update_card_failed"
+    case paymentSheetClosesEditScreen = "mc_cancel_edit_screen"
+
+    // MARK: - CustomerSheet card brand choice
+    case customerSheetDisplayCardBrandDropdownIndicator = "cs_display_cbc_dropdown"
+    case customerSheetOpenCardBrandDropdown = "cs_open_cbc_dropdown"
+    case customerSheetCloseCardBrandDropDown = "cs_close_cbc_dropdown"
+    case customerSheetOpenCardBrandEditScreen = "cs_open_edit_screen"
+    case customerSheetUpdateCardBrand = "cs_update_card"
+    case customerSheetUpdateCardBrandFailed = "cs_update_card_failed"
+    case customerSheetClosesEditScreen = "cs_cancel_edit_screen"
+
 }

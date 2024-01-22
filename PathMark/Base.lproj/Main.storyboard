@@ -2329,7 +2329,7 @@
                                             <constraint firstAttribute="height" constant="30" id="osx-8V-UZb"/>
                                             <constraint firstAttribute="width" constant="30" id="sys-V2-VDo"/>
                                         </constraints>
-                                        <state key="normal" image="menu">
+                                        <state key="normal" image="home">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                     </button>
@@ -2684,11 +2684,11 @@
                     <nil key="simulatedTopBarMetrics"/>
                     <size key="freeformSize" width="414" height="1400"/>
                     <connections>
-                        <outlet property="btnBack" destination="53f-ZP-0QM" id="2RW-MA-KAO"/>
                         <outlet property="btn_booking_confirmed" destination="zG2-kd-4d2" id="HbZ-cF-esG"/>
                         <outlet property="btn_call_driver" destination="oqT-XD-f2J" id="VzH-n5-YQD"/>
                         <outlet property="btn_cancel_ride" destination="FNv-qX-PlV" id="4WE-tL-zo1"/>
                         <outlet property="btn_chat" destination="vCS-aW-WSO" id="MUV-eS-aq0"/>
+                        <outlet property="btn_home" destination="53f-ZP-0QM" id="msF-gh-pAF"/>
                         <outlet property="btn_share" destination="oAX-ix-RW0" id="pcX-Ub-bYl"/>
                         <outlet property="img_profile" destination="ecK-Tm-l5Y" id="sB1-D4-hjG"/>
                         <outlet property="img_star_five" destination="mYc-5w-JCo" id="ins-ay-UD6"/>
@@ -3381,7 +3381,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Egc-mW-o8b">
-                                                                    <rect key="frame" x="36" y="7.3333333333333517" width="16" height="15.666666666666666"/>
+                                                                    <rect key="frame" x="36" y="7.3333333333333526" width="16" height="15.666666666666661"/>
                                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="Hdr-DM-il6"/>
@@ -9394,6 +9394,7 @@
         <image name="globe" catalog="system" width="128" height="123"/>
         <image name="google" width="24" height="24"/>
         <image name="help_facebook" width="100" height="60"/>
+        <image name="home" width="24" height="24"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="list.bullet" catalog="system" width="128" height="87"/>
         <image name="list.dash" catalog="system" width="128" height="85"/>

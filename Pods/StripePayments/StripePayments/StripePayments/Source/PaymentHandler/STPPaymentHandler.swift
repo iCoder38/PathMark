@@ -482,7 +482,7 @@ public class STPPaymentHandler: NSObject {
             params = setupIntentConfirmParams.copy() as! STPSetupIntentConfirmParams
             params.useStripeSDK = NSNumber(value: true)
         }
-        apiClient.confirmSetupIntent(with: params, completion: confirmCompletionBlock)
+        apiClient.confirmSetupIntent(with: params, expand: ["payment_method"], completion: confirmCompletionBlock)
     }
 
     /// Handles any `nextAction` required to authenticate the SetupIntent.
@@ -1701,13 +1701,15 @@ public class STPPaymentHandler: NSObject {
                 {
                     let safariViewController = SFSafariViewController(url: fallbackURL)
                     safariViewController.modalPresentationStyle = .overFullScreen
+#if !canImport(CompositorServices)
                     safariViewController.dismissButtonStyle = .close
+                    safariViewController.delegate = self
+#endif
                     if context.responds(
                         to: #selector(STPAuthenticationContext.configureSafariViewController(_:))
                     ) {
                         context.configureSafariViewController?(safariViewController)
                     }
-                    safariViewController.delegate = self
                     self.safariViewController = safariViewController
                     presentingViewController.present(safariViewController, animated: true, completion: {
                       completion?(safariViewController)
@@ -2093,6 +2095,7 @@ public class STPPaymentHandler: NSObject {
     }
 }
 
+#if !canImport(CompositorServices)
 extension STPPaymentHandler: SFSafariViewControllerDelegate {
     // MARK: - SFSafariViewControllerDelegate
     /// :nodoc:
@@ -2109,6 +2112,7 @@ extension STPPaymentHandler: SFSafariViewControllerDelegate {
         _retrieveAndCheckIntentForCurrentAction()
     }
 }
+#endif
 
 /// :nodoc:
 @_spi(STP) extension STPPaymentHandler: STPURLCallbackListener {

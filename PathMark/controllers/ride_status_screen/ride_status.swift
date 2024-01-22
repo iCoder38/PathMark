@@ -183,6 +183,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @IBOutlet weak var img_star_five:UIImageView!
     
     @IBOutlet weak var btn_booking_confirmed:UIButton!
+    
+    @IBOutlet weak var btn_home:UIButton!
+    
     @IBOutlet weak var lbl_message:UILabel!
     
     override func viewDidLoad() {
@@ -195,11 +198,13 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        // self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.btn_share.addTarget(self, action: #selector(share_click_method), for: .touchUpInside)
         
         self.btn_chat.backgroundColor = .clear
         self.btn_chat.addTarget(self, action: #selector(chat_click_method), for: .touchUpInside)
+        
+        self.btn_home.addTarget(self, action: #selector(home_click_method), for: .touchUpInside)
         
         // self.btnConfirmBooking.addTarget(self, action: #selector(validation_before_confirm_booking), for: .touchUpInside)
         
@@ -478,6 +483,12 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         //
         self.iAmHereForLocationPermission()
+    }
+    
+    @objc func home_click_method() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id")
+        self.navigationController?.pushViewController(push, animated: true)
     }
     
     @objc func chat_click_method() {
