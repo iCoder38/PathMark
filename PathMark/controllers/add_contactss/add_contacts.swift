@@ -168,7 +168,18 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         
         if (self.dict_emergency == nil) {
             print("add contact")
-            self.view_navigation_title.text = "NEW CONTACTS"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "NEW CONTACTS"
+                    btn_submit.setTitle("SUBMIT", for: .normal)
+                } else {
+                    view_navigation_title.text = "নতুন পরিচিতি যোগ করুন"
+                    btn_submit.setTitle("জমা দিন", for: .normal)
+                }
+                
+            }
             
         } else {
             print("edit contact")
@@ -352,7 +363,17 @@ class add_contacts: UIViewController , UITextFieldDelegate {
     @objc func add_emergency_phone() {
         
         // self.show_loading_UI()
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         var parameters:Dictionary<AnyHashable, Any>!
         
@@ -428,7 +449,17 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         
         self.view.endEditing(true)
         
-         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+          if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         let params = payload_country_list(action: "countrylist")
         

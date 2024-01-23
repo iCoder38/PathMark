@@ -42,8 +42,18 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Create an account"
-            view_navigation_title.textColor = .white
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Create an account"
+                } else {
+                    view_navigation_title.text = "অ্যাকাউন্ট তৈরি করুন"
+                }
+                
+                view_navigation_title.textColor = .white
+            }
         }
     }
     
@@ -96,7 +106,17 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         
         self.view.endEditing(true)
         
-         ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+          if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         let params = payload_country_list(action: "countrylist")
         
@@ -322,7 +342,17 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         }
         
         // self.show_loading_UI()
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         //Set Your URL
         let api_url = application_base_url
@@ -714,6 +744,212 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         cell.img_upload.addGestureRecognizer(tapGestureRecognizer)
         
         cell.btn_terms_and_condition.addTarget(self, action: #selector(terms_condition_click_method), for: .touchUpInside)
+        cell.btn_disclaimer.isHidden = true
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.btn_terms_and_condition.setTitle("Terms and Conditions", for: .normal)
+                cell.btn_disclaimer.setTitle("", for: .normal)
+                cell.btnSignUp.setTitle("Create an account", for: .normal)
+                
+                Utils.textFieldUI(textField: cell.txt_country,
+                                  tfName: cell.txt_country.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Bangladesh")
+                
+                
+                Utils.textFieldUI(textField: cell.txtEmailAddress,
+                                  tfName: cell.txtEmailAddress.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Email Address")
+                
+                Utils.textFieldUI(textField: cell.txtPassword,
+                                  tfName: cell.txtPassword.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Password")
+                
+                Utils.textFieldUI(textField: cell.txt_confirm_password,
+                                  tfName: cell.txt_confirm_password.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Confirm Password")
+                
+                Utils.textFieldUI(textField: cell.txt_full_name,
+                                  tfName: cell.txt_full_name.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Full name")
+                
+                Utils.textFieldUI(textField: cell.txt_phone_code,
+                                  tfName: cell.txt_phone_code.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 0,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .numberPad,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "+880")
+                
+                Utils.textFieldUI(textField: cell.txt_phone_number,
+                                  tfName: cell.txt_phone_number.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .numberPad,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "ফোন নম্বর")
+                
+                Utils.textFieldUI(textField: cell.txt_address,
+                                  tfName: cell.txt_address.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Address")
+                
+                
+            } else {
+                cell.btn_terms_and_condition.setTitle("শর্তাদি ও নীতিমালাসমূহ", for: .normal)
+                cell.btnSignUp.setTitle("অ্যাকাউন্ট তৈরি করুন", for: .normal)
+                
+                Utils.textFieldUI(textField: cell.txt_country,
+                                  tfName: cell.txt_country.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "Bangladesh")
+                
+                
+                Utils.textFieldUI(textField: cell.txtEmailAddress,
+                                  tfName: cell.txtEmailAddress.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "ই-মেইল")
+                
+                Utils.textFieldUI(textField: cell.txtPassword,
+                                  tfName: cell.txtPassword.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "পাসওয়ার্ড")
+                
+                Utils.textFieldUI(textField: cell.txt_confirm_password,
+                                  tfName: cell.txt_confirm_password.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "পাসওয়ার্ড নিশ্চিত করুন")
+                
+                Utils.textFieldUI(textField: cell.txt_full_name,
+                                  tfName: cell.txt_full_name.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "পুরো নাম")
+                
+                Utils.textFieldUI(textField: cell.txt_phone_code,
+                                  tfName: cell.txt_phone_code.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 0,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .numberPad,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "+880")
+                
+                Utils.textFieldUI(textField: cell.txt_phone_number,
+                                  tfName: cell.txt_phone_number.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .numberPad,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "ফোন নম্বর")
+                
+                Utils.textFieldUI(textField: cell.txt_address,
+                                  tfName: cell.txt_address.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .default,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "ঠিকানা")
+                
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+        
+        
+        
+        
         
         if let loadedString = UserDefaults.standard.string(forKey: "key_accept_term") {
             print(loadedString)
@@ -837,16 +1073,7 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txt_country:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_country,
-                              tfName: txt_country.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .emailAddress,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Bangladesh")
+            
             
             txt_country.layer.masksToBounds = false
             txt_country.layer.shadowColor = UIColor.black.cgColor
@@ -859,16 +1086,7 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txtEmailAddress:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txtEmailAddress,
-                              tfName: txtEmailAddress.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .emailAddress,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Email Address")
+            
             
             txtEmailAddress.layer.masksToBounds = false
             txtEmailAddress.layer.shadowColor = UIColor.black.cgColor
@@ -881,16 +1099,7 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txtPassword:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txtPassword,
-                              tfName: txtPassword.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .default,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Password")
+            
             
             txtPassword.layer.masksToBounds = false
             txtPassword.layer.shadowColor = UIColor.black.cgColor
@@ -903,16 +1112,8 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txt_confirm_password:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_confirm_password,
-                              tfName: txt_confirm_password.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .default,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Confirm Password")
+            
+            
             
             txt_confirm_password.layer.masksToBounds = false
             txt_confirm_password.layer.shadowColor = UIColor.black.cgColor
@@ -926,16 +1127,8 @@ class sign_up_table_cell: UITableViewCell {
     //
     @IBOutlet weak var txt_full_name:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_full_name,
-                              tfName: txt_full_name.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .default,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Full name")
+            
+           
             
             txt_full_name.layer.masksToBounds = false
             txt_full_name.layer.shadowColor = UIColor.black.cgColor
@@ -948,16 +1141,8 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txt_phone_code:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_phone_code,
-                              tfName: txt_phone_code.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 0,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .numberPad,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "+880")
+            
+            
             
             txt_phone_code.layer.masksToBounds = false
             txt_phone_code.layer.shadowColor = UIColor.black.cgColor
@@ -970,16 +1155,8 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txt_phone_number:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_phone_number,
-                              tfName: txt_phone_number.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .numberPad,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Phone Number")
+            
+           
             
             txt_phone_number.layer.masksToBounds = false
             txt_phone_number.layer.shadowColor = UIColor.black.cgColor
@@ -1019,16 +1196,7 @@ class sign_up_table_cell: UITableViewCell {
     
     @IBOutlet weak var txt_address:UITextField! {
         didSet {
-            Utils.textFieldUI(textField: txt_address,
-                              tfName: txt_address.text!,
-                              tfCornerRadius: 12,
-                              tfpadding: 20,
-                              tfBorderWidth: 0,
-                              tfBorderColor: .clear,
-                              tfAppearance: .dark,
-                              tfKeyboardType: .default,
-                              tfBackgroundColor: .white,
-                              tfPlaceholderText: "Address")
+           
             
             txt_address.layer.masksToBounds = false
             txt_address.layer.shadowColor = UIColor.black.cgColor

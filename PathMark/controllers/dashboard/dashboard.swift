@@ -38,7 +38,17 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Home"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Home"
+                } else {
+                    view_navigation_title.text = "হোম"
+                }
+                    
+            }
+            
             view_navigation_title.textColor = .white
         }
     }
@@ -341,7 +351,17 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     @objc func update_token_WB(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         }
         
         
@@ -691,6 +711,39 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         cell.btn_next.addTarget(self, action: #selector(next_click_method), for: .touchUpInside)
         cell.btn_previous.addTarget(self, action: #selector(previous_click_method), for: .touchUpInside)
         
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                cell.lbl_set_ride_location.text = "Set ride location"
+                cell.lbl_select_vehicle.text = "Select vehicle"
+                cell.btn_book_a_ride_now.setTitle("BOOK A RIDE NOW", for: .normal)
+                cell.btn_schedule_a_ride_now.setTitle("SCHEDULE A RIDE", for: .normal)
+                
+            } else {
+                cell.lbl_set_ride_location.text = "রাইডের লোকেশন সেট করুন"
+                cell.lbl_select_vehicle.text = "বাহন নির্বাচন করুন"
+                cell.btn_book_a_ride_now.setTitle("এখনই রাইড বুক করুন", for: .normal)
+                cell.btn_schedule_a_ride_now.setTitle("রাইডের সময়সুচী নির্ধারণ করুন", for: .normal)
+            }
+            
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         return cell
     }
     
@@ -997,7 +1050,8 @@ class dashboard_table_cell: UITableViewCell {
             
         }
     }
-    
+    @IBOutlet weak var lbl_set_ride_location:UILabel!
+    @IBOutlet weak var lbl_select_vehicle:UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

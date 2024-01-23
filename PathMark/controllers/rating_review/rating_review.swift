@@ -29,7 +29,18 @@ class rating_review: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Review & Rating"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                   view_navigation_title.text = "Review & Rating"
+               } else {
+                   view_navigation_title.text = "রিভিউ ও রেটিং"
+               }
+               
+            
+           }
+            
             view_navigation_title.textColor = .white
         }
     }
@@ -97,7 +108,17 @@ class rating_review: UIViewController {
     @objc func rating_review_history(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         }
         
         self.view.endEditing(true)

@@ -57,7 +57,7 @@ class MenuControllerVC: UIViewController {
     }
     
     // Member
-    var arr_customer_title = ["Dashboard",
+    var arr_customer_title_en = ["Dashboard",
                               "Edit Profile",
                               "Bookings",
                               "Emergency Contacts",
@@ -68,6 +68,17 @@ class MenuControllerVC: UIViewController {
                               "Shared booking",
                               "Help",
                               "Logout"]
+    var arr_customer_title_bg = ["ড্যাশবোর্ড",
+                              "প্রোফাইল আপডেট করুন",
+                              "বুকিংস ",
+                              "জরুরী যোগাযোগ",
+                              "ঠিকানা আপডেট করুন",
+                              "রিভিউ ও রেটিং",
+                              "যারিব সম্পর্কে জানুন",
+                              "FAQ(s)",
+                              "Shared booking",
+                              "হেল্প",
+                              "লগ-আউট করুন"]
     
     var arr_customer_image = ["home",
                               "home",
@@ -347,7 +358,19 @@ extension MenuControllerVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return arr_customer_title.count
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                return arr_customer_title_en.count
+            } else {
+                return arr_customer_title_bg.count
+            }
+            
+        } else {
+            return 0
+        }
+       
    
     }
     
@@ -360,13 +383,30 @@ extension MenuControllerVC: UITableViewDataSource {
         cell.layoutMargins = UIEdgeInsets.zero
         
         
-        cell.lblName.text = self.arr_customer_title[indexPath.row]
+        
         cell.lblName.textColor = .white
         
         cell.imgProfile.image = UIImage(named: self.arr_customer_image[indexPath.row])
         cell.imgProfile.backgroundColor = .clear
         
-        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                cell.lblName.text = self.arr_customer_title_en[indexPath.row]
+                
+            } else {
+                cell.lblName.text = self.arr_customer_title_bg[indexPath.row]
+            }
+            
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
         return cell
     }
@@ -375,7 +415,7 @@ extension MenuControllerVC: UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         
         
-        if self.arr_customer_title[indexPath.row] == "Emergency Contacts" {
+        if self.arr_customer_title_en[indexPath.row] == "Emergency Contacts" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -384,7 +424,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        }  else if arr_customer_title [indexPath.row] == "About Zarib" {
+        }  else if arr_customer_title_en [indexPath.row] == "About Zarib" {
             
             let obj = self.storyboard?.instantiateViewController(withIdentifier: "about_us_id") as! about_us
             let navController = UINavigationController(rootViewController: obj)
@@ -392,7 +432,7 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFront(navController, animated: true)
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
              
-    } else if self.arr_customer_title[indexPath.row] == "Dashboard" {
+    } else if self.arr_customer_title_en[indexPath.row] == "Dashboard" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -401,7 +441,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        } else if self.arr_customer_title[indexPath.row] == "Shared booking" {
+        } else if self.arr_customer_title_en[indexPath.row] == "Shared booking" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -410,7 +450,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
              
-        } else if self.arr_customer_title[indexPath.row] == "Manage Address" {
+        } else if self.arr_customer_title_en[indexPath.row] == "Manage Address" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -419,7 +459,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        }  else if self.arr_customer_title[indexPath.row] == "Help" {
+        }  else if self.arr_customer_title_en[indexPath.row] == "Help" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -428,7 +468,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        } else if self.arr_customer_title [indexPath.row] == "Bookings" {
+        } else if self.arr_customer_title_en [indexPath.row] == "Bookings" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -437,7 +477,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        }  else if self.arr_customer_title [indexPath.row] == "Help" {
+        }  else if self.arr_customer_title_en [indexPath.row] == "Help" {
             
             let obj = self.storyboard?.instantiateViewController(withIdentifier: "help_id") as! help
             let navController = UINavigationController(rootViewController: obj)
@@ -445,7 +485,7 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFront(navController, animated: true)
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
             
-        } else if self.arr_customer_title [indexPath.row] == "Edit Profile" {
+        } else if self.arr_customer_title_en [indexPath.row] == "Edit Profile" {
             
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
@@ -454,7 +494,7 @@ extension MenuControllerVC: UITableViewDataSource {
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             
-        } else if arr_customer_title [indexPath.row] == "FAQ(s)" {
+        } else if arr_customer_title_en [indexPath.row] == "FAQ(s)" {
             
             let obj = self.storyboard?.instantiateViewController(withIdentifier: "faq_id") as! faq
             let navController = UINavigationController(rootViewController: obj)
@@ -462,7 +502,7 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFront(navController, animated: true)
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
             
-        } else if arr_customer_title [indexPath.row] == "Review & Rating" {
+        } else if arr_customer_title_en [indexPath.row] == "Review & Rating" {
             
             let obj = self.storyboard?.instantiateViewController(withIdentifier: "rating_review_id") as! rating_review
             let navController = UINavigationController(rootViewController: obj)
@@ -470,7 +510,7 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFront(navController, animated: true)
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
             
-    } else if self.arr_customer_title [indexPath.row] == "Logout" {
+    } else if self.arr_customer_title_en [indexPath.row] == "Logout" {
             
             self.validation_before_logout()
         }

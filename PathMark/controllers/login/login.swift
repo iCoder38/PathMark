@@ -73,12 +73,47 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
 //        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "verify_phone_number_id") as? verify_phone_number
 //        self.navigationController?.pushViewController(push!, animated: true)
 
+        // set language
+          // UserDefaults.standard.set("bg", forKey: str_language_convert)
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
          
         self.iAmHereForLocationPermission()
-        
+        self.language_convert()
         self.remember_me()
+        
+    }
+    
+    @objc func language_convert() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.btnSignIn.setTitle("Sign In", for: .normal)
+                cell.lbl_remember_me.text = "Remember me"
+                cell.lbl_login_with_social_media.text = "Login with Social media"
+                cell.btnForgotPassword.setTitle("Forgot password ? - Click here", for: .normal)
+                cell.btnDontHaveAnAccount.setTitle("Not a member? Register Now", for: .normal)
+                cell.lbl_login_to_continue.text = "Login to Continue"
+                
+            } else {
+                cell.btnSignIn.setTitle("সাইন ইন করুন", for: .normal)
+                cell.lbl_remember_me.text = "আমাকে মনে কর"
+                cell.lbl_login_with_social_media.text = "সোশ্যাল মিডিয়া দিয়ে লগইন করুন"
+                cell.btnForgotPassword.setTitle("পাসওয়ার্ড ভুলে গেছেন? - এখানে ক্লিক করুন", for: .normal)
+                cell.btnDontHaveAnAccount.setTitle("সদস্যা নন? এখনই নিবন্ধন করুন", for: .normal)
+                cell.lbl_login_to_continue.text = "চালিয়ে যেতে লগইন করুন"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
     }
     
@@ -235,6 +270,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         }
         
     }
+    
+    
 
     @objc func iAmHereForLocationPermission() {
         // Ask for Authorisation from the User.
@@ -968,6 +1005,11 @@ class login_table_cell: UITableViewCell {
             Utils.buttonStyle(button: btnDontHaveAnAccount, bCornerRadius: 6, bBackgroundColor: .clear, bTitle: "Not a member? Register Now", bTitleColor: UIColor(red: 87.0/255.0, green: 77.0/255.0, blue: 112.0/255.0, alpha: 1))
         }
     }
+    
+    @IBOutlet weak var lbl_remember_me:UILabel!
+    @IBOutlet weak var lbl_login_with_social_media:UILabel!
+    @IBOutlet weak var lbl_login_to_continue:UILabel!
+    // চালিয়ে যেতে লগইন করুন
     
     override func awakeFromNib() {
         super.awakeFromNib()

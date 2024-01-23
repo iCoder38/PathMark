@@ -109,7 +109,17 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
         
         self.view.endEditing(true)
         
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         // let params = main_token(body: get_encrpyt_token)
         let params = payload_verify_OTP(action: "verifyOTP",

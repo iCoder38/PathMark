@@ -18,6 +18,9 @@ class schedule_ride_details: UIViewController {
     var str_total_duration:String! = ""
     var str_total_rupees:String! = ""
     
+    @IBOutlet weak var lbl_total_fare_head:UILabel!
+    @IBOutlet weak var lbl_distance_head:UILabel!
+    
     @IBOutlet weak var view_driver_info:UIView! {
         didSet {
             view_driver_info.backgroundColor = navigation_color
@@ -49,7 +52,17 @@ class schedule_ride_details: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Schedule ride details"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Schedule ride details"
+                } else {
+                    view_navigation_title.text = "শিডিউল রাইডের বিবরণ"
+                }
+                
+                view_navigation_title.textColor = .white
+            }
             view_navigation_title.textColor = .white
         }
     }
@@ -291,8 +304,34 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
         cell.lbl_price_one.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
         cell.lbl_price_two.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["estimatedPrice"]!)"
         
-        
-        
+        // @IBOutlet weak var lbl_total_fare_head:UILabel!
+        // @IBOutlet weak var lbl_distance_head:UILabel!
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.lbl_total_fare.text = "Total fare : "
+                cell.lbl_total.text = "Total : "
+                cell.btn_call.setTitle("Call", for: .normal)
+                cell.btn_cancel.setTitle("Cancel", for: .normal)
+                self.lbl_total_fare_head.text = "TOTAL FARE"
+                self.lbl_distance_head.text = "DISTANCE"
+            } else {
+                cell.lbl_total_fare.text = "মোট ভাড়া : "
+                cell.lbl_total.text = "মোট : "
+                cell.btn_call.setTitle("ড্রাইভারকে", for: .normal)
+                cell.btn_cancel.setTitle("বাতিল", for: .normal)
+                self.lbl_total_fare_head.text = "মোট ভাড়া"
+                self.lbl_distance_head.text = "দূরত্ব"
+            }
+            
+             
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
         // bookingDate = "2024-01-30T00:00:00+0530";
         
@@ -306,9 +345,28 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             inputFormatter.dateFormat = "MM-dd-yyyy"
             let resultString = inputFormatter.string(from: showDate!)
             print(resultString)*/
-            
+            //
             if (self.dict_get_booking_details["bookingTime"] as! String) == "" {
-                cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                    } else {
+                        cell.lbl_time.text = "বুকিংয়ের তারিখ তারিখ এবং : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                    }
+                    
+                     
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
+                
             } else {
                 let fullName    = (self.dict_get_booking_details["bookingTime"] as! String)
                 let fullNameArr = fullName.components(separatedBy: ":")
@@ -319,32 +377,50 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
                 var str_am:String! = "am"
                 var str_pm:String! = "pm"
                 
-                if (hour == "13") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 1:"+minute+str_pm
-                } else if (hour == "14") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 2:"+minute+str_pm
-                } else if (hour == "15") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 3:"+minute+str_pm
-                } else if (hour == "16") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 4:"+minute+str_pm
-                } else if (hour == "17") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 5:"+minute+str_pm
-                } else if (hour == "18") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 6:"+minute+str_pm
-                } else if (hour == "19") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 7:"+minute+str_pm
-                } else if (hour == "20") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 8:"+minute+str_pm
-                } else if (hour == "21") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 9:"+minute+str_pm
-                } else if (hour == "22") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 10:"+minute+str_pm
-                } else if (hour == "23") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 11:"+minute+str_pm
-                } else if (hour == "24") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 12:"+minute+str_pm
+                var booking_date_and_time_text = ""
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        booking_date_and_time_text = "Booking Date and Time"
+                    } else {
+                        booking_date_and_time_text = "বুকিংয়ের তারিখ তারিখ এবং"
+                    }
+                    
+                     
                 } else {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
+                if (hour == "13") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 1:"+minute+str_pm
+                } else if (hour == "14") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 2:"+minute+str_pm
+                } else if (hour == "15") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 3:"+minute+str_pm
+                } else if (hour == "16") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 4:"+minute+str_pm
+                } else if (hour == "17") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 5:"+minute+str_pm
+                } else if (hour == "18") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 6:"+minute+str_pm
+                } else if (hour == "19") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 7:"+minute+str_pm
+                } else if (hour == "20") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 8:"+minute+str_pm
+                } else if (hour == "21") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 9:"+minute+str_pm
+                } else if (hour == "22") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 10:"+minute+str_pm
+                } else if (hour == "23") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 11:"+minute+str_pm
+                } else if (hour == "24") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 12:"+minute+str_pm
+                } else {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
                 }
             }
         } else {
@@ -359,7 +435,27 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
             print(resultString)
             
             if (self.dict_get_booking_details["bookingTime"] as! String) == "" {
-                cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                // cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                    } else {
+                        cell.lbl_time.text = "বুকিংয়ের তারিখ তারিখ এবং : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)
+                    }
+                    
+                     
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
+                
+                
             } else {
                 let fullName    = (self.dict_get_booking_details["bookingTime"] as! String)
                 let fullNameArr = fullName.components(separatedBy: ":")
@@ -370,39 +466,57 @@ extension schedule_ride_details: UITableViewDataSource , UITableViewDelegate {
                 let str_am:String! = "am"
                 let str_pm:String! = "pm"
                 
-                if (hour == "13") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 1:"+minute+str_pm
-                } else if (hour == "14") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 2:"+minute+str_pm
-                } else if (hour == "15") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 3:"+minute+str_pm
-                } else if (hour == "16") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 4:"+minute+str_pm
-                } else if (hour == "17") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 5:"+minute+str_pm
-                } else if (hour == "18") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 6:"+minute+str_pm
-                } else if (hour == "19") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 7:"+minute+str_pm
-                } else if (hour == "20") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 8:"+minute+str_pm
-                } else if (hour == "21") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 9:"+minute+str_pm
-                } else if (hour == "22") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 10:"+minute+str_pm
-                } else if (hour == "23") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 11:"+minute+str_pm
-                } else if (hour == "24") {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | 12:"+minute+str_pm
+                var booking_date_and_time_text = ""
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        booking_date_and_time_text = "Booking Date and Time"
+                    } else {
+                        booking_date_and_time_text = "বুকিংয়ের তারিখ তারিখ এবং"
+                    }
+                    
+                     
                 } else {
-                    cell.lbl_time.text = "Booking Date and Time : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
+                if (hour == "13") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 1:"+minute+str_pm
+                } else if (hour == "14") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 2:"+minute+str_pm
+                } else if (hour == "15") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 3:"+minute+str_pm
+                } else if (hour == "16") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 4:"+minute+str_pm
+                } else if (hour == "17") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 5:"+minute+str_pm
+                } else if (hour == "18") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 6:"+minute+str_pm
+                } else if (hour == "19") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 7:"+minute+str_pm
+                } else if (hour == "20") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 8:"+minute+str_pm
+                } else if (hour == "21") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 9:"+minute+str_pm
+                } else if (hour == "22") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 10:"+minute+str_pm
+                } else if (hour == "23") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 11:"+minute+str_pm
+                } else if (hour == "24") {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | 12:"+minute+str_pm
+                } else {
+                    cell.lbl_time.text = "\(booking_date_and_time_text) : "+String(resultString)+" | "+(self.dict_get_booking_details["bookingTime"] as! String)+str_am
                 }
             }
         }
         
         
         
-        
+         
         
         if (self.str_from_history == "yes") {
             cell.lbl_driver_name.text = (self.dict_get_booking_details["fullName"] as! String)
@@ -732,6 +846,9 @@ class schedule_ride_details_table_cell: UITableViewCell {
     
     @IBOutlet weak var lbl_driver_name:UILabel!
     
+    @IBOutlet weak var lbl_total_fare:UILabel!
+    @IBOutlet weak var lbl_total:UILabel!
+    
     @IBOutlet weak var btn_call:UIButton! {
         didSet {
             btn_call.layer.cornerRadius = 12
@@ -750,6 +867,8 @@ class schedule_ride_details_table_cell: UITableViewCell {
             btn_cancel.tintColor = .systemRed
         }
     }
+    
+    
     
     @IBOutlet weak var lbl_price_one:UILabel!
     @IBOutlet weak var lbl_price_two:UILabel! {

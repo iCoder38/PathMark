@@ -14,8 +14,8 @@
             filePath = "PathMark/controllers/edit_profile/edit_profile.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "399"
-            endingLineNumber = "399"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
             landmarkName = "sign_up_WB(str_show_loader:)"
             landmarkType = "7">
             <Locations>
@@ -65,22 +65,6 @@
                   offsetFromSymbolStart = "7016">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "66AE8729-9D9D-461E-A35E-4ADE5AF92E1F"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/add_address/add_address.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -141,9 +125,9 @@
             filePath = "PathMark/controllers/third_party/side_bar_menu/MenuControllerVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "520"
-            endingLineNumber = "520"
-            landmarkName = "logoutWB(str_show_loader:)"
+            startingLineNumber = "550"
+            endingLineNumber = "550"
+            landmarkName = "validation_before_logout()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -204,13 +188,13 @@
             filePath = "PathMark/controllers/login/login.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "737"
-            endingLineNumber = "737"
+            startingLineNumber = "774"
+            endingLineNumber = "774"
             landmarkName = "social_login_via_apple_one(social_id:email:name:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 3945b23c749ad2e"
+                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 3945b23c749b68a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -220,12 +204,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "738"
-                  endingLineNumber = "738"
+                  startingLineNumber = "774"
+                  endingLineNumber = "774"
                   offsetFromSymbolStart = "1812">
                </Location>
                <Location
-                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 2f1a5874f9407dff"
+                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 2f1a5874f940665b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -235,12 +219,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "738"
-                  endingLineNumber = "738"
+                  startingLineNumber = "774"
+                  endingLineNumber = "774"
                   offsetFromSymbolStart = "476">
                </Location>
                <Location
-                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 3945b23c749ad4f"
+                  uuid = "643C2861-8BFD-4FC3-858F-5E7F26409394 - 3945b23c749b68a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -250,8 +234,8 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "737"
-                  endingLineNumber = "737"
+                  startingLineNumber = "774"
+                  endingLineNumber = "774"
                   offsetFromSymbolStart = "1456">
                </Location>
             </Locations>
@@ -267,10 +251,57 @@
             filePath = "PathMark/controllers/add_address/add_address.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "538"
-            endingLineNumber = "538"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
             landmarkName = "add_address_WB(str_show_loader:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "153AD0E9-7391-4A88-8883-CEB020BF304A - 30faa5c9b765ea00"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.add_address.add_address_WB(str_show_loader: Swift.String) -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "601"
+                  endingLineNumber = "601"
+                  offsetFromSymbolStart = "2672">
+               </Location>
+               <Location
+                  uuid = "153AD0E9-7391-4A88-8883-CEB020BF304A - 30faa5c9b765eaa3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.add_address.add_address_WB(str_show_loader: Swift.String) -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "598"
+                  endingLineNumber = "598"
+                  offsetFromSymbolStart = "2624">
+               </Location>
+               <Location
+                  uuid = "153AD0E9-7391-4A88-8883-CEB020BF304A - 30faa5c9b765eaa3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.add_address.add_address_WB(str_show_loader: Swift.String) -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "598"
+                  endingLineNumber = "598"
+                  offsetFromSymbolStart = "2636">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -283,10 +314,87 @@
             filePath = "PathMark/controllers/add_address/add_address.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "561"
-            endingLineNumber = "561"
+            startingLineNumber = "621"
+            endingLineNumber = "621"
             landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "723A726C-81FA-438B-99C0-2C453F01610D - 417190e04277cb29"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "622"
+                  endingLineNumber = "622"
+                  offsetFromSymbolStart = "736">
+               </Location>
+               <Location
+                  uuid = "723A726C-81FA-438B-99C0-2C453F01610D - 417190e04277cb29"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "622"
+                  endingLineNumber = "622"
+                  offsetFromSymbolStart = "1128">
+               </Location>
+               <Location
+                  uuid = "723A726C-81FA-438B-99C0-2C453F01610D - 417190e04277cbc6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "621"
+                  endingLineNumber = "621"
+                  offsetFromSymbolStart = "160">
+               </Location>
+               <Location
+                  uuid = "723A726C-81FA-438B-99C0-2C453F01610D - 417190e04277cbc6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "621"
+                  endingLineNumber = "621"
+                  offsetFromSymbolStart = "568">
+               </Location>
+               <Location
+                  uuid = "723A726C-81FA-438B-99C0-2C453F01610D - 417190e04277cbc6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "621"
+                  endingLineNumber = "621"
+                  offsetFromSymbolStart = "608">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -299,10 +407,72 @@
             filePath = "PathMark/controllers/add_address/add_address.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "576"
-            endingLineNumber = "576"
+            startingLineNumber = "636"
+            endingLineNumber = "636"
             landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "052365EB-EE97-4840-BE18-044D56345402 - 417190e04277c9d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "637"
+                  endingLineNumber = "637"
+                  offsetFromSymbolStart = "2752">
+               </Location>
+               <Location
+                  uuid = "052365EB-EE97-4840-BE18-044D56345402 - db49075a494801bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "637"
+                  endingLineNumber = "637"
+                  offsetFromSymbolStart = "436">
+               </Location>
+               <Location
+                  uuid = "052365EB-EE97-4840-BE18-044D56345402 - 417190e04277c9d6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "637"
+                  endingLineNumber = "637"
+                  offsetFromSymbolStart = "2376">
+               </Location>
+               <Location
+                  uuid = "052365EB-EE97-4840-BE18-044D56345402 - 417190e04277c9f7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "PathMark.add_address.login_refresh_token_wb() -&gt; ()"
+                  moduleName = "PathMark"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/add_address/add_address.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "636"
+                  endingLineNumber = "636"
+                  offsetFromSymbolStart = "2376">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -315,13 +485,13 @@
             filePath = "PathMark/controllers/login/login.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "647"
-            endingLineNumber = "647"
+            startingLineNumber = "684"
+            endingLineNumber = "684"
             landmarkName = "social_login_via_apple_two(social_id:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - a797165213519480"
+                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - a797165213519864"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -331,12 +501,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "648"
-                  endingLineNumber = "648"
+                  startingLineNumber = "684"
+                  endingLineNumber = "684"
                   offsetFromSymbolStart = "1468">
                </Location>
                <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - ff2d59fb37ad93b1"
+                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - ff2d59fb37ad9f55"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -346,12 +516,12 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "648"
-                  endingLineNumber = "648"
+                  startingLineNumber = "684"
+                  endingLineNumber = "684"
                   offsetFromSymbolStart = "444">
                </Location>
                <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - a7971652135194a1"
+                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - a797165213519864"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -361,8 +531,8 @@
                   urlString = "file:///Users/dishantrajput/Documents/evs_2022/PathMark/PathMark/controllers/login/login.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "647"
-                  endingLineNumber = "647"
+                  startingLineNumber = "684"
+                  endingLineNumber = "684"
                   offsetFromSymbolStart = "1112">
                </Location>
             </Locations>

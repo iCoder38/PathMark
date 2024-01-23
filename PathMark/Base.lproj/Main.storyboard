@@ -275,6 +275,9 @@
                                             <outlet property="btn_facebook" destination="FUh-2p-l6e" id="ce8-m5-GYY"/>
                                             <outlet property="btn_google" destination="He1-i6-a4d" id="lC2-EH-KfK"/>
                                             <outlet property="btn_remember_me" destination="1Lg-Hu-Tax" id="F4h-Bb-drn"/>
+                                            <outlet property="lbl_login_to_continue" destination="PPw-e5-pTo" id="W0U-ml-J74"/>
+                                            <outlet property="lbl_login_with_social_media" destination="Sh4-7I-Cew" id="tIR-gn-8E9"/>
+                                            <outlet property="lbl_remember_me" destination="Xf5-T3-4NN" id="hES-GK-jOE"/>
                                             <outlet property="txtEmailAddress" destination="rlq-dl-4m8" id="i7x-sL-Uw7"/>
                                             <outlet property="view_apple" destination="dkt-1P-cDj" id="dZA-h7-T62"/>
                                         </connections>
@@ -840,6 +843,8 @@
                                             <outlet property="btn_schedule_a_ride_now" destination="r7J-Nm-jZC" id="s1C-jl-p8X"/>
                                             <outlet property="collectionView" destination="Xar-yq-rD7" id="xie-Sq-4AB"/>
                                             <outlet property="lbl_my_full_address" destination="rLy-jK-UhJ" id="ZEP-Be-1pj"/>
+                                            <outlet property="lbl_select_vehicle" destination="UkR-eP-Vjc" id="IBt-QD-57y"/>
+                                            <outlet property="lbl_set_ride_location" destination="enb-Oy-ZJe" id="iOh-kE-bIF"/>
                                             <outlet property="page_control" destination="gOq-RS-ber" id="BKD-xt-DSG"/>
                                             <outlet property="view_select_vehicle" destination="dCm-nS-kcV" id="RQl-cg-P7n"/>
                                             <outlet property="view_set_name" destination="Pnm-Ei-adJ" id="wVs-DC-J9Z"/>
@@ -2125,6 +2130,8 @@
                         <outlet property="btn_back" destination="UNw-HC-fLc" id="JLA-EX-h2D"/>
                         <outlet property="btn_save" destination="OJz-qN-5gN" id="ZUC-Bg-5pL"/>
                         <outlet property="btn_submit" destination="IEr-Tp-aXP" id="FMh-xM-oDp"/>
+                        <outlet property="lbl_complete_address" destination="284-yC-ZQh" id="YW4-TA-wxV"/>
+                        <outlet property="lbl_save_as" destination="1PW-i2-MDO" id="SOH-QK-QcZ"/>
                         <outlet property="txt_house_number" destination="kIM-Kk-oCt" id="Xah-LS-bnI"/>
                         <outlet property="txt_save_as" destination="rRp-jG-fEe" id="WwZ-1r-O9q"/>
                         <outlet property="view_navigation_bar" destination="BLn-Y5-Hr8" id="Sfs-MR-Hrz"/>
@@ -5277,6 +5284,8 @@
                                             <outlet property="lbl_price_two" destination="Bwi-9c-aQf" id="RQN-vf-gvN"/>
                                             <outlet property="lbl_time" destination="CxZ-H3-Tjk" id="1cQ-fb-Pyl"/>
                                             <outlet property="lbl_to" destination="aMd-1c-zlE" id="gfA-p4-ANh"/>
+                                            <outlet property="lbl_total" destination="2Yw-Fw-5VL" id="kgm-OQ-9ew"/>
+                                            <outlet property="lbl_total_fare" destination="lAZ-1m-byW" id="F4o-70-tJP"/>
                                             <outlet property="view_driver_info" destination="ILx-7o-iBk" id="SLR-ec-soZ"/>
                                             <outlet property="view_fare" destination="sAm-ej-Yoe" id="Xu8-a1-qa0"/>
                                             <outlet property="view_from_to" destination="UNf-Wk-zvd" id="qFH-Fu-qGh"/>
@@ -5377,7 +5386,9 @@
                     <connections>
                         <outlet property="btn_home" destination="3Mb-zq-9n8" id="SaV-zC-wcl"/>
                         <outlet property="lbl_distance" destination="jCl-0v-zbJ" id="ptM-8I-8pC"/>
+                        <outlet property="lbl_distance_head" destination="oVP-Gz-Ieu" id="AnF-OH-ASf"/>
                         <outlet property="lbl_price" destination="1Tr-q4-IwM" id="W5t-ra-DlY"/>
+                        <outlet property="lbl_total_fare_head" destination="j3e-o9-gJA" id="lvG-Ud-UQd"/>
                         <outlet property="tbleView" destination="8vk-GF-tnR" id="RpG-aE-RvX"/>
                         <outlet property="view_driver_info" destination="veq-nH-UJD" id="Y7g-6b-aLp"/>
                         <outlet property="view_navigation_bar" destination="MpY-H8-1hc" id="Pq9-ci-QMr"/>

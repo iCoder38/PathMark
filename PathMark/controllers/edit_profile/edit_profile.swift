@@ -48,8 +48,17 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Edit Profile"
-            view_navigation_title.textColor = .white
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Edit Profile"
+                } else {
+                    view_navigation_title.text = "প্রোফাইল আপডেট করুন"
+                }
+                
+                view_navigation_title.textColor = .white
+            }
         }
     }
     
@@ -104,7 +113,17 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
         
         self.view.endEditing(true)
         
-        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         
         let params = payload_country_list(action: "countrylist")
         
@@ -252,7 +271,17 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
                 let x : Int = person["userId"] as! Int
                 let myString = String(x)
                 // self.show_loading_UI()
-                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
                 
                 //Set Your URL
                 let api_url = application_base_url
@@ -594,7 +623,17 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
         let cell = self.tbleView.cellForRow(at: indexPath) as! edit_profile_table_cell
         
         if (str_show_loader == "yes") {
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
         }
         
         self.view.endEditing(true)
@@ -912,6 +951,24 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         cell.img_upload.isUserInteractionEnabled = true
         cell.img_upload.addGestureRecognizer(tapGestureRecognizer)
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                cell.btnSignUp.setTitle("Submit", for: .normal)
+                
+            } else {
+                cell.btnSignUp.setTitle("জমা দিন", for: .normal)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
         return cell
     }

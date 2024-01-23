@@ -43,10 +43,28 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "ADD ADDRESS"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Add address"
+                } else {
+                    view_navigation_title.text = "নতুন ঠিকানা যোগ করুন"
+                }
+                
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
             view_navigation_title.textColor = .white
         }
     }
+    
+    @IBOutlet weak var lbl_complete_address:UILabel!
+    @IBOutlet weak var lbl_save_as:UILabel!
     
     @IBOutlet weak var lbl_current_address:UILabel!
     
@@ -139,9 +157,51 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         self.btn_submit.addTarget(self, action: #selector(validate_before_submit), for: .touchUpInside)
         self.btnCompleteAddress.addTarget(self, action: #selector(map_view_click_method), for: .touchUpInside)
         
+        // @IBOutlet weak var lbl_complete_address:UILabel!
+        // @IBOutlet weak var lbl_save_as:UILabel!
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                self.lbl_complete_address.text = "Complete address"
+                self.lbl_save_as.text = "Save as"
+                
+            } else {
+                
+                self.lbl_complete_address.text = "সম্পূর্ণ ঠিকানা"
+                self.lbl_save_as.text = "সংরক্ষণ করুন"
+                
+            }
+            
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
         if (self.dict_address == nil) {
             print("add contact")
-            self.view_navigation_title.text = "NEW ADDRESS"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    self.view_navigation_title.text = "NEW ADDRESS"
+                    self.btn_submit.setTitle("SAVE ADDRESS", for: .normal)
+                } else {
+                    self.view_navigation_title.text = "নতুন ঠিকানা যোগ করুন"
+                    self.btn_submit.setTitle("ঠিকানা সংরক্ষণ করুন", for: .normal)
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
             
         } else {
             print("edit contact")
