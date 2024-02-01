@@ -176,7 +176,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
         
         self.view.endEditing(true)
         
-        if (self.str_user_select_image == "0") {
+        /*if (self.str_user_select_image == "0") {
             
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please upload Profile Picture"), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -184,7 +184,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             self.present(alert, animated: true)
             
             return
-        }
+        }*/
         
         
         
@@ -220,7 +220,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             return
             
-        }  else if (cell.txt_address.text! == "") {
+        }/*  else if (cell.txt_address.text! == "") {
             
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter address"), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -230,7 +230,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             return
             
-        }  else if (cell.txtPassword.text! == "") {
+        }*/  else if (cell.txtPassword.text! == "") {
             
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter password"), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -270,7 +270,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             return
             
-        } else if (cell.txt_phone_number.text!.count != 10) {
+        }/* else if (cell.txt_phone_number.text!.count != 10) {
             
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -280,9 +280,9 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             return
             
-        } else {
+        } */else {
             
-            if (cell.txt_phone_number.text!.count == 10) {
+            /*if (cell.txt_phone_number.text!.count == 10) {
                 
                 if (self.arr_country_array == nil) {
                     phone_number_code = "+880"
@@ -303,7 +303,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                     }
                 }
                 
-            }  else if (cell.txt_phone_number.text!.count == 11) {
+            }  else */if (cell.txt_phone_number.text!.count == 11) {
                 
                 if (self.arr_country_array == nil) {
                     phone_number_code = "+880"
@@ -335,33 +335,152 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                 
             }
             
-            
-           
-            
-            
         }
         
         // self.show_loading_UI()
-         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
-                }
-                
-             
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+            } else {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
             }
-        
-        //Set Your URL
-        let api_url = application_base_url
-        guard let url = URL(string: api_url) else {
-            return
+            
+            
         }
         
-        // if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
-            // print(token_id_is as Any)
+        
+        if (self.str_user_select_image == "0") {
+             
+            var str_device_token:String! = ""
+            
+            if let device_token = UserDefaults.standard.string(forKey: "key_my_device_token") {
+                
+                str_device_token = String(device_token)
+            }
+            
+            // self.show_loading_UI()
+            
+            
+            
+            
+            
+            var parameters:Dictionary<AnyHashable, Any>!
+  
+                parameters = [
+                    "action"        : "registration",
+                    "fullName"      : String(cell.txt_full_name.text!),
+                    "email"         : String(cell.txtEmailAddress.text!),
+                    "countryCode"   : String(phone_number_code),
+                    "contactNumber" : String(cell.txt_phone_number.text!),
+                    "password"      : String(cell.txtPassword.text!),
+                    "countryName"   : String(cell.txt_country.text!),
+                   
+                    "countryId"     : String(self.str_country_id),
+                    "role"          : String("Member"),
+                    // "address"  : String(""),
+                    "longitude"     : String(""),
+                    "device"        : String(""),
+                    "deviceToken"   : String(str_device_token),
+                ]
+            
+            
+            
+            
+            
+    //        }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if (JSON["status"] as! String) == "success" {
+                            print("yes")
+                            
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(dict, forKey: str_save_login_user_data)
+                            
+                            // save email and password
+                            let custom_email_pass = ["email"    : cell.txtEmailAddress.text!,
+                                                     "password" : cell.txtPassword.text!]
+                            
+                            UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                            
+                            let alert = NewYorkAlertController(title: String("Success").uppercased(), message: (JSON["msg"] as! String), style: .alert)
+                            let cancel = NewYorkButton(title: "Ok", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                            // self.hide_loading_UI()
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            self.navigationController?.popViewController(animated: true)
+                            
+                        } else if (JSON["status"] as! String) == "Success" {
+                            print("yes")
+                            
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(dict, forKey: str_save_login_user_data)
+                            
+                            // save email and password
+                            let custom_email_pass = ["email"    : cell.txtEmailAddress.text!,
+                                                     "password" : cell.txtPassword.text!]
+                            
+                            UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                            
+                            let alert = NewYorkAlertController(title: String("Success").uppercased(), message: (JSON["msg"] as! String), style: .alert)
+                            let cancel = NewYorkButton(title: "Ok", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                            // self.hide_loading_UI()
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            self.navigationController?.popViewController(animated: true)
+                            
+                        } else {
+                            let alert = NewYorkAlertController(title: String("Success").uppercased(), message: (JSON["msg"] as! String), style: .alert)
+                            let cancel = NewYorkButton(title: "Ok", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    self.hide_loading_UI()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        } else {
+            
+            //Set Your URL
+            let api_url = application_base_url
+            guard let url = URL(string: api_url) else {
+                return
+            }
             
             var urlRequest = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 10.0 * 1000)
             urlRequest.httpMethod = "POST"
@@ -390,7 +509,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             parameterDict.setValue(String(self.str_country_id), forKey: "countryId")
             parameterDict.setValue("Member", forKey: "role")
             
-            parameterDict.setValue(String(cell.txt_address.text!), forKey: "address")
+            // parameterDict.setValue(String(cell.txt_address.text!), forKey: "address")
             parameterDict.setValue("", forKey: "latitude")
             parameterDict.setValue("", forKey: "longitude")
             parameterDict.setValue("iOS", forKey: "device")
@@ -512,8 +631,15 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                 }
                 
             })
+        }
+        
         // }
     }
+    
+    @objc func upload_sign_up_data_without_image() {
+        
+    }
+    
     
     @objc func alert_warning () {
         
@@ -719,9 +845,9 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         
         cell.txtEmailAddress.delegate = self
         cell.txtPassword.delegate = self
-        cell.txt_address.delegate = self
+        // cell.txt_address.delegate = self
         cell.txt_full_name.delegate = self
-        cell.txt_address.delegate = self
+         
         cell.txt_phone_number.delegate = self
         // cell.txt_nid_number.delegate = self
         
@@ -830,9 +956,9 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
                                   tfAppearance: .dark,
                                   tfKeyboardType: .numberPad,
                                   tfBackgroundColor: .white,
-                                  tfPlaceholderText: "ফোন নম্বর")
+                                  tfPlaceholderText: "Phone number")
                 
-                Utils.textFieldUI(textField: cell.txt_address,
+                /*Utils.textFieldUI(textField: cell.txt_address,
                                   tfName: cell.txt_address.text!,
                                   tfCornerRadius: 12,
                                   tfpadding: 20,
@@ -841,7 +967,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
                                   tfAppearance: .dark,
                                   tfKeyboardType: .default,
                                   tfBackgroundColor: .white,
-                                  tfPlaceholderText: "Address")
+                                  tfPlaceholderText: "Address")*/
                 
                 
             } else {
@@ -926,7 +1052,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
                                   tfBackgroundColor: .white,
                                   tfPlaceholderText: "ফোন নম্বর")
                 
-                Utils.textFieldUI(textField: cell.txt_address,
+                /*Utils.textFieldUI(textField: cell.txt_address,
                                   tfName: cell.txt_address.text!,
                                   tfCornerRadius: 12,
                                   tfpadding: 20,
@@ -935,7 +1061,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
                                   tfAppearance: .dark,
                                   tfKeyboardType: .default,
                                   tfBackgroundColor: .white,
-                                  tfPlaceholderText: "ঠিকানা")
+                                  tfPlaceholderText: "ঠিকানা")*/
                 
             }
             
@@ -959,11 +1085,11 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
             UserDefaults.standard.set(nil, forKey: "key_accept_term")
             
             // cell.btn_accept_terms.tag = 1
-            cell.btn_accept_terms.setImage(UIImage(named: "check"), for: .normal)
+            cell.btn_accept_terms.setImage(UIImage(named: "rem"), for: .normal)
             cell.btnSignUp.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1)
             cell.btnSignUp.isUserInteractionEnabled = true
         } else {
-            cell.btn_accept_terms.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
             // cell.btn_accept_terms.tag = 0
             cell.btnSignUp.backgroundColor = .lightGray
             cell.btnSignUp.isUserInteractionEnabled = false
@@ -991,7 +1117,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         
         if cell.btn_accept_terms.tag == 1 {
             
-            cell.btn_accept_terms.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
             cell.btn_accept_terms.tag = 0
             cell.btnSignUp.backgroundColor = .lightGray
             cell.btnSignUp.isUserInteractionEnabled = false
@@ -999,7 +1125,7 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
         } else {
             
             cell.btn_accept_terms.tag = 1
-            cell.btn_accept_terms.setImage(UIImage(named: "check"), for: .normal)
+            cell.btn_accept_terms.setImage(UIImage(named: "rem"), for: .normal)
             cell.btnSignUp.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1)
             cell.btnSignUp.isUserInteractionEnabled = true
             
@@ -1194,7 +1320,7 @@ class sign_up_table_cell: UITableViewCell {
         }
     }*/
     
-    @IBOutlet weak var txt_address:UITextField! {
+    /*@IBOutlet weak var txt_address:UITextField! {
         didSet {
            
             
@@ -1205,14 +1331,14 @@ class sign_up_table_cell: UITableViewCell {
             txt_address.layer.shadowRadius = 2
             
         }
-    }
+    }*/
     
     
     @IBOutlet weak var btn_accept_terms:UIButton! {
         didSet {
             btn_accept_terms.backgroundColor = .clear
             btn_accept_terms.tag = 0
-            btn_accept_terms.setImage(UIImage(named: "un_check"), for: .normal)
+            btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
         }
     }
     

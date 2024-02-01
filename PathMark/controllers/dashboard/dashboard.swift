@@ -28,6 +28,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
+    var str_selected_language_is:String!
+    
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
             view_navigation_bar.backgroundColor = navigation_color
@@ -77,6 +79,22 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
         self.tbleView.delegate = self
         self.tbleView.dataSource = self
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                self.str_selected_language_is = "en"
+            } else {
+                self.str_selected_language_is = "bn"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            self.str_selected_language_is = "en"
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
         // location
         self.iAmHereForLocationPermission()
@@ -554,7 +572,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                  ]
                 
                 parameters = [
-                    "action"        : "couponlist",
+                    "action"    : "couponlist",
+                    "language"  :String(self.str_selected_language_is)
                 ]
                 
                 print(parameters as Any)
@@ -587,22 +606,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             
                             ERProgressHud.sharedInstance.hide()
                             self.dismiss(animated: true)
-                            
-                            /*let defaults = UserDefaults.standard
-                            defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
-                            
-                            let str_token = (JSON["AuthToken"] as! String)
-                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
-                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
-                            
-                            ERProgressHud.sharedInstance.hide()
-                            self.dismiss(animated: true)*/
-                            
-                            
-                                    /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
-                                    self.navigationController?.pushViewController(push!, animated: true)*/
-                            
-                            
+                           
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
                             
@@ -715,7 +719,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
             print(language as Any)
             
             if (language == "en") {
-                
+                self.str_selected_language_is = "en"
                 cell.lbl_set_ride_location.text = "Set ride location"
                 cell.lbl_select_vehicle.text = "Select vehicle"
                 cell.btn_book_a_ride_now.setTitle("BOOK A RIDE NOW", for: .normal)
@@ -726,6 +730,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
                 cell.lbl_select_vehicle.text = "বাহন নির্বাচন করুন"
                 cell.btn_book_a_ride_now.setTitle("এখনই রাইড বুক করুন", for: .normal)
                 cell.btn_schedule_a_ride_now.setTitle("রাইডের সময়সুচী নির্ধারণ করুন", for: .normal)
+                self.str_selected_language_is = "bn"
             }
             
             
@@ -733,6 +738,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
             print("=============================")
             print("LOGIN : Select language error")
             print("=============================")
+            self.str_selected_language_is = "en"
             UserDefaults.standard.set("en", forKey: str_language_convert)
         }
         

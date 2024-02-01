@@ -26,7 +26,26 @@ class address_list: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "ADDRESS LIST"
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    
+                    view_navigation_title.text = "ADDRESSES LIST"
+                    
+                } else {
+                    view_navigation_title.text = "ঠিকানার তালিকা"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
             view_navigation_title.textColor = .white
         }
     }
@@ -39,6 +58,19 @@ class address_list: UIViewController {
         super.viewDidLoad()
         self.tbleView.separatorColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                btn_add.setTitle("+ add", for: .normal)
+            } else {
+                btn_add.setTitle("+ যোগ করুন", for: .normal)
+            }
+            
+            
+        }
         
         self.sideBarMenuClick()
 
@@ -319,42 +351,91 @@ extension address_list: UITableViewDataSource , UITableViewDelegate {
     
     @objc func setting_click_method(_ sender:UIButton) {
 
-        let item = self.arr_address_list[sender.tag] as? [String:Any]
-        
-        let alertController = UIAlertController(title: "Settings", message: "", preferredStyle: .actionSheet)
-        
-        let delete_contact = UIAlertAction(title: "Delete address", style: .destructive) {
-            UIAlertAction in
-            NSLog("OK Pressed")
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
             
-            
-             self.delete_address(address_id: "\(item!["addressId"]!)" )
-        }
-        
-        let Edit_contact = UIAlertAction(title: "Edit address", style: .default) {
-            UIAlertAction in
-            NSLog("OK Pressed")
+            if (language == "en") {
+                
+                let item = self.arr_address_list[sender.tag] as? [String:Any]
+                
+                let alertController = UIAlertController(title: "Settings", message: "", preferredStyle: .actionSheet)
+                
+                let delete_contact = UIAlertAction(title: "Delete address", style: .destructive) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    
+                    
+                     self.delete_address(address_id: "\(item!["addressId"]!)" )
+                }
+                
+                let Edit_contact = UIAlertAction(title: "Edit address", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
 
-            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id") as? add_address
-            
-            push!.dict_address = (item! as NSDictionary)
-            
-            self.navigationController?.pushViewController(push!, animated: true)
-            
-        }
-         
-        
-        let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-        }
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id") as? add_address
+                    
+                    push!.dict_address = (item! as NSDictionary)
+                    
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                }
+                 
+                
+                let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                }
 
-         
-        alertController.addAction(Edit_contact)
-        alertController.addAction(delete_contact)
-        alertController.addAction(dismiss)
+                 
+                alertController.addAction(Edit_contact)
+                alertController.addAction(delete_contact)
+                alertController.addAction(dismiss)
+                
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                let item = self.arr_address_list[sender.tag] as? [String:Any]
+                
+                let alertController = UIAlertController(title: "সেটিংস", message: "", preferredStyle: .actionSheet)
+                
+                let delete_contact = UIAlertAction(title: "ঠিকানা মুছুন", style: .destructive) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    
+                    
+                     self.delete_address(address_id: "\(item!["addressId"]!)" )
+                }
+                
+                let Edit_contact = UIAlertAction(title: "ঠিকানা সম্পাদনা করুন", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "add_address_id") as? add_address
+                    
+                    push!.dict_address = (item! as NSDictionary)
+                    
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                }
+                 
+                
+                let dismiss = UIAlertAction(title: "খারিজ", style: .cancel) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                }
+
+                 
+                alertController.addAction(Edit_contact)
+                alertController.addAction(delete_contact)
+                alertController.addAction(dismiss)
+                
+                self.present(alertController, animated: true, completion: nil)
+            }
+            
+            
+        }
         
-        self.present(alertController, animated: true, completion: nil)
+        
+        
 
     }
     

@@ -82,6 +82,20 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20 , height: txt_house_number.frame.height))
             txt_house_number.leftView = paddingView
             txt_house_number.leftViewMode = UITextField.ViewMode.always
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    
+                    txt_house_number.placeholder = "House No. / Flat No. Building"
+                } else {
+                    txt_house_number.placeholder = "বাড়ি নং / ফ্ল্যাট নং বিল্ডিং"
+                }
+                
+                
+            }
+            
         }
     }
     
@@ -165,12 +179,12 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             
             if (language == "en") {
                 
-                self.lbl_complete_address.text = "Complete address"
+                self.lbl_complete_address.text = "Enter location"
                 self.lbl_save_as.text = "Save as"
                 
             } else {
                 
-                self.lbl_complete_address.text = "সম্পূর্ণ ঠিকানা"
+                self.lbl_complete_address.text = "অবস্থান লিখুন"
                 self.lbl_save_as.text = "সংরক্ষণ করুন"
                 
             }
@@ -260,41 +274,86 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     }
     
     @objc func save_as_click_method() {
-         
-        let alertController = UIAlertController(title: "Save as", message: "", preferredStyle: .actionSheet)
-         
-        let home = UIAlertAction(title: "Home", style: .default) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-            self.txt_save_as.text = "Home"
-        }
         
-        let work = UIAlertAction(title: "Work", style: .default) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-            self.txt_save_as.text = "Work"
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                let alertController = UIAlertController(title: "Save as", message: "", preferredStyle: .actionSheet)
+                
+                let home = UIAlertAction(title: "Home", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Home"
+                }
+                
+                let work = UIAlertAction(title: "Work", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Work"
+                    
+                }
+                
+                let other = UIAlertAction(title: "Other", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Other"
+                    
+                }
+                
+                let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                }
+                
+                alertController.addAction(home)
+                alertController.addAction(work)
+                alertController.addAction(other)
+                alertController.addAction(dismiss)
+                
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                let alertController = UIAlertController(title: "সংরক্ষণ করুন", message: "", preferredStyle: .actionSheet)
+                
+                let home = UIAlertAction(title: "বাড়ি", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Home"
+                }
+                
+                let work = UIAlertAction(title: "কাজ", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Work"
+                    
+                }
+                
+                let other = UIAlertAction(title: "অন্যান্য", style: .default) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                    self.txt_save_as.text = "Other"
+                    
+                }
+                
+                let dismiss = UIAlertAction(title: "খারিজ", style: .cancel) {
+                    UIAlertAction in
+                    NSLog("OK Pressed")
+                }
+                
+                alertController.addAction(home)
+                alertController.addAction(work)
+                alertController.addAction(other)
+                alertController.addAction(dismiss)
+                
+                self.present(alertController, animated: true, completion: nil)
+            }
+            
             
         }
         
-        let other = UIAlertAction(title: "Other", style: .default) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-            self.txt_save_as.text = "Other"
-            
-        }
         
-        let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
-            UIAlertAction in
-            NSLog("OK Pressed")
-        }
-
-        alertController.addAction(home)
-        alertController.addAction(work)
-        alertController.addAction(other)
-        alertController.addAction(dismiss)
         
-        self.present(alertController, animated: true, completion: nil)
-
     }
     
     @objc func iAmHereForLocationPermission() {

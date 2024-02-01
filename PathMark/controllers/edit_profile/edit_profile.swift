@@ -607,10 +607,27 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
     }
     
     @objc func sign_up_click_method() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! edit_profile_table_cell
         
         if (self.str_user_select_image != "1") {
             // Image
-            self.edit_without_image(str_show_loader: "yes")
+            
+            if (cell.txt_phone_number.text!.count != 11) {
+                
+                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
+                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                alert.addButtons([cancel])
+                self.present(alert, animated: true)
+                ERProgressHud.sharedInstance.hide()
+
+                return
+                
+            } else {
+                self.edit_without_image(str_show_loader: "yes")
+            }
+            
+            
         } else {
             self.sign_up_WB(str_show_loader: "yes")
         }
@@ -872,6 +889,34 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
         self.str_user_select_image = "1"
     }
     
+    
+    
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! edit_profile_table_cell
+
+        
+        if (textField == cell.txt_phone_number) {
+            
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+
+            // make sure the result is under 16 characters
+            return updatedText.count <= 11
+            
+        
+        }
+        return true
+        
+    }
+    
+    
+    
+    
 }
 
 extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
@@ -896,7 +941,7 @@ extension edit_profile: UITableViewDataSource  , UITableViewDelegate {
         cell.txtEmailAddress.delegate = self
         cell.txt_full_name.delegate = self
         
-        // cell.txtPassword.delegate = self
+         cell.txt_phone_number.delegate = self
         // cell.txt_address.delegate = self
         // cell.txt_address.delegate = self
         // cell.txt_nid_number.delegate = self

@@ -76,6 +76,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var set_new_lat:Double!
     var set_new_long:Double!
     
+    var str_selected_language_is:String!
+    
     @IBOutlet weak var search_text_field:UISearchTextField!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
@@ -147,7 +149,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     @IBOutlet weak var btn_search:UIButton! {
         didSet {
-            btn_search.setTitle("recent", for: .normal)
+            
         }
     }
     
@@ -231,9 +233,50 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.btnBack.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
         if (self.str_user_option == "schedule") {
-            self.btnRideNow.setTitle("Continue to Book", for: .normal)
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    self.btnRideNow.setTitle("Continue to Book", for: .normal)
+                    self.btn_search.setTitle("recent", for: .normal)
+                    self.str_selected_language_is = "en"
+                } else {
+                    self.btnRideNow.setTitle("বুকিং চালিয়ে যান", for: .normal)
+                    self.btn_search.setTitle("বর্তমান", for: .normal)
+                    self.str_selected_language_is = "bn"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                self.str_selected_language_is = "en"
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
         } else {
-            self.btnRideNow.setTitle("Ride now", for: .normal)
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    self.btnRideNow.setTitle("Ride now", for: .normal)
+                    self.btn_search.setTitle("recent", for: .normal)
+                    self.str_selected_language_is = "en"
+                } else {
+                    self.btnRideNow.setTitle("এখনই রাইড নিন", for: .normal)
+                    self.btn_search.setTitle("বর্তমান", for: .normal)
+                    self.str_selected_language_is = "bn"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                self.str_selected_language_is = "en"
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
         }
         
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
@@ -444,7 +487,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             // UserDefaults.standard.set(self.lbl_location_from.text, forKey: "key_save_full_address_for_map_search")
             
             //
-            // self.find_driver_WB()
+             // self.find_driver_WB()
         })
         
     }
@@ -530,7 +573,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                     "userId"    : String(myString),
                     "latitude"  : String(self.strSaveLatitude),
                     "longitude" : String(self.strSaveLongitude),
-                   
+                    "language"  : String(self.str_selected_language_is)
                     
                 ]
                 
@@ -709,7 +752,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         // let params = main_token(body: get_encrpyt_token)
         let params = payload_vehicle_list(action: "category",
-                                          TYPE: String(self.str_user_select_vehicle))
+                                          TYPE: String(self.str_user_select_vehicle),
+                                          language:String(self.str_selected_language_is))
         
         print(params as Any)
         

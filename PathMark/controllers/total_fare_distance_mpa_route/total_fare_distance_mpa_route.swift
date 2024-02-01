@@ -104,6 +104,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     
 //    @IBOutlet weak var mapView:MKMapView!
     
+    var str_selected_language_is:String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -121,6 +123,26 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
 
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                 
+                self.btnConfirmBooking.setTitle("Confirm booking", for: .normal)
+                self.str_selected_language_is = "en"
+            } else {
+                self.btnConfirmBooking.setTitle("বুকিং নিশ্চিত করুন", for: .normal)
+                self.str_selected_language_is = "bn"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            self.str_selected_language_is = "en"
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
         print(self.str_vehicle_type as Any)
         
         // self.iAmHereForLocationPermission()
@@ -373,20 +395,50 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     
     @objc func validation_before_confirm_booking() {
         
-        let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
-        
-        let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
-            _ in
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
+                    _ in
 
-            self.confirm_booking_WB()
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+                
+            } else {
+                let alert = NewYorkAlertController(title: String("সতর্ক"), message: String("আপনি কি নিশ্চিত আপনি এই বুকিং নিশ্চিত করতে চান?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "হ্যাঁ, নিশ্চিত করুন", style: .default) {
+                    _ in
+
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
         }
         
-        let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
-            _ in
-        }
         
-        alert.addButtons([yes_confirm,cancel])
-        self.present(alert, animated: true)
         
     }
     
@@ -428,17 +480,17 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
 
                 parameters = [
                     
-                    "action"            : "addbooking",
-                    "userId"            : String(myString),
-                    "categoryId"        : String(self.str_get_category_id),
-                    "RequestPickupAddress" : String(self.str_from_location),
-                    "RequestPickupLatLong" : String(request_lat)+","+String(request_long),
-                    "RequestDropAddress" : String(self.str_to_location),
-                    "RequestDropLatLong" : String(drop_lat)+","+String(drop_long),
-                    
-                    "duration" : String(self.str_total_duration),
-                    "distance" : String(self.str_total_distance),
-                    "estimateAmount": String(self.str_total_rupees)
+                    "action"                : "addbooking",
+                    "userId"                : String(myString),
+                    "categoryId"            : String(self.str_get_category_id),
+                    "RequestPickupAddress"  : String(self.str_from_location),
+                    "RequestPickupLatLong"  : String(request_lat)+","+String(request_long),
+                    "RequestDropAddress"    : String(self.str_to_location),
+                    "RequestDropLatLong"    : String(drop_lat)+","+String(drop_long),
+                    "duration"              : String(self.str_total_duration),
+                    "distance"              : String(self.str_total_distance),
+                    "estimateAmount"        : String(self.str_total_rupees),
+                    "language"              : String(self.str_selected_language_is)
                     
                 ]
                 
@@ -576,57 +628,65 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             let headers: HTTPHeaders = [
                 "token":String(token_id_is),
             ]
-
+            
             var parameters:Dictionary<AnyHashable, Any>!
             
-            parameters = [
-                "action"        : "getprice",
-                "pickuplatLong" : String(self.my_location_lat)+","+String(self.my_location_long),
-                "droplatLong"   : String(self.searched_place_location_lat)+","+String(self.searched_place_location_long),
-                "categoryId"    : String(self.str_get_category_id),
-            ]
-            
-            print("parameters-------\(String(describing: parameters))")
-            
-            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
-                response in
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
                 
-                switch(response.result) {
-                case .success(_):
-                    if let data = response.value {
-                        
-                        let JSON = data as! NSDictionary
-                        print(JSON)
-                        
-                        var strSuccess : String!
-                        strSuccess = JSON["status"] as? String
-                        
-                        if strSuccess.lowercased() == "success" {
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"        : "getprice",
+                    "userId"        : String(myString),
+                    "pickuplatLong" : String(self.my_location_lat)+","+String(self.my_location_long),
+                    "droplatLong"   : String(self.searched_place_location_lat)+","+String(self.searched_place_location_long),
+                    "categoryId"    : String(self.str_get_category_id),
+                    "language"      : "en"
+                ]
+                
+                print("parameters-------\(String(describing: parameters))")
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    
+                    switch(response.result) {
+                    case .success(_):
+                        if let data = response.value {
                             
-                            var dict: Dictionary<AnyHashable, Any>
-                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            let JSON = data as! NSDictionary
+                            print(JSON)
                             
-                            self.hide_loading_UI()
-                            self.tbleView.separatorColor = .clear
-                            self.iAmHereForLocationPermission()
+                            var strSuccess : String!
+                            strSuccess = JSON["status"] as? String
                             
-                            self.str_total_distance = (dict["distance"] as! String)
-                            self.str_total_rupees = "\(dict["total"]!)"
-                            self.str_total_duration = (dict["duration"] as! String)
+                            if strSuccess.lowercased() == "success" {
+                                
+                                var dict: Dictionary<AnyHashable, Any>
+                                dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                                
+                                self.hide_loading_UI()
+                                self.tbleView.separatorColor = .clear
+                                self.iAmHereForLocationPermission()
+                                
+                                self.str_total_distance = (dict["distance"] as! String)
+                                self.str_total_rupees = "\(dict["total"]!)"
+                                self.str_total_duration = (dict["duration"] as! String)
+                                
+                            }
+                            else {
+                                self.hide_loading_UI()
+                            }
                             
                         }
-                        else {
-                            self.hide_loading_UI()
-                        }
                         
+                    case .failure(_):
+                        print("Error message:\(String(describing: response.error))")
+                        self.hide_loading_UI()
+                        self.please_check_your_internet_connection()
+                        
+                        break
                     }
-                    
-                case .failure(_):
-                    print("Error message:\(String(describing: response.error))")
-                    self.hide_loading_UI()
-                    self.please_check_your_internet_connection()
-                    
-                    break
                 }
             }
         }
@@ -659,6 +719,29 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         
         cell.lbl_curreny_symbol.text = String(str_bangladesh_currency_symbol)
         
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.lbl_estimated_only_text.text = "This is an estimated only, price & km may vary."
+                cell.lbl_distance_text.text = "distance"
+                cell.lbl_est_amount_text.text = "Est. amount"
+                cell.txt_field.placeholder = "Promo Code"
+            } else {
+                cell.lbl_estimated_only_text.text = "এটি কেবল একটি অনুমান মাত্র, সময়, ভাড়া ও কি.মি. পরিবর্তন হতে পারে "
+                cell.lbl_distance_text.text = "দূরত্ব"
+                cell.lbl_est_amount_text.text = "পরিমাণ"
+                cell.txt_field.placeholder = "পদোন্নতি"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            self.str_selected_language_is = "en"
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
         return cell
     }
     
@@ -674,6 +757,10 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
  
 class total_fare_distance_mpa_route_table_cell: UITableViewCell {
     
+    @IBOutlet weak var lbl_estimated_only_text:UILabel!
+    @IBOutlet weak var lbl_distance_text:UILabel!
+    @IBOutlet weak var lbl_est_amount_text:UILabel!
+    
     @IBOutlet weak var txt_field:UITextField! {
         didSet {
             txt_field.backgroundColor = UIColor.init(red: 242.0/255.0, green: 242.0/255.0, blue: 242.0/255.0, alpha: 1)
@@ -685,7 +772,7 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
             txt_field.layer.masksToBounds = false
             txt_field.backgroundColor = .white
             txt_field.layer.cornerRadius = 8
-            txt_field.placeholder = "Promo Code"
+            
             txt_field.setLeftPaddingPoints(60)
             // txt_field.clipsToBounds = true
     

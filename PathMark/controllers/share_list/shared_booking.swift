@@ -27,7 +27,27 @@ class shared_booking: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Schedule ride details"
+            
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    
+                    view_navigation_title.text = "Shared Booking"
+                    
+                } else {
+                    view_navigation_title.text = "শেয়ার্ড বুকিং"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
             view_navigation_title.textColor = .white
         }
     }

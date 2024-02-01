@@ -55,6 +55,19 @@ class emergency_contacts: UIViewController {
         self.tbleView.separatorColor = .lightGray
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                
+                btn_add.setTitle("+ add", for: .normal)
+            } else {
+                btn_add.setTitle("+ যোগ করুন", for: .normal)
+            }
+            
+            
+        }
+        
         self.sideBarMenuClick()
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
@@ -96,17 +109,17 @@ class emergency_contacts: UIViewController {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             
             if (str_show_loader == "yes") {
-                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                    } else {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                    }
+                    
+                    
                 }
-                
-             
-            }
             }
             
             

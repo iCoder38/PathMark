@@ -52,6 +52,8 @@ class terms_and_conditions: UIViewController {
         // let request = URLRequest(url: URL(string: "https://zaribbd.com/terms-condition/")!)
         // self.webView?.load(request)
         
+        self.btn_accept.setImage(UIImage(named: ""), for: .normal)
+        
         self.terms_WB()
     }
     
@@ -60,9 +62,10 @@ class terms_and_conditions: UIViewController {
         let string = "yes_terms"
         UserDefaults.standard.set(string, forKey: "key_accept_term")
         
-        self.btn_accept.setImage(UIImage(named: "check"), for: .normal)
+        
         self.btn_accept.setTitle("Agree and Continue", for: .normal)
         
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc func terms_WB() {

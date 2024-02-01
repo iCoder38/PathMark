@@ -144,6 +144,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
     }
     
+    @IBOutlet weak var lbl_OTP:UILabel!
+    
     @IBOutlet weak var btn_send:UIButton! {
         didSet {
             btn_send.setTitleColor(.systemOrange, for: .normal)
@@ -251,32 +253,112 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         print("=============================================")
         print("=============================================")
         
+        
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                self.btn_call_driver.setTitle(" Call driver", for: .normal)
+                self.btn_cancel_ride.setTitle(" cancel ride", for: .normal)
+            } else {
+                self.btn_call_driver.setTitle(" ড্রাইভারকে কল করুন", for: .normal)
+                self.btn_cancel_ride.setTitle(" যাত্রা বাতিল করুন", for: .normal)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
         if (self.str_from_history == "yes") {
             
             if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "3") {
-                self.lblNavigationTitle.text = "Enjoy your ride"
+                
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.text = "Enjoy your ride"
+                self.lbl_OTP.isHidden = true
                 
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.lblNavigationTitle.text = "Enjoy your ride"
+                        self.lbl_message.text = "Enjoy your ride"
+                        
+                    } else {
+                        self.lblNavigationTitle.text = "আপনার রাইড উপভোগ করুন"
+                        self.lbl_message.text = "আপনার রাইড উপভোগ করুন"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
                 
             } else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "2") {
-                self.lblNavigationTitle.text = "Driver has arrived"
+                // self.lblNavigationTitle.text = "Driver has arrived"
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_message.text = "Driver has arrived"
+                // self.lbl_message.text = "Driver has arrived"
+                self.lbl_OTP.isHidden = true
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.lblNavigationTitle.text = "Driver has arrived"
+                        self.lbl_message.text = "Driver has arrived"
+                        
+                    } else {
+                        self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"
+                        self.lbl_message.text = "ড্রাইভার এসেছিল"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
                 
                 
             }  else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "1") {
-                self.lblNavigationTitle.text = "Booking Confirmed"
+                // self.lblNavigationTitle.text = "Booking Confirmed"
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = false
                 self.lbl_message.text = "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ . وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ"
                 
+                self.lbl_OTP.isHidden = false
+                self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.lblNavigationTitle.text = "Booking Confirmed"
+                         
+                        
+                    } else {
+                        self.lblNavigationTitle.text = "বুকিং নিশ্চিত করা হয়েছে"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
             }
+              
+            
             
             self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
             
@@ -354,32 +436,93 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                  
                 if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
                     
-                    self.btn_booking_confirmed.setTitle("Booking Confirmed", for: .normal)
-                    self.lblNavigationTitle.text = "Your ride is on its way."
+                    
+                    
                     self.navigationBar.backgroundColor = navigation_color
                     // UIColor.init(red: 104.0/255.0, green: 218.0/255.0, blue: 134.0/255.0, alpha: 1)
                     
                     self.btn_booking_confirmed.isHidden = false
                     self.lbl_message.isHidden = false
                     
-                } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
+                    self.lbl_OTP.isHidden = false
+                    self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
                     
-                    self.lblNavigationTitle.text = "Driver has arrived"
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            self.btn_booking_confirmed.setTitle("Booking Confirmed", for: .normal)
+                            self.lblNavigationTitle.text = "Booking Confirmed."
+                            
+                        } else {
+                            self.btn_booking_confirmed.setTitle("বুকিং নিশ্চিত করা হয়েছে", for: .normal)
+                            self.lblNavigationTitle.text = "বুকিং নিশ্চিত করা হয়েছে."
+                        }
+                        
+                    } else {
+                        print("=============================")
+                        print("LOGIN : Select language error")
+                        print("=============================")
+                        UserDefaults.standard.set("en", forKey: str_language_convert)
+                    }
+                    
+                } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
+                    self.lbl_OTP.isHidden = true
+                    
+                    // self.lblNavigationTitle.text = "Driver has arrived"
                     self.navigationBar.backgroundColor = navigation_color
                     
                     self.btn_booking_confirmed.isHidden = true
-                    self.lbl_message.text = "Driver has arrived"
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            self.lblNavigationTitle.text = "Driver has arrived"
+                            self.lbl_message.text = "Driver has arrived"
+                            
+                        } else {
+                            self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"
+                            self.lbl_message.text = "ড্রাইভার এসেছিল"
+                        }
+                        
+                    } else {
+                        print("=============================")
+                        print("LOGIN : Select language error")
+                        print("=============================")
+                        UserDefaults.standard.set("en", forKey: str_language_convert)
+                    }
                     
                 }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
+                    self.lbl_OTP.isHidden = true
                     
-                    self.lblNavigationTitle.text = "Enjoy your ride"
+                    
                     self.navigationBar.backgroundColor = navigation_color
                     self.btn_cancel_ride.isHidden = true
                     
                     self.btn_booking_confirmed.isHidden = true
-                    self.lbl_message.text = "Enjoy your ride"
+                    
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            self.lblNavigationTitle.text = "Enjoy your ride"
+                            self.lbl_message.text = "Enjoy your ride"
+                            
+                        } else {
+                            self.lblNavigationTitle.text = "আপনার রাইড উপভোগ করুন"
+                            self.lbl_message.text = "আপনার রাইড উপভোগ করুন  "
+                        }
+                        
+                    } else {
+                        print("=============================")
+                        print("LOGIN : Select language error")
+                        print("=============================")
+                        UserDefaults.standard.set("en", forKey: str_language_convert)
+                    }
                     
                 }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
+                    self.lbl_OTP.isHidden = true
                     
                     self.lblNavigationTitle.text = "Ride Complete - Please pay"
                     self.navigationBar.backgroundColor = navigation_color
@@ -409,8 +552,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 }
                 
                 
-                
-                self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
+                self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)
+                // +" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
                 
                 self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["driverName"] as! String)
                 self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["rating"]!)"
@@ -744,7 +887,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     @objc func validation_before_confirm_booking() {
         
-        let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
+        /*let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
         
         let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
             _ in
@@ -757,7 +900,50 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
         
         alert.addButtons([yes_confirm,cancel])
-        self.present(alert, animated: true)
+        self.present(alert, animated: true)*/
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
+                    _ in
+
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+                
+            } else {
+                let alert = NewYorkAlertController(title: String("সতর্ক"), message: String("আপনি কি নিশ্চিত আপনি এই বুকিং নিশ্চিত করতে চান?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "হ্যাঁ, নিশ্চিত করুন", style: .default) {
+                    _ in
+
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
     }
     

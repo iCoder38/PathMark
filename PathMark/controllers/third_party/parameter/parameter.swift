@@ -47,6 +47,7 @@ struct payload_verify_OTP: Encodable {
 struct payload_vehicle_list: Encodable {
     let action :String
     let TYPE :String
+    let language :String
 }
 
 class parameter: UIViewController {

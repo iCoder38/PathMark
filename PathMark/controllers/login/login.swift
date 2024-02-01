@@ -95,7 +95,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                 cell.btnSignIn.setTitle("Sign In", for: .normal)
                 cell.lbl_remember_me.text = "Remember me"
                 cell.lbl_login_with_social_media.text = "Login with Social media"
-                cell.btnForgotPassword.setTitle("Forgot password ? - Click here", for: .normal)
+                // cell.btnForgotPassword.setTitle("Forgot password ? - Click here", for: .normal)
                 cell.btnDontHaveAnAccount.setTitle("Not a member? Register Now", for: .normal)
                 cell.lbl_login_to_continue.text = "Login to Continue"
                 
@@ -103,7 +103,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                 cell.btnSignIn.setTitle("সাইন ইন করুন", for: .normal)
                 cell.lbl_remember_me.text = "আমাকে মনে কর"
                 cell.lbl_login_with_social_media.text = "সোশ্যাল মিডিয়া দিয়ে লগইন করুন"
-                cell.btnForgotPassword.setTitle("পাসওয়ার্ড ভুলে গেছেন? - এখানে ক্লিক করুন", for: .normal)
+                // cell.btnForgotPassword.setTitle("পাসওয়ার্ড ভুলে গেছেন? - এখানে ক্লিক করুন", for: .normal)
                 cell.btnDontHaveAnAccount.setTitle("সদস্যা নন? এখনই নিবন্ধন করুন", for: .normal)
                 cell.lbl_login_to_continue.text = "চালিয়ে যেতে লগইন করুন"
             }
@@ -920,7 +920,7 @@ class login_table_cell: UITableViewCell {
                               tfAppearance: .dark,
                               tfKeyboardType: .emailAddress,
                               tfBackgroundColor: .white,
-                              tfPlaceholderText: "Email Address")
+                              tfPlaceholderText: "Email Address/Phone number")
             
             txtEmailAddress.layer.masksToBounds = false
             txtEmailAddress.layer.shadowColor = UIColor.black.cgColor
@@ -966,7 +966,7 @@ class login_table_cell: UITableViewCell {
             Utils.buttonStyle(button: btnSignIn,
                               bCornerRadius: 12,
                               bBackgroundColor: UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1),
-                              bTitle: "Sign In",
+                              bTitle: "Login",
                               bTitleColor: .black)
             
             btnSignIn.layer.masksToBounds = false
@@ -990,7 +990,7 @@ class login_table_cell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var btnForgotPassword:UIButton! {
+    /*@IBOutlet weak var btnForgotPassword:UIButton! {
         didSet {
             Utils.buttonStyle(button: btnForgotPassword,
                               bCornerRadius: 6,
@@ -998,7 +998,7 @@ class login_table_cell: UITableViewCell {
                               bTitle: "Forgot Password ? - Click here",
                               bTitleColor: navigation_color)
         }
-    }
+    }*/
     
     @IBOutlet weak var btnDontHaveAnAccount:UIButton! {
         didSet {

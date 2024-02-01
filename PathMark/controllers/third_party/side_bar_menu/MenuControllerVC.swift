@@ -67,6 +67,7 @@ class MenuControllerVC: UIViewController {
                               "FAQ(s)",
                               "Shared booking",
                               "Help",
+                                 "Change Language",
                               "Logout"]
     var arr_customer_title_bg = ["ড্যাশবোর্ড",
                               "প্রোফাইল আপডেট করুন",
@@ -78,6 +79,7 @@ class MenuControllerVC: UIViewController {
                               "FAQ(s)",
                               "Shared booking",
                               "হেল্প",
+                                 "ভাষা পরিবর্তন করুন",
                               "লগ-আউট করুন"]
     
     var arr_customer_image = ["home",
@@ -90,6 +92,7 @@ class MenuControllerVC: UIViewController {
                               "help",
                               "help",
                               "help",
+                              "language_white",
                               "logout"]
     
     @IBOutlet weak var lblUserName:UILabel! {
@@ -465,6 +468,15 @@ extension MenuControllerVC: UITableViewDataSource {
             let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
             self.view.window?.rootViewController = sw
             let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "help_id")
+            let navigationController = UINavigationController(rootViewController: destinationController!)
+            sw.setFront(navigationController, animated: true)
+            
+        }  else if self.arr_customer_title_en[indexPath.row] == "Change Language" {
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let sw = storyboard.instantiateViewController(withIdentifier: "sw") as! SWRevealViewController
+            self.view.window?.rootViewController = sw
+            let destinationController = self.storyboard?.instantiateViewController(withIdentifier: "change_language_id")
             let navigationController = UINavigationController(rootViewController: destinationController!)
             sw.setFront(navigationController, animated: true)
             

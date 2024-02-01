@@ -197,22 +197,22 @@ class ride_history: UIViewController {
                 print(language as Any)
                 
                 if (language == "en") {
-                     if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                        } else {
+                            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                        }
+                        
+                        
+                    }
                 } else {
                     ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
                 }
                 
-             
-            }
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
-                }
                 
-             
             }
             
         }
@@ -439,11 +439,48 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                 
                 if "\(item!["paymentStatus"]!)" == "" {
                     cell.lbl_status.backgroundColor = .systemOrange
-                    cell.lbl_status.text = "Pay"
+                    
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.lbl_status.text = "Pay"
+                            
+                        } else {
+                            cell.lbl_status.text = "এখন পরিশোধ করুন"
+                        }
+                        
+                    } else {
+                        print("=============================")
+                        print("LOGIN : Select language error")
+                        print("=============================")
+                        UserDefaults.standard.set("en", forKey: str_language_convert)
+                    }
+                    
                     cell.lbl_status.textColor = .white
                 } else {
                     cell.lbl_status.backgroundColor = .systemGreen
-                    cell.lbl_status.text = "Completed"
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.lbl_status.text = "Completed"
+                            
+                        } else {
+                            cell.lbl_status.text = "সম্পূর্ণ হয়েছে "
+                        }
+                        
+                    } else {
+                        print("=============================")
+                        print("LOGIN : Select language error")
+                        print("=============================")
+                        UserDefaults.standard.set("en", forKey: str_language_convert)
+                    }
+                    
+                    
+                    
                     cell.lbl_status.textColor = .white
                 }
                 
@@ -471,13 +508,51 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                         print("Date is today")
                         if "\(item!["rideStatus"]!)" == "1" {
                             cell.lbl_status.backgroundColor = .systemOrange
-                            cell.lbl_status.text = "Pending"
+                            
+                            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                                print(language as Any)
+                                
+                                if (language == "en") {
+                                    cell.lbl_status.text = "Pending"
+                                    
+                                } else {
+                                    cell.lbl_status.text = "অনিষ্পন্ন"
+                                }
+                                
+                            } else {
+                                print("=============================")
+                                print("LOGIN : Select language error")
+                                print("=============================")
+                                UserDefaults.standard.set("en", forKey: str_language_convert)
+                            }
+                            
+                            
                         }
                     } else {
                         print("Date is future")
                         if "\(item!["rideStatus"]!)" == "1" {
                             cell.lbl_status.backgroundColor = .systemOrange
-                            cell.lbl_status.text = "Pending"
+                            
+                            
+                            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                                print(language as Any)
+                                
+                                if (language == "en") {
+                                    cell.lbl_status.text = "Pending"
+                                    
+                                } else {
+                                    cell.lbl_status.text = "অনিষ্পন্ন"
+                                }
+                                
+                            } else {
+                                print("=============================")
+                                print("LOGIN : Select language error")
+                                print("=============================")
+                                UserDefaults.standard.set("en", forKey: str_language_convert)
+                            }
+                            
+                            
+                            
                         }
                     }
                 }

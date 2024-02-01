@@ -362,12 +362,12 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
     
     @objc func validation_before_confirm_booking() {
         
-        let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
+        /*let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
         
         let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
             _ in
 
-            self.confirm_booking_WB()
+            
         }
         
         let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
@@ -375,8 +375,50 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
         }
         
         alert.addButtons([yes_confirm,cancel])
-        self.present(alert, animated: true)
+        self.present(alert, animated: true)*/
         
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
+                    _ in
+
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+                
+            } else {
+                let alert = NewYorkAlertController(title: String("সতর্ক"), message: String("আপনি কি নিশ্চিত আপনি এই বুকিং নিশ্চিত করতে চান?"), style: .alert)
+                
+                let yes_confirm = NewYorkButton(title: "হ্যাঁ, নিশ্চিত করুন", style: .default) {
+                    _ in
+
+                    self.confirm_booking_WB()
+                }
+                
+                let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .destructive) {
+                    _ in
+                }
+                
+                alert.addButtons([yes_confirm,cancel])
+                self.present(alert, animated: true)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
     }
     
     // MARK:- GET TOTAL DISTANCE FARE -
