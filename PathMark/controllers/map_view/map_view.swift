@@ -88,7 +88,18 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Search"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Search"
+                } else {
+                    view_navigation_title.text = "অনুসন্ধান করুন"
+                }
+                    
+            }
+            
+            view_navigation_title.textColor = .white
             view_navigation_title.textColor = .white
         }
     }
@@ -196,7 +207,19 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     @IBOutlet weak var btnRideNow:UIButton!{
         didSet{
-            btnRideNow.setTitle("Continue to Book", for: .normal)
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btnRideNow.setTitle("Continue to Book", for: .normal)
+                } else {
+                    btnRideNow.setTitle("বুকিং চালিয়ে যান", for: .normal)
+                }
+                    
+            }
+            
+            
             btnRideNow.backgroundColor = .systemGreen
         }
     }
@@ -682,10 +705,24 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         if self.str_category_id == "0" {
             
-            let alert = NewYorkAlertController(title: String("Alert"), message: String("Please select atleast one vehicle"), style: .alert)
-            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-            alert.addButtons([cancel])
-            present(alert, animated: true)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    let alert = NewYorkAlertController(title: String("Alert"), message: String("Please select atleast one vehicle"), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    present(alert, animated: true)
+                } else {
+                    let alert = NewYorkAlertController(title: String("সতর্কতা"), message: String("অনুগ্রহ করে অন্তত একটি গাড়ি নির্বাচন করুন"), style: .alert)
+                    let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+                    alert.addButtons([cancel])
+                    present(alert, animated: true)
+                }
+                    
+            }
+            
+            
             
         } else {
         

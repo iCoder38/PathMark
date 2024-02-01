@@ -70,7 +70,7 @@ class shared_booking: UIViewController {
         self.view.endEditing(true)
         if revealViewController() != nil {
             btn_back.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
-            revealViewController().rearViewRevealWidth = 300
+            revealViewController().rearViewRevealWidth = self.view.frame.size.width
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
     }

@@ -138,7 +138,7 @@ class search_location: UIViewController {
                                     let item = ar[indexx] as? [String:Any]
                                     
                                     let custom = [
-                                        "address_type":(item!["addressType"] as! String),
+                                        "address_type":"\(item!["addressType"]!)",
                                         "address":(item!["address"] as! String),
                                         "lat_long":(item!["coordinate"] as! String),
                                         "type":"1"
@@ -318,7 +318,14 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             let item = self.arr_address_list[indexPath.row] as? [String:Any]
             print(item as Any)
             
-            cell.lbl_title.text = (item!["address_type"] as! String)
+            if "\(item!["address_type"]!)" == "0" {
+                cell.lbl_title.text = "Home"
+            } else if "\(item!["address_type"]!)" == "1" {
+                cell.lbl_title.text = "Work"
+            } else {
+                cell.lbl_title.text = "Other"
+            }
+            
             cell.lbl_sub_title.text = (item!["address"] as! String)
             
             return cell

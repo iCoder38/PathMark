@@ -107,17 +107,17 @@ class address_list: UIViewController {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             
             if (str_show_loader == "yes") {
-                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                    } else {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                    }
+                    
+                    
                 }
-                
-             
-            }
             }
             
             let x : Int = person["userId"] as! Int
@@ -130,9 +130,22 @@ class address_list: UIViewController {
                      "token":String(token_id_is),
                 ]
     
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                }
+                
                 parameters = [
                     "action"    : "addresslist",
                     "userId"     : String(myString),
+                    "language"      : String(lan)
                 ]
                 
                 print(headers)
@@ -254,7 +267,21 @@ class address_list: UIViewController {
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             self.arr_address_list.removeAllObjects()
             
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "deleting...")
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "deleting...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "মুছে ফেলা...")
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
             
             let x : Int = person["userId"] as! Int
             let myString = String(x)
@@ -340,7 +367,14 @@ extension address_list: UITableViewDataSource , UITableViewDelegate {
         let item = self.arr_address_list[indexPath.row] as? [String:Any]
         print(item as Any)
         
-        cell.lbl_title.text = (item!["addressType"] as! String)
+        if ("\(item!["addressType"]!)" == "0") {
+            cell.lbl_title.text = "Home"
+        } else if ("\(item!["addressType"]!)" == "1") {
+            cell.lbl_title.text = "Work"
+        } else {
+            cell.lbl_title.text = "other"
+        }
+        
         cell.lbl_sub_title.text = (item!["address"] as! String)
         
         cell.btn_setting.tag = indexPath.row

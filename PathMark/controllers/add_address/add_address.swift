@@ -15,6 +15,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
 
     var dict_address:NSDictionary!
     var str_address_id:String!
+    var str_Address_text:String!
     
     let locationManager = CLLocationManager()
     
@@ -89,8 +90,10 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                 if (language == "en") {
                     
                     txt_house_number.placeholder = "House No. / Flat No. Building"
+                     
                 } else {
                     txt_house_number.placeholder = "বাড়ি নং / ফ্ল্যাট নং বিল্ডিং"
+                     
                 }
                 
                 
@@ -113,6 +116,22 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20 , height: txt_save_as.frame.height))
             txt_save_as.leftView = paddingView
             txt_save_as.leftViewMode = UITextField.ViewMode.always
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    
+                     
+                    txt_save_as.placeholder = "Home / Work / Other"
+                } else {
+                     
+                    txt_save_as.placeholder = "বাড়ি / কাজ / অন্যান্য"
+                }
+                
+                
+            }
+            
         }
     }
     
@@ -219,11 +238,100 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             
         } else {
             print("edit contact")
-            self.view_navigation_title.text = "EDIT ADDRESS"
+            
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    self.view_navigation_title.text = "EDIT ADDRESS"
+                    self.btn_submit.setTitle("SAVE ADDRESS", for: .normal)
+                } else {
+                    self.view_navigation_title.text = "ঠিকানা সম্পাদনা করুন"
+                    self.btn_submit.setTitle("ঠিকানা সংরক্ষণ করুন", for: .normal)
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
             print(self.dict_address as Any)
             
             self.txt_house_number.text = (self.dict_address["address"] as! String)
-            self.txt_save_as.text = (self.dict_address["addressType"] as! String)
+            // self.txt_save_as.text = (self.dict_address["addressType"] as! String)
+            
+             
+            let fullNameArr = "\(self.dict_address["coordinate"]!)".components(separatedBy: ",")
+
+            let name    = fullNameArr[0]
+            let surname = fullNameArr[1]
+            self.str_save_lat = "\(name)"
+            self.str_save_lat = "\(surname)"
+            
+            
+            if ("\(self.dict_address["addressType"]!)" == "0") {
+                
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_save_as.text = "Home"
+                        self.str_Address_text = "0"
+                    } else {
+                        self.txt_save_as.text = "বাড়ি"
+                        self.str_Address_text = "0"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
+                
+            } else if ("\(self.dict_address["addressType"]!)" == "1") {
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_save_as.text = "Work"
+                        self.str_Address_text = "1"
+                    } else {
+                        self.txt_save_as.text = "কাজ"
+                        self.str_Address_text = "1"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+            } else {
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_save_as.text = "Other"
+                        self.str_Address_text = "2"
+                    } else {
+                        self.txt_save_as.text = "অন্যান্য"
+                        self.str_Address_text = "2"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+            }
             
             self.str_address_id = "\(self.dict_address["addressId"]!)"
         }
@@ -269,8 +377,10 @@ class add_address: UIViewController , CLLocationManagerDelegate {
             
         }
         UserDefaults.standard.set("", forKey: "key_save_lat_for_address")
+        UserDefaults.standard.set(nil, forKey: "key_save_lat_for_address")
         UserDefaults.standard.set("", forKey: "key_save_long_for_address")
         UserDefaults.standard.set("", forKey: "key_save_full_address_for_address")
+        UserDefaults.standard.set(nil, forKey: "key_save_full_address_for_address")
     }
     
     @objc func save_as_click_method() {
@@ -286,20 +396,21 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     UIAlertAction in
                     NSLog("OK Pressed")
                     self.txt_save_as.text = "Home"
+                    self.str_Address_text = "0"
                 }
                 
                 let work = UIAlertAction(title: "Work", style: .default) {
                     UIAlertAction in
                     NSLog("OK Pressed")
                     self.txt_save_as.text = "Work"
-                    
+                    self.str_Address_text = "1"
                 }
                 
                 let other = UIAlertAction(title: "Other", style: .default) {
                     UIAlertAction in
                     NSLog("OK Pressed")
                     self.txt_save_as.text = "Other"
-                    
+                    self.str_Address_text = "2"
                 }
                 
                 let dismiss = UIAlertAction(title: "Dismiss", style: .cancel) {
@@ -319,21 +430,22 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                 let home = UIAlertAction(title: "বাড়ি", style: .default) {
                     UIAlertAction in
                     NSLog("OK Pressed")
-                    self.txt_save_as.text = "Home"
+                    self.txt_save_as.text = "বাড়ি"
+                    self.str_Address_text = "0"
                 }
                 
                 let work = UIAlertAction(title: "কাজ", style: .default) {
                     UIAlertAction in
                     NSLog("OK Pressed")
-                    self.txt_save_as.text = "Work"
-                    
+                    self.txt_save_as.text = "কাজ"
+                    self.str_Address_text = "1"
                 }
                 
                 let other = UIAlertAction(title: "অন্যান্য", style: .default) {
                     UIAlertAction in
                     NSLog("OK Pressed")
-                    self.txt_save_as.text = "Other"
-                    
+                    self.txt_save_as.text = "অন্যান্য"
+                    self.str_Address_text = "2"
                 }
                 
                 let dismiss = UIAlertAction(title: "খারিজ", style: .cancel) {
@@ -461,7 +573,25 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     @objc func edit_address_WB(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "editing...")
+            
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "editing...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "সম্পাদনা...")
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
         }
         
         var parameters:Dictionary<AnyHashable, Any>!
@@ -478,13 +608,27 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "token":String(token_id_is),
                 ]
 
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                }
+                
+                 
                 parameters = [
                     "action"        : "addressadd",
                     "userId"        : String(myString),
                     "addressId"     : String(self.str_address_id),
                     "address"       : String(self.txt_house_number.text!),
-                    "addressType"   : String(self.txt_save_as.text!),
+                    "addressType"   : String(self.str_Address_text),
                     "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
+                    "language"      : String(lan)
                 ]
                 
                 print(headers)
@@ -619,12 +763,25 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "token":String(token_id_is),
                 ]
 
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                }
+                
                 parameters = [
                     "action"        : "addressadd",
                     "userId"        : String(myString),
                     "address"       : String(self.txt_house_number.text!),
-                    "addressType"   : String(self.txt_save_as.text!),
+                    "addressType"   : String(self.str_Address_text),
                     "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
+                    "language"      : String(lan)
                 ]
                 
                 print(headers)
@@ -654,6 +811,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                                 self.back_click_method()
                                 
                             } else {
+                                ERProgressHud.sharedInstance.hide()
                                 self.login_refresh_token_wb()
                             }
                             
@@ -664,6 +822,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                         print("Error message:\(String(describing: response.error))")
                         self.hide_loading_UI()
                         self.please_check_your_internet_connection()
+                        ERProgressHud.sharedInstance.hide()
                         
                         break
                     }

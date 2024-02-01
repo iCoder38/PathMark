@@ -83,6 +83,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         }
     }
     
+    var str_relation_text:String!
     @IBOutlet weak var btn_relation:UIButton!
     @IBOutlet weak var txt_relation:UITextField! {
         didSet {
@@ -195,12 +196,39 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             
         } else {
             print("edit contact")
-            self.view_navigation_title.text = "EDIT CONTACTS"
+            
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    self.view_navigation_title.text = "EDIT CONTACTS"
+                    btn_submit.setTitle("SUBMIT", for: .normal)
+                } else {
+                    self.view_navigation_title.text = "নতুন পরিচিতি যোগ করুন"
+                    btn_submit.setTitle("জমা দিন", for: .normal)
+                }
+                
+            }
+            
             
             self.txt_full_name.text = (self.dict_emergency["Name"] as! String)
             self.txt_email.text = (self.dict_emergency["email"] as! String)
             self.txt_phone.text = (self.dict_emergency["phone"] as! String)
-            self.txt_relation.text = (self.dict_emergency["relation"] as! String)
+            
+            
+            
+            if ("\(self.dict_emergency["relation"]!)" == "0") {
+                self.txt_relation.text = "Friend"
+                self.str_relation_text = "0"
+            } else if ("\(self.dict_emergency["relation"]!)" == "1") {
+                self.txt_relation.text = "Family"
+                self.str_relation_text = "1"
+            } else {
+                self.txt_relation.text = "Other"
+                self.str_relation_text = "2"
+            }
+            
         }
         
         self.btn_relation.addTarget(self, action: #selector(open_relation_drop_down), for: .touchUpInside)
@@ -328,14 +356,44 @@ class add_contacts: UIViewController , UITextFieldDelegate {
                      "token":String(token_id_is),
                 ]
                 
+                //
+                if (self.txt_relation.text! == "Friend") {
+                    self.str_relation_text = "0"
+                } else if (self.txt_relation.text! == "Family") {
+                    self.str_relation_text = "1"
+                } else if (self.txt_relation.text! == "Other") {
+                    self.str_relation_text = "2"
+                } else if (self.txt_relation.text! == "বন্ধু") {
+                    self.str_relation_text = "0"
+                } else if (self.txt_relation.text! == "পরিবার") {
+                    self.str_relation_text = "1"
+                } else {
+                    self.str_relation_text = "2"
+                }
+                
+                
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                }
+                
+                
                 parameters = [
                     "action"    : "emergencyadd",
                     "addressId" : "\(self.dict_emergency["emergencyId"]!)",
                     "userId"    : String(myString),
                     "Name"      : String(self.txt_full_name.text!),
                     "phone"     : String(self.txt_phone.text!),
-                    "relation"  : String(self.txt_relation.text!),
+                    "relation"  : String(self.str_relation_text),
                     "email"     : String(self.txt_email.text!),
+                    "language"  : String(lan)
                 ]
                 
                 print(headers)
@@ -412,13 +470,42 @@ class add_contacts: UIViewController , UITextFieldDelegate {
                 let headers: HTTPHeaders = [
                      "token":String(token_id_is),
                 ]
+                
+                //
+                if (self.txt_relation.text! == "Friend") {
+                    self.str_relation_text = "0"
+                } else if (self.txt_relation.text! == "Family") {
+                    self.str_relation_text = "1"
+                } else if (self.txt_relation.text! == "Other") {
+                    self.str_relation_text = "2"
+                } else if (self.txt_relation.text! == "বন্ধু") {
+                    self.str_relation_text = "0"
+                } else if (self.txt_relation.text! == "পরিবার") {
+                    self.str_relation_text = "1"
+                } else {
+                    self.str_relation_text = "2"
+                }
+                
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                }
+                
                 parameters = [
                     "action"    : "emergencyadd",
                     "userId"    : String(myString),
                     "Name"      : String(self.txt_full_name.text!),
                     "phone"     : String(self.txt_phone.text!),
-                    "relation"  : String(self.txt_relation.text!),
+                    "relation"  : String(self.str_relation_text),
                     "email"     : String(self.txt_email.text!),
+                    "language"  : String(lan)
                 ]
                 
                 print(headers)

@@ -46,12 +46,66 @@ class schedule_a_ride: UIViewController {
     
     @IBOutlet weak var lblNavigationTitle:UILabel! {
         didSet {
-            lblNavigationTitle.text = "Schedule a ride"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lblNavigationTitle.text = "Schedule a ride"
+                } else {
+                    lblNavigationTitle.text = "একটি যাত্রার সময়সূচী"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
             lblNavigationTitle.textColor = NAVIGATION_TITLE_COLOR
             lblNavigationTitle.backgroundColor = .clear
         }
     }
     
+    @IBOutlet weak var lbl_please_select_date_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_please_select_date_text.text = "Please select a date"
+                } else {
+                    lbl_please_select_date_text.text = "একটি তারিখ নির্বাচন করুন"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+        }
+    }
+    @IBOutlet weak var lbl_please_select_time_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_please_select_time_text.text = "Select Time"
+                } else {
+                    lbl_please_select_time_text.text = "সময় নির্বাচন করুন"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+        }
+    }
     var str_selected_date:String! = ""
     var str_selected_date2:String! = ""
     
@@ -64,7 +118,25 @@ class schedule_a_ride: UIViewController {
         }
     }
     
-    @IBOutlet weak var btn_select_time:UIButton!
+    @IBOutlet weak var btn_select_time:UIButton! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_select_time.setTitle("select time", for: .normal)
+                } else {
+                    btn_select_time.setTitle("সময় নির্বাচন করুন", for: .normal)
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+        }
+    }
     
     @IBOutlet weak var btn_schedule:UIButton! {
         didSet {
@@ -72,7 +144,24 @@ class schedule_a_ride: UIViewController {
             btn_schedule.layer.cornerRadius = 12
             btn_schedule.clipsToBounds = true
             btn_schedule.setTitleColor(.white, for: .normal)
-            btn_schedule.setTitle("Schedule a ride now", for: .normal)
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_schedule.setTitle("Schedule a ride now", for: .normal)
+                } else {
+                    btn_schedule.setTitle("এখন একটি রাইড সময়সূচী", for: .normal)
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
         }
     }
     
@@ -145,157 +234,324 @@ class schedule_a_ride: UIViewController {
     }
     
     @objc func select_time_click_method() {
-        RPicker.selectDate(title: "Select Time", cancelText: "Cancel", datePickerMode: .time, didSelectDate: { (selectedDate) in
-            // TODO: Your implementation for date
-            self.btn_select_time.setTitle(selectedDate.dateString("HH:mm"), for: .normal)
-            self.str_selected_time = selectedDate.dateString("HH:mm")
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
             
-            print(self.str_selected_time as Any)
-            
-            let fullName    = String(self.str_selected_time)
-            let fullNameArr = fullName.components(separatedBy: ":")
+            if (language == "en") {
+                RPicker.selectDate(title: "Select Time", cancelText: "Cancel", datePickerMode: .time, didSelectDate: { (selectedDate) in
+                    // TODO: Your implementation for date
+                    self.btn_select_time.setTitle(selectedDate.dateString("HH:mm"), for: .normal)
+                    self.str_selected_time = selectedDate.dateString("HH:mm")
+                    
+                    print(self.str_selected_time as Any)
+                    
+                    let fullName    = String(self.str_selected_time)
+                    let fullNameArr = fullName.components(separatedBy: ":")
 
-            let hour    = fullNameArr[0]
-            let minute = fullNameArr[1]
-            
-            var str_am:String! = " am"
-            var str_pm:String! = " pm"
-            
-            
-            
-            if (hour == "00") {
-                
-                self.str_selected_time2 = "12:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
-                
-            } else if (hour == "01") {
-                
-                self.str_selected_time2 = "1:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("1:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "02") {
-                
-                self.str_selected_time2 = "2:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("2:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "03") {
-                
-                self.str_selected_time2 = "3:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("3:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "04") {
-                
-                self.str_selected_time2 = "4:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("4:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "05") {
-                
-                self.str_selected_time2 = "5:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("5:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "06") {
-                
-                self.str_selected_time2 = "6:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("6:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "07") {
-                
-                self.str_selected_time2 = "7:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("7:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "08") {
-                
-                self.str_selected_time2 = "8:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("8:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "09") {
-                
-                self.str_selected_time2 = "9:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("9:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "10") {
-                
-                self.str_selected_time2 = "10:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("10:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "11") {
-                
-                self.str_selected_time2 = "11:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("11:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "12") {
-                
-                self.str_selected_time2 = "12:\(minute)\(str_am!)"
-                self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
-                
-            }else if (hour == "13") {
-                
-                self.str_selected_time2 = "1:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("1:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "14") {
-                
-                self.str_selected_time2 = "2:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("2:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "15") {
-                
-                self.str_selected_time2 = "3:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("3:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "16") {
-                
-                self.str_selected_time2 = "4:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("4:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "17") {
-                
-                self.str_selected_time2 = "5:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("5:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "18") {
-                
-                self.str_selected_time2 = "6:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("6:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "19") {
-                
-                self.str_selected_time2 = "7:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("7:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "20") {
-                
-                self.str_selected_time2 = "8:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("8:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "21") {
-                
-                self.str_selected_time2 = "9:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("9:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "22") {
-                
-                self.str_selected_time2 = "10:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("10:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "23") {
-                
-                self.str_selected_time2 = "11:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("11:\(minute)\(str_pm!)", for: .normal)
-                
-            } else if (hour == "24") {
-                
-                self.str_selected_time2 = "12:\(minute)\(str_pm!)"
-                self.btn_select_time.setTitle("12:\(minute)\(str_pm!)", for: .normal)
-                
+                    let hour    = fullNameArr[0]
+                    let minute = fullNameArr[1]
+                    
+                    var str_am:String! = " am"
+                    var str_pm:String! = " pm"
+                    
+                    
+                    
+                    if (hour == "00") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                        
+                    } else if (hour == "01") {
+                        
+                        self.str_selected_time2 = "1:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("1:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "02") {
+                        
+                        self.str_selected_time2 = "2:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("2:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "03") {
+                        
+                        self.str_selected_time2 = "3:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("3:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "04") {
+                        
+                        self.str_selected_time2 = "4:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("4:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "05") {
+                        
+                        self.str_selected_time2 = "5:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("5:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "06") {
+                        
+                        self.str_selected_time2 = "6:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("6:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "07") {
+                        
+                        self.str_selected_time2 = "7:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("7:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "08") {
+                        
+                        self.str_selected_time2 = "8:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("8:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "09") {
+                        
+                        self.str_selected_time2 = "9:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("9:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "10") {
+                        
+                        self.str_selected_time2 = "10:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("10:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "11") {
+                        
+                        self.str_selected_time2 = "11:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("11:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "12") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "13") {
+                        
+                        self.str_selected_time2 = "1:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("1:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "14") {
+                        
+                        self.str_selected_time2 = "2:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("2:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "15") {
+                        
+                        self.str_selected_time2 = "3:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("3:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "16") {
+                        
+                        self.str_selected_time2 = "4:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("4:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "17") {
+                        
+                        self.str_selected_time2 = "5:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("5:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "18") {
+                        
+                        self.str_selected_time2 = "6:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("6:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "19") {
+                        
+                        self.str_selected_time2 = "7:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("7:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "20") {
+                        
+                        self.str_selected_time2 = "8:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("8:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "21") {
+                        
+                        self.str_selected_time2 = "9:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("9:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "22") {
+                        
+                        self.str_selected_time2 = "10:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("10:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "23") {
+                        
+                        self.str_selected_time2 = "11:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("11:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "24") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else {
+                        
+                        self.btn_select_time.setTitle(selectedDate.dateString("HH:mm")+str_am, for: .normal)
+                        self.str_selected_time = selectedDate.dateString("HH:mm")
+                        
+                    }
+                    
+                })
             } else {
-                
-                self.btn_select_time.setTitle(selectedDate.dateString("HH:mm")+str_am, for: .normal)
-                self.str_selected_time = selectedDate.dateString("HH:mm")
-                
+                RPicker.selectDate(title: "সময় নির্বাচন করুন", cancelText: "বাতিল করুন", datePickerMode: .time, didSelectDate: { (selectedDate) in
+                    // TODO: Your implementation for date
+                    self.btn_select_time.setTitle(selectedDate.dateString("HH:mm"), for: .normal)
+                    self.str_selected_time = selectedDate.dateString("HH:mm")
+                    
+                    print(self.str_selected_time as Any)
+                    
+                    let fullName    = String(self.str_selected_time)
+                    let fullNameArr = fullName.components(separatedBy: ":")
+
+                    let hour    = fullNameArr[0]
+                    let minute = fullNameArr[1]
+                    
+                    var str_am:String! = " am"
+                    var str_pm:String! = " pm"
+                    
+                    
+                    
+                    if (hour == "00") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                        
+                    } else if (hour == "01") {
+                        
+                        self.str_selected_time2 = "1:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("1:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "02") {
+                        
+                        self.str_selected_time2 = "2:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("2:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "03") {
+                        
+                        self.str_selected_time2 = "3:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("3:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "04") {
+                        
+                        self.str_selected_time2 = "4:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("4:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "05") {
+                        
+                        self.str_selected_time2 = "5:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("5:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "06") {
+                        
+                        self.str_selected_time2 = "6:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("6:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "07") {
+                        
+                        self.str_selected_time2 = "7:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("7:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "08") {
+                        
+                        self.str_selected_time2 = "8:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("8:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "09") {
+                        
+                        self.str_selected_time2 = "9:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("9:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "10") {
+                        
+                        self.str_selected_time2 = "10:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("10:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "11") {
+                        
+                        self.str_selected_time2 = "11:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("11:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "12") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_am!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_am!)", for: .normal)
+                        
+                    }else if (hour == "13") {
+                        
+                        self.str_selected_time2 = "1:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("1:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "14") {
+                        
+                        self.str_selected_time2 = "2:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("2:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "15") {
+                        
+                        self.str_selected_time2 = "3:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("3:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "16") {
+                        
+                        self.str_selected_time2 = "4:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("4:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "17") {
+                        
+                        self.str_selected_time2 = "5:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("5:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "18") {
+                        
+                        self.str_selected_time2 = "6:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("6:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "19") {
+                        
+                        self.str_selected_time2 = "7:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("7:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "20") {
+                        
+                        self.str_selected_time2 = "8:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("8:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "21") {
+                        
+                        self.str_selected_time2 = "9:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("9:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "22") {
+                        
+                        self.str_selected_time2 = "10:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("10:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "23") {
+                        
+                        self.str_selected_time2 = "11:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("11:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else if (hour == "24") {
+                        
+                        self.str_selected_time2 = "12:\(minute)\(str_pm!)"
+                        self.btn_select_time.setTitle("12:\(minute)\(str_pm!)", for: .normal)
+                        
+                    } else {
+                        
+                        self.btn_select_time.setTitle(selectedDate.dateString("HH:mm")+str_am, for: .normal)
+                        self.str_selected_time = selectedDate.dateString("HH:mm")
+                        
+                    }
+                    
+                })
             }
             
-        })
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+        
+        
     }
     
     // calendar

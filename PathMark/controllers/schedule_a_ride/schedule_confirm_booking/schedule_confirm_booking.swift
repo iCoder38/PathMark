@@ -80,12 +80,30 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
     
     @IBOutlet weak var lblNavigationTitle:UILabel! {
         didSet {
-            lblNavigationTitle.text = "Fare distance"
+             
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lblNavigationTitle.text = "Fare distance"
+                } else {
+                    lblNavigationTitle.text = "ভাড়া দূরত্ব"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
             lblNavigationTitle.textColor = NAVIGATION_TITLE_COLOR
             lblNavigationTitle.backgroundColor = .clear
         }
     }
     
+   
     let cellReuseIdentifier = "dFareDistanceTableViewCell"
     
     @IBOutlet weak var tbleView:UITableView! {
@@ -97,7 +115,24 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
     @IBOutlet weak var btnConfirmBooking:UIButton! {
         didSet {
             btnConfirmBooking.backgroundColor = .systemGreen
-            btnConfirmBooking.setTitle("Confirm booking", for: .normal)
+            
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btnConfirmBooking.setTitle("Confirm booking", for: .normal)
+                } else {
+                    btnConfirmBooking.setTitle("বুকিং নিশ্চিত করুন", for: .normal)
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
         }
     }
     
@@ -457,6 +492,24 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                 let drop_lat = String(self.searched_place_location_lat2)
                 let drop_long = String(self.searched_place_location_long2)
 
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                    
+                } else {
+                    print("=============================")
+                    print("LOGIN : Select language error")
+                    print("=============================")
+                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                }
+                
                 parameters = [
                     
                     "action"            : "addbooking",
@@ -478,6 +531,7 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                     
                     "bookingDate":String(self.str_date),
                     "bookingTime":String(self.str_time),
+                    "language" : String(lan)
                     
                 ]
                 
@@ -525,10 +579,29 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
                             else {
                                 self.hide_loading_UI()
                                 
-                                let alert = NewYorkAlertController(title: String("Alert"), message: String(message), style: .alert)
-                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                                alert.addButtons([cancel])
-                                self.present(alert, animated: true)
+                                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                                    print(language as Any)
+                                    
+                                    if (language == "en") {
+                                        let alert = NewYorkAlertController(title: String("Alert"), message: String(message), style: .alert)
+                                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                        alert.addButtons([cancel])
+                                        self.present(alert, animated: true)
+                                    } else {
+                                        let alert = NewYorkAlertController(title: String("সতর্কতা"), message: String(message), style: .alert)
+                                        let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+                                        alert.addButtons([cancel])
+                                        self.present(alert, animated: true)
+                                    }
+                                    
+                                } else {
+                                    print("=============================")
+                                    print("LOGIN : Select language error")
+                                    print("=============================")
+                                    UserDefaults.standard.set("en", forKey: str_language_convert)
+                                }
+                                
+                                
                                 
                             }
                             
@@ -620,56 +693,87 @@ class schedule_confirm_booking: UIViewController , CLLocationManagerDelegate , M
            let drop = String(self.searched_place_location_lat2)+","+String(self.searched_place_location_long2)
            
            var parameters:Dictionary<AnyHashable, Any>!
-           parameters = [
-               "action"        : "getprice",
-               "pickuplatLong" : String(pickUp),
-               "droplatLong"   : String(drop),
-               "categoryId"    : String(self.str_get_category_id2),
-           ]
-         
-            print("parameters-------\(String(describing: parameters))")
-            
-            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
-                response in
+           
+           var lan:String!
+           
+           if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                    
+                   lan = "en"
+               } else {
+                   lan = "bn"
+               }
+               
+           } else {
+               print("=============================")
+               print("LOGIN : Select language error")
+               print("=============================")
                 
-                switch(response.result) {
-                case .success(_):
-                    if let data = response.value {
-                        
-                        let JSON = data as! NSDictionary
-                        print(JSON)
-                        
-                        var strSuccess : String!
-                        strSuccess = JSON["status"] as? String
-                        
-                        if strSuccess.lowercased() == "success" {
-                            
-                            var dict: Dictionary<AnyHashable, Any>
-                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
-                            
-                            self.hide_loading_UI()
-                            self.tbleView.separatorColor = .clear
-                            self.iAmHereForLocationPermission()
-                            
-                            self.str_total_distance = (dict["distance"] as! String)
-                            self.str_total_rupees = "\(dict["total"]!)"
-                            self.str_total_duration = (dict["duration"] as! String)
-                            
-                        }
-                        else {
-                            self.hide_loading_UI()
-                        }
-                        
-                    }
-                    
-                case .failure(_):
-                    print("Error message:\(String(describing: response.error))")
-                    self.hide_loading_UI()
-                    self.please_check_your_internet_connection()
-                    
-                    break
-                }
-            }
+               UserDefaults.standard.set("en", forKey: str_language_convert)
+           }
+           
+           
+           if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+               
+               let x : Int = person["userId"] as! Int
+               let myString = String(x)
+               
+               
+               parameters = [
+                "action"        : "getprice",
+                "userId"        : String(myString),
+                "pickuplatLong" : String(pickUp),
+                "droplatLong"   : String(drop),
+                "categoryId"    : String(self.str_get_category_id2),
+                "language"      : String(lan)
+               ]
+               
+               print("parameters-------\(String(describing: parameters))")
+               
+               AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                   response in
+                   
+                   switch(response.result) {
+                   case .success(_):
+                       if let data = response.value {
+                           
+                           let JSON = data as! NSDictionary
+                           print(JSON)
+                           
+                           var strSuccess : String!
+                           strSuccess = JSON["status"] as? String
+                           
+                           if strSuccess.lowercased() == "success" {
+                               
+                               var dict: Dictionary<AnyHashable, Any>
+                               dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                               
+                               self.hide_loading_UI()
+                               self.tbleView.separatorColor = .clear
+                               self.iAmHereForLocationPermission()
+                               
+                               self.str_total_distance = (dict["distance"] as! String)
+                               self.str_total_rupees = "\(dict["total"]!)"
+                               self.str_total_duration = (dict["duration"] as! String)
+                               
+                           }
+                           else {
+                               self.hide_loading_UI()
+                           }
+                           
+                       }
+                       
+                   case .failure(_):
+                       print("Error message:\(String(describing: response.error))")
+                       self.hide_loading_UI()
+                       self.please_check_your_internet_connection()
+                       
+                       break
+                   }
+               }
+           }
         }
     }
 }
@@ -698,9 +802,43 @@ extension schedule_confirm_booking: UITableViewDataSource , UITableViewDelegate 
         // cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
         // cell.lbl_duration.text = "Duration : "+String(self.str_total_duration)
         
-        cell.lbl_amount.text = str_bangladesh_currency_symbol+" "+String(self.str_total_rupees)+"\nAmount"
-         cell.lbl_arrived.text = String(self.str_total_duration)+"\nArrived"
-         cell.lbl_distance.text = String(self.str_total_distance)+"\nDistance"
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.lbl_amount.text = str_bangladesh_currency_symbol+" "+String(self.str_total_rupees)+"\nAmount"
+            } else {
+                cell.lbl_amount.text = str_bangladesh_currency_symbol+" "+String(self.str_total_rupees)+"\nপরিমাণ"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.lbl_arrived.text = String(self.str_total_duration)+"\nArrived"
+                cell.lbl_distance.text = String(self.str_total_distance)+"\nDistance"
+            } else {
+                cell.lbl_arrived.text = String(self.str_total_duration)+"\nপৌঁছেছে"
+                cell.lbl_distance.text = String(self.str_total_distance)+"\nদূরত্ব"
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+         
+         
         
         cell.lbl_date.text = String(str_date2)
         cell.lbl_time.text = String(str_time2)
@@ -871,7 +1009,28 @@ class schedule_confirm_booking_table_cell: UITableViewCell {
     @IBOutlet weak var lblStartingLocation:UILabel!
     @IBOutlet weak var lblEndLocation:UILabel!
     
-
+    @IBOutlet weak var lbl_estimate:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_estimate.text = "This is an estimate only, time, price & km may vary"
+                } else {
+                    lbl_estimate.text = "এটি শুধুমাত্র একটি অনুমান, সময়, মূল্য এবং কিমি পরিবর্তিত হতে পারে"
+                }
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+        }
+        
+        
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

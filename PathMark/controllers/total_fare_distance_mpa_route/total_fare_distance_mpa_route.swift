@@ -123,6 +123,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
 
+        
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
             
@@ -642,7 +643,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "pickuplatLong" : String(self.my_location_lat)+","+String(self.my_location_long),
                     "droplatLong"   : String(self.searched_place_location_lat)+","+String(self.searched_place_location_long),
                     "categoryId"    : String(self.str_get_category_id),
-                    "language"      : "en"
+                    "language"      : String(self.str_selected_language_is)
                 ]
                 
                 print("parameters-------\(String(describing: parameters))")
@@ -880,6 +881,8 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
     
     @IBOutlet weak var lbl_from:UILabel!
     @IBOutlet weak var lbl_to:UILabel!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
