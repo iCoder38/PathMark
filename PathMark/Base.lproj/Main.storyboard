@@ -828,6 +828,7 @@
                                             <outlet property="btn_schedule_a_ride_now" destination="r7J-Nm-jZC" id="s1C-jl-p8X"/>
                                             <outlet property="collectionView" destination="Xar-yq-rD7" id="xie-Sq-4AB"/>
                                             <outlet property="lbl_my_full_address" destination="rLy-jK-UhJ" id="ZEP-Be-1pj"/>
+                                            <outlet property="lbl_select_destination" destination="0vQ-0b-Jug" id="oXV-e1-8NG"/>
                                             <outlet property="lbl_select_vehicle" destination="UkR-eP-Vjc" id="IBt-QD-57y"/>
                                             <outlet property="lbl_set_ride_location" destination="enb-Oy-ZJe" id="iOh-kE-bIF"/>
                                             <outlet property="page_control" destination="gOq-RS-ber" id="BKD-xt-DSG"/>
@@ -1481,7 +1482,6 @@
                                             <outlet property="lbl_distance_text" destination="yAc-dL-Xx7" id="3A7-Bm-fXf"/>
                                             <outlet property="lbl_duration" destination="NJY-Q8-jYR" id="tcQ-6c-eRl"/>
                                             <outlet property="lbl_est_amount_text" destination="03n-eG-Eij" id="OyF-9w-G4r"/>
-                                            <outlet property="lbl_estimate" destination="IPz-gv-lHJ" id="zGG-cA-cNE"/>
                                             <outlet property="lbl_estimated_only_text" destination="IPz-gv-lHJ" id="gp5-m5-jhI"/>
                                             <outlet property="lbl_from" destination="puH-Ex-lId" id="JB8-4e-zpr"/>
                                             <outlet property="lbl_to" destination="cG5-yq-PWc" id="Nev-uN-DWM"/>
@@ -3401,7 +3401,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Egc-mW-o8b">
-                                                                    <rect key="frame" x="36" y="7.3333333333333517" width="16" height="15.666666666666666"/>
+                                                                    <rect key="frame" x="36" y="7.3333333333333526" width="16" height="15.666666666666661"/>
                                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="Hdr-DM-il6"/>
@@ -8587,10 +8587,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TwF-Sm-sX7">
-                                <rect key="frame" x="0.0" y="773" width="393" height="79"/>
+                                <rect key="frame" x="0.0" y="770" width="393" height="82"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GTg-aA-t4N" customClass="GrowingTextView" customModule="GrowingTextView">
-                                        <rect key="frame" x="50" y="8" width="303" height="30"/>
+                                        <rect key="frame" x="50" y="8" width="303" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -8704,7 +8704,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fJS-Nd-B0I">
-                                <rect key="frame" x="0.0" y="88" width="393" height="685"/>
+                                <rect key="frame" x="0.0" y="88" width="393" height="682"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellOne" rowHeight="70" id="zXz-EI-kUM" customClass="BooCheckTableCell" customModule="PathMark" customModuleProvider="target">

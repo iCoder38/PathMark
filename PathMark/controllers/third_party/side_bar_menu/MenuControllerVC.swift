@@ -49,7 +49,24 @@ class MenuControllerVC: UIViewController {
     
     @IBOutlet weak var btn_panic:UIButton! {
         didSet {
-            btn_panic.setTitle("PANIC SOS", for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_panic.setTitle("PANIC SOS", for: .normal)
+                } else {
+                    btn_panic.setTitle("প্যানিক এসওএস", for: .normal)
+                }
+                
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+            
+            
             btn_panic.setTitleColor(.white, for: .normal)
             btn_panic.layer.cornerRadius = 6
             btn_panic.clipsToBounds = true
@@ -77,7 +94,7 @@ class MenuControllerVC: UIViewController {
                               "রিভিউ ও রেটিং",
                               "যারিব সম্পর্কে জানুন",
                               "FAQ(s)",
-                              "Shared booking",
+                              "শেয়ার্ড বুকিং",
                               "হেল্প",
                                  "ভাষা পরিবর্তন করুন",
                               "লগ-আউট করুন"]

@@ -124,16 +124,54 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
         
         if (self.str_vehicle_type == "0") {
-            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
+            /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
             alert.addButtons([cancel])
-            self.present(alert, animated: true)
+            self.present(alert, animated: true)*/
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    self.present(alert, animated: true)
+                } else {
+                    let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("একটি গাড়ির ধরন নির্বাচন করুন."), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    self.present(alert, animated: true)
+                    
+                    
+                }
+                
+            }
         } else {
             if (self.str_select_option == "0") {
-                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
+                /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
                 let cancel = NewYorkButton(title: "dismiss", style: .cancel)
                 alert.addButtons([cancel])
-                self.present(alert, animated: true)
+                self.present(alert, animated: true)*/
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                    } else {
+                        let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("অনুগ্রহ করে একটি বিকল্প নির্বাচন করুন (এখন একটি রাইড বুক করুন বা একটি যাত্রার সময়সূচী করুন)।"), style: .alert)
+                        let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                        
+                    }
+                    
+                }
+                
             } else {
                 // push to next screen
                 
@@ -232,7 +270,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.view.endEditing(true)
         if revealViewController() != nil {
             btn_back.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
-            revealViewController().rearViewRevealWidth = self.view.frame.size.width
+            revealViewController().rearViewRevealWidth = 100//self.view.frame.size.width
             view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
     }
@@ -671,25 +709,58 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
-            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
-            cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
-            cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                           print(language as Any)
+                           
+                           if (language == "en") {
+                               cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+                               cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
+                               cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+                           } else {
+                               cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
+                               cell.btn_car.setImage(UIImage(named: "car_bangla_selected"), for: .normal)
+                               cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
+                           }
+                               
+                       }
             //
         } else if (self.str_vehicle_type == "BIKE") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
-            cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
-            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
-            cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                          print(language as Any)
+                          
+                          if (language == "en") {
+                              cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
+                              cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+                              cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+                          } else {
+                              cell.btn_bike.setImage(UIImage(named: "bike_bangla_selected"), for: .normal)
+                              cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
+                              cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
+                          }
+                              
+                      }
             //
         } else if (self.str_vehicle_type == "INTERCITY") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
-            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
-            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
-            cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+                            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+                            cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
+                        } else {
+                            cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
+                            cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
+                            cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_selected"), for: .normal)
+                        }
+                            
+                    }
             //
         }
         
@@ -904,10 +975,10 @@ class dashboard_collection_view_cell: UICollectionViewCell , UITextFieldDelegate
             // view_bg.backgroundColor = UIColor.init(red: 86.0/255.0, green: 86.0/255.0, blue: 86.0/255.0, alpha: 1)
             
             /*view_bg.layer.shadowColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.25).cgColor
-            view_bg.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
-            view_bg.layer.shadowOpacity = 1.0
-            view_bg.layer.shadowRadius = 15.0
-            view_bg.layer.masksToBounds = false*/
+             view_bg.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
+             view_bg.layer.shadowOpacity = 1.0
+             view_bg.layer.shadowRadius = 15.0
+             view_bg.layer.masksToBounds = false*/
         }
     }
     
@@ -927,11 +998,20 @@ class dashboard_collection_view_cell: UICollectionViewCell , UITextFieldDelegate
 }
 
 class dashboard_table_cell: UITableViewCell {
-
+    
     @IBOutlet weak var btn_car:UIButton! {
         didSet {
-            btn_car .setBackgroundImage(UIImage(named: "car_image_name"), for: .normal)
-            btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+                } else {
+                    btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
+                }
+                
+            }
+            
             btn_car.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_car.backgroundColor = .systemPurple
             btn_car.layer.cornerRadius = 14
@@ -947,8 +1027,16 @@ class dashboard_table_cell: UITableViewCell {
     }
     @IBOutlet weak var btn_bike:UIButton! {
         didSet {
-            btn_bike .setBackgroundImage(UIImage(named: "bike_with_name"), for: .normal)
-            btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+                } else {
+                    btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
+                }
+                
+            }
             btn_bike.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_bike.backgroundColor = .systemPurple
             btn_bike.layer.cornerRadius = 14
@@ -964,8 +1052,16 @@ class dashboard_table_cell: UITableViewCell {
     }
     @IBOutlet weak var btn_intercity:UIButton! {
         didSet {
-            btn_intercity .setBackgroundImage(UIImage(named: "intercity_with_name"), for: .normal)
-            btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+                } else {
+                    btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
+                }
+                
+            }
             btn_intercity.titleLabel!.font = UIFont(name: "Poppins-Regular", size: 14.0)!
             btn_intercity.backgroundColor = .systemPurple
             btn_intercity.layer.cornerRadius = 14
@@ -984,11 +1080,11 @@ class dashboard_table_cell: UITableViewCell {
     @IBOutlet weak var btn_previous:UIButton!
     
     @IBOutlet weak var page_control:UIPageControl! {
-           didSet {
-                page_control.currentPage = 0
-               page_control.backgroundColor = .clear
-           }
-       }
+        didSet {
+            page_control.currentPage = 0
+            page_control.backgroundColor = .clear
+        }
+    }
     
     @IBOutlet weak var collectionView:UICollectionView! {
         didSet {
@@ -1056,17 +1152,33 @@ class dashboard_table_cell: UITableViewCell {
             
         }
     }
+    
+    @IBOutlet weak var lbl_select_destination:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_select_destination.text = "Select destination"
+                } else {
+                    lbl_select_destination.text = "গন্তব্য নির্বাচন করুন"
+                }
+                
+            }
+        }
+    }
+    
     @IBOutlet weak var lbl_set_ride_location:UILabel!
     @IBOutlet weak var lbl_select_vehicle:UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }

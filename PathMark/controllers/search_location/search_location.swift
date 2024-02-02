@@ -31,8 +31,18 @@ class search_location: UIViewController {
     
     @IBOutlet weak var lblNavigationTitle:UILabel! {
         didSet {
-            lblNavigationTitle.text = "Search"
-             
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lblNavigationTitle.text = "Search"
+                } else {
+                    lblNavigationTitle.text = "অনুসন্ধান করুন"
+                }
+                    
+            }
+            lblNavigationTitle.textColor = .white
         }
     }
     
@@ -50,6 +60,17 @@ class search_location: UIViewController {
         /*let kUserDefault = UserDefaults.standard
         let data = kUserDefault.array(forKey: "nameArray")! as? [String] ?? [String]()
         print(data)*/
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                self.btn_add.setTitle("+ add", for: .normal)
+            } else {
+                self.btn_add.setTitle("+ যোগ করুন", for: .normal)
+            }
+                
+        }
         
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
@@ -291,7 +312,18 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             
             cell.backgroundColor = .clear
             
-            cell.lbl_added_address.text = "Added Address"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.lbl_added_address.text = "Added Address"
+                } else {
+                    cell.lbl_added_address.text = "যোগ করা ঠিকানা"
+                }
+                    
+            }
+            
+            
             
             return cell
         } else if (item!["type"] as! String) == "2" {
@@ -303,7 +335,18 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             
             cell.backgroundColor = .clear
             
-            cell.lbl_recent_address.text = "Recent Address"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.lbl_recent_address.text = "Recent Address"
+                } else {
+                    cell.lbl_recent_address.text = "সাম্প্রতিক ঠিকানা"
+                }
+                    
+            }
+            
+            
             
             return cell
         } else if (item!["type"] as! String) == "1" {
@@ -319,11 +362,47 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             print(item as Any)
             
             if "\(item!["address_type"]!)" == "0" {
-                cell.lbl_title.text = "Home"
+                
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_title.text = "Home"
+                    } else {
+                        cell.lbl_title.text = "বাড়ি"
+                    }
+                        
+                }
+                
             } else if "\(item!["address_type"]!)" == "1" {
                 cell.lbl_title.text = "Work"
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_title.text = "Work"
+                    } else {
+                        cell.lbl_title.text = "কাজ"
+                    }
+                        
+                }
+                
             } else {
                 cell.lbl_title.text = "Other"
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_title.text = "Other"
+                    } else {
+                        cell.lbl_title.text = "অন্যান্য"
+                    }
+                        
+                }
+                
             }
             
             cell.lbl_sub_title.text = (item!["address"] as! String)

@@ -204,9 +204,21 @@ class add_contacts: UIViewController , UITextFieldDelegate {
                 if (language == "en") {
                     self.view_navigation_title.text = "EDIT CONTACTS"
                     btn_submit.setTitle("SUBMIT", for: .normal)
+                    
+                    self.txt_full_name.placeholder = "Full name"
+                    self.txt_email.placeholder = "Email address"
+                    self.txt_phone.placeholder = "Phone number"
+                    self.txt_relation.placeholder = "Relation"
+                    
                 } else {
                     self.view_navigation_title.text = "নতুন পরিচিতি যোগ করুন"
                     btn_submit.setTitle("জমা দিন", for: .normal)
+                    
+                    self.txt_full_name.placeholder = "পুরো নাম"
+                    self.txt_email.placeholder = "ইমেইল ঠিকানা"
+                    self.txt_phone.placeholder = "ফোন নম্বর"
+                    self.txt_relation.placeholder = "সম্পর্ক"
+                    
                 }
                 
             }
@@ -219,13 +231,52 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             
             
             if ("\(self.dict_emergency["relation"]!)" == "0") {
-                self.txt_relation.text = "Friend"
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_relation.text = "Friend"
+                        
+                    } else {
+                        self.txt_relation.text = "বন্ধু"
+                        
+                    }
+                    
+                }
+                
+                
                 self.str_relation_text = "0"
             } else if ("\(self.dict_emergency["relation"]!)" == "1") {
-                self.txt_relation.text = "Family"
+                 
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_relation.text = "Family"
+                        
+                    } else {
+                        self.txt_relation.text = "পরিবার"
+                        
+                    }
+                    
+                }
+                
                 self.str_relation_text = "1"
             } else {
-                self.txt_relation.text = "Other"
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        self.txt_relation.text = "Other"
+                        
+                    } else {
+                        self.txt_relation.text = "অন্যান্য"
+                        
+                    }
+                    
+                }
                 self.str_relation_text = "2"
             }
             
