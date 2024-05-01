@@ -26,6 +26,8 @@ class before_payment: UIViewController {
     
     var str_coupon_code2:String!
     
+    var total_amount:String!
+    
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
             view_navigation_bar.backgroundColor = navigation_color
@@ -104,6 +106,7 @@ class before_payment: UIViewController {
         
         self.btn_submit.addTarget(self, action: #selector(submit_click_method), for: .touchUpInside)
         
+        self.total_amount = String(self.str_get_total_price2)
         self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
         
         self.str_final_amount = String(self.str_get_total_price2)
@@ -311,6 +314,12 @@ class before_payment: UIViewController {
             self.cash_payment_WB(str_show_loader: "yes")
             
         } else {
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+            push!.doublePayment = "\(self.total_amount!)"
+            push!.dict_full = self.get_full_data_for_payment2
+            push!.str_booking_id = String(self.str_booking_id2)
+            self.navigationController?.pushViewController(push!, animated: true)
             
             /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
             
@@ -570,7 +579,7 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         
         let final_cal = double_total - cal
         // print(final_cal)
-        
+        self.total_amount = "\(final_cal)"
         self.lbl_total_payable.text = "Total Payable Amount : \(str_bangladesh_currency_symbol)\(final_cal)"
         
         self.str_final_amount = "\(final_cal)"

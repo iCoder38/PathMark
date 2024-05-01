@@ -129,6 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
+    
    
     
     // MARK:- FIREBASE NOTIFICATION -
@@ -392,6 +393,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 return true
             } else if (ApplicationDelegate.shared.application(app, open: url, options: options)) {
                 return true
+            } else {
+                if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                   let queryItems = components.queryItems {
+                    for item in queryItems {
+                        if item.name == "payment_status" && item.value == "success" {
+                            // Payment was successful
+                            if let transactionID = queryItems.first(where: { $0.name == "transaction_id" })?.value {
+                                // Update UI, notify user, etc.
+                                print("Payment successful. Transaction ID: \(transactionID)")
+                            }
+                            break
+                        }
+                    }
+                }
+                return true
             }
 
             return false
@@ -399,6 +415,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 }
 
-
-
-
+/*
+ func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+         // Handle the redirect URL or deep link here
+         if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+            let queryItems = components.queryItems {
+             for item in queryItems {
+                 if item.name == "payment_status" && item.value == "success" {
+                     // Payment was successful
+                     if let transactionID = queryItems.first(where: { $0.name == "transaction_id" })?.value {
+                         // Update UI, notify user, etc.
+                         print("Payment successful. Transaction ID: \(transactionID)")
+                     }
+                     break
+                 }
+             }
+         }
+         return true
+     }
+ */

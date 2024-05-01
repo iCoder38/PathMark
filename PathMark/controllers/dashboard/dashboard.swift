@@ -77,8 +77,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
-        self.navigationController?.pushViewController(push!, animated: true)
+        /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+        self.navigationController?.pushViewController(push!, animated: true)*/
         
         self.tbleView.delegate = self
         self.tbleView.dataSource = self
