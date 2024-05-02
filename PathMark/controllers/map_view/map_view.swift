@@ -85,6 +85,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var pick_lat:String!
     var pick_long:String!
     
+    var str_bike_cat_id:String!
+    
     @IBOutlet weak var search_text_field:UISearchTextField!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
@@ -356,7 +358,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         print(self.str_get_login_user_lat as Any)
         print(self.str_get_login_user_long as Any)
+        print(self.str_user_select_vehicle as Any)
         
+        
+        if (self.str_user_select_vehicle == "BIKE"){
+            list_of_all_category_WB()
+        }
         // self.show_loading_UI()
         // self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
@@ -546,8 +553,33 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             self.mapView.isHidden = true
             self.btnRideNow.isHidden = true
             
+            if (self.str_user_select_vehicle == "BIKE"){
+                print("bike")
+                
+                print(self.str_get_login_user_lat as Any)
+                print(self.str_get_login_user_long as Any)
+                print(self.pick_lat as Any)
+                print(self.pick_long as Any)
+                
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                
+                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                
+                push!.str_get_category_id = String(self.str_bike_cat_id)
+                push!.str_from_location = String(self.lbl_location_from.text!)
+                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                
+                push!.my_location_lat = String(self.str_get_login_user_lat)
+                push!.my_location_long = String(self.str_get_login_user_long)
+                
+                push!.searched_place_location_lat = String(self.searchLat)
+                push!.searched_place_location_long = String(self.searchLong)
+                
+                self.navigationController?.pushViewController(push!, animated: true)
+            } else {
+                self.list_by_car_WB(str_show_loader: "yes")
+            }
             
-            self.list_by_car_WB(str_show_loader: "yes")
             // UserDefaults.standard.set(self.lbl_location_from.text, forKey: "key_save_full_address_for_map_search")
             
             //
@@ -814,30 +846,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     /// **************************************************************
     
     @objc func list_of_all_category_WB() {
-        //        if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
-        // let str:String = person["role"] as! String
-        //            print(token_id_is)
-        
-        /*let headers: HTTPHeaders = [
-         "token":String(token_id_is),
-         // "Content-Type":"Application/json"
-         ]*/
-        
+      
         self.view.endEditing(true)
         
-        
-        // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-        
-        // let params = main_token(body: get_encrpyt_token)
-        
-        /*
-         [action] => listbyprice
-         [TYPE] => CAR
-         [userId] => 235
-         [pickuplatLong] => 28.5872414,77.060609
-         [droplatLong] => 28.73826769999999,77.0822151
-         [language] => en
-         */
         let params = payload_vehicle_list(action: "category",
                                           TYPE: String(self.str_user_select_vehicle),
                                           language:String(self.str_selected_language_is))
@@ -862,16 +873,16 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                     var strSuccess : String!
                     strSuccess = JSON["status"] as? String
                     
-                    //                        var dict: Dictionary<AnyHashable, Any>
-                    //                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
-                    
                     if strSuccess.lowercased() == "success" {
                         
                         self.ar = (JSON["data"] as! Array<Any>) as NSArray
                         
-                        for indexx in 0..<self.ar.count {
+                        let item = self.ar[0] as? [String:Any]
+                        self.str_bike_cat_id = "\(item!["id"]!)"
+                        /*for indexx in 0..<self.ar.count {
                             
                             let item = self.ar[indexx] as? [String:Any]
+                        
                             
                             let custom_dict = ["ID":"\(item!["ID"]!)",
                                                "name":(item!["name"] as! String),
@@ -889,7 +900,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                         
                         self.collectionView.dataSource = self
                         self.collectionView.delegate = self
-                        self.collectionView.reloadData()
+                        self.collectionView.reloadData()*/
                         
                         self.hide_loading_UI()
                         
@@ -1267,7 +1278,32 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                             
-                            self.list_by_car_WB(str_show_loader: "no")
+                            if (self.str_user_select_vehicle == "BIKE"){
+                                print("bike")
+                                 
+                                print(self.str_get_login_user_lat as Any)
+                                print(self.str_get_login_user_long as Any)
+                                print(self.pick_lat as Any)
+                                print(self.pick_long as Any)
+                                
+                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                                
+                                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                                
+                                push!.str_get_category_id = String(self.str_bike_cat_id)
+                                push!.str_from_location = String(self.lbl_location_from.text!)
+                                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                                
+                                push!.my_location_lat = String(self.str_get_login_user_lat)
+                                push!.my_location_long = String(self.str_get_login_user_long)
+                                
+                                push!.searched_place_location_lat = String(self.searchLat)
+                                push!.searched_place_location_long = String(self.searchLong)
+                                
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            } else {
+                                self.list_by_car_WB(str_show_loader: "no")
+                            }
                         }
                         else {
                             ERProgressHud.sharedInstance.hide()
@@ -1591,7 +1627,33 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                     if (self.pick_lat == nil) {
                         
                     } else {
-                        self.list_by_car_WB(str_show_loader: "yes")
+                        if (self.str_user_select_vehicle == "BIKE"){
+                            print("bike")
+                            
+                            print(self.str_get_login_user_lat as Any)
+                            print(self.str_get_login_user_long as Any)
+                            print(self.pick_lat as Any)
+                            print(self.pick_long as Any)
+                            
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                            
+                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                            
+                            push!.str_get_category_id = String(self.str_bike_cat_id)
+                            push!.str_from_location = String(self.lbl_location_from.text!)
+                            push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                            
+                            push!.my_location_lat = String(self.str_get_login_user_lat)
+                            push!.my_location_long = String(self.str_get_login_user_long)
+                            
+                            push!.searched_place_location_lat = String(self.searchLat)
+                            push!.searched_place_location_long = String(self.searchLong)
+                            
+                            self.navigationController?.pushViewController(push!, animated: true)
+                            
+                        } else {
+                            self.list_by_car_WB(str_show_loader: "yes")
+                        }
                     }
                     
                 }
@@ -1660,7 +1722,32 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                     if (self.str_get_login_user_lat == nil) {
                         
                     } else {
-                        self.list_by_car_WB(str_show_loader: "yes")
+                        if (self.str_user_select_vehicle == "BIKE"){
+                            print("bike")
+                            
+                            print(self.str_get_login_user_lat as Any)
+                            print(self.str_get_login_user_long as Any)
+                            print(self.pick_lat as Any)
+                            print(self.pick_long as Any)
+                            
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                            
+                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                            
+                            push!.str_get_category_id = String(self.str_bike_cat_id)
+                            push!.str_from_location = String(self.lbl_location_from.text!)
+                            push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                            
+                            push!.my_location_lat = String(self.str_get_login_user_lat)
+                            push!.my_location_long = String(self.str_get_login_user_long)
+                            
+                            push!.searched_place_location_lat = String(self.searchLat)
+                            push!.searched_place_location_long = String(self.searchLong)
+                            
+                            self.navigationController?.pushViewController(push!, animated: true)
+                        } else {
+                            self.list_by_car_WB(str_show_loader: "yes")
+                        }
                     }
                     
                 }
