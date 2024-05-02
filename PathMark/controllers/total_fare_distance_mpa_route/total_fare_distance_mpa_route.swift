@@ -63,6 +63,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     var str_total_distance:String! = ""
     var str_total_duration:String! = ""
     var str_total_rupees:String! = ""
+    var str_active_ride:String! = ""
     
     // ***************************************************************** // nav
     
@@ -396,6 +397,20 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     
     @objc func validation_before_confirm_booking() {
         
+        if (self.str_active_ride == "1") {
+            let alert = NewYorkAlertController(title: String("Alert"), message: String("Please complete your previous rides before book any new ride."), style: .alert)
+            
+            let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                _ in
+            }
+            
+            alert.addButtons([ cancel])
+            self.present(alert, animated: true)
+            return
+        }
+        
+        
+        
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
             
@@ -673,6 +688,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 self.str_total_distance = (dict["distance"] as! String)
                                 self.str_total_rupees = "\(dict["total"]!)"
                                 self.str_total_duration = (dict["duration"] as! String)
+                                self.str_active_ride = "\(dict["activeRide"]!)"
                                 
                             }
                             else {

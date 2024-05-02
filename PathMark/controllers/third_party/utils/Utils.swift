@@ -31,16 +31,65 @@ let sha_token_api_key = "68V0zWFrS72GbpPreidkQFLfj4v9m3Ti+DXc8OB0gcM="
 // BKASH ( COMMON )
 var bkash_call_back_URL = "http://mamtechit.com/callback"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // BKASH ( test mode )
 var bkash_generate_token = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/token/grant"
 var bkash_create_payment = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/create"
 var bkash_execute_payment = "https://tokenized.sandbox.bka.sh/v1.2.0-beta/tokenized/checkout/execute"
 
-var bkash_app_key = "4f6o0cjiki2rfm34kfdadl1eqq"
+// 01770618567
+// D7DaC<*E*eG
+// 0vWQuCRGiUX7EPVjQDr0EUAYtc
+// jcUNPBgbcqEDedNKdvE4G1cAK7D3hCjmJccNPZZBq96QIxxwAMEx
+
+// bkash => team
+var bkash_app_key = "0vWQuCRGiUX7EPVjQDr0EUAYtc"
+var bkash_app_secret_key = "jcUNPBgbcqEDedNKdvE4G1cAK7D3hCjmJccNPZZBq96QIxxwAMEx"
+
+var bkash_user_name = "01770618567"
+var bkash_password = "D7DaC<*E*eG"
+
+// bkash => from dashbaord
+/*var bkash_app_key = "4f6o0cjiki2rfm34kfdadl1eqq"
 var bkash_app_secret_key = "2is7hdktrekvrbljjh44ll3d9l1dtjo4pasmjvs5vl5qr3fug4b"
 
 var bkash_user_name = "sandboxTokenizedUser02"
-var bkash_password = "sandboxTokenizedUser02@12345"
+var bkash_password = "sandboxTokenizedUser02@12345"*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // BKASH ( live mode )
@@ -325,6 +374,16 @@ extension String {
 
 extension UIViewController {
     
+    @objc func sideBarMenu(button:UIButton) {
+        self.view.endEditing(true)
+        
+        if revealViewController() != nil {
+            button.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
+            
+            revealViewController().rearViewRevealWidth = 300
+            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        }
+    }
     
     @IBAction func showAlertButtonTapped(_ sender: UIButton) {
 

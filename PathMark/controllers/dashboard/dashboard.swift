@@ -77,6 +77,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.sideBarMenu(button: self.btn_back)
+        
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
         self.navigationController?.pushViewController(push!, animated: true)*/
         
@@ -102,8 +105,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         // location
         self.iAmHereForLocationPermission()
         
-        self.sideBarMenuClick()
-         // setupCarousel()
+        
         
         if let device_token = UserDefaults.standard.string(forKey: "key_my_device_token") {
             
@@ -266,16 +268,6 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
          self.str_select_option = "book"
          self.tbleView.reloadData()
         
-    }
-    
-    @objc func sideBarMenuClick() {
-        
-        self.view.endEditing(true)
-        if revealViewController() != nil {
-            btn_back.addTarget(self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:)), for: .touchUpInside)
-            revealViewController().rearViewRevealWidth = 100//self.view.frame.size.width
-            view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        }
     }
     
     @objc func iAmHereForLocationPermission() {

@@ -1028,7 +1028,7 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
         
         if self.str_which_panel_select == "0" {
             
-            if "\(item!["rideStatus"]!)" == "4" {
+            if "\(item!["rideStatus"]!)" == "5" || "\(item!["rideStatus"]!)" == "4" {
                 
                 if "\(item!["paymentStatus"]!)" == "" {
                     
@@ -1045,6 +1045,13 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
                     self.navigationController?.pushViewController(push!, animated: true)*/
                     
                 }
+            } else if "\(item!["rideStatus"]!)" == "3" || "\(item!["rideStatus"]!)" == "1" || "\(item!["rideStatus"]!)" == "2" {
+                
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                push!.dict_get_all_data_from_notification = (item! as NSDictionary)
+                push!.str_from_history = "yes"
+                
+                self.navigationController?.pushViewController(push!, animated: true)
             } else {
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
                 push!.dict_get_booking_details = (item! as NSDictionary)
