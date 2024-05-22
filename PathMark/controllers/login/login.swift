@@ -60,10 +60,14 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         }
     }
     
+    @IBOutlet weak var btn_back:UIButton!
+    
     var dict:NSDictionary!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
 //        let defaults = UserDefaults.standard
 //        defaults.setValue("", forKey: str_save_login_user_data)
@@ -76,11 +80,13 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         // set language
           // UserDefaults.standard.set("bg", forKey: str_language_convert)
         
+        
+        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
          
         self.iAmHereForLocationPermission()
         self.language_convert()
-        self.remember_me()
+        
         
     }
     
@@ -245,31 +251,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         }
     }
     
-    @objc func remember_me() {
-        
-        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-            print(person as Any)
-            
-            if person["role"] as! String == "Member" {
-                 
-                if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
-                    let indexPath = IndexPath.init(row: 0, section: 0)
-                    let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
-                    
-                    cell.txtEmailAddress.text = (person["email"] as! String)
-                    // cell.txtPassword.text = "123456"
-                }
-            } else {
-                
-                // DRIVER
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id")
-                self.navigationController?.pushViewController(push, animated: true)
-                
-            }
-            
-        }
-        
-    }
+    
     
     
 
@@ -853,11 +835,14 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
             cell.btn_remember_me.setImage(UIImage(named: "un_check"), for: .normal)
             cell.btn_remember_me.tag = 0
             
+            UserDefaults.standard.set("no", forKey: "key_remember_me")
+            
         } else {
             
             cell.btn_remember_me.tag = 1
             cell.btn_remember_me.setImage(UIImage(named: "check"), for: .normal)
             
+            UserDefaults.standard.set("yes", forKey: "key_remember_me")
         }
         
     }

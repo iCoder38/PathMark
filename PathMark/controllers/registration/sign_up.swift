@@ -14,8 +14,17 @@ import JWTDecode
 // MARK:- LOCATION -
 import CoreLocation
 
-class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+import GoogleSignIn
 
+import FacebookCore
+import FacebookLogin
+
+// apple
+import AuthenticationServices
+
+
+class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ASAuthorizationControllerDelegate {
+    var window: UIWindow?
     let locationManager = CLLocationManager()
     
     // MARK:- SAVE LOCATION STRING -
@@ -303,7 +312,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                     }
                 }
                 
-            }  else */if (cell.txt_phone_number.text!.count == 11) {
+            }  else */if (cell.txt_phone_number.text!.count == 10) {
                 
                 if (self.arr_country_array == nil) {
                     phone_number_code = "+880"
@@ -807,7 +816,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 11
+            return updatedText.count <= 10
             
         
         }  else {
@@ -821,6 +830,305 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
         }
         
+    }
+    
+    
+    
+    @objc func signInViaGoogle() {
+        // let gIdConfiguration = GIDConfiguration(clientID: "clientID", serverClientID: "serverClientID")
+         let gIdConfiguration  = GIDConfiguration(clientID: "750959835757-m69poiuvdmji91uqku55em8o3cljarke.apps.googleusercontent.com")
+        // ledt gIdConfiguration  = GIDConfiguration(clientID: "com.googleusercontent.apps.750959835757-m69poiuvdmji91uqku55em8o3cljarke")
+        
+        GIDSignIn.sharedInstance.configuration = gIdConfiguration
+//
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { signInResult, error in
+            guard error == nil else { return }
+            guard let signInResult = signInResult else { return }
+
+            let user = signInResult.user
+
+            let emailAddress = user.profile?.email
+
+            let fullName = user.profile?.name
+            let givenName = user.profile?.givenName
+            let familyName = user.profile?.familyName
+            let social_id = user.userID
+
+            let profilePicUrl = user.profile?.imageURL(withDimension: 320)
+            
+            print(emailAddress as Any)
+            print(fullName as Any)
+            print(givenName as Any)
+            print(familyName as Any)
+            print(profilePicUrl as Any)
+            
+            
+            
+            self.socia_login_wb(name: fullName!, social_id: "\(social_id!)", email: emailAddress!, profile_picture: "\(profilePicUrl!)")
+        }
+        
+        
+    }
+    
+    @objc func socia_login_wb(name:String,social_id:String,email:String,profile_picture:String) {
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("google"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String(profile_picture)
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        self.save_email(email: String(email))
+                        //
+                        
+                        self.hide_loading_UI()
+                        
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    @objc func save_email(email:String) {
+        
+        let custom_email_pass = ["email":String(email)]
+        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+    }
+    @objc func signInViaFacebook() {
+        // Settings.shared.appID = "fb1035864164317944"
+        // Settings.shared.displayName = "Zarib"
+        
+        let fbLoginManager : LoginManager = LoginManager()
+        
+        fbLoginManager.logIn(permissions:["email","public_profile"], from: self, handler: {(result, error) -> Void in
+            
+            print("\n\n result: \(String(describing: result))")
+            print("\n\n Error: \(String(describing: error))")
+            
+            if (error == nil)
+            {
+                if let fbloginresult = result
+                {
+                    if(fbloginresult.isCancelled)
+                    {
+                        //Show Cancel alert to the user
+                        let alert = UIAlertController(title: "Facebook login", message: "User pressed cancel button", preferredStyle: UIAlertController.Style.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: {    (action:UIAlertAction!) in
+                            //print("you have pressed the ok button")
+                            
+                        }))
+                        
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    else {
+                        print("going to getFBLoggedInUserData.. ")
+                        // self.getFBLoggedInUserData()
+                        /*print("\(Profile.current?.userID)")
+                         print("\(Profile.current?.firstName)")
+                         print("\(Profile.current?.email)")
+                         print("\(Profile.current?.imageURL)")*/
+                        
+                        if let url = URL(string: "\(Profile.current?.imageURL!)") {
+                            print(url)
+                            // print(String(contentsOf: url))
+                            var myUrlStr : String = url.absoluteString
+                            print(url)
+                            
+                            self.socia_login_fb_wb(name: (Profile.current?.firstName)!, social_id: Profile.current!.userID, email: (Profile.current?.email)!, profile_picture: "")
+                            
+                        }
+                        
+                    }
+                }
+                
+            }
+        })
+    }
+    
+    @objc func socia_login_fb_wb(name:String,social_id:String,email:String,profile_picture:String) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+//            let x : Int = (person["userId"] as! Int)
+//            let myString = String(x)
+            
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("facebook"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String(profile_picture)
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        self.save_email(email: String(email))
+                        // save email and pass
+                        // email
+                        
+                        //
+                        
+                        self.hide_loading_UI()
+                        
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    @objc func push_to_dashboard() {
+        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+        // self.navigationController?.pushViewController(push!, animated: true)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        let mainRevealController = SWRevealViewController()
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
     }
 }
 
@@ -1086,18 +1394,240 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
             
             // cell.btn_accept_terms.tag = 1
             cell.btn_accept_terms.setImage(UIImage(named: "rem"), for: .normal)
+            cell.btn_accept_terms.backgroundColor = .clear
             cell.btnSignUp.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1)
             cell.btnSignUp.isUserInteractionEnabled = true
         } else {
-            cell.btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
+            // cell.btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
+            cell.btn_accept_terms.backgroundColor = .systemGray4
             // cell.btn_accept_terms.tag = 0
             cell.btnSignUp.backgroundColor = .lightGray
             cell.btnSignUp.isUserInteractionEnabled = false
         }
         
+        cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
+        cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
+        
+        // apple
+         // func setUpSignInAppleButton() {
+        let authorizationButton = ASAuthorizationAppleIDButton()
+        authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest), for: .touchUpInside)
+        authorizationButton.cornerRadius = 10
+        // authorizationButton.center = cell.view_apple.center
+          //Add button on some view or stack
+        cell.view_apple.addSubview(authorizationButton)
+        
         return cell
     }
+    @objc func handleAppleIdRequest() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.performRequests()
+    }
     
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as?  ASAuthorizationAppleIDCredential {
+            let userIdentifier = appleIDCredential.user
+            let fullName = appleIDCredential.fullName
+            let email = appleIDCredential.email
+            print("User id is \(userIdentifier) \n Full Name is \(String(describing: fullName)) \n Email id is \(String(describing: email))")
+            
+            if (email == nil) {
+                print("second")
+                self.social_login_via_apple_two(social_id: userIdentifier)
+            } else {
+                self.social_login_via_apple_one(social_id: userIdentifier, email: "\(String(describing: email))", name: "\(String(describing: fullName))")
+            }
+            
+        }
+        /*
+         User id is 001171.b152c5c0628f4f92b62199a247481a17.0707
+          Full Name is Optional(givenName: Manju familyName: Rajput )
+          Email id is Optional("tdx2mhbpfq@privaterelay.appleid.com")
+         */
+        
+    }
+    
+    @objc func social_login_via_apple_two(social_id:String) {
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+
+            parameters = [
+                "action"        :   "socialLoginAction",
+            // "email"         :   String(""),
+                "socialId"      :   String(social_id),
+            // "fullName"      :   String(""),
+                "socialType"    :   String("apple"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String("")
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        // let indexPath = IndexPath.init(row: 0, section: 0)
+                        // let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        // self.save_email(email: String(email))
+                        //
+                        
+                        self.hide_loading_UI()
+                         
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    
+    @objc func social_login_via_apple_one(social_id:String,email:String,name:String) {
+        
+        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+
+            parameters = [
+                "action"        :   "socialLoginAction",
+                "email"         :   String(email),
+                "socialId"      :   String(social_id),
+                "fullName"      :   String(name),
+                "socialType"    :   String("apple"),
+                "device"        :   String("iOS"),
+                "deviceToken"   :   String(""),
+                "image"         :   String("")
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        var dict: Dictionary<AnyHashable, Any>
+                        dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        /*let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                        
+                        self.save_email(email: String(email))
+                        
+                        self.hide_loading_UI()
+                        
+                        self.push_to_dashboard()
+                        
+                    }
+                    else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        // Handle error.
+    }
     // 989013037178
     // VLMBIP
     
@@ -1332,13 +1862,16 @@ class sign_up_table_cell: UITableViewCell {
             
         }
     }*/
-    
-    
+    @IBOutlet weak var view_apple:UIView!
+    @IBOutlet weak var btn_google:UIButton!
+    @IBOutlet weak var btn_facebook:UIButton!
     @IBOutlet weak var btn_accept_terms:UIButton! {
         didSet {
-            btn_accept_terms.backgroundColor = .clear
+            btn_accept_terms.backgroundColor = .systemGray4
             btn_accept_terms.tag = 0
-            btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
+            btn_accept_terms.layer.cornerRadius = 12
+            btn_accept_terms.clipsToBounds = true
+            // btn_accept_terms.setImage(UIImage(named: "rem1"), for: .normal)
         }
     }
     

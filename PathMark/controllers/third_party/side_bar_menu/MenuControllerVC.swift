@@ -642,6 +642,8 @@ extension MenuControllerVC: UITableViewDataSource {
                             defaults.setValue("", forKey: str_save_login_user_data)
                             defaults.setValue("", forKey: str_save_last_api_token)
                             
+                            UserDefaults.standard.set("no", forKey: "key_remember_me")
+                                
                             ERProgressHud.sharedInstance.hide()
                             self.dismiss(animated: true)
                             

@@ -362,9 +362,9 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             
             if (self.txt_phone.text!.count == 10) {
                 self.add_emergency_phone()
-            } else if (self.txt_phone.text!.count == 11) {
+            }/* else if (self.txt_phone.text!.count == 11) {
                 self.add_emergency_phone()
-            } else {
+            } */else {
                 let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
                 let cancel = NewYorkButton(title: "dismiss", style: .cancel)
                 alert.addButtons([cancel])
@@ -377,9 +377,9 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             
             if (self.txt_phone.text!.count == 10) {
                 self.check_edit_or_add_contact_WB()
-            } else if (self.txt_phone.text!.count == 11) {
+            }/* else if (self.txt_phone.text!.count == 11) {
                 self.check_edit_or_add_contact_WB()
-            } else {
+            } */else {
                 let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
                 let cancel = NewYorkButton(title: "dismiss", style: .cancel)
                 alert.addButtons([cancel])
@@ -683,7 +683,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 11
+            return updatedText.count <= 10
             
         
         }  else {

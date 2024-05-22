@@ -613,7 +613,7 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
         if (self.str_user_select_image != "1") {
             // Image
             
-            if (cell.txt_phone_number.text!.count != 11) {
+            if (cell.txt_phone_number.text!.count != 10) {
                 
                 let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
                 let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -906,7 +906,7 @@ class edit_profile: UIViewController , UITextFieldDelegate, CLLocationManagerDel
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 11
+            return updatedText.count <= 10
             
         
         }
