@@ -312,8 +312,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     print(language as Any)
                     
                     if (language == "en") {
-                        self.lblNavigationTitle.text = "Driver has arrived"
-                        self.lbl_message.text = "Driver has arrived"
+                        self.lblNavigationTitle.text = "Driver has Arrived"
+                        self.lbl_message.text = "Driver has Arrived"
                         
                     } else {
                         self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"
@@ -477,8 +477,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         print(language as Any)
                         
                         if (language == "en") {
-                            self.lblNavigationTitle.text = "Driver has arrived"
-                            self.lbl_message.text = "Driver has arrived"
+                            self.lblNavigationTitle.text = "Driver has Arrived"
+                            self.lbl_message.text = "Driver has Arrived"
                             
                         } else {
                             self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"

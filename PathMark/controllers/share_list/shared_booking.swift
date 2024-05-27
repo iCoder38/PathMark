@@ -37,7 +37,7 @@ class shared_booking: UIViewController {
                     view_navigation_title.text = "Shared Booking"
                     
                 } else {
-                    view_navigation_title.text = "শেয়ার্ড বুকিং"
+                    view_navigation_title.text = "বুকিং শেয়ার করুন"
                 }
                 
             } else {

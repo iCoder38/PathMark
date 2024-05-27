@@ -430,8 +430,8 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B9A8EE602BFE206E00169855 /* select_profile */,
 				B96399492BFDEA06000A00CA /* get_started */,
+				B9A8EE602BFE206E00169855 /* select_profile */,
 				B9CC22CB2BE0D4EB00164C53 /* bKash */,
 				B9F779F52BDBA24D00D699D0 /* invoice */,
 				B984256B2B5FE0EB00B4042D /* change_language */,

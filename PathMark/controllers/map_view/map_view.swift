@@ -1196,6 +1196,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                                                        "image":(item!["image"] as! String),
                                                        "status":"no",
                                                        "perMile":"\(item!["perMile"]!)",
+                                                       "Promotional_total":"\(item!["Promotional_total"]!)",
                                                        "total":"\(item!["total"]!)",
                                                        "TYPE":(item!["TYPE"] as! String)]
                                     
@@ -1376,6 +1377,25 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         cell.lbl_price.text = "\(str_bangladesh_currency_symbol) \(item!["total"]!)"
         cell.backgroundColor  = .clear
         
+         print("\(item!["Promotional_total"]!)")
+        if let firstValue = Double("\(item!["Promotional_total"]!)"), let secondValue = Double("\(item!["total"]!)") {
+            // Subtract the second value from the first value
+            let result = secondValue - firstValue
+            
+            // Print the result
+            print("The result of subtraction is \(result)")
+            
+            let formattedStringFF = roundToTwoDecimalPlaces(result)
+            cell.lbl_discount_price.text = "\(formattedStringFF)"
+        } else {
+            print("One or both of the string values could not be converted to Double.")
+        }
+        
+        
+        // var calculate = doublePriceTotal - doublePricePT
+        
+        // cell.lbl_discount_price.text = "\(calculate)"
+        
         return cell
         
     }
@@ -1411,6 +1431,7 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                                "image":(item!["image"] as! String),
                                "status":"no",
                                "perMile":"\(item!["perMile"]!)",
+                               "Promotional_total":"\(item!["Promotional_total"]!)",
                                "total":"\(item!["total"]!)",
                                "TYPE":(item!["TYPE"] as! String)]
             
@@ -1429,6 +1450,7 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
                            "image":(item!["image"] as! String),
                            "status":"yes",
                            "perMile":"\(item!["perMile"]!)",
+                           "Promotional_total":"\(item!["Promotional_total"]!)",
                            "total":"\(item!["total"]!)",
                            "TYPE":(item!["TYPE"] as! String)]
         
@@ -1448,7 +1470,7 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         var sizes: CGSize
         let result = UIScreen.main.bounds.size
         NSLog("%f",result.height)
-        sizes = CGSize(width: 120, height: 180)
+        sizes = CGSize(width: 120, height: 192)
         
         return sizes
     }
@@ -1722,7 +1744,7 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                     if (self.str_get_login_user_lat == nil) {
                         
                     } else {
-                        if (self.str_user_select_vehicle == "BIKE"){
+                        if (self.str_user_select_vehicle == "BIKE") {
                             print("bike")
                             
                             print(self.str_get_login_user_lat as Any)
@@ -1777,6 +1799,8 @@ class map_view_collection_view_cell: UICollectionViewCell , UITextFieldDelegate 
     
     @IBOutlet weak var lbl_total_seats:UILabel!
     @IBOutlet weak var lbl_price:UILabel!
+    
+    @IBOutlet weak var lbl_discount_price:UILabel!
 }
 
 class Person

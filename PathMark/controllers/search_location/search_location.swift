@@ -36,9 +36,9 @@ class search_location: UIViewController {
                 print(language as Any)
                 
                 if (language == "en") {
-                    lblNavigationTitle.text = "Search"
+                    lblNavigationTitle.text = "Saved location"
                 } else {
-                    lblNavigationTitle.text = "অনুসন্ধান করুন"
+                    lblNavigationTitle.text = "সেইভ করা স্থানসমূহ"
                 }
                     
             }

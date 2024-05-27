@@ -470,7 +470,20 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     @objc func find_driver_WB(str_show_loader:String) {
 
         if (str_show_loader == "yes") {
-            self.show_loading_UI()
+            // self.show_loading_UI()
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                   ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Finding an available driver near you")
+               } else {
+                   ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+               }
+               
+            
+           }
+            
         }
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
@@ -529,6 +542,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                             message = (JSON["msg"] as? String)
                             
                             if strSuccess.lowercased() == "success" {
+                                ERProgressHud.sharedInstance.hide()
                                 
                                 self.hide_loading_UI()
                                 
@@ -552,8 +566,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 
                             }
                             else {
-                                self.hide_loading_UI()
-                                
+                                // self.hide_loading_UI()
+                                ERProgressHud.sharedInstance.hide()
                                 let alert = NewYorkAlertController(title: String("Alert"), message: String(message), style: .alert)
                                 let cancel = NewYorkButton(title: "dismiss", style: .cancel)
                                 alert.addButtons([cancel])
@@ -743,12 +757,12 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
                 cell.lbl_estimated_only_text.text = "This is an estimated only, price & km may vary."
                 cell.lbl_distance_text.text = "distance"
                 cell.lbl_est_amount_text.text = "Est. amount"
-                cell.txt_field.placeholder = "Promo Code"
+                cell.txt_field.placeholder = "Promotion"
             } else {
                 cell.lbl_estimated_only_text.text = "এটি কেবল একটি অনুমান মাত্র, সময়, ভাড়া ও কি.মি. পরিবর্তন হতে পারে "
                 cell.lbl_distance_text.text = "দূরত্ব"
                 cell.lbl_est_amount_text.text = "পরিমাণ"
-                cell.txt_field.placeholder = "পদোন্নতি"
+                cell.txt_field.placeholder = "প্রোমোশন"
             }
             
         } else {

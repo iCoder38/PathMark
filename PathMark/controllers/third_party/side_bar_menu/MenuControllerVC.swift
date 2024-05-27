@@ -94,7 +94,7 @@ class MenuControllerVC: UIViewController {
                               "রিভিউ ও রেটিং",
                               "যারিব সম্পর্কে জানুন",
                               "FAQ(s)",
-                              "শেয়ার্ড বুকিং",
+                              "বুকিং শেয়ার করুন",
                               "হেল্প",
                                  "ভাষা পরিবর্তন করুন",
                               "লগ-আউট করুন"]
@@ -540,8 +540,16 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
             
     } else if self.arr_customer_title_en [indexPath.row] == "Logout" {
-            
+        let refreshAlert = UIAlertController(title: "Logout", message: "Do you want to log out?", preferredStyle: UIAlertController.Style.alert)
+
+        refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+              print("Handle Ok logic here")
             self.validation_before_logout()
+            
+        }))
+        refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        self.present(refreshAlert, animated: true, completion: nil)
+            
         }
         
         
@@ -574,6 +582,7 @@ extension MenuControllerVC: UITableViewDataSource {
                 sw.setFront(navigationController, animated: true)
                 
             } else {
+                
                 self.logoutWB(str_show_loader: "yes")
             }
             

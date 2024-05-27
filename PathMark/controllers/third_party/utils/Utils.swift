@@ -374,6 +374,11 @@ extension String {
 
 extension UIViewController {
     
+    func roundToTwoDecimalPlaces(_ number: Double) -> String {
+        let roundedNumber = round(100 * number) / 100
+        return String(format: "%.2f", roundedNumber)
+    }
+    
     @objc func sideBarMenu(button:UIButton) {
         self.view.endEditing(true)
         

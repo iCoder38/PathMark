@@ -868,7 +868,26 @@ class schedule_ride_details_table_cell: UITableViewCell {
         }
     }
     
-    
+    @IBOutlet weak var lbl_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_text.text = "Driver will wait only 10 minutes after the schedule ride time. **Cancellation fee will be apply if you cancel the schedule ride."
+                } else {
+                    lbl_text.text = "ড্রাইভার সিডিউল রাইড সময়ের পর ১০ মিনিট পর্যন্ত অপেক্ষা করবেন। আপনি রাইড বাতিল করলে ফি যুক্ত হবে।"
+                }
+                
+                
+            } else {
+                print("=============================")
+                print("LOGIN : Select language error")
+                print("=============================")
+                UserDefaults.standard.set("en", forKey: str_language_convert)
+            }
+        }
+    }
     
     @IBOutlet weak var lbl_price_one:UILabel!
     @IBOutlet weak var lbl_price_two:UILabel! {

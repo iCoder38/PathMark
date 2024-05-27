@@ -102,19 +102,19 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
         cell.lbl_to.text = (self.dict_get_booking_details["RequestDropAddress"] as! String)
         
         cell.lbl_fare.text = "\(self.dict_get_booking_details["FinalFare"]!)"
-        cell.lbl_tip.text = "\(self.dict_get_booking_details["TIP"]!)"
+        // cell.lbl_tip.text = "\(self.dict_get_booking_details["TIP"]!)"
         cell.lbl_promotion.text = "\(self.dict_get_booking_details["discountAmount"]!)"
         cell.lbl_cancellation_fee.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["last_cancel_amount"]!)"
         
         
          
         // tip
-        let i_am_tip:String!
+        /*let i_am_tip:String!
         if "\(self.dict_get_booking_details["TIP"]!)" == "" {
             i_am_tip = "0.0"
         } else {
             i_am_tip = "\(self.dict_get_booking_details["TIP"]!)"
-        }
+        }*/
         
         // promotion
         let i_am_promotion:String!
@@ -132,10 +132,11 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
              double_fare = Double("\(self.dict_get_booking_details["FinalFare"]!)")
         }*/
         
-        let double_tip = Double(i_am_tip)
+        // let double_tip = Double(i_am_tip)
         let double_promotion = Double(i_am_promotion)
         
-        let add_all = double_tip!+double_promotion!
+        // let add_all = double_tip!+double_promotion!
+        let add_all = double_promotion!
         // cell.lbl_total_amount.text = "\(add_all)"
         
         var added_all_value = "\(add_all)"
@@ -190,11 +191,15 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
             } else if "\(self.dict_get_booking_details["last_cancel_amount"]!)" == "0" {
                 cell.lbl_cancellation_fee.isHidden = true
                 cell.lbl_cancellation_fee_text.isHidden = true
-                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(sum)"
+                
+                let formattedStringFF = roundToTwoDecimalPlaces(sum)
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(formattedStringFF)"
             } else {
                 cell.lbl_cancellation_fee_text.isHidden = false
                 cell.lbl_cancellation_fee.isHidden = false
-                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(sum)"
+                
+                let formattedStringFF = roundToTwoDecimalPlaces(sum)
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(formattedStringFF)"
             }
             
         }
@@ -224,6 +229,7 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
         } else {
             cell.img_gif.isHidden = true
         }
+        
         
         // star manage
         if "\(self.dict_get_booking_details["AVGRating"]!)" == "0" {
