@@ -22,6 +22,12 @@ import FacebookLogin
 // apple
 import AuthenticationServices
 
+extension Date {
+    func currentTimeMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
+}
+
 class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate, ASAuthorizationControllerDelegate {
     
     var window: UIWindow?
@@ -66,6 +72,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         

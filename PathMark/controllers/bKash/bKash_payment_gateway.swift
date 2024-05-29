@@ -528,6 +528,7 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
         }
         
     }
+    
     @objc func home_click_method() {
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
         self.navigationController?.pushViewController(push!, animated: true)

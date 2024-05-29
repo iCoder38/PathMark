@@ -18,6 +18,10 @@ import FirebaseDatabase
 
 class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
+    var str_back_home:String!
+    
+    var get_all_data:NSDictionary!
+    
     var str_sender_id:String!
     var str_get_user_id:String!
     
@@ -183,11 +187,17 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         
         
         
+        print(self.get_all_data as Any)
         
         
+        if (self.str_back_home == "home") {
+            
+            
+            self.btnBack.addTarget(self, action: #selector(home_click_method), for: .touchUpInside)
+        } else {
+            self.btnBack.addTarget(self, action: #selector(backClickMethod), for: .touchUpInside)
+        }
         
-        
-        self.btnBack.addTarget(self, action: #selector(backClickMethod), for: .touchUpInside)
         
         // *** Customize GrowingTextView ***
         textView.layer.cornerRadius = 4.0
@@ -267,19 +277,14 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
         self.get_chat_data_for_room_id()
     }
     
+    @objc func home_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+         
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
+    
     // new
     func get_chat_data_for_room_id() {
-        
-//        let newMessagesRef = Firestore.firestore().collection("mode/test/message/India/private_chats")
-//            .whereField("room_id", isEqualTo: String(self.room_id))
-//            .order(by: "time_stamp",descending: false)
-//        newMessagesRef.observe(., changeHandler: <#T##(Query, NSKeyValueObservedChange<Value>) -> Void#>)
-        /*observeSingleEvent(of: .value, with: { snapshot in
-            if let currentValue = snapshot.value as! Int? {
-                let updatedValue = currentValue + 1
-                ref.setValue(updatedValue)
-            }
-        })*/
         
         Firestore.firestore().collection("mode/test/message/India/private_chats")
             .whereField("room_id", isEqualTo: String(self.room_id))
@@ -571,7 +576,8 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
     @objc func sendMessageWithAttachment() {
         
         
-        let timestamp = NSDate().timeIntervalSince1970
+        let timestamp = Date().currentTimeMillis()
+        print(timestamp)
         var ref: DocumentReference? = nil
         ref = Firestore.firestore().collection("mode/test/message/India/private_chats").addDocument(data: [
             
@@ -590,7 +596,9 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                 print("Error adding document: \(err)")
             } else {
                 print("Document added with ID: \(ref!.documentID)")
+                var message = String(self.textView.text)
                 self.textView.text = ""
+                self.send_notification(message: message)
                 // self.get_chat_data_for_room_id()
             }
         }
@@ -658,7 +666,8 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
             
         } else {
             
-            let timestamp = NSDate().timeIntervalSince1970
+            let timestamp = Date().currentTimeMillis()
+            print(timestamp)
             var ref: DocumentReference? = nil
             ref = Firestore.firestore().collection("mode/test/message/India/private_chats").addDocument(data: [
                 
@@ -677,80 +686,228 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                     print("Error adding document: \(err)")
                 } else {
                     print("Document added with ID: \(ref!.documentID)")
+                    
+                    var message = String(self.textView.text)
                     self.textView.text = ""
+                    self.send_notification(message: message)
+                    
                     // self.get_chat_data_for_room_id()
                 }
             }
            
         }
         
-        /*} else {
-         // self.textView.text = self.strSaveLastMessage
-         // self.view.endEditing(true)
-         let ref = Database.database().reference()
-         .child("one_to_one")
-         .child(self.chatChannelName)
-         .childByAutoId()
          
-         let message = ["attachment_path": String(""),
-         "chatSenderId": String(self.strLoginUserId!),
-         // "uid":newRegistrationUniqueId,
-         "chat_date": "today_string",
-         "chat_message": String(self.textView.text!),
-         "chat_receiver": String(self.receiverNameIs),//String(self.strReceiptId),
-         "chat_receiver_img": String(self.strReceiptImage),
-         "chat_sender": String(self.strLoginUserName!),
-         "chat_sender_img": String(self.strLoginUserImage!),
-         "chat_time": String("time_string"),
-         "type": "Text"] as [String : Any]
-         
-         ref.setValue(message)
-         
-         
-         let someDate = Date()
-         let myTimeStamp = someDate.timeIntervalSince1970
-         
-         let ref2 = Database.database().reference()
-         ref2.child("DialogsListing")
-         // .child(newRegistrationUniqueId)
-         .child(self.chatChannelName)
-         .updateChildValues(
-         
-         ["SenderId"              : (self.strLoginUserId!),
-         "SenderName"            : (self.strLoginUserName!),
-         "SenderImage"           : (self.strLoginUserImage!),
-         "ReceiverId"            : (self.strReceiptId!),
-         "ReceiverName"          : (self.receiverNameIs!),
-         "ReceiverImage"         : (self.strReceiptImage!),
-         "lastMessage"           : (self.textView.text!),
-         // "uid"                   : newRegistrationUniqueId,
-         "lastMessageType"       : "Text",
-         
-         "TimeStamp"             : myTimeStamp,
-         
-         "SenderDeviceToken"     : (self.strSenderDeviceToken!),
-         "SenderDevice"          : (self.strSenderDevice!),
-         
-         "ReceiverDeviceToken"   : (self.strReceiverDeviceToken!),
-         "ReceiverDevice"        : (self.strReceiverDevice!)
-         
-         // "SenderNotificationCount":0,
-         // "ReceiverNotificationCount":"",
-         
-         /*"Notification":[
-          "SenderId":"",
-          "":"",
-          String(self.strLoginUserId!) : 0,
-          String(self.strReceiptId) : 1
-          ]*/
-         
-         ])
-         self.textView.text = ""
-         
-         
-         
-         }
-         }*/
+    }
+    
+    @objc func send_notification(message:String) {
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! payment_table_cell
+        
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            /*if (language == "en") {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+            } else {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+            }*/
+            
+            
+        }
+        
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                /*
+                 @Field("action") action: String?,
+                 @Header("token") token: String?,
+                 @Field("deviceToken") deviceToken: String?,
+                 @Field("device") device: String?,
+                 @Field("toDevice") toDevice: String?,
+                 @Field("toDeviceToken") toDeviceToken: String?,
+                 @Field("message") message: String?,
+                 @Field("userId") userId: String?,
+                 @Field("bookingId") bookingId: String?,
+                 @Field("name") name: String?,
+                 @Field("image") image: String?,
+                 @Field("type") type: String?,
+                 */
+                
+                print(self.get_all_data as Any)
+                
+                var token_to_parse:String!
+                if (self.str_back_home == "home") {
+                    
+                    if "\(self.self.get_all_data["deviceToken"]!)" == (person["deviceToken"] as! String) {
+                         token_to_parse = "\(self.self.get_all_data["toDeviceToken"]!)"
+                    } else {
+                        token_to_parse = "\(self.self.get_all_data["deviceToken"]!)"
+                    }
+                    
+                } else {
+                    token_to_parse = "\(self.self.get_all_data["deviceToken"]!)"
+                }
+                
+                parameters = [
+                    "action"        : "notificationall",
+                    "userId"        : String(myString),
+                    "deviceToken"   : String(token_to_parse),
+                    "device"        : "\(self.self.get_all_data["device"]!)",
+                    "toDevice"      : (person["device"] as! String),
+                    "toDeviceToken" : (person["deviceToken"] as! String),
+                    "message"       : String(message),
+                    
+                    "bookingId"     : String(self.str_booking_id),
+                    "name"          : (person["fullName"] as! String),
+                    "image"         : (person["image"] as! String),
+                    "type"          : String("Chat"),
+                    
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON { [self]
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            /*let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)*/
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            // self.back_click_method()
+                            
+                            
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : "Driver"
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            //self.update_payment( )
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
     }
     
 }

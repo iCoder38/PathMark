@@ -196,6 +196,20 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         self.view.backgroundColor = .white
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
+        if (self.dict_get_all_data_from_notification["type"] != nil) {
+            
+            
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChatId") as? BooCheckChat
+            
+            push!.str_back_home = "home"
+            push!.get_all_data = self.dict_get_all_data_from_notification
+            push!.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
+            
+            self.navigationController?.pushViewController(push!, animated: true)
+            
+            return
+        }
+        
         // keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -532,74 +546,6 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     self.lbl_message.text = "Ride Complete - Please pay"
                     
                     
-                    /*if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
-                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
-                        let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                            
-                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                            
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        let cancel = NewYorkButton(title: "Home", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        alert.addButtons([pay,cancel])
-                        self.present(alert, animated: true)
-                    } else if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "0" {
-                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
-                        let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                            
-                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                            
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        let cancel = NewYorkButton(title: "Home", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        alert.addButtons([pay,cancel])
-                        self.present(alert, animated: true)
-                    } else {
-                        
-                        let a: Int? = Int("\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)")
-                        let b: Int? = Int("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
-                        
-                        var sum:Int!
-                        
-                        sum = a! + b!
-                        
-                        print(sum)
-                        
-                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                        let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                            
-                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                            
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        let cancel = NewYorkButton(title: "Home", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        alert.addButtons([pay,cancel])
-                        self.present(alert, animated: true)
-                    }*/
                     
                     
                     
@@ -697,6 +643,18 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     
                     
                     
+                } else if (self.dict_get_all_data_from_notification["type"] as! String) == "Chat" {
+                    
+                    
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChatId") as? BooCheckChat
+                    
+                    push!.str_back_home = "home"
+                    push!.get_all_data = self.dict_get_all_data_from_notification
+                    push!.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
+                    
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                    return
                 }
                 
                 
@@ -790,6 +748,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         // push!.str_get_user_id = "\(self.dict_get_all_data_from_notification["userId"]!)"
         
         // push!.str_driver_id = "\(self.dict_get_all_data_from_notification["userId"]!)"
+        push!.get_all_data = self.dict_get_all_data_from_notification
         push!.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
         
         self.navigationController?.pushViewController(push!, animated: true)
@@ -798,9 +757,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @objc func cancancel_ride_click_method() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let myAlert = storyboard.instantiateViewController(withIdentifier: "decline_request_id") as? decline_request
-        myAlert!.dict_booking_details = self.dict_get_all_data_from_notification
+        myAlert!.dict_booking_details   = self.dict_get_all_data_from_notification
         myAlert!.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-        myAlert!.modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+        myAlert!.modalTransitionStyle   = UIModalTransitionStyle.crossDissolve
         present(myAlert!, animated: true, completion: nil)
     }
     
@@ -1336,6 +1295,7 @@ extension ride_status: UITableViewDataSource , UITableViewDelegate {
          type = confirm;
          vehicleNumber = dl007;
          */
+        
         
         if (self.dict_get_all_data_from_notification != nil) {
             
