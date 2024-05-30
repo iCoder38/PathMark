@@ -1255,16 +1255,36 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
                                   tfBackgroundColor: .white,
                                   tfPlaceholderText: "+880")
                 
-                Utils.textFieldUI(textField: cell.txt_phone_number,
-                                  tfName: cell.txt_phone_number.text!,
-                                  tfCornerRadius: 12,
-                                  tfpadding: 20,
-                                  tfBorderWidth: 0,
-                                  tfBorderColor: .clear,
-                                  tfAppearance: .dark,
-                                  tfKeyboardType: .numberPad,
-                                  tfBackgroundColor: .white,
-                                  tfPlaceholderText: "Phone number")
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        Utils.textFieldUI(textField: cell.txt_phone_number,
+                                          tfName: cell.txt_phone_number.text!,
+                                          tfCornerRadius: 12,
+                                          tfpadding: 20,
+                                          tfBorderWidth: 0,
+                                          tfBorderColor: .clear,
+                                          tfAppearance: .dark,
+                                          tfKeyboardType: .numberPad,
+                                          tfBackgroundColor: .white,
+                                          tfPlaceholderText: "Mobile number")
+                    } else {
+                        Utils.textFieldUI(textField: cell.txt_phone_number,
+                                          tfName: cell.txt_phone_number.text!,
+                                          tfCornerRadius: 12,
+                                          tfpadding: 20,
+                                          tfBorderWidth: 0,
+                                          tfBorderColor: .clear,
+                                          tfAppearance: .dark,
+                                          tfKeyboardType: .numberPad,
+                                          tfBackgroundColor: .white,
+                                          tfPlaceholderText: "মোবাইল নম্বর")
+                    }
+                    
+                }
+                
+                
                 
                 /*Utils.textFieldUI(textField: cell.txt_address,
                                   tfName: cell.txt_address.text!,

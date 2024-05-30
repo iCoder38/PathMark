@@ -365,11 +365,29 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             }/* else if (self.txt_phone.text!.count == 11) {
                 self.add_emergency_phone()
             } */else {
-                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
-                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                alert.addButtons([cancel])
-                self.present(alert, animated: true)
-                ERProgressHud.sharedInstance.hide()
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        let alert = NewYorkAlertController(title: nil, message: String("Please enter valid phone number"), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                    } else {
+                        let alert = NewYorkAlertController(title: nil, message: String("দয়া করে সঠিক ফোন নম্বর লিখুন"), style: .alert)
+                        let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                    }
+                    
+                }
+                
+                
             }
             
         } else {
@@ -380,11 +398,27 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             }/* else if (self.txt_phone.text!.count == 11) {
                 self.check_edit_or_add_contact_WB()
             } */else {
-                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please enter valid phone number"), style: .alert)
-                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                alert.addButtons([cancel])
-                self.present(alert, animated: true)
-                ERProgressHud.sharedInstance.hide()
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        let alert = NewYorkAlertController(title: nil, message: String("Please enter valid phone number"), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                    } else {
+                        let alert = NewYorkAlertController(title: nil, message: String("দয়া করে সঠিক ফোন নম্বর লিখুন"), style: .alert)
+                        let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                    }
+                    
+                }
+                 
             }
         }
     }

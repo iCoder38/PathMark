@@ -2247,6 +2247,7 @@
                         <outlet property="btn_back" destination="UNw-HC-fLc" id="JLA-EX-h2D"/>
                         <outlet property="btn_save" destination="OJz-qN-5gN" id="ZUC-Bg-5pL"/>
                         <outlet property="btn_submit" destination="IEr-Tp-aXP" id="FMh-xM-oDp"/>
+                        <outlet property="lbl_additional_info" destination="mTQ-cZ-9DL" id="Ucj-2a-3LY"/>
                         <outlet property="lbl_complete_address" destination="284-yC-ZQh" id="YW4-TA-wxV"/>
                         <outlet property="lbl_name" destination="HLN-x8-xsh" id="Mox-U9-gCM"/>
                         <outlet property="lbl_save_as" destination="1PW-i2-MDO" id="SOH-QK-QcZ"/>
@@ -3713,14 +3714,19 @@
                                             <outlet property="lbl_cancellation_fee" destination="dF1-ne-PCc" id="gAE-eh-PdN"/>
                                             <outlet property="lbl_cancellation_fee_text" destination="iH9-b9-gRB" id="CP7-yr-t5s"/>
                                             <outlet property="lbl_car_color" destination="SNV-Te-MNt" id="0ZK-fb-EvH"/>
+                                            <outlet property="lbl_car_color_text" destination="M2N-Yo-U6D" id="o8R-v0-RaC"/>
                                             <outlet property="lbl_car_driver_name" destination="Xze-i4-9pY" id="vbL-W2-NrN"/>
                                             <outlet property="lbl_car_number" destination="PiB-z8-sgg" id="x75-uw-rus"/>
+                                            <outlet property="lbl_car_number_text" destination="vHK-Hm-GFw" id="qkZ-4Q-G9a"/>
+                                            <outlet property="lbl_discoun_text" destination="vq7-D4-BNZ" id="OeG-j3-JP5"/>
                                             <outlet property="lbl_fare" destination="j3O-zc-MSZ" id="Eae-5W-cj4"/>
+                                            <outlet property="lbl_fare_text" destination="JII-XU-etu" id="N0d-a4-eI5"/>
                                             <outlet property="lbl_from" destination="je3-cB-VNL" id="yCb-q6-0hX"/>
                                             <outlet property="lbl_promotion" destination="768-co-q3g" id="vla-qI-j4I"/>
                                             <outlet property="lbl_rating" destination="BN7-hG-9Xj" id="WEg-bU-bSl"/>
                                             <outlet property="lbl_to" destination="F9J-Sf-1lz" id="vDv-ye-6WV"/>
                                             <outlet property="lbl_total_amount" destination="jGl-fN-EYL" id="gzV-f9-a5D"/>
+                                            <outlet property="lbl_total_amount_text" destination="rXF-hq-2uV" id="gCC-7q-iir"/>
                                             <outlet property="view_driver_info" destination="qOH-DX-eDm" id="qYQ-en-byU"/>
                                             <outlet property="view_fare" destination="19X-1w-0mJ" id="P75-AQ-dfu"/>
                                             <outlet property="view_from_to" destination="HjD-I4-0lU" id="ufR-2B-KZf"/>
@@ -3823,6 +3829,8 @@
                         <outlet property="btn_back" destination="w1U-Dg-oUQ" id="CGB-jP-9bC"/>
                         <outlet property="lbl_distance" destination="X39-cl-stJ" id="k4D-b2-Nng"/>
                         <outlet property="lbl_price" destination="U6T-mi-ea8" id="ahc-XX-NjO"/>
+                        <outlet property="lbl_total_distance_text" destination="vlj-0m-JbN" id="I6o-A7-5wx"/>
+                        <outlet property="lbl_total_fare_text" destination="fgx-ot-XNV" id="n8p-L5-bDD"/>
                         <outlet property="tbleView" destination="prx-h9-W7m" id="EEi-Ge-5HR"/>
                         <outlet property="view_driver_info" destination="gGr-XG-AVj" id="XSL-7c-AOf"/>
                         <outlet property="view_navigation_bar" destination="IP0-vk-TIc" id="s3i-T6-rPZ"/>
@@ -4387,6 +4395,7 @@
                                             <outlet property="lbl_from" destination="1uD-zb-PcT" id="pfW-vR-MMc"/>
                                             <outlet property="lbl_star_count" destination="mWm-sU-KpV" id="ptf-P2-lgt"/>
                                             <outlet property="lbl_to" destination="my4-a4-Na9" id="a9r-yl-GLp"/>
+                                            <outlet property="lbl_write_your_comment_text" destination="eRG-Zb-sNu" id="eyM-e1-QLd"/>
                                             <outlet property="txt_view" destination="5hF-nl-c5Q" id="MNF-o7-cQy"/>
                                             <outlet property="view_fare" destination="FWb-w0-35Q" id="xhE-js-yQ7"/>
                                             <outlet property="view_from_to" destination="tfT-9z-lrN" id="Vwz-op-yQ9"/>
@@ -5881,6 +5890,8 @@
                         <outlet property="btn_cash" destination="Yaq-9f-ULN" id="dCo-WJ-qkw"/>
                         <outlet property="btn_cash_tick" destination="4C6-f6-Jap" id="OOC-LA-eiu"/>
                         <outlet property="btn_submit" destination="9lj-gT-PZz" id="7uc-EX-m7W"/>
+                        <outlet property="lbl_ava_vo_Text" destination="7Zb-xF-4NV" id="GSA-Zy-edk"/>
+                        <outlet property="lbl_payment_method_text" destination="oVz-XJ-xpR" id="Ln4-H9-bzo"/>
                         <outlet property="lbl_total_payable" destination="lwg-UB-CSC" id="AgQ-HW-tnI"/>
                         <outlet property="tbleView" destination="nS1-kK-50A" id="XvI-T3-cXl"/>
                         <outlet property="view_navigation_bar" destination="7jr-3X-YIE" id="vXc-u4-5xu"/>
@@ -5944,7 +5955,7 @@
                                     <constraint firstAttribute="height" constant="186" id="v50-h2-tN5"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="© 2023 Zarib. All Rights Reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu3-ot-Rc6">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="© 2024 Zarib. All Rights Reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bu3-ot-Rc6">
                                 <rect key="frame" x="8" y="720" width="377" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="a5u-gz-XE6"/>
@@ -6001,7 +6012,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fio-sl-pBc">
                                 <rect key="frame" x="16" y="367" width="361" height="200"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONNECT WITH US :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Et4-jp-2e0">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CONNECT US :" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Et4-jp-2e0">
                                         <rect key="frame" x="8" y="28" width="345" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="DSA-Zf-CXJ"/>
@@ -6084,6 +6095,7 @@
                     <connections>
                         <outlet property="btn_back" destination="K92-1u-kD8" id="edm-Gk-oEC"/>
                         <outlet property="lbl_contact_number" destination="CdU-0e-XzJ" id="4dt-gS-sgQ"/>
+                        <outlet property="lbl_contact_us" destination="Et4-jp-2e0" id="krO-bb-8g3"/>
                         <outlet property="lbl_email" destination="9HK-e0-ncs" id="8Xo-2v-2Yt"/>
                         <outlet property="lbl_whatsapp" destination="XbE-5c-3QM" id="yyP-1C-SHb"/>
                         <outlet property="view_navigation_bar" destination="JQ0-g7-qKs" id="Zph-23-1y4"/>
@@ -8826,10 +8838,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TwF-Sm-sX7">
-                                <rect key="frame" x="0.0" y="773" width="393" height="79"/>
+                                <rect key="frame" x="0.0" y="770" width="393" height="82"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GTg-aA-t4N" customClass="GrowingTextView" customModule="GrowingTextView">
-                                        <rect key="frame" x="50" y="8" width="303" height="30"/>
+                                        <rect key="frame" x="50" y="8" width="303" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -8943,7 +8955,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fJS-Nd-B0I">
-                                <rect key="frame" x="0.0" y="88" width="393" height="685"/>
+                                <rect key="frame" x="0.0" y="88" width="393" height="682"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellOne" rowHeight="70" id="zXz-EI-kUM" customClass="BooCheckTableCell" customModule="PathMark" customModuleProvider="target">
@@ -10045,6 +10057,7 @@
                         <outlet property="lbl_distance_text" destination="pXx-NX-166" id="Scu-aB-XE1"/>
                         <outlet property="lbl_drop" destination="erH-Mt-ORI" id="VrA-rZ-Kbk"/>
                         <outlet property="lbl_pick_up" destination="7TQ-Y9-mLL" id="bnS-hh-KX3"/>
+                        <outlet property="lbl_prev_can_fee_text" destination="NXj-0y-qBk" id="Pjb-zT-utS"/>
                         <outlet property="lbl_previuos_cancel_fee" destination="k8C-81-epG" id="udJ-nf-jOF"/>
                         <outlet property="lbl_price" destination="zfT-BR-AkH" id="2pe-bU-yFg"/>
                         <outlet property="lbl_price_text" destination="XXP-sS-WdG" id="9Lq-MT-vJT"/>

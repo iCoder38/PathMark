@@ -87,7 +87,21 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     var str_bike_cat_id:String!
     
-    @IBOutlet weak var search_text_field:UISearchTextField!
+    @IBOutlet weak var search_text_field:UISearchTextField! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    search_text_field.placeholder = "Select drop address"
+                } else {
+                    search_text_field.placeholder = "গন্তব্য নির্বাচন করুন"
+                }
+                
+            }
+            
+        }
+    }
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -115,11 +129,32 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     @IBOutlet weak var search_place_pickup:UISearchBar! {
         didSet {
             search_place_pickup.tag = 0
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    search_place_pickup.placeholder = "Select pickup address"
+                } else {
+                    search_place_pickup.placeholder = "পিক-আপ স্থান নির্বাচন করুন"
+                }
+                
+            }
+            
         }
     }
     @IBOutlet weak var search_place_drop:UISearchBar!  {
         didSet {
             search_place_drop.tag = 1
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    search_place_drop.placeholder = "Select drop address"
+                } else {
+                    search_place_drop.placeholder = "গন্তব্য নির্বাচন করুন"
+                }
+                
+            }
         }
     }
     @IBOutlet weak var searchResultsTableView: UITableView! {
@@ -1369,9 +1404,26 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         }
         
         if (self.str_user_select_vehicle == "BIKE") {
-            cell.lbl_total_seats.text = "1 person per ride"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+            if (language == "en") {
+                cell.lbl_total_seats.text = "1 person per ride"
+            } else {
+                cell.lbl_total_seats.text = "রাইড প্রতি 1 জন ব্যক্তি"
+            }
+        }
         } else {
-            cell.lbl_total_seats.text = "4 person per ride"
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.lbl_total_seats.text = "4 person per ride"
+                } else {
+                    cell.lbl_total_seats.text = "রাইড প্রতি 4 জন ব্যক্তি"
+                }
+                
+            }
         }
         
         cell.lbl_price.text = "\(str_bangladesh_currency_symbol) \(item!["total"]!)"
@@ -1797,7 +1849,11 @@ class map_view_collection_view_cell: UICollectionViewCell , UITextFieldDelegate 
     @IBOutlet weak var lblCarType:UILabel!
     @IBOutlet weak var lblExtimatedTime:UILabel!
     
-    @IBOutlet weak var lbl_total_seats:UILabel!
+    @IBOutlet weak var lbl_total_seats:UILabel! {
+        didSet {
+            
+        }
+    }
     @IBOutlet weak var lbl_price:UILabel!
     
     @IBOutlet weak var lbl_discount_price:UILabel!

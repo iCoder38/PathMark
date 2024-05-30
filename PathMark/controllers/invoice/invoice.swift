@@ -127,7 +127,21 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
             }
         }
     }
-    
+    @IBOutlet weak var lbl_prev_can_fee_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_prev_can_fee_text.text = "Previous Cancellation fee"
+                } else {
+                    lbl_prev_can_fee_text.text = "পূর্ববর্তী বাতিলকরণ ফি"
+                }
+                
+                
+            }
+        }
+    }
     @IBOutlet weak var lbl_total_text:UILabel! {
         didSet {
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -148,7 +162,18 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
         didSet {
             btn_cash.layer.cornerRadius = 12
             btn_cash.clipsToBounds = true
-            btn_cash.setTitle("Pay now", for: .normal)
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_cash.setTitle("Pay now", for: .normal)
+                } else {
+                    btn_cash.setTitle("এখন পরিশোধ করুন", for: .normal)
+                }
+                
+                
+            }
         }
     }
     

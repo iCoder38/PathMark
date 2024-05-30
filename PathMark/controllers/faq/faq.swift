@@ -93,11 +93,26 @@ class faq: UIViewController {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                   print(language as Any)
+                   
+                   if (language == "en") {
+                       parameters = [
+                           "action"    : "faq",
+                           "type"      : "User",
+                           "language":"en"
+                       ]
+                   } else {
+                       parameters = [
+                           "action"    : "faq",
+                           "type"      : "User",
+                           "language":"bn"
+                       ]
+                   }
+                   
                 
-                parameters = [
-                    "action"    : "faq",
-                    "type"      : "User"
-                ]
+               }
+                
                 
                 print(parameters as Any)
                 

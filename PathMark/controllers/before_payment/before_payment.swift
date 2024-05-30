@@ -38,12 +38,59 @@ class before_payment: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "Payment Method"
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Payment Method"
+                } else {
+                    view_navigation_title.text = "পেমেন্ট পদ্ধতি"
+                }
+                
+                
+            }
+            
             view_navigation_title.textColor = .white
         }
     }
     
     @IBOutlet weak var lbl_total_payable:UILabel!
+    
+    @IBOutlet weak var lbl_payment_method_text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_payment_method_text.text = "Choose your payment method"
+                } else {
+                    lbl_payment_method_text.text = "পেমেন্ট পদ্ধতি নির্বাচন করুন"
+                }
+                
+                
+            }
+            
+            view_navigation_title.textColor = .white
+        }
+    }
+    @IBOutlet weak var lbl_ava_vo_Text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_ava_vo_Text.text = "Vouchers available"
+                } else {
+                    lbl_ava_vo_Text.text = "ভাউচার উপলব্ধ"
+                }
+                
+                
+            }
+            
+            view_navigation_title.textColor = .white
+        }
+    }
+
     
     @IBOutlet weak var btn_cash:UIButton! {
         didSet {
@@ -53,6 +100,17 @@ class before_payment: UIViewController {
             btn_cash.layer.shadowOpacity = 0.5
             btn_cash.layer.shadowRadius = 2
             btn_cash.backgroundColor = .white
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_cash.setTitle("Cash", for: .normal)
+                } else {
+                    btn_cash.setTitle("ক্যাশ", for: .normal)
+                }
+                
+                
+            }
         }
     }
     @IBOutlet weak var btn_bkash:UIButton! {
@@ -63,6 +121,19 @@ class before_payment: UIViewController {
             btn_bkash.layer.shadowOpacity = 0.5
             btn_bkash.layer.shadowRadius = 2
             btn_bkash.backgroundColor = .white
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_bkash.setTitle("BKash", for: .normal)
+                } else {
+                    btn_bkash.setTitle("বিকাশ", for: .normal)
+                }
+                
+                
+            }
+            
         }
     }
     
@@ -92,6 +163,19 @@ class before_payment: UIViewController {
             btn_submit.backgroundColor = .systemGreen
             btn_submit.layer.cornerRadius = 12
             btn_submit.clipsToBounds = true
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_submit.setTitle("Submit", for: .normal)
+                } else {
+                    btn_submit.setTitle("জমা দিন", for: .normal)
+                }
+                
+                
+            }
+            
         }
     }
     
@@ -100,6 +184,8 @@ class before_payment: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
         self.btn_cash.addTarget(self, action: #selector(cash_click_method), for: .touchUpInside)
         self.btn_bkash.addTarget(self, action: #selector(bkash_click_method), for: .touchUpInside)

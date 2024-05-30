@@ -44,9 +44,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 print(language as Any)
                 
                 if (language == "en") {
-                    view_navigation_title.text = "Home"
+                    view_navigation_title.text = "Dashboard"
                 } else {
-                    view_navigation_title.text = "হোম"
+                    view_navigation_title.text = "ড্যাশবোর্ড"
                 }
                     
             }
@@ -691,7 +691,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
- 
+        
         cell.btn_car.addTarget(self, action: #selector(push_to_car_map_click_method), for: .touchUpInside)
         cell.btn_bike.addTarget(self, action: #selector(push_to_bike_map_click_method), for: .touchUpInside)
         cell.btn_intercity.addTarget(self, action: #selector(push_to_intercity_map_click_method), for: .touchUpInside)
@@ -705,57 +705,57 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                           print(language as Any)
-                           
-                           if (language == "en") {
-                               cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
-                               cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
-                               cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
-                           } else {
-                               cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
-                               cell.btn_car.setImage(UIImage(named: "car_bangla_selected"), for: .normal)
-                               cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
-                           }
-                               
-                       }
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+                } else {
+                    cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "car_bangla_selected"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
+                }
+                
+            }
             //
         } else if (self.str_vehicle_type == "BIKE") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                          print(language as Any)
-                          
-                          if (language == "en") {
-                              cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
-                              cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
-                              cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
-                          } else {
-                              cell.btn_bike.setImage(UIImage(named: "bike_bangla_selected"), for: .normal)
-                              cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
-                              cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
-                          }
-                              
-                      }
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "ns_intercity"), for: .normal)
+                } else {
+                    cell.btn_bike.setImage(UIImage(named: "bike_bangla_selected"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_unselected"), for: .normal)
+                }
+                
+            }
             //
         } else if (self.str_vehicle_type == "INTERCITY") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                        print(language as Any)
-                        
-                        if (language == "en") {
-                            cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
-                            cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
-                            cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
-                        } else {
-                            cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
-                            cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
-                            cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_selected"), for: .normal)
-                        }
-                            
-                    }
+                print(language as Any)
+                
+                if (language == "en") {
+                    cell.btn_bike.setImage(UIImage(named: "ns_bike"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "ns_car"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
+                } else {
+                    cell.btn_bike.setImage(UIImage(named: "bike_bangla_unselected"), for: .normal)
+                    cell.btn_car.setImage(UIImage(named: "car_bangla_unselected"), for: .normal)
+                    cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_selected"), for: .normal)
+                }
+                
+            }
             //
         }
         
@@ -780,6 +780,8 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         cell.btn_next.tag = indexPath.row
         cell.btn_next.addTarget(self, action: #selector(next_click_method), for: .touchUpInside)
         cell.btn_previous.addTarget(self, action: #selector(previous_click_method), for: .touchUpInside)
+        
+       
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
@@ -828,8 +830,6 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
     @objc func next_click_method(_ scrollView: UIScrollView) {
         print(scrollView)
         print(scrollView.tag)
-        
-       
         
 //        if scrollView.contentOffset.x < scrollView.bounds.width * CGFloat(1) {
 //            scrollView.contentOffset.x +=  scrollView.bounds.width
@@ -1071,8 +1071,35 @@ class dashboard_table_cell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var btn_next:UIButton!
-    @IBOutlet weak var btn_previous:UIButton!
+    @IBOutlet weak var btn_next:UIButton! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_next.setTitle("Next", for: .normal)
+                } else {
+                    btn_next.setTitle("পরবর্তী", for: .normal)
+                }
+                
+            }
+        }
+    }
+    
+    @IBOutlet weak var btn_previous:UIButton! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    btn_previous.setTitle("Previous", for: .normal)
+                } else {
+                    btn_previous.setTitle("পূর্ববর্তী", for: .normal)
+                }
+                
+            }
+        }
+    }
     
     @IBOutlet weak var page_control:UIPageControl! {
         didSet {

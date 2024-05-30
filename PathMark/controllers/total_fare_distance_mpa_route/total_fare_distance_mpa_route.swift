@@ -132,9 +132,11 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                  
                 self.btnConfirmBooking.setTitle("Confirm booking", for: .normal)
                 self.str_selected_language_is = "en"
+                lblNavigationTitle.text = "Confirm booking"
             } else {
                 self.btnConfirmBooking.setTitle("বুকিং নিশ্চিত করুন", for: .normal)
                 self.str_selected_language_is = "bn"
+                lblNavigationTitle.text = "বুকিং নিশ্চিত করুন"
             }
             
         } else {
@@ -398,15 +400,37 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     @objc func validation_before_confirm_booking() {
         
         if (self.str_active_ride == "1") {
-            let alert = NewYorkAlertController(title: String("Alert"), message: String("Please complete your previous rides before book any new ride."), style: .alert)
             
-            let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
-                _ in
-            }
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                   let alert = NewYorkAlertController(title: String("Alert"), message: String("Please complete your previous rides before book any new ride."), style: .alert)
+                   
+                   let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                       _ in
+                   }
+                   
+                   alert.addButtons([ cancel])
+                   self.present(alert, animated: true)
+                   return
+               } else {
+                   let alert = NewYorkAlertController(title: nil, message: String("নতুন বুকিংয়ের আগে আপনার রাইড সম্পূর্ণ করুন।"), style: .alert)
+                   
+                   let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                       _ in
+                   }
+                   
+                   alert.addButtons([ cancel])
+                   self.present(alert, animated: true)
+                   return
+               }
+               
             
-            alert.addButtons([ cancel])
-            self.present(alert, animated: true)
-            return
+           }
+            
+            
+            
         }
         
         
@@ -744,7 +768,23 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         cell.selectedBackgroundView = backgroundView
         
         cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
-        cell.lbl_duration.text = "Duration : "+String(self.str_total_duration)
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.lbl_duration.text = "Time : "+String(self.str_total_duration)
+            } else {
+                cell.lbl_duration.text = "সময় : "+String(self.str_total_duration)
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            self.str_selected_language_is = "en"
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
         
         cell.txt_field.delegate = self
         

@@ -119,7 +119,18 @@ class ride_history: UIViewController {
         didSet {
             lbl_search_name.layer.cornerRadius = 12
             lbl_search_name.clipsToBounds = true
-            lbl_search_name.text = "All"
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_search_name.text = "All"
+                } else {
+                    lbl_search_name.text = "সব"
+                }
+                
+                 
+            }
         }
     }
     @IBOutlet weak var btn_search:UIButton! {
@@ -127,6 +138,7 @@ class ride_history: UIViewController {
             btn_search.setTitle("", for: .normal)
         }
     }
+    var str_selected_item:String! = "All"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,14 +166,45 @@ class ride_history: UIViewController {
     
     @objc func search_click_method() {
         
-        let dummyList = ["All", "Completed", "Cancelled"]
-        
-        RPicker.selectOption(title: "Select", cancelText: "Cancel", dataArray: dummyList, selectedIndex: 0) { (selctedText, atIndex) in
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
             
-            self.lbl_search_name.text = String(selctedText)
+            if (language == "en") {
+                let dummyList = ["All", "Completed", "Cancelled"]
+                
+                RPicker.selectOption(title: "Select", cancelText: "Cancel", dataArray: dummyList, selectedIndex: 0) { (selctedText, atIndex) in
+                    
+                    self.lbl_search_name.text = String(selctedText)
+                    
+                    self.booking_history(str_show_loader: "yes")
+                }
+            } else {
+                let dummyList = ["সব", "সম্পন্ন বুকিং", "বাতিল"]
+                
+                RPicker.selectOption(title: "Select", cancelText: "Cancel", dataArray: dummyList, selectedIndex: 0) { (selctedText, atIndex) in
+                    
+                    
+                    
+                    if (String(selctedText) == "সব") {
+                        self.lbl_search_name.text = "সব"
+                        self.str_selected_item = "All"
+                    } else if (String(selctedText) == "সম্পন্ন বুকিং") {
+                        self.lbl_search_name.text = "সম্পন্ন বুকিং"
+                        self.str_selected_item = "Completed"
+                    } else {
+                        self.lbl_search_name.text = "বাতিল"
+                        self.str_selected_item = "Cancelled"
+                    }
+                    
+                    self.booking_history(str_show_loader: "yes")
+                }
+            }
             
-            self.booking_history(str_show_loader: "yes")
+            
         }
+        
+       
+        
         
     }
     
@@ -290,14 +333,14 @@ class ride_history: UIViewController {
                     "token":String(token_id_is),
                 ]
                 
-                if (self.lbl_search_name.text == "All") {
+                if (self.str_selected_item == "All") {
                     parameters = [
                         "action"    : "bookinglist",
                         "userId"    : String(myString),
                         "usertype"  : String("Member"),
                         "language" : String(lan)
                     ]
-                } else if (self.lbl_search_name.text == "Completed") {
+                } else if (self.str_selected_item == "Completed") {
                     parameters = [
                         "action"    : "bookinglist",
                         "userId"    : String(myString),

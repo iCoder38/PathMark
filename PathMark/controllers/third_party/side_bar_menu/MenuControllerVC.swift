@@ -540,15 +540,45 @@ extension MenuControllerVC: UITableViewDataSource {
             self.revealViewController().setFrontViewPosition(FrontViewPosition.left, animated: true)
             
     } else if self.arr_customer_title_en [indexPath.row] == "Logout" {
-        let refreshAlert = UIAlertController(title: "Logout", message: "Do you want to log out?", preferredStyle: UIAlertController.Style.alert)
-
-        refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
-              print("Handle Ok logic here")
-            self.validation_before_logout()
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
             
-        }))
-        refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-        self.present(refreshAlert, animated: true, completion: nil)
+            if (language == "en") {
+                
+                 
+                let refreshAlert = UIAlertController(title: "Logout", message: "Do you want to log out?", preferredStyle: UIAlertController.Style.alert)
+         
+                
+                refreshAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (action: UIAlertAction!) in
+                      print("Handle Ok logic here")
+                    self.validation_before_logout()
+                    
+                }))
+                refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                self.present(refreshAlert, animated: true, completion: nil)
+            } else {
+                let refreshAlert = UIAlertController(title: nil, message: "আপনি কি লগ আউট করতে চান?", preferredStyle: UIAlertController.Style.alert)
+         
+                
+                refreshAlert.addAction(UIAlertAction(title: "হ্যাঁ", style: .default, handler: { (action: UIAlertAction!) in
+                      print("Handle Ok logic here")
+                    self.validation_before_logout()
+                    
+                }))
+                refreshAlert.addAction(UIAlertAction(title: "না", style: .cancel, handler: nil))
+                self.present(refreshAlert, animated: true, completion: nil)
+            }
+            
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
+        
             
         }
         

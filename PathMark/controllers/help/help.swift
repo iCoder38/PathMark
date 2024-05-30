@@ -29,11 +29,38 @@ class help: UIViewController {
     
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
-            view_navigation_title.text = "HELP"
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                   view_navigation_title.text = "HELP"
+               } else {
+                   view_navigation_title.text = "হেল্প"
+               }
+               
+            
+           }
             view_navigation_title.textColor = .white
         }
     }
-    
+    @IBOutlet weak var lbl_contact_us:UILabel! {
+        didSet {
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+               print(language as Any)
+               
+               if (language == "en") {
+                   lbl_contact_us.text = "Contact Us"
+               } else {
+                   lbl_contact_us.text = "যোগাযোগ করুন"
+               }
+               
+            
+           }
+             
+        }
+    }
     @IBOutlet weak var lbl_whatsapp:UILabel!
     @IBOutlet weak var lbl_email:UILabel!
     @IBOutlet weak var lbl_contact_number:UILabel!
@@ -135,8 +162,23 @@ class help: UIViewController {
                             self.str_email_address = (dict["phone"] as! String)
                             
                             self.lbl_whatsapp.text = "Whatsapp : "
-                            self.lbl_contact_number.text = "E-mail : "+(dict["eamil"] as! String)
-                            self.lbl_email.text = "Contact number : "+(dict["phone"] as! String)
+                            
+                            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                               print(language as Any)
+                               
+                               if (language == "en") {
+                                   self.lbl_contact_number.text = "E-mail : "+(dict["eamil"] as! String)
+                                   self.lbl_email.text = "Contact number : "+(dict["phone"] as! String)
+                               } else {
+                                   self.lbl_contact_number.text = "ইমেইল : "+(dict["eamil"] as! String)
+                                   self.lbl_email.text = "যোগাযোগের নম্বর : "+(dict["phone"] as! String)
+                               }
+                               
+                            
+                           }
+                            
+                            
+                            
                             
                             ERProgressHud.sharedInstance.hide()
                             self.dismiss(animated: true)

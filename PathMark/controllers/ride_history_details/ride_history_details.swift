@@ -18,6 +18,35 @@ class ride_history_details: UIViewController {
         }
     }
     
+    @IBOutlet weak var lbl_total_fare_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_total_fare_text.text = "TOTAL FARE"
+                } else {
+                    lbl_total_fare_text.text = "মোট ভাড়া"
+                }
+                
+            }
+        }
+    }
+    @IBOutlet weak var lbl_total_distance_text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_total_distance_text.text = "DISTANCE"
+                } else {
+                    lbl_total_distance_text.text = "মোট দুরত্ব"
+                }
+                
+            }
+        }
+    }
+    
     @IBOutlet weak var lbl_price:UILabel! {
         didSet {
             lbl_price.textColor = .white
@@ -327,7 +356,95 @@ class ride_history_details_table_cell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var lbl_cancellation_fee_text:UILabel!
+    @IBOutlet weak var lbl_fare_text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_fare_text.text = "Total fare"
+                } else {
+                    lbl_fare_text.text = "ট্রিপ ভাড়া"
+                }
+                
+            }
+        }
+    }
+    @IBOutlet weak var lbl_discoun_text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_discoun_text.text = "Discount"
+                } else {
+                    lbl_discoun_text.text = "ছাড়"
+                }
+                
+            }
+        }
+    }
+    
+    @IBOutlet weak var lbl_total_amount_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_total_amount_text.text = "Total amount"
+                } else {
+                    lbl_total_amount_text.text = "সর্বমোট"
+                }
+                
+            }
+        }
+    }
+    
+    @IBOutlet weak var lbl_car_number_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_car_number_text.text = "Car number"
+                } else {
+                    lbl_car_number_text.text = "গাড়ির নম্বর"
+                }
+                
+            }
+        }
+    }
+    
+    @IBOutlet weak var lbl_car_color_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_car_color_text.text = "Car color"
+                } else {
+                    lbl_car_color_text.text = "গাড়ির রঙ"
+                }
+                
+            }
+        }
+    }
+    
+    @IBOutlet weak var lbl_cancellation_fee_text:UILabel! {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_cancellation_fee_text.text = "Previous Cancellation fee"
+                } else {
+                    lbl_cancellation_fee_text.text = "পূর্ববর্তী বাতিলকরণ ফি"
+                }
+                
+            }
+        }
+    }
+    
     @IBOutlet weak var lbl_cancellation_fee:UILabel!
     
     @IBOutlet weak var lbl_from:UILabel!

@@ -66,6 +66,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet weak var lbl_complete_address:UILabel!
     @IBOutlet weak var lbl_save_as:UILabel!
+    @IBOutlet weak var lbl_additional_info:UILabel!
     
     @IBOutlet weak var lbl_current_address:UILabel!
     
@@ -230,11 +231,13 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                 
                 self.lbl_complete_address.text = "Enter location"
                 self.lbl_save_as.text = "Save as"
+                self.lbl_additional_info.text = "Additional info"
                 
             } else {
                 
                 self.lbl_complete_address.text = "অবস্থান লিখুন"
                 self.lbl_save_as.text = "সংরক্ষণ করুন"
+                self.lbl_additional_info.text = "অতিরিক্ত তথ্য"
                 
             }
             

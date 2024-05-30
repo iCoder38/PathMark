@@ -785,7 +785,6 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                     "name"          : (person["fullName"] as! String),
                     "image"         : (person["image"] as! String),
                     "type"          : String("Chat"),
-                    
                 ]
                 
                 print(parameters as Any)
@@ -817,8 +816,6 @@ class BooCheckChat: UIViewController, MessagingDelegate, UINavigationControllerD
                             ERProgressHud.sharedInstance.hide()
                             
                             // self.back_click_method()
-                            
-                            
                             
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
