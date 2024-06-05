@@ -118,6 +118,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         // self.navigationController?.pushViewController(settingsVCId!, animated: true)
         //
         
+        
+         // self.dummy_notification()
+        
     }
     
     var _lastContentOffset: CGPoint!
@@ -670,6 +673,74 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         }
     }
    
+    
+    
+    var token:String = "cIu4OcOD8E3Fhk-Z4Aj8XH:APA91bHI5xX0Vzzdvu-TN2vZjrUCgTLMSy-L4l-SR7WUHZrV0CRYCCMYMBfi_2hm1j73Pp_jZeYD0hligeVI8SksVOOj-fc5ZlhvDYqIdP0l9-CyNiCgqEdpHk4r0KTACFaiMtJt--X-"
+    var serverKey:String = "AAAArtixum0:APA91bHUusFW81-wCd6C7YUgzTHY9zi-XpqHw_YVyRukf5yNTNpdMe8NXuAk5TnStvbz6_Z-VpOdPs4-nCvxYZ2ejPf6yoLq1Dvk0ZwlBM2HSGD1xY3xdm_MIZrYd6wQbsueAqWlnAiV"
+    
+    @objc func dummy_notification() {
+        print("CUSTOM NOTIFICATION TOKEN")
+        let token = token
+        print(token as Any)
+        
+        let serverKey = serverKey
+        
+        let partnerToken = token
+        
+        let url = NSURL(string: "https://fcm.googleapis.com/fcm/send")
+        
+        let postParams = [
+            "to": partnerToken,
+            "content-available" : 1,
+            "notification": [
+                "body": "New request from XYZ",
+                "title": "Zarib Driver",
+                "sound" : "default"
+                
+                // "custom_notification.mp3",
+                
+            ],
+            /*"data":[
+                "message"               : "Incoming Audio Call",
+                "type"                  : "audiocall",
+            ]*/
+            
+        ] as [String : Any]
+        
+        let request = NSMutableURLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+        request.setValue("key=\(serverKey)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postParams, options: JSONSerialization.WritingOptions())
+            print("My paramaters: \(postParams)")
+            
+            
+        } catch {
+            print("Caught an error: \(error)")
+        }
+        
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+            if let realResponse = response as? HTTPURLResponse {
+                if realResponse.statusCode != 200 {
+                    print("Not a 200 response")
+                }
+            }
+            
+            if let postString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue) as String? {
+                print("POST: \(postString)")
+                DispatchQueue.main.async {
+                    
+                    
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
 }
 
 

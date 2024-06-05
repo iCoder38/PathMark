@@ -657,24 +657,57 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         var sum = a! + b!
                         print(sum as Any)
                         
-                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                        let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                        
+                        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                            print(language as Any)
                             
-                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                            if (language == "en") {
+                                
+                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                                    _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                    
+                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                    
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                let cancel = NewYorkButton(title: "Home", style: .default) {
+                                    _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                alert.addButtons([pay,cancel])
+                                self.present(alert, animated: true)
+                                
+                            } else {
+                                
+                                let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                let pay = NewYorkButton(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                                    _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                    
+                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                    
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                let cancel = NewYorkButton(title: "হোম", style: .default) {
+                                    _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                alert.addButtons([pay,cancel])
+                                self.present(alert, animated: true)
+                                
+                            }
                             
-                            self.navigationController?.pushViewController(push!, animated: true)
                         }
-                        let cancel = NewYorkButton(title: "Home", style: .default) {
-                            _ in
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                            self.navigationController?.pushViewController(push!, animated: true)
-                        }
-                        alert.addButtons([pay,cancel])
-                        self.present(alert, animated: true)
+                        
+                        
                         
                         /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
                         self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/

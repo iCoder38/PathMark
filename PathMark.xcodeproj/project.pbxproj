@@ -84,6 +84,7 @@
 		B9AFE5102A5BDB9100C76CE4 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FD2A5BDB9000C76CE4 /* Poppins-BoldItalic.ttf */; };
 		B9AFE5112A5BDB9100C76CE4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */; };
 		B9AFE5122A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */; };
+		B9BE71FE2C0DF42000FB48D8 /* custom_notification.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B9BE71FD2C0DF41F00FB48D8 /* custom_notification.mp3 */; };
 		B9C530802B0DD2FF00DB37B0 /* decline_request.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */; };
 		B9C530832B0DF62C00DB37B0 /* cancel_your_ride.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C530822B0DF62C00DB37B0 /* cancel_your_ride.swift */; };
 		B9C73A352A5BEE67001F0B90 /* verify_phone_number.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */; };
@@ -207,6 +208,7 @@
 		B9AFE4FD2A5BDB9000C76CE4 /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
 		B9AFE4FE2A5BDB9100C76CE4 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Italic.ttf"; sourceTree = "<group>"; };
 		B9AFE4FF2A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		B9BE71FD2C0DF41F00FB48D8 /* custom_notification.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = custom_notification.mp3; sourceTree = "<group>"; };
 		B9C5307F2B0DD2FF00DB37B0 /* decline_request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = decline_request.swift; sourceTree = "<group>"; };
 		B9C530822B0DF62C00DB37B0 /* cancel_your_ride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cancel_your_ride.swift; sourceTree = "<group>"; };
 		B9C73A342A5BEE67001F0B90 /* verify_phone_number.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = verify_phone_number.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 		B96B4B702A5BD0AC0038B82F /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B9BE71FD2C0DF41F00FB48D8 /* custom_notification.mp3 */,
 				B96399492BFDEA06000A00CA /* get_started */,
 				B9A8EE602BFE206E00169855 /* select_profile */,
 				B9CC22CB2BE0D4EB00164C53 /* bKash */,
@@ -982,6 +985,7 @@
 				B9AFE5122A5BDB9100C76CE4 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				B903CD962A58018000208E80 /* Main.storyboard in Resources */,
 				B97A19582A8CF4DD00D4DAD0 /* car-toy.gif in Resources */,
+				B9BE71FE2C0DF42000FB48D8 /* custom_notification.mp3 in Resources */,
 				B9AFE5032A5BDB9100C76CE4 /* Poppins-LightItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

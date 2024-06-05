@@ -107,22 +107,22 @@ class success_payment: UIViewController {
             if (cell.txt_view.text == "") {
                 
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                               print(language as Any)
-                               
-                               if (language == "en") {
-                                   let alert = NewYorkAlertController(title: nil, message: String("Please enter some comment"), style: .alert)
-                                   let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                                   alert.addButtons([cancel])
-                                   self.present(alert, animated: true)
-                               } else {
-                                   let alert = NewYorkAlertController(title: nil, message: String("আপনার মন্তব্য লিখুন"), style: .alert)
-                                   let cancel = NewYorkButton(title: "ঠিক আছে", style: .cancel)
-                                   alert.addButtons([cancel])
-                                   self.present(alert, animated: true)
-                               }
-                               
-                            
-                           }
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        let alert = NewYorkAlertController(title: nil, message: String("Please enter some comment"), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                    } else {
+                        let alert = NewYorkAlertController(title: nil, message: String("আপনার মন্তব্য লিখুন"), style: .alert)
+                        let cancel = NewYorkButton(title: "ঠিক আছে", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                    }
+                    
+                    
+                }
                 
                 
             } else {

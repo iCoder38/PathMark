@@ -8,11 +8,14 @@
 import UIKit
 import MapKit
 import Alamofire
+import GoogleMaps
 
 // MARK:- LOCATION -
 import CoreLocation
 
 class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
+    
+    
     
     var str_vehicle_type:String!
     
@@ -327,6 +330,23 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
         self.tbleView.reloadData()
         
+        
+        
+         
+        // Set up the camera with an initial location
+                let camera = GMSCameraPosition.camera(withLatitude: 37.7749, longitude: -122.4194, zoom: 10.0)
+        cell.mapViewG.camera = camera
+                
+                // Sample coordinates for user and driver
+        let userCoordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
+        let driverCoordinate = CLLocationCoordinate2D(latitude: 37.7849, longitude: -122.4294)
+                
+                // Add markers for user and driver
+        self.addMarker(at: userCoordinate, title: "User Location")
+        self.addMarker(at: driverCoordinate, title: "Driver Location")
+                
+                // Draw polyline between user and driver
+        self.drawPolyline(from: userCoordinate, to: driverCoordinate)
         // speed = distance / time
     }
     
@@ -723,6 +743,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 self.tbleView.separatorColor = .clear
                                 self.iAmHereForLocationPermission()
                                 
+                                
+                                
                                 self.str_total_distance = (dict["distance"] as! String)
                                 self.str_total_rupees = "\(dict["total"]!)"
                                 self.str_total_duration = (dict["duration"] as! String)
@@ -746,6 +768,31 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             }
         }
     }
+    
+    
+    
+    
+    func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
+            let marker = GMSMarker(position: coordinate)
+            marker.title = title
+        marker.map = cell.mapViewG
+        }
+    
+    func drawPolyline(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
+            let path = GMSMutablePath()
+            path.add(from)
+            path.add(to)
+            
+            let polyline = GMSPolyline(path: path)
+            polyline.strokeColor = .blue
+            polyline.strokeWidth = 5.0
+        polyline.map = cell.mapViewG
+        }
+    
 }
 
 //MARK:- TABLE VIEW -
@@ -911,7 +958,7 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
     }
     
     @IBOutlet weak var lblTotalPayableAmount:UILabel!
-     
+    @IBOutlet weak var mapViewG: GMSMapView!
     @IBOutlet weak var btnFareEstimate:UIButton!
     @IBOutlet weak var btnPromocode:UIButton!
     @IBOutlet weak var btnSelectPaymentMethod:UIButton!

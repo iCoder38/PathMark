@@ -589,7 +589,22 @@ class schedule_a_ride: UIViewController {
         
         self.str_selected_date = resultString
         self.str_selected_date2 = resultString2
-        self.lbl_selected_date.text = "Selected Date: " + resultString2
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                self.lbl_selected_date.text = "Selected Date: " + resultString2
+            } else {
+                self.lbl_selected_date.text = "নির্বাচিত তারিখ: " + resultString2
+            }
+            
+        } else {
+            print("=============================")
+            print("LOGIN : Select language error")
+            print("=============================")
+            UserDefaults.standard.set("en", forKey: str_language_convert)
+        }
+        
         
         // self.get_calendar_date_WB(str_date: resultString)
     }

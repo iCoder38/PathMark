@@ -70,7 +70,7 @@ class before_payment: UIViewController {
                 
             }
             
-            view_navigation_title.textColor = .white
+            // view_navigation_title.textColor = .white
         }
     }
     @IBOutlet weak var lbl_ava_vo_Text:UILabel!  {
@@ -87,7 +87,7 @@ class before_payment: UIViewController {
                 
             }
             
-            view_navigation_title.textColor = .white
+            // view_navigation_title.textColor = .white
         }
     }
 
@@ -193,7 +193,17 @@ class before_payment: UIViewController {
         self.btn_submit.addTarget(self, action: #selector(submit_click_method), for: .touchUpInside)
         
         self.total_amount = String(self.str_get_total_price2)
-        self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+            } else {
+                self.lbl_total_payable.text = "মোট পরিশোধযোগ্য পরিমাণ : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+            }
+            
+        }
         
         self.str_final_amount = String(self.str_get_total_price2)
         

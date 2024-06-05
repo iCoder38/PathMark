@@ -601,8 +601,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 push!.str_vehicle_type = String(self.str_user_select_vehicle)
                 
                 push!.str_get_category_id = String(self.str_bike_cat_id)
-                push!.str_from_location = String(self.lbl_location_from.text!)
-                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                // push!.str_from_location = String(self.lbl_location_from.text!)
+                // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                
+                push!.str_from_location = String(self.search_place_pickup.text!)
+                push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
                 
                 push!.my_location_lat = String(self.str_get_login_user_lat)
                 push!.my_location_long = String(self.str_get_login_user_long)
@@ -857,8 +860,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 push!.str_vehicle_type = String(self.str_user_select_vehicle)
                 
                 push!.str_get_category_id = String(self.str_category_id)
-                push!.str_from_location = String(self.lbl_location_from.text!)
-                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                // push!.str_from_location = String(self.lbl_location_from.text!)
+                // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                
+                push!.str_from_location = String(self.search_place_pickup.text!)
+                push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
                 
                 push!.my_location_lat = String(self.strSaveLatitude)
                 push!.my_location_long = String(self.strSaveLongitude)
@@ -1638,6 +1644,9 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
             self.search_place_pickup.text = ""
             self.search_place_pickup.text = completion.title+" "+completion.subtitle
             
+            print(self.search_place_drop.text as Any)
+            print(self.search_place_pickup.text as Any)
+            
             UserDefaults.standard.synchronize()
             
             let searchRequest = MKLocalSearch.Request(completion: completion)
@@ -1708,23 +1717,43 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                             print(self.str_get_login_user_long as Any)
                             print(self.pick_lat as Any)
                             print(self.pick_long as Any)
-                            
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
-                            
-                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
-                            
-                            push!.str_get_category_id = String(self.str_bike_cat_id)
-                            push!.str_from_location = String(self.lbl_location_from.text!)
-                            push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
-                            
-                            push!.my_location_lat = String(self.str_get_login_user_lat)
-                            push!.my_location_long = String(self.str_get_login_user_long)
-                            
-                            push!.searched_place_location_lat = String(self.searchLat)
-                            push!.searched_place_location_long = String(self.searchLong)
-                            
-                            self.navigationController?.pushViewController(push!, animated: true)
-                            
+                            print(self.str_user_select_vehicle)
+                            print(self.str_user_option)
+                             
+                            if (self.str_user_option == "schedule") {
+                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_a_ride_id") as? schedule_a_ride
+                                
+                                push!.str_get_category_id = "10"//String(self.str_category_id)
+                                push!.str_from_location = String(self.lbl_location_from.text!)
+                                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                                
+                                push!.my_location_lat = String(self.strSaveLatitude)
+                                push!.my_location_long = String(self.strSaveLongitude)
+                                
+                                push!.searched_place_location_lat = String(self.searchLat)
+                                push!.searched_place_location_long = String(self.searchLong)
+                                
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            } else {
+                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                                
+                                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                                
+                                push!.str_get_category_id = String(self.str_bike_cat_id)
+                                // push!.str_from_location = String(self.lbl_location_from.text!)
+                                // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                                
+                                push!.str_from_location = String(self.search_place_pickup.text!)
+                                push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
+                                
+                                push!.my_location_lat = String(self.str_get_login_user_lat)
+                                push!.my_location_long = String(self.str_get_login_user_long)
+                                
+                                push!.searched_place_location_lat = String(self.searchLat)
+                                push!.searched_place_location_long = String(self.searchLong)
+                                
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            }
                         } else {
                             self.list_by_car_WB(str_show_loader: "yes")
                         }
@@ -1738,6 +1767,9 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
             
             self.search_place_drop.text = ""
             self.search_place_drop.text = completion.title+" "+completion.subtitle
+            
+            print(self.search_place_drop.text as Any)
+            print(self.search_place_pickup.text as Any)
             
             UserDefaults.standard.synchronize()
             
@@ -1803,22 +1835,44 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                             print(self.str_get_login_user_long as Any)
                             print(self.pick_lat as Any)
                             print(self.pick_long as Any)
+                            print(self.str_user_select_vehicle)
+                            print(self.str_user_option)
                             
-                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                            if (self.str_user_option == "schedule") {
+                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_a_ride_id") as? schedule_a_ride
+                                
+                                push!.str_get_category_id = "10"// String(self.str_category_id)
+                                push!.str_from_location = String(self.lbl_location_from.text!)
+                                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                                
+                                push!.my_location_lat = String(self.strSaveLatitude)
+                                push!.my_location_long = String(self.strSaveLongitude)
+                                
+                                push!.searched_place_location_lat = String(self.searchLat)
+                                push!.searched_place_location_long = String(self.searchLong)
+                                
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            } else {
+                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                                
+                                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                                
+                                push!.str_get_category_id = String(self.str_bike_cat_id)
+//                                push!.str_from_location = String(self.lbl_location_from.text!)
+//                                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                                
+                                push!.str_from_location = String(self.search_place_pickup.text!)
+                                push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
+                                
+                                push!.my_location_lat = String(self.str_get_login_user_lat)
+                                push!.my_location_long = String(self.str_get_login_user_long)
+                                
+                                push!.searched_place_location_lat = String(self.searchLat)
+                                push!.searched_place_location_long = String(self.searchLong)
+                                
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            }
                             
-                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
-                            
-                            push!.str_get_category_id = String(self.str_bike_cat_id)
-                            push!.str_from_location = String(self.lbl_location_from.text!)
-                            push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
-                            
-                            push!.my_location_lat = String(self.str_get_login_user_lat)
-                            push!.my_location_long = String(self.str_get_login_user_long)
-                            
-                            push!.searched_place_location_lat = String(self.searchLat)
-                            push!.searched_place_location_long = String(self.searchLong)
-                            
-                            self.navigationController?.pushViewController(push!, animated: true)
                         } else {
                             self.list_by_car_WB(str_show_loader: "yes")
                         }

@@ -1244,6 +1244,11 @@
                                                 <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="RNc-xw-Cgh">
                                                     <rect key="frame" x="20" y="0.0" width="374" height="808"/>
                                                 </mapView>
+                                                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oT6-5Y-hDH" customClass="GMSMapView">
+                                                    <rect key="frame" x="20" y="0.0" width="384" height="500"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ewg-Lm-A67">
                                                     <rect key="frame" x="32" y="21" width="350" height="120"/>
                                                     <subviews>
@@ -1555,6 +1560,7 @@
                                             <outlet property="lbl_from" destination="puH-Ex-lId" id="JB8-4e-zpr"/>
                                             <outlet property="lbl_to" destination="cG5-yq-PWc" id="Nev-uN-DWM"/>
                                             <outlet property="mapView" destination="RNc-xw-Cgh" id="7YF-eU-sKc"/>
+                                            <outlet property="mapViewG" destination="oT6-5Y-hDH" id="bz1-Bj-7s0"/>
                                             <outlet property="txt_field" destination="aX9-wJ-lHd" id="hyt-fp-6RQ"/>
                                             <outlet property="viewCellbg" destination="Ewg-Lm-A67" id="iTb-kQ-tmk"/>
                                             <outlet property="view_big" destination="tOE-Os-mEJ" id="7IE-0E-WVX"/>
