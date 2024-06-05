@@ -5140,12 +5140,26 @@
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" image="house.fill" catalog="system"/>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sAN-Hf-yed">
+                                        <rect key="frame" x="355" y="50" width="30" height="30"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="8nb-yJ-aML"/>
+                                            <constraint firstAttribute="height" constant="30" id="yBY-w0-yax"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="18"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="message.fill" catalog="system"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="sAN-Hf-yed" secondAttribute="bottom" constant="8" id="OLM-ao-K2p"/>
                                     <constraint firstAttribute="height" constant="88" id="aCg-lT-P73"/>
                                     <constraint firstItem="3Mb-zq-9n8" firstAttribute="leading" secondItem="MpY-H8-1hc" secondAttribute="leading" constant="8" id="aQd-RG-VkL"/>
                                     <constraint firstItem="Aso-tO-wVP" firstAttribute="leading" secondItem="MpY-H8-1hc" secondAttribute="leading" constant="8" id="feo-Mm-Vx6"/>
+                                    <constraint firstAttribute="trailing" secondItem="sAN-Hf-yed" secondAttribute="trailing" constant="8" id="ogU-xv-eum"/>
                                     <constraint firstAttribute="bottom" secondItem="3Mb-zq-9n8" secondAttribute="bottom" constant="8" id="wH1-KT-ooh"/>
                                     <constraint firstAttribute="trailing" secondItem="Aso-tO-wVP" secondAttribute="trailing" constant="8" id="wzq-vc-BMe"/>
                                     <constraint firstAttribute="bottom" secondItem="Aso-tO-wVP" secondAttribute="bottom" constant="4" id="xzl-6J-Zjb"/>
@@ -5583,6 +5597,7 @@
                     </view>
                     <size key="freeformSize" width="393" height="1200"/>
                     <connections>
+                        <outlet property="btn_chat" destination="sAN-Hf-yed" id="64F-eA-wJF"/>
                         <outlet property="btn_home" destination="3Mb-zq-9n8" id="SaV-zC-wcl"/>
                         <outlet property="lbl_distance" destination="jCl-0v-zbJ" id="ptM-8I-8pC"/>
                         <outlet property="lbl_distance_head" destination="oVP-Gz-Ieu" id="AnF-OH-ASf"/>
@@ -10333,6 +10348,7 @@
         <image name="logo33" width="1024" height="1024"/>
         <image name="menu" width="256" height="256"/>
         <image name="message" catalog="system" width="128" height="116"/>
+        <image name="message.fill" catalog="system" width="128" height="114"/>
         <image name="new-password" width="138" height="138"/>
         <image name="paperclip" catalog="system" width="121" height="128"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>

@@ -76,6 +76,7 @@ class schedule_ride_details: UIViewController {
         }
     }
     
+    @IBOutlet weak var btn_chat:UIButton!
     @IBOutlet weak var btn_home:UIButton! {
         didSet {
             btn_home.tintColor = .white
@@ -137,8 +138,19 @@ class schedule_ride_details: UIViewController {
         
         // self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        self.btn_chat.addTarget(self, action: #selector(chat_click_method), for: .touchUpInside)
+        
     }
-
+    
+    @objc func chat_click_method() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BooCheckChatId") as? BooCheckChat
+       
+        push!.get_all_data = self.dict_get_booking_details
+        push!.str_booking_id = "\(self.dict_get_booking_details["bookingId"]!)"
+        
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
     
     @objc func home_click_methodd() {
         
@@ -804,6 +816,8 @@ class schedule_ride_details_table_cell: UITableViewCell {
             view_fare.layer.cornerRadius = 12
         }
     }
+    
+    @IBOutlet weak var btn_chat:UIButton!
     
     @IBOutlet weak var lbl_fare:UILabel!
     @IBOutlet weak var lbl_tip:UILabel!
