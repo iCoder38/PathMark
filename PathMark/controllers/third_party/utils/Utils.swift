@@ -535,7 +535,9 @@ extension UIViewController {
     @objc func back_click_method() {
         self.navigationController?.popViewController(animated: true)
     }
-    
+    func convertToDouble(_ string: String) -> Double? {
+        return Double(string)
+    }
 }
 
 extension UIViewController {

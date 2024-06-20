@@ -44,6 +44,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
+    var strPhoneNumber:String!
+    
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
             view_navigation_bar.backgroundColor = navigation_color
@@ -202,15 +204,12 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                     var strSuccess : String!
                     strSuccess = JSON["status"] as? String
                     
-                    
-                    
                     if strSuccess.lowercased() == "success" {
                         
                         var dict: Dictionary<AnyHashable, Any>
                         dict = JSON["data"] as! Dictionary<AnyHashable, Any>
                         
-                        let defaults = UserDefaults.standard
-                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        
                         
                         // save token
                         // print("\(JSON["AuthToken"]!)")
@@ -230,7 +229,40 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         self.hide_loading_UI()
                         
-                        self.push_to_dashboard()
+                        if (dict["contactNumber"] as! String) == "" {
+                            // save number
+                            
+                            //1. Create the alert controller.
+                            let alert = UIAlertController(title: "Phone number", message: "Enter your phone number", preferredStyle: .alert)
+
+                            //2. Add the text field. You can configure it however you need.
+                            alert.addTextField { (textField) in
+                                textField.delegate = self
+                                textField.text = ""
+                                textField.keyboardType = .numberPad
+                            }
+
+                            // 3. Grab the value from the text field, and print it when the user clicks OK.
+                            alert.addAction(UIAlertAction(title: "Login", style: .default, handler: { [weak alert] (_) in
+                                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+                                // print("Text field: \(textField!.text)")
+                                
+                                self.strPhoneNumber = String(textField!.text!)
+                                self.update_number_WB(str_show_loader: "yes")
+                                //
+                            }))
+
+                            // 4. Present the alert.
+                            self.present(alert, animated: true, completion: nil)
+                            
+                            
+                        } else {
+                            self.hide_loading_UI()
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(dict, forKey: str_save_login_user_data)
+                            self.push_to_dashboard()
+                        }
+                        
                         
                     }
                     else {
@@ -259,7 +291,189 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         }
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+        if (textField != cell.txtEmailAddress) {
+            let currentText = textField.text ?? ""
+            let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+            return updatedText.count <= 11
+        }
+        return true
+    }
     
+    @objc func update_number_WB(str_show_loader:String) {
+        
+        if (str_show_loader == "yes") {
+             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+             
+            }
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                var parameters:Dictionary<AnyHashable, Any>!
+                parameters = [
+                    "action"        : "editprofile",
+                    "userId"        : String(myString),
+                    "contactNumber"   : String(self.strPhoneNumber),
+                    
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            self.hide_loading_UI()
+                            self.push_to_dashboard()
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            self.hide_loading_UI()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            } else {
+                print("no token found")
+                self.login_refresh_token_wb()
+            }
+        }
+    }
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : "Member"
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.update_number_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
     
     
 

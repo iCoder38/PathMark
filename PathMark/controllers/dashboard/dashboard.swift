@@ -405,7 +405,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     @objc func update_token_WB(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
-             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                 print(language as Any)
                 
                 if (language == "en") {
@@ -414,14 +414,11 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                     ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
                 }
                 
-             
+                
             }
         }
         
-        
         self.view.endEditing(true)
-        
-        
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
@@ -482,11 +479,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             
                             self.show_banner_WB()
                             
-                            
-                            
-                            
-                                    /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
-                                    self.navigationController?.pushViewController(push!, animated: true)*/
+                            /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                             self.navigationController?.pushViewController(push!, animated: true)*/
                             
                             
                         } else if message == String(not_authorize_api) {

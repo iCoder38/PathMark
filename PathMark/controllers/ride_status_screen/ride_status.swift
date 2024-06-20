@@ -559,6 +559,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         if self.dict_get_all_data_from_notification["last_cancel_amount"] == nil {
                             
                             // BOTH LAST CANCEL AMOUNT IS NIL
+                            print(self.dict_get_all_data_from_notification as Any)
                             
                             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
                             let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
@@ -587,7 +588,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             
                             
                             
-                            
+                            print(self.dict_get_all_data_from_notification as Any)
                             
                             
                             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -652,10 +653,62 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         }
                         
                     } else {
+                        print(self.dict_get_all_data_from_notification as Any)
                         let a = Double("\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)")
                         let b = Double("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
                         var sum = a! + b!
                         print(sum as Any)
+                        
+                        
+                        
+                        var total_Amount_is:String!
+                        
+                        let cancellationFees:Double!
+                        
+                        if let amount = self.convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)"),
+                           let bookingFees = self.convertToDouble("\(self.dict_get_all_data_from_notification["bookingFee"]!)") {
+                            
+                            if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
+                                 cancellationFees = convertToDouble("0.0")
+                            } else if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
+                                cancellationFees = convertToDouble("0.0")
+                           } else {
+                                 cancellationFees = convertToDouble("\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)")
+                            }
+                            
+                            let totalAmount = amount + bookingFees + cancellationFees!
+                            
+                            if "\(self.dict_get_all_data_from_notification["Promotional_total"]!)" != "" {
+                                let pro_dis = convertToDouble("\(self.dict_get_all_data_from_notification["Promotional_total"]!)")
+                                print(pro_dis as Any)
+                                let complete_cal = totalAmount - pro_dis!
+                                print("Complete cal: \(complete_cal)")
+                                
+                                // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                                // // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                                
+                                // also manage trip fare
+                                // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["FinalFare"]!)"
+                                
+                                let final_fare = convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
+                                print("Final fare: \(final_fare!)")
+                                
+                                let f_f_total = final_fare! - pro_dis!
+                                // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
+                                total_Amount_is = "\(f_f_total)"
+                            } else {
+                                total_Amount_is = "\(totalAmount)"
+                                // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                                // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                            }
+                            
+                        } else {
+                            print("Invalid number format in one of the strings.")
+                        }
+                        
+                        
+                        
+                        
                         
                         
                         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -669,7 +722,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                     
                                     push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                    push!.str_get_total_price2 = "\(total_Amount_is!)"
                                     push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
                                     
                                     self.navigationController?.pushViewController(push!, animated: true)

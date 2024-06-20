@@ -360,7 +360,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         if (self.dict_emergency == nil) {
             print("add contact")
             
-            if (self.txt_phone.text!.count == 10) {
+            if (self.txt_phone.text!.count == 11) {
                 self.add_emergency_phone()
             }/* else if (self.txt_phone.text!.count == 11) {
                 self.add_emergency_phone()
@@ -393,7 +393,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
         } else {
             print("edit contact")
             
-            if (self.txt_phone.text!.count == 10) {
+            if (self.txt_phone.text!.count == 11) {
                 self.check_edit_or_add_contact_WB()
             }/* else if (self.txt_phone.text!.count == 11) {
                 self.check_edit_or_add_contact_WB()
@@ -717,7 +717,7 @@ class add_contacts: UIViewController , UITextFieldDelegate {
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 10
+            return updatedText.count <= 11
             
         
         }  else {

@@ -312,7 +312,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                     }
                 }
                 
-            }  else */if (cell.txt_phone_number.text!.count == 10) {
+            }  else */if (cell.txt_phone_number.text!.count == 11) {
                 
                 if (self.arr_country_array == nil) {
                     phone_number_code = "+880"
@@ -371,10 +371,6 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             
             // self.show_loading_UI()
             
-            
-            
-            
-            
             var parameters:Dictionary<AnyHashable, Any>!
   
                 parameters = [
@@ -393,12 +389,6 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                     "device"        : String(""),
                     "deviceToken"   : String(str_device_token),
                 ]
-            
-            
-            
-            
-            
-    //        }
             
             print("parameters-------\(String(describing: parameters))")
             
@@ -816,7 +806,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 10
+            return updatedText.count <= 11
             
         
         }  else {
