@@ -27,6 +27,8 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
+    var str_store_total_price:String!
+    
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
             btn_back.tintColor = .white
@@ -177,6 +179,23 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
         }
     }
     
+    @IBOutlet weak var lbl_booking_fees:UILabel!
+    @IBOutlet weak var lbl_booking_fees_text:UILabel!  {
+        didSet {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    lbl_booking_fees_text.text = "Booking Fee: "
+                } else {
+                    lbl_booking_fees_text.text = "সংরক্ষণ ফি:"
+                }
+                
+                
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -219,8 +238,50 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
         }
         
         
+        self.lbl_booking_fees.text = "\(str_bangladesh_currency_symbol) \(self.dict_all_details["bookingFee"]!)"
         
+        let cancellationFees:Double!
         
+        if let amount = convertToDouble("\(self.dict_all_details["FinalFare"]!)"),
+           let bookingFees = convertToDouble("\(self.dict_all_details["bookingFee"]!)") {
+            
+            if "\(self.dict_all_details["last_cancel_amount"]!)" == "" {
+                 cancellationFees = convertToDouble("0.0")
+            } else {
+                 cancellationFees = convertToDouble("\(self.dict_all_details["last_cancel_amount"]!)")
+            }
+            
+            let totalAmount = amount + bookingFees + cancellationFees!
+            
+            if "\(self.dict_all_details["promotional_discount"]!)" != "" {
+                let pro_dis = convertToDouble("\(self.dict_all_details["promotional_discount"]!)")
+                print(pro_dis as Any)
+                let complete_cal = totalAmount - pro_dis!
+                print("Complete cal: \(complete_cal)")
+                
+                self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                
+                // also manage trip fare
+                self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(self.dict_all_details["FinalFare"]!)"
+                
+                let final_fare = convertToDouble("\(self.dict_all_details["FinalFare"]!)")
+                print("Final fare: \(final_fare!)")
+                
+                let f_f_total = final_fare! - pro_dis!
+                self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
+                self.str_store_total_price = "\(complete_cal)"
+                
+            } else {
+                
+                self.str_store_total_price = "\(totalAmount)"
+                self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+            }
+            
+        } else {
+            print("Invalid number format in one of the strings.")
+        }
         
         
         
@@ -435,7 +496,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                 
                 push!.str_booking_id2 = "\(self.dict_all_details["bookingId"]!)"
-                push!.str_get_total_price2 = "\(self.dict_all_details["FinalFare"]!)"
+                push!.str_get_total_price2 = String(self.str_store_total_price)
                 push!.get_full_data_for_payment2 = self.dict_all_details
                 
                 self.navigationController?.pushViewController(push!, animated: true)
@@ -452,7 +513,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                 
                 push!.str_booking_id2 = "\(self.dict_all_details["bookingId"]!)"
-                push!.str_get_total_price2 = "\(sum!)"
+                push!.str_get_total_price2 = String(self.str_store_total_price)
                 push!.get_full_data_for_payment2 = self.dict_all_details
                 
                 self.navigationController?.pushViewController(push!, animated: true)
@@ -470,7 +531,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
             
             push!.str_booking_id2 = "\(self.dict_all_details["bookingId"]!)"
-            push!.str_get_total_price2 = "\(sum!)"
+            push!.str_get_total_price2 = String(self.str_store_total_price)
             push!.get_full_data_for_payment2 = self.dict_all_details
             
             self.navigationController?.pushViewController(push!, animated: true)

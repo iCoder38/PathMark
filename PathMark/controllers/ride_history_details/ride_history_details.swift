@@ -366,9 +366,13 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
                 print("total: \(f_f_total)")
                 // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
                 
-                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal!)"
+                
                 cell.lbl_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
-                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(complete_cal!)"
+                
+                
+                let doubleStr = String(format: "%.2f", complete_cal)
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(doubleStr)"
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(doubleStr)"
                 
                 if "\(self.dict_get_booking_details["discountAmount"]!)" == "" {
                     cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"
@@ -384,6 +388,11 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
                 self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
                 cell.lbl_fare.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
                 cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                
+                let doubleStr = String(format: "%.2f", totalAmount)
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(doubleStr)"
+                cell.lbl_fare.text = "\(str_bangladesh_currency_symbol) \(doubleStr)"
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(doubleStr)"
                 
                 if "\(self.dict_get_booking_details["discountAmount"]!)" == "" {
                     cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"

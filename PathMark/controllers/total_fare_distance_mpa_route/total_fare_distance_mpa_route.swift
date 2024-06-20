@@ -551,6 +551,8 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 let drop_lat = String(self.searched_place_location_lat)
                 let drop_long = String(self.searched_place_location_long)
 
+                let doubleStr = String(format: "%.2f", self.str_total_rupees)
+                
                 parameters = [
                     
                     "action"                : "addbooking",
@@ -562,7 +564,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "RequestDropLatLong"    : String(drop_lat)+","+String(drop_long),
                     "duration"              : String(self.str_total_duration),
                     "distance"              : String(self.str_total_distance),
-                    "estimateAmount"        : String(self.str_total_rupees),
+                    "estimateAmount"        : "\(doubleStr)",
                     "language"              : String(self.str_selected_language_is)
                     
                 ]
@@ -814,7 +816,8 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         backgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = backgroundView
         
-        cell.lblTotalPayableAmount.text = String(self.str_total_rupees)
+        let doubleStr = String(format: "%.2f", self.str_total_rupees)
+        cell.lblTotalPayableAmount.text = "\(doubleStr)"
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)

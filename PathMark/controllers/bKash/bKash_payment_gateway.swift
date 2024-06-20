@@ -391,16 +391,16 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
                 ]
                 
                 parameters = [
-                    "action"        : "updatepayment",
-                    "userId"        : String(myString),
-                    "bookingId"     : String(self.str_booking_id),
-                    "transactionId"  : String(self.trxId),
-                    "totalAmount"   : String(self.doublePayment),
-                    "TIP"           : String("0"),
+                    "action"            : "updatepayment",
+                    "userId"            : String(myString),
+                    "bookingId"         : String(self.str_booking_id),
+                    "transactionId"     : String(self.trxId),
+                    "totalAmount"       : String(self.doublePayment),
+                    "TIP"               : String("0"),
                     "discountAmount"    : String(""),
-                    "couponCode"    : String(""),
-                    "paymentMethod" : String("Card"),
-                    "paymentID"     : String(self.strPaymentId)
+                    "couponCode"        : String(""),
+                    "paymentMethod"     : String("Card"),
+                    "paymentID"         : String(self.strPaymentId)
                 ]
                 
                 print(parameters as Any)

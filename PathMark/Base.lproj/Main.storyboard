@@ -9953,11 +9953,11 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jV1-dy-0o7">
-                                <rect key="frame" x="37" y="553" width="340" height="1"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gFe-4C-Kyc">
+                                <rect key="frame" x="37" y="486" width="340" height="1"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="1fI-a1-NMy"/>
+                                    <constraint firstAttribute="height" constant="1" id="bA4-oR-Qzz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
                                 <nil key="textColor"/>
@@ -9973,75 +9973,83 @@
                                 <state key="normal" title=" " image="destination_mark"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip fare :" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyf-q4-T97">
-                                <rect key="frame" x="36.999999999999993" y="502" width="73.333333333333314" height="46"/>
+                                <rect key="frame" x="35.999999999999993" y="495" width="73.333333333333314" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="KP3-tK-hn2"/>
+                                    <constraint firstAttribute="height" constant="20" id="j6f-vz-0aX"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Previuos cancellation fee" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NXj-0y-qBk">
-                                <rect key="frame" x="37" y="562" width="200" height="46"/>
+                                <rect key="frame" x="37" y="547" width="150" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="S0e-cX-IDp"/>
+                                    <constraint firstAttribute="height" constant="20" id="Ngz-pf-7zb"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip fare :" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iz7-46-YUw">
-                                <rect key="frame" x="300" y="502" width="73.333333333333314" height="46"/>
+                                <rect key="frame" x="317.33333333333331" y="495" width="55" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="vT0-PH-xRb"/>
+                                    <constraint firstAttribute="height" constant="20" id="LXL-tk-efO"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip fare :" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k8C-81-epG">
-                                <rect key="frame" x="300" y="562" width="73.333333333333314" height="46"/>
+                                <rect key="frame" x="317.33333333333331" y="547" width="55" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="EOz-ww-e07"/>
+                                    <constraint firstAttribute="height" constant="20" id="e0d-LF-1lk"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IxH-4c-qbk">
-                                <rect key="frame" x="20" y="682" width="374" height="50"/>
+                                <rect key="frame" x="20" y="599" width="374" height="50"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="eJW-kO-mv4"/>
+                                    <constraint firstAttribute="height" constant="50" id="GJh-zO-WLy"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="cashout history"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6QI-BG-CT7">
-                                <rect key="frame" x="37" y="625" width="39.666666666666657" height="46"/>
+                                <rect key="frame" x="37" y="571" width="39.666666666666657" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="KL6-5Z-S9K"/>
+                                    <constraint firstAttribute="height" constant="20" id="EVW-ig-cnM"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip fare :" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qj9-S2-dba">
-                                <rect key="frame" x="300" y="625" width="73.333333333333314" height="46"/>
+                                <rect key="frame" x="318.33333333333331" y="571" width="55" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="46" id="cax-fl-yyU"/>
+                                    <constraint firstAttribute="height" constant="20" id="aJr-c2-AAD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Booking fees:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYI-1v-lAp">
+                                <rect key="frame" x="37.000000000000007" y="523" width="104.66666666666669" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="NTg-rr-ACy"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CHQ-EA-mOM">
-                                <rect key="frame" x="37" y="616" width="340" height="1"/>
-                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Booking fees:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="og2-Z2-yir">
+                                <rect key="frame" x="294" y="523" width="78.666666666666686" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="sHb-7y-DlU"/>
+                                    <constraint firstAttribute="height" constant="20" id="17w-Lc-DNE"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -10051,44 +10059,45 @@
                         <constraints>
                             <constraint firstItem="7If-Eq-0N8" firstAttribute="top" secondItem="xYg-tB-G5Q" secondAttribute="top" id="0Lb-vC-4En"/>
                             <constraint firstItem="b6u-Ef-KzM" firstAttribute="top" secondItem="rMF-yE-UtL" secondAttribute="bottom" id="0VQ-ov-vgi"/>
-                            <constraint firstItem="IxH-4c-qbk" firstAttribute="top" secondItem="NXj-0y-qBk" secondAttribute="bottom" constant="74" id="48E-Jg-bY5"/>
+                            <constraint firstItem="cyf-q4-T97" firstAttribute="top" secondItem="erH-Mt-ORI" secondAttribute="bottom" constant="17" id="1ba-kp-S4s"/>
                             <constraint firstItem="7If-Eq-0N8" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" id="4fJ-gh-AxK"/>
                             <constraint firstItem="7TQ-Y9-mLL" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="54" id="6Mr-X6-13E"/>
                             <constraint firstItem="ile-5v-ybT" firstAttribute="top" secondItem="b6u-Ef-KzM" secondAttribute="bottom" constant="14" id="6Tk-wB-Xmo"/>
-                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="IxH-4c-qbk" secondAttribute="trailing" constant="20" id="7bm-xN-sGM"/>
-                            <constraint firstItem="IxH-4c-qbk" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="20" id="AJm-mu-cH4"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="CHQ-EA-mOM" secondAttribute="trailing" constant="17" id="B0A-OW-ZW7"/>
+                            <constraint firstItem="gFe-4C-Kyc" firstAttribute="top" secondItem="erH-Mt-ORI" secondAttribute="bottom" constant="8" symbolic="YES" id="8M3-K2-fUm"/>
+                            <constraint firstItem="NXj-0y-qBk" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="9aP-32-dRf"/>
                             <constraint firstItem="rMF-yE-UtL" firstAttribute="trailing" secondItem="ewN-f6-FoG" secondAttribute="trailing" id="E2c-99-s1e"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="jV1-dy-0o7" secondAttribute="trailing" constant="17" id="G8Q-sG-4YC"/>
-                            <constraint firstItem="6QI-BG-CT7" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="Hrp-4o-WiO"/>
                             <constraint firstItem="7If-Eq-0N8" firstAttribute="trailing" secondItem="ewN-f6-FoG" secondAttribute="trailing" id="JCW-To-Fkc"/>
                             <constraint firstItem="erH-Mt-ORI" firstAttribute="top" secondItem="7TQ-Y9-mLL" secondAttribute="bottom" constant="18" id="K54-eG-hrE"/>
+                            <constraint firstItem="sYI-1v-lAp" firstAttribute="top" secondItem="cyf-q4-T97" secondAttribute="bottom" constant="8" symbolic="YES" id="Kgh-7R-CHv"/>
                             <constraint firstItem="b6u-Ef-KzM" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" id="KhW-Ky-pNR"/>
+                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="IxH-4c-qbk" secondAttribute="trailing" constant="20" id="Lcx-qE-wqY"/>
+                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="k8C-81-epG" secondAttribute="trailing" constant="41.666666666666686" id="Mss-WW-6Uo"/>
                             <constraint firstItem="rMF-yE-UtL" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" id="OrN-QK-j98"/>
-                            <constraint firstItem="6QI-BG-CT7" firstAttribute="top" secondItem="CHQ-EA-mOM" secondAttribute="bottom" constant="8" symbolic="YES" id="PKh-YL-m20"/>
-                            <constraint firstItem="CHQ-EA-mOM" firstAttribute="top" secondItem="NXj-0y-qBk" secondAttribute="bottom" constant="8" symbolic="YES" id="Pf2-UI-9g6"/>
-                            <constraint firstItem="cyf-q4-T97" firstAttribute="top" secondItem="erH-Mt-ORI" secondAttribute="bottom" constant="24" id="QmQ-Vg-zf3"/>
-                            <constraint firstItem="NXj-0y-qBk" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="Qoc-i2-EaH"/>
-                            <constraint firstItem="CHQ-EA-mOM" firstAttribute="leading" secondItem="xYg-tB-G5Q" secondAttribute="leadingMargin" constant="17" id="SoK-mR-uhW"/>
-                            <constraint firstItem="Iz7-46-YUw" firstAttribute="top" secondItem="erH-Mt-ORI" secondAttribute="bottom" constant="24" id="Xxf-b4-TkV"/>
-                            <constraint firstItem="NXj-0y-qBk" firstAttribute="top" secondItem="cyf-q4-T97" secondAttribute="bottom" constant="14" id="Yei-cK-TYT"/>
-                            <constraint firstItem="cyf-q4-T97" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="ZDi-np-MUt"/>
+                            <constraint firstItem="6QI-BG-CT7" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="TMu-eC-JfP"/>
+                            <constraint firstItem="gFe-4C-Kyc" firstAttribute="leading" secondItem="xYg-tB-G5Q" secondAttribute="leadingMargin" constant="17" id="WOZ-fG-iSB"/>
                             <constraint firstItem="rMF-yE-UtL" firstAttribute="top" secondItem="7If-Eq-0N8" secondAttribute="bottom" id="ZtQ-pc-ijZ"/>
                             <constraint firstItem="erH-Mt-ORI" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="54" id="aec-Ek-U30"/>
-                            <constraint firstItem="jV1-dy-0o7" firstAttribute="leading" secondItem="xYg-tB-G5Q" secondAttribute="leadingMargin" constant="17" id="bJC-YH-X1b"/>
-                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="k8C-81-epG" secondAttribute="trailing" constant="40.666666666666686" id="bdG-Mf-fvd"/>
+                            <constraint firstItem="Qj9-S2-dba" firstAttribute="top" secondItem="k8C-81-epG" secondAttribute="bottom" constant="4" id="blo-sf-KVg"/>
                             <constraint firstItem="P38-hT-NDO" firstAttribute="leading" secondItem="xYg-tB-G5Q" secondAttribute="leadingMargin" constant="34" id="dbl-id-LW1"/>
-                            <constraint firstItem="jV1-dy-0o7" firstAttribute="top" secondItem="cyf-q4-T97" secondAttribute="bottom" constant="5" id="gfF-T5-BCD"/>
+                            <constraint firstItem="cyf-q4-T97" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="35.999999999999993" id="dsy-Ig-t8f"/>
+                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="Iz7-46-YUw" secondAttribute="trailing" constant="41.666666666666686" id="dux-cT-6m3"/>
+                            <constraint firstItem="6QI-BG-CT7" firstAttribute="top" secondItem="NXj-0y-qBk" secondAttribute="bottom" constant="4" id="ecd-Xq-8ft"/>
                             <constraint firstItem="7TQ-Y9-mLL" firstAttribute="top" secondItem="b6u-Ef-KzM" secondAttribute="bottom" constant="8" symbolic="YES" id="jE5-xs-0Qq"/>
+                            <constraint firstItem="Iz7-46-YUw" firstAttribute="top" secondItem="erH-Mt-ORI" secondAttribute="bottom" constant="17" id="kh2-xj-T7l"/>
+                            <constraint firstItem="IxH-4c-qbk" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="20" id="leE-in-c4i"/>
+                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="og2-Z2-yir" secondAttribute="trailing" constant="41.333333333333371" id="mLw-OA-Pza"/>
                             <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="7TQ-Y9-mLL" secondAttribute="trailing" constant="20" id="mXU-u5-sSa"/>
+                            <constraint firstItem="NXj-0y-qBk" firstAttribute="top" secondItem="sYI-1v-lAp" secondAttribute="bottom" constant="4" id="meI-7A-Vm7"/>
                             <constraint firstItem="P38-hT-NDO" firstAttribute="top" secondItem="7TQ-Y9-mLL" secondAttribute="bottom" constant="8" symbolic="YES" id="ntc-eu-rlw"/>
+                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="Qj9-S2-dba" secondAttribute="trailing" constant="40.66666666666606" id="oUb-7F-Fj5"/>
                             <constraint firstItem="P38-hT-NDO" firstAttribute="trailing" secondItem="xYg-tB-G5Q" secondAttribute="trailingMargin" id="pAB-XL-Mgi"/>
-                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="Iz7-46-YUw" secondAttribute="trailing" constant="40.666666666666686" id="ps2-Pb-kWb"/>
-                            <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="Qj9-S2-dba" secondAttribute="trailing" constant="40.670000000000002" id="qGr-CB-Z7z"/>
-                            <constraint firstItem="k8C-81-epG" firstAttribute="top" secondItem="Iz7-46-YUw" secondAttribute="bottom" constant="14" id="tpb-Wt-QSk"/>
+                            <constraint firstItem="IxH-4c-qbk" firstAttribute="top" secondItem="6QI-BG-CT7" secondAttribute="bottom" constant="8" symbolic="YES" id="pQG-2b-Bc1"/>
                             <constraint firstItem="ewN-f6-FoG" firstAttribute="trailing" secondItem="erH-Mt-ORI" secondAttribute="trailing" constant="20" id="vAC-eP-TUU"/>
+                            <constraint firstItem="sYI-1v-lAp" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="37" id="vce-nH-ukL"/>
+                            <constraint firstItem="k8C-81-epG" firstAttribute="top" secondItem="og2-Z2-yir" secondAttribute="bottom" constant="4" id="wXa-PT-Msj"/>
                             <constraint firstItem="b6u-Ef-KzM" firstAttribute="trailing" secondItem="ewN-f6-FoG" secondAttribute="trailing" id="wYi-g9-5ir"/>
-                            <constraint firstItem="Qj9-S2-dba" firstAttribute="top" secondItem="CHQ-EA-mOM" secondAttribute="bottom" constant="8" symbolic="YES" id="xQ5-6a-fUS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gFe-4C-Kyc" secondAttribute="trailing" constant="17" id="xE1-JO-ZoO"/>
+                            <constraint firstItem="og2-Z2-yir" firstAttribute="top" secondItem="Iz7-46-YUw" secondAttribute="bottom" constant="8" symbolic="YES" id="xE3-IU-97A"/>
                             <constraint firstItem="ile-5v-ybT" firstAttribute="leading" secondItem="ewN-f6-FoG" secondAttribute="leading" constant="6" id="xXw-xB-b0o"/>
                         </constraints>
                     </view>
@@ -10098,6 +10107,8 @@
                     <connections>
                         <outlet property="btn_back" destination="Lq7-ct-f2V" id="2I2-KW-hY4"/>
                         <outlet property="btn_cash" destination="IxH-4c-qbk" id="yxp-kr-k2f"/>
+                        <outlet property="lbl_booking_fees" destination="og2-Z2-yir" id="een-si-MDU"/>
+                        <outlet property="lbl_booking_fees_text" destination="sYI-1v-lAp" id="Hhd-c7-7lf"/>
                         <outlet property="lbl_distance" destination="PeF-HA-Zx8" id="qG3-pC-XoB"/>
                         <outlet property="lbl_distance_text" destination="pXx-NX-166" id="Scu-aB-XE1"/>
                         <outlet property="lbl_drop" destination="erH-Mt-ORI" id="VrA-rZ-Kbk"/>
@@ -10118,7 +10129,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VFK-1g-HkB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="24133" y="4"/>
+            <point key="canvasLocation" x="24132.824427480915" y="3.5211267605633805"/>
         </scene>
         <!--Kash payment gateway-->
         <scene sceneID="49I-hC-ScP">

@@ -10,6 +10,8 @@ import Alamofire
 import AudioToolbox
 
 class before_payment: UIViewController {
+    var store_coupon_code:String!
+    var discounted_amount:String!
     
     // parse
     var get_full_data_for_payment2:NSDictionary!
@@ -481,8 +483,8 @@ class before_payment: UIViewController {
                     "transactionId"  : String("cash_dummy_transaction_id"),
                     "totalAmount"   : String(self.str_final_amount),
                     "TIP"           : String("0"),
-                    "discountAmount"    : String(""),
-                    "couponCode"    : String(""),
+                    "discountAmount"    : String(self.discounted_amount),
+                    "couponCode"    : String(self.store_coupon_code),
                     "paymentMethod" : String("Cash"),
                 ]
                 
@@ -652,26 +654,19 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         tableView .deselectRow(at: indexPath, animated: true)
      
         let item = self.arr_coupon_list[indexPath.row] as? [String:Any]
+        print(item as Any)
         
         self.str_coupon_code2 = (item!["description"] as! String)
         
-        // print(self.str_get_total_amount as Any)
-        // print("\(item!["discount"]!)")
-        
-        // calculate
-        // var str_discount = "\(item!["discount"]!)"
-        
-        // let a: Int? = Int("\(item!["discount"]!)")
-        // print(a as Any)
-        
         let double_off = Double("\(item!["discount"]!)")!
+        self.store_coupon_code = "\(double_off)"
         let double_total = Double(self.str_get_total_price2)!
-        
-        // var discount = (double_off/100)
-        
         
         let cal = (double_off/100)*double_total
         print(cal)
+        
+        self.discounted_amount = "\(cal)"
+        print(self.discounted_amount  as Any)
         self.str_discount_amount2 = "\(cal)"
         
         let final_cal = double_total - cal
