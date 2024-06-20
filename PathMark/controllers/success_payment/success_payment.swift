@@ -78,12 +78,12 @@ class success_payment: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard2))
         view.addGestureRecognizer(tap)
         
-        if (self.str_show_total_price == nil) {
+        /*if (self.str_show_total_price == nil) {
             self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.get_booking_details["FinalFare"]!)"
         } else {
             self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.str_show_total_price!)"
-        }
-        
+        }*/
+        self.lbl_price.text = "\(str_bangladesh_currency_symbol)\(self.str_show_total_price!)"
         
         if (self.get_booking_details["created"]) == nil {
             self.lbl_date_time.text = ""

@@ -68,6 +68,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     var str_user_save_phone_number:String! = ""
     
+    var str_booking_id:String!
+    
     // ***************************************************************** // nav
     
     @IBOutlet weak var navigationBar:UIView! {
@@ -661,7 +663,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         
                         
-                        var total_Amount_is:String!
+                        /*var total_Amount_is:String!
                         
                         let cancellationFees:Double!
                         
@@ -704,61 +706,15 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             
                         } else {
                             print("Invalid number format in one of the strings.")
-                        }
+                        }*/
+                        
+                        self.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
+                        
+                        self.booking_history_details_WB(str_show_loader: "yes")
                         
                         
                         
                         
-                        
-                        
-                        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                            print(language as Any)
-                            
-                            if (language == "en") {
-                                
-                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                                let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                                    _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                    
-                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                    push!.str_get_total_price2 = "\(total_Amount_is!)"
-                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                    
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                let cancel = NewYorkButton(title: "Home", style: .default) {
-                                    _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                alert.addButtons([pay,cancel])
-                                self.present(alert, animated: true)
-                                
-                            } else {
-                                
-                                let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                                let pay = NewYorkButton(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                                    _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                    
-                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                    
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                let cancel = NewYorkButton(title: "হোম", style: .default) {
-                                    _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                alert.addButtons([pay,cancel])
-                                self.present(alert, animated: true)
-                                
-                            }
-                            
-                        }
                         
                         
                         
@@ -864,6 +820,324 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         //
         self.iAmHereForLocationPermission()
     }
+    
+    
+    
+    
+    @objc func booking_history_details_WB(str_show_loader:String) {
+        
+        if (str_show_loader == "yes") {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+                }
+            }
+        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+             let x : Int = person["userId"] as! Int
+             let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                    
+                     
+                }
+                
+                parameters = [
+                    "action"        : "bookingdetail",
+                    "bookingId"     : String(self.str_booking_id),
+                    "userId"        : String(myString),
+                    "language"      : String(lan),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            print(dict as Any)
+                            
+                            let cancellationFees:Double!
+                            
+                            if let amount = self.convertToDouble("\(dict["FinalFare"]!)"),
+                               let bookingFees = self.convertToDouble("\(dict["bookingFee"]!)") {
+                                
+                                if "\(dict["last_cancel_amount"]!)" == "" {
+                                    cancellationFees = self.convertToDouble("0.0")
+                                } else if "\(dict["last_cancel_amount"]!)" == "0" {
+                                    cancellationFees = self.convertToDouble("0.0")
+                                } else {
+                                    cancellationFees = self.convertToDouble("\(dict["last_cancel_amount"]!)")
+                                }
+                                
+                                let totalAmount = amount + bookingFees + cancellationFees!
+                                print(totalAmount as Any)
+                                
+                                if "\(dict["promotional_discount"]!)" != "" {
+                                    let pro_dis = self.convertToDouble("\(dict["promotional_discount"]!)")
+                                    print(pro_dis as Any)
+                                    let complete_cal = totalAmount - pro_dis!
+                                    print("Complete cal: \(complete_cal)")
+                                    
+                                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                                        print(language as Any)
+                                        
+                                        if (language == "en") {
+                                            
+                                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            let pay = NewYorkButton(title: "Pay : \(complete_cal)", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                
+                                                push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                push!.str_get_total_price2 = "\(complete_cal)"
+                                                push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            let cancel = NewYorkButton(title: "Home", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            alert.addButtons([pay,cancel])
+                                            self.present(alert, animated: true)
+                                            
+                                        } else {
+                                            
+                                            let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            let pay = NewYorkButton(title: "বেতন : \(complete_cal)", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                
+                                                push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                push!.str_get_total_price2 = "\(complete_cal)"
+                                                push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            let cancel = NewYorkButton(title: "হোম", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            alert.addButtons([pay,cancel])
+                                            self.present(alert, animated: true)
+                                            
+                                        }
+                                        
+                                    }
+                                   
+                                    
+                                } else {
+                                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                                        print(language as Any)
+                                        
+                                        if (language == "en") {
+                                            
+                                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            let pay = NewYorkButton(title: "Pay : \(totalAmount)", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                
+                                                push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                push!.str_get_total_price2 = "\(totalAmount)"
+                                                push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            let cancel = NewYorkButton(title: "Home", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            alert.addButtons([pay,cancel])
+                                            self.present(alert, animated: true)
+                                            
+                                        } else {
+                                            
+                                            let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            let pay = NewYorkButton(title: "বেতন : \(totalAmount)", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                
+                                                push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                push!.str_get_total_price2 = "\(totalAmount)"
+                                                push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            let cancel = NewYorkButton(title: "হোম", style: .default) {
+                                                _ in
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                self.navigationController?.pushViewController(push!, animated: true)
+                                            }
+                                            alert.addButtons([pay,cancel])
+                                            self.present(alert, animated: true)
+                                            
+                                        }
+                                        
+                                    }
+                                }
+                                
+                            } else {
+                                print("Invalid number format in one of the strings.")
+                            }
+                            
+                            
+                            
+                            /*// self.dict_get_booking_details = JSON
+                            self.str_starrating = "\(dict["bookingrating"]!)"
+                            self.tbleView.delegate = self
+                            self.tbleView.dataSource = self
+                            self.tbleView.reloadData()*/
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    /*
+     
+     */
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : (person["role"] as! String)
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.booking_history_details_WB(str_show_loader: "no")
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
+    
+    
     
     @objc func home_click_method() {
         
@@ -1290,7 +1564,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             self.dismiss(animated: true)
                             
                         } else if message == String(not_authorize_api) {
-                            self.login_refresh_token_wb()
+                            self.login_refresh_token_wb2()
                             
                         } else {
                             
@@ -1319,7 +1593,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
     }
     
-    @objc func login_refresh_token_wb() {
+    @objc func login_refresh_token_wb2() {
         
         var parameters:Dictionary<AnyHashable, Any>!
         if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {

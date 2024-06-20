@@ -412,7 +412,7 @@ class before_payment: UIViewController {
         } else {
             
             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
-            push!.doublePayment = "\(self.total_amount!)"
+            push!.doublePayment = "\(self.str_final_amount!)"
             push!.dict_full = self.get_full_data_for_payment2
             push!.str_booking_id = String(self.str_booking_id2)
             self.navigationController?.pushViewController(push!, animated: true)
@@ -479,7 +479,7 @@ class before_payment: UIViewController {
                     "userId"        : String(myString),
                     "bookingId"     : String(self.str_booking_id2),
                     "transactionId"  : String("cash_dummy_transaction_id"),
-                    "totalAmount"   : String(self.str_get_total_price2),
+                    "totalAmount"   : String(self.str_final_amount),
                     "TIP"           : String("0"),
                     "discountAmount"    : String(""),
                     "couponCode"    : String(""),
@@ -518,6 +518,7 @@ class before_payment: UIViewController {
                             
                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
                             
+                            push!.str_show_total_price = String(self.str_final_amount)
                             push!.get_booking_details = self.get_full_data_for_payment2
                             
                             self.navigationController?.pushViewController(push!, animated: true)

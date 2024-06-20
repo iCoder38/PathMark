@@ -324,6 +324,82 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
         
         cell.backgroundColor = .clear
         
+        
+        cell.lbl_booking_fee.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["bookingFee"]!)"
+        cell.lbl_cancellation_fee.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["last_cancel_amount"]!)"
+        
+        let cancellationFees:Double!
+        let discountAmount:Double!
+        let complete_cal:Double!
+        
+        if let amount = convertToDouble("\(self.dict_get_booking_details["FinalFare"]!)"),
+           let bookingFees = convertToDouble("\(self.dict_get_booking_details["bookingFee"]!)") {
+            
+            if "\(self.dict_get_booking_details["last_cancel_amount"]!)" == "" {
+                 cancellationFees = convertToDouble("0.0")
+            } else if "\(self.dict_get_booking_details["last_cancel_amount"]!)" == "0" {
+                cancellationFees = convertToDouble("0.0")
+           } else {
+               cancellationFees = convertToDouble("\(self.dict_get_booking_details["last_cancel_amount"]!)")
+            }
+            
+            if "\(self.dict_get_booking_details["discountAmount"]!)" == "" {
+                discountAmount = convertToDouble("0.0")
+            } else if "\(self.dict_get_booking_details["discountAmount"]!)" == "0" {
+                discountAmount = convertToDouble("0.0")
+            } else {
+                discountAmount = convertToDouble("\(self.dict_get_booking_details["discountAmount"]!)")
+            }
+             
+            let totalAmount =  amount + bookingFees + cancellationFees! - discountAmount!
+            
+            if "\(self.dict_get_booking_details["promotional_discount"]!)" != "" {
+                let pro_dis = convertToDouble("\(self.dict_get_booking_details["promotional_discount"]!)")
+                print(pro_dis as Any)
+                complete_cal = totalAmount - pro_dis!
+                print("Complete cal: \(complete_cal!)")
+                
+                let final_fare = convertToDouble("\(self.dict_get_booking_details["FinalFare"]!)")
+                print("Final fare: \(final_fare!)")
+                
+                let f_f_total = final_fare! - pro_dis!
+                print("total: \(f_f_total)")
+                // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
+                
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal!)"
+                cell.lbl_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(complete_cal!)"
+                
+                if "\(self.dict_get_booking_details["discountAmount"]!)" == "" {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"
+                } else if "\(self.dict_get_booking_details["discountAmount"]!)" == "0" {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"
+                } else {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["discountAmount"]!)"
+                }
+                
+            } else {
+                print("NO promotional_discount")
+                
+                self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                cell.lbl_fare.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                cell.lbl_total_amount.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                
+                if "\(self.dict_get_booking_details["discountAmount"]!)" == "" {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"
+                } else if "\(self.dict_get_booking_details["discountAmount"]!)" == "0" {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) 0"
+                } else {
+                    cell.lbl_promotion.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_booking_details["discountAmount"]!)"
+                }
+                
+                
+            }
+            
+        } else {
+            print("Invalid number format in one of the strings.")
+        }
+        
         return cell
         
     }
@@ -524,4 +600,16 @@ class ride_history_details_table_cell: UITableViewCell {
     @IBOutlet weak var img_star_three:UIImageView!
     @IBOutlet weak var img_star_four:UIImageView!
     @IBOutlet weak var img_star_five:UIImageView!
+    
+    @IBOutlet weak var lbl_booking_fee:UILabel! {
+        didSet {
+            lbl_booking_fee.textColor = .black
+        }
+    }
+    
+    @IBOutlet weak var lbl_booking_fee_text:UILabel! {
+        didSet {
+            lbl_booking_fee_text.textColor = .black
+        }
+    }
 }
