@@ -352,7 +352,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           
           window?.makeKeyAndVisible()
           
-      } else if (dict["type"] as! String) == "Payment" { // when driver cancel your ride
+      } /*else if (dict["type"] as! String) == "Payment" {
           
           let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
@@ -373,7 +373,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           
           window?.makeKeyAndVisible()
           
-      }/* else if (dict["type"] as! String) == "Chat" {
+      }*//* else if (dict["type"] as! String) == "Chat" {
           
           /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
 

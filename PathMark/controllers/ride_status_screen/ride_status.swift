@@ -596,6 +596,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         UserDefaults.standard.set("en", forKey: str_language_convert)
                     }
                     
+                    self.btnConfirmBooking.isHidden = true
+                    
                 }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
                     // self.lbl_OTP.isHidden = true
                     
@@ -772,7 +774,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
                         self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
                     }
-                    
+                    self.btnConfirmBooking.isHidden = true
                 } else if (self.dict_get_all_data_from_notification["type"] as! String) == "Chat" {
                     
                     
