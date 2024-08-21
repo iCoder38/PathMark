@@ -45,13 +45,30 @@ class cancel_your_ride: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        if (self.dict_get_data_from_notification["cancelComment"] as! String) != "" {
-            self.lbl_one.text = "You ride has been cancelled.\n"+(self.dict_get_data_from_notification["cancelReason"] as! String)+"\n Reason : "+(self.dict_get_data_from_notification["cancelReason"] as! String)
+        if (self.dict_get_data_from_notification["cancelReason"] as! String) == "0" {
+            self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\nReason: Passenger denied to go to destination.\n\n\(self.dict_get_data_from_notification["cancelComment"] as! String)"
+        } else if (self.dict_get_data_from_notification["cancelReason"] as! String) == "1" {
+            self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\nReason: Passenger denied to come to pickup.\n\n\(self.dict_get_data_from_notification["cancelComment"] as! String)"
+        } else if (self.dict_get_data_from_notification["cancelReason"] as! String) == "2" {
+            self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\nReason: Expected a shorter a wait time.\n\n\(self.dict_get_data_from_notification["cancelComment"] as! String)"
+        } else if (self.dict_get_data_from_notification["cancelReason"] as! String) == "3" {
+            self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\nReason: Unable to contact Passenger.\n\n\(self.dict_get_data_from_notification["cancelComment"] as! String)"
         } else {
-            self.lbl_one.text = "You ride has been cancelled.\n"+(self.dict_get_data_from_notification["cancelReason"] as! String)+"\n"+(self.dict_get_data_from_notification["cancelComment"] as! String)
-            // self.lbl_one.text = "You ride has been cancelled.
+            self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\n\(self.dict_get_data_from_notification["cancelComment"] as! String)"
         }
+        
+//        if (self.dict_get_data_from_notification["cancelComment"] as! String) != "" {
+//            self.lbl_one.text = "You ride has been cancelled.\n"+(self.dict_get_data_from_notification["cancelReason"] as! String)+"\n Reason : "+(self.dict_get_data_from_notification["cancelReason"] as! String)
+//        } else {
+//            self.lbl_one.text = "You ride has been cancelled.\n"+(self.dict_get_data_from_notification["cancelReason"] as! String)+"\n"+(self.dict_get_data_from_notification["cancelComment"] as! String)
+//            // self.lbl_one.text = "You ride has been cancelled.
+//        }
+        
         self.btn_dismiss.addTarget(self, action: #selector(home_page_click), for: .touchUpInside)
+    }
+    
+    @objc func cancelBookingAlert() {
+        self.lbl_one.text = "\(self.dict_get_data_from_notification["message"] as! String)\n\nReason: \(self.dict_get_data_from_notification["cancelComment"] as! String)"
     }
     
     @objc func home_page_click() {

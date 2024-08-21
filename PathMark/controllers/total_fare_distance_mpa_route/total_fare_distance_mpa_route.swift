@@ -551,7 +551,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 let drop_lat = String(self.searched_place_location_lat)
                 let drop_long = String(self.searched_place_location_long)
 
-                let doubleStr = String(format: "%.2f", self.str_total_rupees)
+                // let doubleStr = String(format: "%.2f", self.str_total_rupees)
                 
                 parameters = [
                     
@@ -559,12 +559,14 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "userId"                : String(myString),
                     "categoryId"            : String(self.str_get_category_id),
                     "RequestPickupAddress"  : String(self.str_from_location),
+                    // "RequestPickupLatLong"  : "28.663360225298394,77.32386478305855",//String(request_lat)+","+String(request_long),
                     "RequestPickupLatLong"  : String(request_lat)+","+String(request_long),
                     "RequestDropAddress"    : String(self.str_to_location),
+                    // "RequestDropLatLong"    : "28.663360225298394,77.32386478305855",// String(drop_lat)+","+String(drop_long),
                     "RequestDropLatLong"    : String(drop_lat)+","+String(drop_long),
                     "duration"              : String(self.str_total_duration),
                     "distance"              : String(self.str_total_distance),
-                    "estimateAmount"        : "\(doubleStr)",
+                    "estimateAmount"        : String(self.str_total_rupees), // "\(doubleStr)",
                     "language"              : String(self.str_selected_language_is)
                     
                 ]
@@ -748,7 +750,25 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 
                                 
                                 self.str_total_distance = (dict["distance"] as! String)
-                                self.str_total_rupees = "\(dict["total"]!)"
+                                
+//                                var doubleTotal = Double("\(dict["total"]!)")
+//                                var doublePromotionalTotal = Double("\(dict["Promotional_total"]!)")
+//                                var calculateTotal = doubleTotal - doublePromotionalTotal
+                                
+                                let string1 = "\(dict["total"]!)"
+                                let string2 = "\(dict["Promotional_total"]!)"
+
+                               
+                                if let value1 = Double(string1), let value2 = Double(string2) {
+                                    
+                                    let result = value1 - value2
+                                    print("The result is \(result)")
+                                    self.str_total_rupees = "\(result)"
+                                    
+                                } else {
+                                    print("One or both values are not valid Doubles")
+                                }
+
                                 self.str_total_duration = (dict["duration"] as! String)
                                 self.str_active_ride = "\(dict["activeRide"]!)"
                                 
@@ -817,7 +837,7 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         cell.selectedBackgroundView = backgroundView
         
         let doubleStr = String(format: "%.2f", self.str_total_rupees)
-        cell.lblTotalPayableAmount.text = "\(doubleStr)"
+        cell.lblTotalPayableAmount.text = String (self.str_total_rupees) // "\(doubleStr)"
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)

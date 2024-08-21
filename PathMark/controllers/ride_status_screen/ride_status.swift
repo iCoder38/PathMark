@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import Alamofire
+import SDWebImage
 
 // MARK:- LOCATION -
 import CoreLocation
@@ -69,6 +70,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     var str_user_save_phone_number:String! = ""
     
     var str_booking_id:String!
+    
+    var isRideCodeHidden:Bool! = false
     
     // ***************************************************************** // nav
     
@@ -146,7 +149,19 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
     }
     
-    @IBOutlet weak var lbl_OTP:UILabel!
+    @IBOutlet weak var lbl_OTP:UILabel! {
+        didSet {
+            self.lbl_OTP.isHidden = true
+        }
+    }
+    
+    @IBOutlet weak var btnConfirmRide:UIButton! {
+        didSet {
+            btnConfirmRide.isHidden = true
+            btnConfirmRide.backgroundColor = .systemGreen
+            btnConfirmRide.setTitle("Confirm booking", for: .normal)
+        }
+    }
     
     @IBOutlet weak var btn_send:UIButton! {
         didSet {
@@ -228,7 +243,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         // self.btnConfirmBooking.addTarget(self, action: #selector(validation_before_confirm_booking), for: .touchUpInside)
         
-        self.show_loading_UI()
+        // self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
 
         self.tbleView.delegate = self
@@ -271,6 +286,19 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         print("=============================================")
         print("=============================================")
         
+        // whatIsYourRideCodeStatus
+        
+        if self.dict_get_all_data_from_notification["RideCode"] != nil {
+            let myString = "\(self.dict_get_all_data_from_notification["RideCode"]!)"
+            if (myString.count < 4) {
+                debugPrint("Yes, Ride code is less then 4")
+                isRideCodeHidden = true
+            } else {
+                debugPrint("Ride code is valid")
+                isRideCodeHidden = false
+            }
+        }
+        
         
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -292,13 +320,14 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
         
         if (self.str_from_history == "yes") {
+            print("\(self.dict_get_all_data_from_notification["rideStatus"]!)")
             
             if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "3") {
-                
+                self.btnConfirmBooking.isHidden = true
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                self.lbl_OTP.isHidden = true
+                // self.lbl_OTP.isHidden = true
                 
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                     print(language as Any)
@@ -320,18 +349,18 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 }
                 
             } else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "2") {
-                // self.lblNavigationTitle.text = "Driver has arrived"
+                 
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                // self.lbl_message.text = "Driver has arrived"
-                self.lbl_OTP.isHidden = true
+                 
+                // self.lbl_OTP.isHidden = true
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                     print(language as Any)
                     
                     if (language == "en") {
                         self.lblNavigationTitle.text = "Driver has Arrived"
-                        self.lbl_message.text = "Driver has Arrived"
+                        self.lbl_message.text = "Confirm booking"
                         
                     } else {
                         self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"
@@ -344,17 +373,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     print("=============================")
                     UserDefaults.standard.set("en", forKey: str_language_convert)
                 }
+                self.hide_loading_UI()
                 
+                if (isRideCodeHidden == true) {
+                    self.btnConfirmBooking.isHidden = true
+                    self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
+                    
+                } else {
+                    self.btnConfirmBooking.isHidden = false
+                    self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
+                    
+                }
                 
             }  else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "1") {
                 // self.lblNavigationTitle.text = "Booking Confirmed"
                 self.navigationBar.backgroundColor = navigation_color
                 
+                self.btnConfirmBooking.isHidden = true
+                
                 self.btn_booking_confirmed.isHidden = false
                 self.lbl_message.text = "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ . وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُونَ"
                 
-                self.lbl_OTP.isHidden = true
-                self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
+                
+                // self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
                 
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                     print(language as Any)
@@ -380,8 +421,13 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             
             self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
             
+            print(self.self.dict_get_all_data_from_notification as Any)
+            
             self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["fullName"] as! String)
             self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["AVGRating"]!)"
+            
+            self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.whiteLarge
+            self.img_profile.sd_setImage(with: URL(string: (self.dict_get_all_data_from_notification["image"] as! String)), placeholderImage: UIImage(named: "logo"))
             
             //
             // star manage
@@ -448,6 +494,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             }
             
         } else {
+            // print("\(self.dict_get_all_data_from_notification["rideStatus"]!)")
             if (self.dict_get_all_data_from_notification == nil) {
                 
             } else {
@@ -460,8 +507,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     self.btn_booking_confirmed.isHidden = false
                     self.lbl_message.isHidden = false
                     
-                    self.lbl_OTP.isHidden = true
-                    self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
+                    // self.lbl_OTP.isHidden = true
+                    // self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
                     
                     if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                         print(language as Any)
@@ -484,10 +531,10 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     
                 } else if (self.dict_get_all_data_from_notification["type"] as! String) == "arrived" {
                     
-                    self.lbl_OTP.isHidden = false
-                    self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
+                    // self.lbl_OTP.isHidden = false
+                    // self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
                     
-                    // self.lblNavigationTitle.text = "Driver has arrived"
+                     
                     self.navigationBar.backgroundColor = navigation_color
                     
                     self.btn_booking_confirmed.isHidden = true
@@ -496,7 +543,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         if (language == "en") {
                             self.lblNavigationTitle.text = "Driver has Arrived"
-                            self.lbl_message.text = "Driver has Arrived"
+                            self.lbl_message.text = "Confirm booking"
                             
                         } else {
                             self.lblNavigationTitle.text = "ড্রাইভার এসেছিল"
@@ -510,8 +557,18 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         UserDefaults.standard.set("en", forKey: str_language_convert)
                     }
                     
+                    if (isRideCodeHidden == true) {
+                        self.btnConfirmBooking.isHidden = true
+                        self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
+                        
+                    } else {
+                        self.btnConfirmBooking.isHidden = false
+                        self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
+                        
+                    }
+                    
                 }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "ridestart" {
-                    self.lbl_OTP.isHidden = true
+                    // self.lbl_OTP.isHidden = true
                     
                     
                     self.navigationBar.backgroundColor = navigation_color
@@ -540,7 +597,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     }
                     
                 }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
-                    self.lbl_OTP.isHidden = true
+                    // self.lbl_OTP.isHidden = true
                     
                     self.lblNavigationTitle.text = "Ride Complete - Please pay"
                     self.navigationBar.backgroundColor = navigation_color
@@ -712,23 +769,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         self.booking_history_details_WB(str_show_loader: "yes")
                         
-                        
-                        
-                        
-                        
-                        
-                        
                         /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
                         self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
                     }
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     
                 } else if (self.dict_get_all_data_from_notification["type"] as! String) == "Chat" {
                     
@@ -748,8 +791,18 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)
                 // +" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
                 
+                print(self.self.dict_get_all_data_from_notification as Any)
+                
                 self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["driverName"] as! String)
                 self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["rating"]!)"
+                
+                self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.whiteLarge
+                self.img_profile.sd_setImage(with: URL(string: (self.dict_get_all_data_from_notification["DriverImage"] as! String)), placeholderImage: UIImage(named: "logo"))
+                
+                
+                
+                
+                
                 
                 // star manage
                 if "\(self.dict_get_all_data_from_notification["rating"]!)" == "0" {
@@ -821,6 +874,10 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         self.iAmHereForLocationPermission()
     }
     
+    
+    @objc func parseData() {
+        
+    }
     
     
     
@@ -1653,6 +1710,183 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
     }
     
+    
+    
+    @objc func confirmBookingSetOTP() {
+        
+       
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+                }
+            }
+       
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+             let x : Int = person["userId"] as! Int
+             let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                     
+                }
+                
+                parameters = [
+                    "action"        : "customerverify",
+                    "bookingId"     : "\(self.dict_get_all_data_from_notification["bookingId"]!)",
+                    "userId"        : String(myString),
+                    "RideCode"      : "\(self.dict_get_all_data_from_notification["RideCode"]!)",
+                    "language"      : String(lan),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                              
+                            self.isRideCodeHidden = false
+                            self.btnConfirmBooking.isHidden = true
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb7()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
+    /*
+     
+     */
+    @objc func login_refresh_token_wb7() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : (person["role"] as! String)
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.confirmBookingSetOTP()
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
 }
 
 

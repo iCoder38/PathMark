@@ -1444,7 +1444,9 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
             print("The result of subtraction is \(result)")
             
             let formattedStringFF = roundToTwoDecimalPlaces(result)
-            cell.lbl_discount_price.text = "\(formattedStringFF)"
+            
+            cell.lbl_discount_price.text = "\(str_bangladesh_currency_symbol) \(formattedStringFF)"
+            
         } else {
             print("One or both of the string values could not be converted to Double.")
         }
@@ -1717,8 +1719,8 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                             print(self.str_get_login_user_long as Any)
                             print(self.pick_lat as Any)
                             print(self.pick_long as Any)
-                            print(self.str_user_select_vehicle)
-                            print(self.str_user_option)
+                            // print(self.str_user_select_vehicle)
+                            // print(self.str_user_option)
                              
                             if (self.str_user_option == "schedule") {
                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_a_ride_id") as? schedule_a_ride

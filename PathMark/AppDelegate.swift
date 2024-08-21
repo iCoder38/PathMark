@@ -352,6 +352,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           
           window?.makeKeyAndVisible()
           
+      } else if (dict["type"] as! String) == "Payment" { // when driver cancel your ride
+          
+          let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+          let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+            // destinationController?.dict_get_data_from_notification = dict as NSDictionary
+          let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+
+          let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+
+          let mainRevealController = SWRevealViewController()
+
+          mainRevealController.rearViewController = rearViewController
+          mainRevealController.frontViewController = frontNavigationController
+          
+          DispatchQueue.main.async {
+              UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+          }
+          
+          window?.makeKeyAndVisible()
+          
       }/* else if (dict["type"] as! String) == "Chat" {
           
           /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
