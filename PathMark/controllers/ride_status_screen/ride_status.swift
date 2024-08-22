@@ -609,12 +609,6 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     self.btn_booking_confirmed.isHidden = true
                     self.lbl_message.text = "Ride Complete - Please pay"
                     
-                    
-                    
-                    
-                    
-                    
-                    
                     // NEW
                     if self.dict_get_all_data_from_notification["Last_cancel_amount"] == nil {
                         
@@ -769,16 +763,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         // Present the alert
                                     self.present(alert, animated: true, completion: nil)
                                     
-                                    
-                                    
-                                    
                                 }
                                 
-                                
                             }
-                            
-                            
-                            
                             
                             /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
                             self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
@@ -948,7 +935,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         
         //
-        self.iAmHereForLocationPermission()
+        if (self.dict_get_all_data_from_notification["type"] as! String) != "rideend" {
+            self.iAmHereForLocationPermission()
+        }
     }
     
     

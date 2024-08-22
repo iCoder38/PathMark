@@ -196,13 +196,16 @@ class before_payment: UIViewController {
         
         self.total_amount = String(self.str_get_total_price2)
         
+        let doublePrice2 = Double("\(str_get_total_price2!)")
+        let formattedNumber2 = String(format: "%.2f", doublePrice2!)
+        
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
             
             if (language == "en") {
-                self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+                self.lbl_total_payable.text = "Total Payment Amount : "+String(str_bangladesh_currency_symbol)+String(formattedNumber2)
             } else {
-                self.lbl_total_payable.text = "মোট পরিশোধযোগ্য পরিমাণ : "+String(str_bangladesh_currency_symbol)+String(self.str_get_total_price2)
+                self.lbl_total_payable.text = "মোট পরিশোধযোগ্য পরিমাণ : "+String(str_bangladesh_currency_symbol)+String(formattedNumber2)
             }
             
         }
@@ -684,7 +687,10 @@ extension before_payment: UITableViewDataSource , UITableViewDelegate {
         let final_cal = double_total - cal
         // print(final_cal)
         self.total_amount = "\(final_cal)"
-        self.lbl_total_payable.text = "Total Payable Amount : \(str_bangladesh_currency_symbol)\(final_cal)"
+        
+        let doublePrice1 = Double("\(final_cal)")
+        let formattedNumber = String(format: "%.2f", doublePrice1!)
+        self.lbl_total_payable.text = "Total Payable Amount : \(str_bangladesh_currency_symbol)\(formattedNumber)"
         
         self.str_final_amount = "\(final_cal)"
         
