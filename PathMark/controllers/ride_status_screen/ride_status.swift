@@ -105,6 +105,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     @IBOutlet weak var btnConfirmBooking:UIButton! {
         didSet {
+            btnConfirmBooking.isHidden = true
             btnConfirmBooking.backgroundColor = .systemGreen
             btnConfirmBooking.setTitle("Confirm booking", for: .normal)
         }
@@ -769,7 +770,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         self.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
                         
-                        self.booking_history_details_WB(str_show_loader: "yes")
+                        let delayInSeconds = Double(300) / 1000.0
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                            // Call the hitWebservice function after the delay
+                            self.booking_history_details_WB(str_show_loader: "yes")
+                        }
                         
                         /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
                         self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/

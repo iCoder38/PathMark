@@ -67,6 +67,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     var str_total_duration:String! = ""
     var str_total_rupees:String! = ""
     var str_active_ride:String! = ""
+    var strGetTotalDistance:String! = ""
     
     // ***************************************************************** // nav
     
@@ -298,7 +299,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
             let distanceFloat: Double = (distanceInMeters as Any as! Double)
             
             // cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
-            cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
+            // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
             
             print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
             print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
@@ -771,6 +772,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
 
                                 self.str_total_duration = (dict["duration"] as! String)
                                 self.str_active_ride = "\(dict["activeRide"]!)"
+                                self.strGetTotalDistance = "\(dict["distance"]!)"
                                 
                             }
                             else {
@@ -882,6 +884,8 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
             self.str_selected_language_is = "en"
             UserDefaults.standard.set("en", forKey: str_language_convert)
         }
+        
+        cell.lbl_distance.text = String(self.strGetTotalDistance)
         
         return cell
     }
