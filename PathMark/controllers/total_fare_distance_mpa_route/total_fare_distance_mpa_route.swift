@@ -748,8 +748,6 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 self.tbleView.separatorColor = .clear
                                 self.iAmHereForLocationPermission()
                                 
-                                
-                                
                                 self.str_total_distance = (dict["distance"] as! String)
                                 
 //                                var doubleTotal = Double("\(dict["total"]!)")
@@ -759,7 +757,6 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 let string1 = "\(dict["total"]!)"
                                 let string2 = "\(dict["Promotional_total"]!)"
 
-                               
                                 if let value1 = Double(string1), let value2 = Double(string2) {
                                     
                                     let result = value1 - value2
@@ -839,7 +836,10 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         cell.selectedBackgroundView = backgroundView
         
         let doubleStr = String(format: "%.2f", self.str_total_rupees)
-        cell.lblTotalPayableAmount.text = String (self.str_total_rupees) // "\(doubleStr)"
+        
+        let doubleTotalRupees = Double(self.str_total_rupees)
+        let formattedNumber = String(format: "%.2f", doubleTotalRupees!)
+        cell.lblTotalPayableAmount.text = formattedNumber //String (self.str_total_rupees)
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)

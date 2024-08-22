@@ -377,9 +377,10 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 self.hide_loading_UI()
                 
                 if (isRideCodeHidden == true) {
-                    self.btnConfirmBooking.isHidden = true
-                    self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
-                    
+                    self.btnConfirmBooking.isHidden = false
+                    self.btnConfirmBooking.setTitle("Driver arrived", for: .normal)
+                    self.btnConfirmBooking.tag = 100
+                   
                 } else {
                     self.btnConfirmBooking.isHidden = false
                     self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
@@ -559,8 +560,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     }
                     
                     if (isRideCodeHidden == true) {
-                        self.btnConfirmBooking.isHidden = true
-                        self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
+                        self.btnConfirmBooking.isHidden = false
                         
                     } else {
                         self.btnConfirmBooking.isHidden = false
@@ -623,7 +623,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             // BOTH LAST CANCEL AMOUNT IS NIL
                             print(self.dict_get_all_data_from_notification as Any)
                             
-                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
+                            /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
                             let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
                                 _ in
                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
@@ -640,8 +640,32 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                 self.navigationController?.pushViewController(push!, animated: true)
                             }
                             alert.addButtons([pay,cancel])
-                            self.present(alert, animated: true)
+                            self.present(alert, animated: true)*/
                             
+                            
+                            let alert = UIAlertController(title: "Alert", message: String("Ride done"), preferredStyle: .alert)
+                                
+                                // Add actions
+                                let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                    
+                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                    
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
+                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                    self.navigationController?.pushViewController(push!, animated: true)
+                                }
+                                
+                                alert.addAction(okAction)
+                                alert.addAction(cancelAction)
+                                
+                                // Present the alert
+                            self.present(alert, animated: true, completion: nil)
+                           
                         } else {
                             let a = Double("\(self.dict_get_all_data_from_notification["last_cancel_amount"]!)")
                             let b = Double("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
@@ -657,7 +681,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                 print(language as Any)
                                 
                                 if (language == "en") {
-                                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
+                                    /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
                                     let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
                                         _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
@@ -675,9 +699,34 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         self.navigationController?.pushViewController(push!, animated: true)
                                     }
                                     alert.addButtons([pay,cancel])
-                                    self.present(alert, animated: true)
+                                    self.present(alert, animated: true)*/
+                                    
+                                    let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
+                                        
+                                        // Add actions
+                                        let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                            
+                                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                            
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                        }
+                                        let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                        }
+                                        
+                                        alert.addAction(okAction)
+                                        alert.addAction(cancelAction)
+                                        
+                                        // Present the alert
+                                    self.present(alert, animated: true, completion: nil)
+                                    
+                                    
                                 } else {
-                                    let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
+                                    /*let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
                                     let pay = NewYorkButton(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
                                         _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
@@ -696,8 +745,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                     }
                                     alert.addButtons([pay,cancel])
                                     self.present(alert, animated: true)
-                                    
-                                    
+                                    */
+                                    let alert = UIAlertController(title: "Alert", message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
+                                        
+                                        // Add actions
+                                        let okAction = UIAlertAction(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                            
+                                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                            
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                        }
+                                        let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                        }
+                                        
+                                        alert.addAction(okAction)
+                                        alert.addAction(cancelAction)
+                                        
+                                        // Present the alert
+                                    self.present(alert, animated: true, completion: nil)
                                     
                                     
                                     
@@ -770,7 +840,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         self.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
                         
-                        let delayInSeconds = Double(300) / 1000.0
+                        let delayInSeconds = Double(500) / 1000.0
                         DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
                             // Call the hitWebservice function after the delay
                             self.booking_history_details_WB(str_show_loader: "yes")
@@ -1000,7 +1070,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         
                                         if (language == "en") {
                                             
-                                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
                                             let pay = NewYorkButton(title: "Pay : \(complete_cal)", style: .default) {
                                                 _ in
                                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
@@ -1017,11 +1087,34 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                                 self.navigationController?.pushViewController(push!, animated: true)
                                             }
                                             alert.addButtons([pay,cancel])
-                                            self.present(alert, animated: true)
+                                            self.present(alert, animated: true)*/
+                                            
+                                            let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
+                                                
+                                                // Add actions
+                                                let okAction = UIAlertAction(title: "Pay : \(complete_cal)", style: .default) { _ in
+                                                    
+                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                    push!.str_get_total_price2 = "\(complete_cal)"
+                                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                    self.navigationController?.pushViewController(push!, animated: true)
+                                                    
+                                                }
+                                                let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
+                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                    self.navigationController?.pushViewController(push!, animated: true)
+                                                }
+                                                
+                                                alert.addAction(okAction)
+                                                alert.addAction(cancelAction)
+                                                
+                                                // Present the alert
+                                            self.present(alert, animated: true, completion: nil)
                                             
                                         } else {
                                             
-                                            let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
+                                            /*let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
                                             let pay = NewYorkButton(title: "বেতন : \(complete_cal)", style: .default) {
                                                 _ in
                                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
@@ -1038,7 +1131,30 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                                 self.navigationController?.pushViewController(push!, animated: true)
                                             }
                                             alert.addButtons([pay,cancel])
-                                            self.present(alert, animated: true)
+                                            self.present(alert, animated: true)*/
+                                            
+                                            let alert = UIAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
+                                                
+                                                // Add actions
+                                                let okAction = UIAlertAction(title: "বেতন : \(complete_cal)", style: .default) { _ in
+                                                    
+                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                                    push!.str_get_total_price2 = "\(complete_cal)"
+                                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                                    self.navigationController?.pushViewController(push!, animated: true)
+                                                    
+                                                }
+                                                let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
+                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                                    self.navigationController?.pushViewController(push!, animated: true)
+                                                }
+                                                
+                                                alert.addAction(okAction)
+                                                alert.addAction(cancelAction)
+                                                
+                                                // Present the alert
+                                            self.present(alert, animated: true, completion: nil)
                                             
                                         }
                                         
@@ -1180,7 +1296,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                             
-                            self.booking_history_details_WB(str_show_loader: "no")
+                            let delayInSeconds = Double(500) / 1000.0
+                            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                                // Call the hitWebservice function after the delay
+                                self.booking_history_details_WB(str_show_loader: "no")
+                            }
                             
                         } else {
                             ERProgressHud.sharedInstance.hide()
@@ -1721,17 +1841,19 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     @objc func confirmBookingSetOTP() {
         
-       
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
-                }
+        if (self.btnConfirmBooking.tag == 100) {
+            return
+        }
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+            } else {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
             }
-       
+        }
+        
         
         
         self.view.endEditing(true)
@@ -1741,8 +1863,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
-             let x : Int = person["userId"] as! Int
-             let myString = String(x)
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
             
             if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
                 print(token_id_is as Any)
@@ -1761,7 +1883,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     } else {
                         lan = "bn"
                     }
-                     
+                    
                 }
                 
                 parameters = [
@@ -1799,9 +1921,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                             
                             ERProgressHud.sharedInstance.hide()
-                              
+                            
                             self.isRideCodeHidden = false
-                            self.btnConfirmBooking.isHidden = true
+                            self.btnConfirmBooking.isHidden = false
+                            self.btnConfirmBooking.tag = 100
+                            self.btnConfirmBooking.setTitle("Driver arrived", for: .normal)
                             
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb7()
@@ -1832,6 +1956,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             }
         }
     }
+    
     /*
      
      */

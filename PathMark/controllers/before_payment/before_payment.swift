@@ -476,6 +476,18 @@ class before_payment: UIViewController {
                     "token":String(token_id_is),
                 ]
                 
+                print(self.discounted_amount as Any)
+            
+                
+                
+                if (self.discounted_amount == nil) {
+                    self.discounted_amount = "0"
+                }
+                
+                if (self.store_coupon_code == nil) {
+                    self.store_coupon_code = "0"
+                }
+                
                 parameters = [
                     "action"        : "updatepayment",
                     "userId"        : String(myString),
