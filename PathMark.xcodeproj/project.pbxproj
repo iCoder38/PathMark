@@ -36,6 +36,7 @@
 		B943FE542B26EA03000A20FA /* BooCheckChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = B943FE522B26EA03000A20FA /* BooCheckChat.swift */; };
 		B963994B2BFDEA14000A00CA /* get_started.swift in Sources */ = {isa = PBXBuildFile; fileRef = B963994A2BFDEA14000A00CA /* get_started.swift */; };
 		B9658D8F2B2ADF4C005F8D00 /* search_location.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9658D8E2B2ADF4C005F8D00 /* search_location.swift */; };
+		B96790842C7F636D00646B9F /* select_location_via_name.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96790832C7F636D00646B9F /* select_location_via_name.swift */; };
 		B9695DF52A5BE73000552578 /* sign_up.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9695DF42A5BE73000552578 /* sign_up.swift */; };
 		B96B4B722A5BD0BA0038B82F /* get_started_now.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B712A5BD0BA0038B82F /* get_started_now.swift */; };
 		B96B4B752A5BD0F40038B82F /* login.swift in Sources */ = {isa = PBXBuildFile; fileRef = B96B4B742A5BD0F40038B82F /* login.swift */; };
@@ -164,6 +165,7 @@
 		B943FE522B26EA03000A20FA /* BooCheckChat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BooCheckChat.swift; sourceTree = "<group>"; };
 		B963994A2BFDEA14000A00CA /* get_started.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = get_started.swift; path = ../../../../../../Desktop/get_started.swift; sourceTree = "<group>"; };
 		B9658D8E2B2ADF4C005F8D00 /* search_location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = search_location.swift; sourceTree = "<group>"; };
+		B96790832C7F636D00646B9F /* select_location_via_name.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = select_location_via_name.swift; sourceTree = "<group>"; };
 		B9695DF42A5BE73000552578 /* sign_up.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sign_up.swift; sourceTree = "<group>"; };
 		B96B0F142A98844400835208 /* PathMark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PathMark.entitlements; sourceTree = "<group>"; };
 		B96B4B712A5BD0BA0038B82F /* get_started_now.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = get_started_now.swift; sourceTree = "<group>"; };
@@ -420,6 +422,14 @@
 				B9658D8E2B2ADF4C005F8D00 /* search_location.swift */,
 			);
 			path = search_location;
+			sourceTree = "<group>";
+		};
+		B96790822C7F634500646B9F /* search_location_via_name */ = {
+			isa = PBXGroup;
+			children = (
+				B96790832C7F636D00646B9F /* select_location_via_name.swift */,
+			);
+			path = search_location_via_name;
 			sourceTree = "<group>";
 		};
 		B9695DF32A5BE71D00552578 /* registration */ = {
@@ -702,6 +712,7 @@
 			isa = PBXGroup;
 			children = (
 				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
+				B96790822C7F634500646B9F /* search_location_via_name */,
 				B99D3F672C7EEBA00039DC6A /* select_vehicle */,
 			);
 			path = dashboard;
@@ -1199,6 +1210,7 @@
 				B9F377D22B0F3CB3007F6CEB /* share_track.swift in Sources */,
 				B9038E162A5D465A0041A5B4 /* total_fare_distance_mpa_route.swift in Sources */,
 				B9CEA2892B0B5E9200CC2340 /* faq.swift in Sources */,
+				B96790842C7F636D00646B9F /* select_location_via_name.swift in Sources */,
 				B903CD8F2A58018000208E80 /* AppDelegate.swift in Sources */,
 				B903CD912A58018000208E80 /* SceneDelegate.swift in Sources */,
 				B9CC75B82B06055B00446959 /* schedule_confirm_booking.swift in Sources */,

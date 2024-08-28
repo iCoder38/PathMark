@@ -107,15 +107,15 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     // google maps
     var mapView: GMSMapView!
     
-            
     var doublePlaceStartLat:Double!
     var doublePlaceStartLong:Double!
             
     var doublePlaceFinalLat:Double!
     var doublePlaceFinalLong:Double!
-            
+        
     
-    
+    @IBOutlet weak var btnLocationPointOne:UIButton!
+    @IBOutlet weak var btnLocationPointTwo:UIButton!
     
     
     @IBOutlet weak var view_set_name:UIView! {
@@ -126,7 +126,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             view_set_name.layer.shadowOffset =  CGSize.zero
             view_set_name.layer.shadowOpacity = 0.5
             view_set_name.layer.shadowRadius = 2
-            view_set_name.layer.cornerRadius = 12
+            view_set_name.layer.cornerRadius = 2
         }
     }
     
@@ -169,6 +169,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             view_navigation_title.textColor = .white
         }
     }
+    
     @IBOutlet weak var search_place_pickup:UISearchBar! {
         didSet {
             search_place_pickup.tag = 0
@@ -185,6 +186,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             
         }
     }
+    
     @IBOutlet weak var search_place_drop:UISearchBar!  {
         didSet {
             search_place_drop.tag = 1
@@ -200,6 +202,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             }
         }
     }
+    
     @IBOutlet weak var searchResultsTableView: UITableView! {
         didSet {
             searchResultsTableView.delegate = self
@@ -402,7 +405,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
         // self.btn_search.addTarget(self, action: #selector(search_click_method), for: .touchUpInside)
         
-        
+        self.btnLocationPointOne.addTarget(self, action: #selector(locationOneClickMethod), for: .touchUpInside)
+        self.btnLocationPointTwo.addTarget(self, action: #selector(locationTwoClickMethod), for: .touchUpInside)
         
         self.btn_push_to_map.addTarget(self, action: #selector(please_select_atleast_one_vehicle), for: .touchUpInside)
         self.btn_push_to_map_down.addTarget(self, action: #selector(please_select_atleast_one_vehicle2), for: .touchUpInside)
@@ -470,43 +474,90 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         lpgr.delegate = self
         self.mapView.addGestureRecognizer(lpgr)*/
         
+        
+        
+        
+        
+        
+         self.txtFieldUp.text = String(getLoginUserAddressTo)
+         self.txtFieldDown.text = String(getLoginUserAddressFrom)
+        
+    }
+    
+    @objc func locationOneClickMethod() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
+        push!.userSelectOriginOrDestination = "origin"
+        self.navigationController?.pushViewController(push!, animated: true)
+    }
+    
+    @objc func locationTwoClickMethod() {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
+        push!.userSelectOriginOrDestination = "destination"
+        self.navigationController?.pushViewController(push!, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
-            print(load_latitude)
+        if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
+            debugPrint(profileUpOrBottom)
             
-            // self.str_save_lat = load_latitude
-            let fullName    = load_latitude
-            let fullNameArr = fullName.components(separatedBy: ",")
-            
-            let name    = fullNameArr[0]
-            let surname = fullNameArr[1]
-            
-            self.getLoginUserLatitudeFrom = String(name)
-            self.getLoginUserLongitudeFrom = String(surname)
-            
-        }
-        
-        // longitude
-        if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
-            debugPrint(address)
-            
-            
-            if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
-                debugPrint(profileUpOrBottom)
+            if (profileUpOrBottom == "userLocationTo") {
                 
-                if (profileUpOrBottom == "userLocationTo") {
+                debugPrint("SET VALUE FOR TO")
+                
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
+                    
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
+                    
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
+                    
+                    self.getLoginUserLatitudeTo = String(name)
+                    self.getLoginUserLongitudeTo = String(surname)
+                    
+                }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
                     self.txtFieldUp.text = String(address)
-                } else {
-                    self.self.txtFieldDown.text = String(address)
+                    self.getLoginUserAddressTo = String(address)
+                }
+                
+            } else {
+                
+                debugPrint("set value for from")
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
+                    
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
+                    
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
+                    
+                    self.getLoginUserLatitudeFrom = String(name)
+                    self.getLoginUserLongitudeFrom = String(surname)
+                    
+                }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
+                    self.txtFieldDown.text = String(address)
+                    self.getLoginUserAddressFrom = String(address)
                 }
             }
-            
-            self.handleEveythingFromGoogleMapInit()
         }
+        
+        self.handleEveythingFromGoogleMapInit()
     }
     
     @objc func handleEveythingFromGoogleMapInit() {
@@ -526,9 +577,6 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
         UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
-        
-        self.txtFieldUp.text = String(getLoginUserAddressTo)
-        self.txtFieldDown.text = String(getLoginUserAddressFrom)
         
         self.initializeMap()
     }
@@ -554,9 +602,14 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         // Set up constraints for mapView
         NSLayoutConstraint.activate([
+            // Set mapView's leading and trailing constraints to the view's leading and trailing edges
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            
+            // Set mapView's top constraint to 220 points from the top of the view
+            mapView.topAnchor.constraint(equalTo: view.topAnchor, constant: 220),
+            
+            // Set mapView's bottom constraint to be equal to the view's bottom anchor to make it extend to the bottom
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         

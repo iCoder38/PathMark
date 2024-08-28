@@ -575,12 +575,12 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
             // print(prediction.placeID as Any)
             
             let placeID = prediction.placeID
-            print(placeID as Any)
+            // print(placeID as Any)
             getCoordinates(for: placeID) { coordinates, error in
                 if let error = error {
-                    print("Error: \(error.localizedDescription)")
+                    // print("Error: \(error.localizedDescription)")
                 } else if let coordinates = coordinates {
-                    print("Latitude: \(coordinates.latitude), Longitude: \(coordinates.longitude)")
+                    // print("Latitude: \(coordinates.latitude), Longitude: \(coordinates.longitude)")
                     
                     debugPrint("\(coordinates.latitude),\(coordinates.longitude)")
                     debugPrint(prediction.attributedFullText.string)

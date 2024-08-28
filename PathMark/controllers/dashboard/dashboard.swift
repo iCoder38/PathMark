@@ -131,52 +131,69 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
-            print(load_latitude)
-            
-            // self.str_save_lat = load_latitude
-            let fullName    = load_latitude
-            let fullNameArr = fullName.components(separatedBy: ",")
-            
-            let name    = fullNameArr[0]
-            let surname = fullNameArr[1]
-            
-            self.loginUserLatitudeFrom = String(name)
-            self.loginUserLongitudeFrom = String(surname)
-            
-            /*set_lat = String(name)
-            set_long = String(surname)
-            
-            self.pick_lat = set_lat
-            self.pick_long = set_long*/
-        }
         
-        // longitude
-        if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
-            print(address)
+        if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
+            debugPrint(profileUpOrBottom)
             
-            
-            if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
-                debugPrint(profileUpOrBottom)
+            if (profileUpOrBottom == "userLocationTo") {
                 
-                if (profileUpOrBottom == "userLocationTo") {
+                debugPrint("SET VALUE FOR TO")
+                
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
                     
-                    let indexPath = IndexPath.init(row: 0, section: 0)
-                    let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
-                    cell.lbl_my_full_address.text = String(address)
-                    self.loginUserAddressTo = String(address)
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
                     
-                } else {
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
                     
-                    let indexPath = IndexPath.init(row: 0, section: 0)
-                    let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
-                    cell.lbl_select_destination.text = String(address)
-                    self.loginUserAddressFrom = String(address)
+                    self.loginUserLatitudeTo = String(name)
+                    self.loginUserLongitudeTo = String(surname)
                     
                 }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
+                    let indexPath = IndexPath.init(row: 0, section: 0)
+                    let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+                    
+                    cell.lbl_my_full_address.text = String(address)
+                    self.loginUserAddressTo = String(address)
+                }
+                
+            } else {
+                
+                debugPrint("set value for from")
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
+                    
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
+                    
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
+                    
+                    self.loginUserLatitudeFrom = String(name)
+                    self.loginUserLongitudeFrom = String(surname)
+                    
+                }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
+                    let indexPath = IndexPath.init(row: 0, section: 0)
+                    let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+                    
+                    cell.lbl_select_destination.text = String(address)
+                    self.loginUserAddressFrom = String(address)
+                }
             }
-            //
-            
         }
         
         UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
@@ -371,7 +388,14 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             
         } else {
             self.str_select_option = "schedule"
-            self.tbleView.reloadData()
+            // self.tbleView.reloadData()
+            
+            debugPrint(self.str_vehicle_type as Any)
+            debugPrint(self.str_select_option as Any)
+            debugPrint(self.loginUserLatitudeFrom as Any)
+            
+            
+            
         }
         
         
@@ -381,7 +405,16 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     }
     
     @objc func book_a_ride_click_method() {
-        if (self.str_vehicle_type == "0") {
+        
+        if (self.loginUserLatitudeFrom == "" || self.loginUserLatitudeFrom == nil) {
+            
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select destination"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+            
+        } else if (self.str_vehicle_type == "0") {
+            
             debugPrint("Please select car type")
             let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select car type"), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -396,18 +429,11 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             debugPrint(self.str_select_option as Any)
             debugPrint(self.loginUserLatitudeFrom as Any)
             
-            if (self.loginUserLatitudeFrom == "" || self.loginUserLatitudeFrom == nil) {
-                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select destination"), style: .alert)
-                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                alert.addButtons([cancel])
-                self.present(alert, animated: true)
-            } else {
-                self.pushAfterEverything(vehicleType: String(self.str_vehicle_type),
-                                         vehicleOption: String(self.str_select_option))
-            }
+            self.pushAfterEverything(vehicleType: String(self.str_vehicle_type),
+                                     vehicleOption: String(self.str_select_option))
             
         }
-        
+    
     }
     
     
