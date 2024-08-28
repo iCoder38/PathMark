@@ -117,6 +117,7 @@ let NAVIGATION_BACK_COLOR   = UIColor.white
 let CART_COUNT_COLOR        = UIColor.black
 
 var str_bangladesh_currency_symbol = "৳ "
+var countryCodeForGoogleSearch = "BD"
 
 // URLs
 let URL_HARILOSS_SUPPORT_GROUP  = "https://www.google.co.in"
