@@ -57,8 +57,6 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     @IBOutlet weak var tbleView:UITableView! {
         didSet {
-           
-            
             tbleView.backgroundColor = .clear
         }
     }
@@ -127,11 +125,40 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var panGesture : UIPanGestureRecognizer!
     var strIndex:Int! = 0
 
+    @objc func please_select_atleast_one_vehicle2() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
     @objc func please_select_atleast_one_vehicle() {
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
         
-        if (self.str_vehicle_type == "0") {
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+        /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_vehicle_id") as? select_vehicle
+        push!.userCurrentLocationIs = cell.lbl_my_full_address.text
+        self.navigationController?.pushViewController(push!, animated: true)*/
+        
+//        if (self.str_vehicle_type == "0") {
+//            
+//            debugPrint("PLEASE SELECT VEHICLE TYPE")
+//            
+//        } else if (self.str_select_option == "0") {
+//            
+//            debugPrint("PLEASE SELECT OPTIONS")
+//            
+//        } else {
+//            
+//        }
+        
+        
+        /*if (self.str_vehicle_type == "0") {
             /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
             let cancel = NewYorkButton(title: "dismiss", style: .cancel)
             alert.addButtons([cancel])
@@ -156,11 +183,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             }
         } else {
             if (self.str_select_option == "0") {
-                /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
-                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                alert.addButtons([cancel])
-                self.present(alert, animated: true)*/
-                
+               
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                     print(language as Any)
                     
@@ -220,7 +243,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 
                 
             }
-        }
+        }*/
         
         /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
         let cancel = NewYorkButton(title: "dismiss", style: .cancel)
@@ -250,8 +273,12 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     @objc func push_to_intercity_map_click_method() {
         
-        self.str_vehicle_type = "INTERCITY"
-        self.tbleView.reloadData()
+        
+        
+            self.str_vehicle_type = "INTERCITY"
+            self.tbleView.reloadData()
+       
+        
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
         push!.str_user_select_vehicle = "INTERCITY"
         self.navigationController?.pushViewController(push!, animated: true)*/
@@ -259,17 +286,36 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     }
     
     @objc func schedule_a_ride_click_method() {
-         
-        self.str_select_option = "schedule"
+        if (self.str_vehicle_type == "0") {
+            debugPrint("Please select car type")
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select car type"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+            
+        } else {
+            self.str_select_option = "schedule"
+            self.tbleView.reloadData()
+        }
+        
         
         // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_a_ride_id") as? schedule_a_ride
         // self.navigationController?.pushViewController(push!, animated: true)
-        self.tbleView.reloadData()
+        
     }
     
     @objc func book_a_ride_click_method() {
-         self.str_select_option = "book"
-         self.tbleView.reloadData()
+        if (self.str_vehicle_type == "0") {
+            debugPrint("Please select car type")
+            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select car type"), style: .alert)
+            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+            alert.addButtons([cancel])
+            self.present(alert, animated: true)
+            
+        } else {
+            self.str_select_option = "book"
+            self.tbleView.reloadData()
+        }
         
     }
     
@@ -764,10 +810,49 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         cell.btn_intercity.addTarget(self, action: #selector(push_to_intercity_map_click_method), for: .touchUpInside)
         
         cell.btn_book_a_ride_now.addTarget(self, action: #selector(book_a_ride_click_method), for: .touchUpInside)
+        
         cell.btn_push_to_map.addTarget(self, action: #selector(please_select_atleast_one_vehicle), for: .touchUpInside)
+        cell.btn_push_to_map_down.addTarget(self, action: #selector(please_select_atleast_one_vehicle2), for: .touchUpInside)
+        
         cell.btn_schedule_a_ride_now.addTarget(self, action: #selector(schedule_a_ride_click_method), for: .touchUpInside)
         
+        
+        cell.btn_book_a_ride_now.backgroundColor = navigation_color
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                cell.btn_car.setImage(UIImage(named: "s_car"), for: .normal)
+                cell.btn_bike.setImage(UIImage(named: "s_bike"), for: .normal)
+                cell.btn_intercity.setImage(UIImage(named: "s_intercity"), for: .normal)
+            } else {
+                cell.btn_car.setImage(UIImage(named: "car_bangla_selected"), for: .normal)
+                cell.btn_bike.setImage(UIImage(named: "bike_bangla_selected"), for: .normal)
+                cell.btn_intercity.setImage(UIImage(named: "intercity_bangla_selected"), for: .normal)
+            }
+        }
+        
         if (self.str_vehicle_type == "CAR") {
+            
+            cell.btn_car_checkmark.setImage(UIImage(named: "tick3"), for: .normal)
+            cell.btn_bike_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_intercity_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            
+        } else if (self.str_vehicle_type == "BIKE") {
+            
+            cell.btn_car_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_bike_checkmark.setImage(UIImage(named: "tick3"), for: .normal)
+            cell.btn_intercity_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            
+        }  else if (self.str_vehicle_type == "INTERCITY") {
+            
+            cell.btn_car_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_bike_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+            cell.btn_intercity_checkmark.setImage(UIImage(named: "tick3"), for: .normal)
+            
+        }
+        /*if (self.str_vehicle_type == "CAR") {
             cell.btn_book_a_ride_now.backgroundColor = navigation_color
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             //
@@ -824,9 +909,12 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
                 
             }
             //
-        }
+        }*/
         
-        if (self.str_select_option == "schedule") {
+        cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
+        cell.btn_book_a_ride_now.backgroundColor = navigation_color
+        
+        /*if (self.str_select_option == "schedule") {
             cell.btn_schedule_a_ride_now.backgroundColor = UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1);
             cell.btn_book_a_ride_now.backgroundColor = .systemGray
         } else if (self.str_select_option == "book") {
@@ -835,7 +923,7 @@ extension dashboard: UITableViewDataSource  , UITableViewDelegate {
         } else {
             cell.btn_book_a_ride_now.backgroundColor = .systemGray
             cell.btn_schedule_a_ride_now.backgroundColor = .systemGray
-        }
+        }*/
         
         cell.collectionView?.delegate = self
         cell.collectionView?.dataSource = self
@@ -1086,6 +1174,23 @@ class dashboard_table_cell: UITableViewCell {
             btn_car.layer.cornerRadius = 12
         }
     }
+    
+    @IBOutlet weak var btn_car_checkmark:UIButton! {
+        didSet {
+            btn_car_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+        }
+    }
+    @IBOutlet weak var btn_bike_checkmark:UIButton! {
+        didSet {
+            btn_bike_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+        }
+    }
+    @IBOutlet weak var btn_intercity_checkmark:UIButton! {
+        didSet {
+            btn_intercity_checkmark.setImage(UIImage(named: "un_check"), for: .normal)
+        }
+    }
+    
     @IBOutlet weak var btn_bike:UIButton! {
         didSet {
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -1182,6 +1287,7 @@ class dashboard_table_cell: UITableViewCell {
     }
     
     @IBOutlet weak var btn_push_to_map:UIButton!
+    @IBOutlet weak var btn_push_to_map_down:UIButton!
     
     @IBOutlet weak var view_set_name:UIView! {
         didSet {

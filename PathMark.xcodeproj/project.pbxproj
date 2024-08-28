@@ -59,6 +59,7 @@
 		B99223172A8E4991005AA868 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99223152A8E4991005AA868 /* CarouselView.swift */; };
 		B996591C2AA74F03009A2D93 /* payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B996591B2AA74F03009A2D93 /* payment.swift */; };
 		B996591E2AA75CCD009A2D93 /* double-check.gif in Resources */ = {isa = PBXBuildFile; fileRef = B996591D2AA75CCD009A2D93 /* double-check.gif */; };
+		B99D3F692C7EEBB00039DC6A /* select_vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99D3F682C7EEBB00039DC6A /* select_vehicle.swift */; };
 		B9A011632A9F1AB7001B4658 /* ride_history_details.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A011622A9F1AB7001B4658 /* ride_history_details.swift */; };
 		B9A2F6832B2B439700A7CC5F /* FacebookAEM in Frameworks */ = {isa = PBXBuildFile; productRef = B9A2F6822B2B439700A7CC5F /* FacebookAEM */; };
 		B9A2F6852B2B439700A7CC5F /* FacebookBasics in Frameworks */ = {isa = PBXBuildFile; productRef = B9A2F6842B2B439700A7CC5F /* FacebookBasics */; };
@@ -187,6 +188,7 @@
 		B99223152A8E4991005AA868 /* CarouselView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
 		B996591B2AA74F03009A2D93 /* payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = payment.swift; sourceTree = "<group>"; };
 		B996591D2AA75CCD009A2D93 /* double-check.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "double-check.gif"; sourceTree = "<group>"; };
+		B99D3F682C7EEBB00039DC6A /* select_vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = select_vehicle.swift; sourceTree = "<group>"; };
 		B9A011622A9F1AB7001B4658 /* ride_history_details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ride_history_details.swift; sourceTree = "<group>"; };
 		B9A8EE612BFE207D00169855 /* select_profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = select_profile.swift; sourceTree = "<group>"; };
 		B9AFE4ED2A5BDB9000C76CE4 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
@@ -614,6 +616,14 @@
 			path = payment;
 			sourceTree = "<group>";
 		};
+		B99D3F672C7EEBA00039DC6A /* select_vehicle */ = {
+			isa = PBXGroup;
+			children = (
+				B99D3F682C7EEBB00039DC6A /* select_vehicle.swift */,
+			);
+			path = select_vehicle;
+			sourceTree = "<group>";
+		};
 		B9A011612A9F1A7C001B4658 /* ride_history_details */ = {
 			isa = PBXGroup;
 			children = (
@@ -692,6 +702,7 @@
 			isa = PBXGroup;
 			children = (
 				B9C73A372A5BFD2E001F0B90 /* dashboard.swift */,
+				B99D3F672C7EEBA00039DC6A /* select_vehicle */,
 			);
 			path = dashboard;
 			sourceTree = "<group>";
@@ -1198,6 +1209,7 @@
 				B9C73A382A5BFD2E001F0B90 /* dashboard.swift in Sources */,
 				B97A19532A8CE7FD00D4DAD0 /* add_contacts.swift in Sources */,
 				B982B2512A8C9F9C0091DE1B /* my_custom_loader.swift in Sources */,
+				B99D3F692C7EEBB00039DC6A /* select_vehicle.swift in Sources */,
 				B96B4B782A5BD13A0038B82F /* Utils.swift in Sources */,
 				B9CC75B52B05EE0B00446959 /* schedule_a_ride.swift in Sources */,
 				B9038E112A5D45FB0041A5B4 /* NewYorkAlertViewType.swift in Sources */,

@@ -35,8 +35,9 @@ var bkash_call_back_URL = "http://mamtechit.com/callback"
 
 
 
-
-
+// AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0
+// AIzaSyDlTJ6OLa_sQxzYnWEjgubGlaiM6Wq951s: personal
+var GOOGLE_MAP_API = "AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0"
 
 
 

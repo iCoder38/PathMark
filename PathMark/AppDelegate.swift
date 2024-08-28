@@ -28,9 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // firebase
         FirebaseApp.configure()
         
-        // google : places
-        GMSPlacesClient.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
-        GMSServices.provideAPIKey("AIzaSyAmJSVlEKQx8s6XRKeQ1-sb-r1-ItQO6OU")
+        GMSPlacesClient.provideAPIKey(GOOGLE_MAP_API)
+        GMSServices.provideAPIKey(GOOGLE_MAP_API)
+        
+         
+
         
         // facebook
         ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)

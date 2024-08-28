@@ -7,9 +7,55 @@
 
 import UIKit
 import Alamofire
+import GooglePlaces
 
-class search_location: UIViewController {
-
+class search_location: UIViewController, UITextFieldDelegate {
+    
+    var placesClient: GMSPlacesClient!
+    var predictions: [GMSAutocompletePrediction] = []
+    
+    @IBOutlet weak var txtSearchLocationFromGoogle:UITextField! {
+        didSet {
+            
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                print(language as Any)
+                
+                if (language == "en") {
+                    Utils.textFieldUI(textField: txtSearchLocationFromGoogle,
+                                      tfName: txtSearchLocationFromGoogle.text!,
+                                      tfCornerRadius: 12,
+                                      tfpadding: 20,
+                                      tfBorderWidth: 0,
+                                      tfBorderColor: .clear,
+                                      tfAppearance: .dark,
+                                      tfKeyboardType: .emailAddress,
+                                      tfBackgroundColor: .white,
+                                      tfPlaceholderText: "Search location")
+                } else {
+                    Utils.textFieldUI(textField: txtSearchLocationFromGoogle,
+                                      tfName: txtSearchLocationFromGoogle.text!,
+                                      tfCornerRadius: 12,
+                                      tfpadding: 20,
+                                      tfBorderWidth: 0,
+                                      tfBorderColor: .clear,
+                                      tfAppearance: .dark,
+                                      tfKeyboardType: .emailAddress,
+                                      tfBackgroundColor: .white,
+                                      tfPlaceholderText: "ই-মেইল/মোবাইল নম্বর")
+                }
+                
+            }
+            
+            
+            txtSearchLocationFromGoogle.layer.masksToBounds = false
+            txtSearchLocationFromGoogle.layer.shadowColor = UIColor.black.cgColor
+            txtSearchLocationFromGoogle.layer.shadowOffset =  CGSize.zero
+            txtSearchLocationFromGoogle.layer.shadowOpacity = 0.5
+            txtSearchLocationFromGoogle.layer.shadowRadius = 2
+            
+        }
+    }
+    
     var arr_address_list:NSMutableArray! = []
     
     var db:DBHelper = DBHelper()
@@ -26,6 +72,7 @@ class search_location: UIViewController {
     @IBOutlet weak var btnBack:UIButton! {
         didSet {
             btnBack.tintColor = NAVIGATION_BACK_COLOR
+            
         }
     }
     
@@ -40,7 +87,7 @@ class search_location: UIViewController {
                 } else {
                     lblNavigationTitle.text = "সেইভ করা স্থানসমূহ"
                 }
-                    
+                
             }
             lblNavigationTitle.textColor = .white
         }
@@ -49,6 +96,7 @@ class search_location: UIViewController {
     // ***************************************************************** // nav
     
     @IBOutlet weak var tbleView:UITableView!
+    @IBOutlet weak var tableViewForGoogleSearch:UITableView!
     
     @IBOutlet weak var btn_add:UIButton!
     
@@ -58,8 +106,10 @@ class search_location: UIViewController {
         self.tbleView.separatorColor = .clear
         
         /*let kUserDefault = UserDefaults.standard
-        let data = kUserDefault.array(forKey: "nameArray")! as? [String] ?? [String]()
-        print(data)*/
+         let data = kUserDefault.array(forKey: "nameArray")! as? [String] ?? [String]()
+         print(data)*/
+        
+        self.txtSearchLocationFromGoogle.delegate = self
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
@@ -69,8 +119,10 @@ class search_location: UIViewController {
             } else {
                 self.btn_add.setTitle("+ যোগ করুন", for: .normal)
             }
-                
+            
         }
+        
+        self.tableViewForGoogleSearch.isHidden = true
         
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
@@ -85,7 +137,7 @@ class search_location: UIViewController {
     
     //
     @objc func address_list_wb(str_show_loader:String) {
-
+        
         var parameters:Dictionary<AnyHashable, Any>!
         
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
@@ -111,9 +163,9 @@ class search_location: UIViewController {
                 print(token_id_is as Any)
                 
                 let headers: HTTPHeaders = [
-                     "token":String(token_id_is),
+                    "token":String(token_id_is),
                 ]
-    
+                
                 parameters = [
                     "action"    : "addresslist",
                     "userId"     : String(myString),
@@ -141,14 +193,14 @@ class search_location: UIViewController {
                                 var ar : NSArray!
                                 ar = (JSON["data"] as! Array<Any>) as NSArray
                                 // self.arr_address_list.addObjects(from: ar as! [Any])
-
+                                
                                 let str_token = (JSON["AuthToken"] as! String)
                                 UserDefaults.standard.set("", forKey: str_save_last_api_token)
                                 UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                 
                                 let custom = [
                                     "type":"0"
-                                 ]
+                                ]
                                 
                                 self.arr_address_list.add(custom)
                                 
@@ -163,14 +215,14 @@ class search_location: UIViewController {
                                         "address":(item!["address"] as! String),
                                         "lat_long":(item!["coordinate"] as! String),
                                         "type":"1"
-                                     ]
+                                    ]
                                     self.arr_address_list.add(custom)
                                 }
                                 
                                 // recent address
                                 let custom_recent = [
                                     "type":"2"
-                                 ]
+                                ]
                                 
                                 self.arr_address_list.add(custom_recent)
                                 
@@ -189,7 +241,7 @@ class search_location: UIViewController {
                                         "address":self.persons[indexxx].name,
                                         "lat_long":self.persons[indexxx].lat_long,
                                         "type":"3"
-                                     ]
+                                    ]
                                     self.arr_address_list.add(custom)
                                     
                                 }
@@ -218,7 +270,7 @@ class search_location: UIViewController {
     }
     
     @objc func login_refresh_token_wb() {
-
+        
         var parameters:Dictionary<AnyHashable, Any>!
         if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
             print(get_login_details as Any)
@@ -256,9 +308,9 @@ class search_location: UIViewController {
                             let str_token = (JSON["AuthToken"] as! String)
                             UserDefaults.standard.set("", forKey: str_save_last_api_token)
                             UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
-                                                        
+                            
                             self.address_list_wb(str_show_loader: "no")
- 
+                            
                         }
                         else {
                             ERProgressHud.sharedInstance.hide()
@@ -283,6 +335,41 @@ class search_location: UIViewController {
         self.navigationController?.pushViewController(push, animated: true)
     }
     
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentText = textField.text ?? ""
+        let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
+        
+        searchPlaces(query: updatedText)
+        return true
+    }
+    
+    func searchPlaces(query: String) {
+        if query.isEmpty {
+            predictions = []
+            tableViewForGoogleSearch.isHidden = true
+            tableViewForGoogleSearch.reloadData()
+            return
+        }
+        
+        let filter = GMSAutocompleteFilter()
+        filter.type = .establishment
+        
+        placesClient.findAutocompletePredictions(fromQuery: query,
+                                                 filter: filter,
+                                                 sessionToken: nil) { (results, error) in
+            
+            if let error = error {
+                print("Error finding places: \(error.localizedDescription)")
+                return
+            }
+            
+            self.predictions = results ?? []
+            self.tableViewForGoogleSearch.isHidden = self.predictions.isEmpty
+            self.tableViewForGoogleSearch.reloadData()
+        }
+    }
+    
 }
 
 
@@ -295,7 +382,12 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        return self.arr_address_list.count
+        if (self.predictions == []) {
+            return self.predictions.count
+        } else {
+            return self.arr_address_list.count
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -463,6 +555,10 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
         
     }
     
+}
+
+class searchLocationFromGoogleTableViewCell: UITableViewCell {
+    @IBOutlet weak var lblLocationName:UILabel!
 }
 
 class search_location_table_cell: UITableViewCell {

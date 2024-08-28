@@ -433,7 +433,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
             // remove decimal
             let distanceFloat: Double = (distanceInMeters as Any as! Double)
             
-            //            cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
+            // cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
             
             print(String(format: "%.0f", distanceFloat/1000))
             // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))

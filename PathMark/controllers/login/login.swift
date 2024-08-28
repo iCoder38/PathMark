@@ -94,7 +94,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
          
-        self.iAmHereForLocationPermission()
+        
         self.language_convert()
         
         
@@ -130,7 +130,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             print("=============================")
             UserDefaults.standard.set("en", forKey: str_language_convert)
         }
-        
+        self.iAmHereForLocationPermission()
     }
     
     @objc func signInViaGoogle() {
