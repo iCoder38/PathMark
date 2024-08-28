@@ -16,6 +16,8 @@ import CoreLocation
 import CryptoKit
 import JWTDecode
 
+import GoogleMaps
+
 struct Location {
 
     let title: String
@@ -86,6 +88,47 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     var pick_long:String!
     
     var str_bike_cat_id:String!
+    
+    // NEW
+    var getLoginUserLatitudeTo:String!
+    var getLoginUserLongitudeTo:String!
+    var getLoginUserAddressTo:String!
+    var getLoginUserLatitudeFrom:String!
+    var getLoginUserLongitudeFrom:String!
+    var getLoginUserAddressFrom:String!
+    
+    
+    @IBOutlet weak var btn_push_to_map:UIButton!
+    @IBOutlet weak var btn_push_to_map_down:UIButton!
+    
+    @IBOutlet weak var txtFieldUp:UITextField!
+    @IBOutlet weak var txtFieldDown:UITextField!
+    
+    // google maps
+    var mapView: GMSMapView!
+    
+            
+    var doublePlaceStartLat:Double!
+    var doublePlaceStartLong:Double!
+            
+    var doublePlaceFinalLat:Double!
+    var doublePlaceFinalLong:Double!
+            
+    
+    
+    
+    
+    @IBOutlet weak var view_set_name:UIView! {
+        didSet {
+            view_set_name.backgroundColor = .white
+            view_set_name.layer.masksToBounds = false
+            view_set_name.layer.shadowColor = UIColor.black.cgColor
+            view_set_name.layer.shadowOffset =  CGSize.zero
+            view_set_name.layer.shadowOpacity = 0.5
+            view_set_name.layer.shadowRadius = 2
+            view_set_name.layer.cornerRadius = 12
+        }
+    }
     
     @IBOutlet weak var search_text_field:UISearchTextField! {
         didSet {
@@ -164,7 +207,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
     }
     
-    @IBOutlet weak var mapView:MKMapView!
+    // @IBOutlet weak var mapView:MKMapView!
     
     // ***************************************************************** // nav
     
@@ -298,7 +341,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         
         self.collectionView.isHidden = true
-        self.mapView.isHidden = true
+        // self.mapView.isHidden = true
         self.btnRideNow.isHidden = true
         
         // print(persons[0].name)
@@ -338,11 +381,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 
                 if (language == "en") {
                     self.btnRideNow.setTitle("Ride now", for: .normal)
-                    self.btn_search.setTitle("recent", for: .normal)
+                    // self.btn_search.setTitle("recent", for: .normal)
                     self.str_selected_language_is = "en"
                 } else {
                     self.btnRideNow.setTitle("এখনই রাইড নিন", for: .normal)
-                    self.btn_search.setTitle("বর্তমান", for: .normal)
+                    // self.btn_search.setTitle("বর্তমান", for: .normal)
                     self.str_selected_language_is = "bn"
                 }
                 
@@ -357,28 +400,39 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
         
         self.btnRideNow.addTarget(self, action: #selector(ride_now_click_method), for: .touchUpInside)
-        self.btn_search.addTarget(self, action: #selector(search_click_method), for: .touchUpInside)
+        // self.btn_search.addTarget(self, action: #selector(search_click_method), for: .touchUpInside)
         
-        self.strSaveLatitude = String(str_get_login_user_lat)
-        self.strSaveLongitude = String(str_get_login_user_long)
         
-        self.current_location_click_method()
+        
+        self.btn_push_to_map.addTarget(self, action: #selector(please_select_atleast_one_vehicle), for: .touchUpInside)
+        self.btn_push_to_map_down.addTarget(self, action: #selector(please_select_atleast_one_vehicle2), for: .touchUpInside)
+        
+        self.handleEveythingFromGoogleMapInit()
+        
+        
+        
+        
+        
+        // self.strSaveLatitude = String(str_get_login_user_lat)
+        // self.strSaveLongitude = String(str_get_login_user_long)
+        
+        
         
         // apple maps
-        self.mapView.delegate = self
-        self.searchCompleter.delegate = self
-        self.searchResultsTableView.isHidden = true
+        // self.mapView.delegate = self
+       // self.searchCompleter.delegate = self
+        // self.searchResultsTableView.isHidden = true
         
-        self.annotationsOnMap()
+       // self.annotationsOnMap()
         
-        self.stateAndCountry = "0"
-        self.fullAddress = "0"
+       // self.stateAndCountry = "0"
+       // self.fullAddress = "0"
         
-        self.searchLat = "0"
-        self.searchLong = "0"
+       // self.searchLat = "0"
+       // self.searchLong = "0"
         
-        self.lbl_location_from.text = String(self.str_get_user_current_full_address)
-        self.search_place_pickup.text = String(self.str_get_user_current_full_address)
+       // self.lbl_location_from.text = String(self.str_get_user_current_full_address)
+       // self.search_place_pickup.text = String(self.str_get_user_current_full_address)
         
         /*
          push!.str_get_login_user_lat = String(self.strSaveLatitude)
@@ -391,9 +445,17 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
          var pick_long:String!
          */
         
-        print(self.str_get_login_user_lat as Any)
+        /*print(self.str_get_login_user_lat as Any)
         print(self.str_get_login_user_long as Any)
         print(self.str_user_select_vehicle as Any)
+        */
+        
+        
+        
+        
+        
+       // self.current_location_click_method()
+        
         
         
         if (self.str_user_select_vehicle == "BIKE"){
@@ -402,13 +464,227 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         // self.show_loading_UI()
         // self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
-        let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
+        /*let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
         // lpgr.minimumPressDuration = 0.5
         lpgr.delaysTouchesBegan = true
         lpgr.delegate = self
-        self.mapView.addGestureRecognizer(lpgr)
+        self.mapView.addGestureRecognizer(lpgr)*/
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+            print(load_latitude)
+            
+            // self.str_save_lat = load_latitude
+            let fullName    = load_latitude
+            let fullNameArr = fullName.components(separatedBy: ",")
+            
+            let name    = fullNameArr[0]
+            let surname = fullNameArr[1]
+            
+            self.getLoginUserLatitudeFrom = String(name)
+            self.getLoginUserLongitudeFrom = String(surname)
+            
+        }
+        
+        // longitude
+        if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+            debugPrint(address)
+            
+            
+            if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
+                debugPrint(profileUpOrBottom)
+                
+                if (profileUpOrBottom == "userLocationTo") {
+                    self.txtFieldUp.text = String(address)
+                } else {
+                    self.self.txtFieldDown.text = String(address)
+                }
+            }
+            
+            self.handleEveythingFromGoogleMapInit()
+        }
+    }
+    
+    @objc func handleEveythingFromGoogleMapInit() {
+        print(self.getLoginUserLatitudeTo as Any)
+        print(self.getLoginUserLongitudeTo as Any)
+        print(self.getLoginUserAddressTo as Any)
+        
+        print(self.getLoginUserLatitudeFrom as Any)
+        print(self.getLoginUserLongitudeFrom as Any)
+        print(self.getLoginUserAddressFrom as Any)
+        
+        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+        
+        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+        
+        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+        
+        self.txtFieldUp.text = String(getLoginUserAddressTo)
+        self.txtFieldDown.text = String(getLoginUserAddressFrom)
+        
+        self.initializeMap()
+    }
+    
+    func initializeMap() {
+        
+        self.doublePlaceStartLat = Double(self.getLoginUserLatitudeTo)
+        self.doublePlaceStartLong = Double(self.getLoginUserLongitudeTo)
+        
+        self.doublePlaceFinalLat = Double(self.getLoginUserLatitudeFrom)
+        self.doublePlaceFinalLong = Double(self.getLoginUserLongitudeFrom)
+        
+        debugPrint(doublePlaceStartLat as Any)
+        debugPrint(doublePlaceStartLong as Any)
+        debugPrint(doublePlaceFinalLat as Any)
+        debugPrint(doublePlaceFinalLong as Any)
+        
+        let camera = GMSCameraPosition.camera(withLatitude: doublePlaceStartLat!, longitude: doublePlaceStartLong!, zoom: 10.0)
+        mapView = GMSMapView(frame: .zero)
+        mapView.camera = camera
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mapView)
+        
+        // Set up constraints for mapView
+        NSLayoutConstraint.activate([
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        // Ensure overlayView is added after mapView so it's on top
+        view.bringSubviewToFront(view_navigation_bar)
+        view.bringSubviewToFront(view_set_name)
+        
+        let placeACoordinate = CLLocationCoordinate2D(latitude: doublePlaceStartLat!, longitude: doublePlaceStartLong!)
+        let placeBCoordinate = CLLocationCoordinate2D(latitude: doublePlaceFinalLat!, longitude: doublePlaceFinalLong!)
+        
+        
+        
+        addMarker(at: placeACoordinate, title: "Origin", snippet: String(self.getLoginUserAddressTo))
+        addMarker(at: placeBCoordinate, title: "Destination", snippet: String(self.getLoginUserAddressFrom))
+        
+        fetchRoute(from: placeACoordinate, to: placeBCoordinate)
+    }
+    
+    @objc func buttonUpClickMethod() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        self.navigationController?.pushViewController(push!, animated: true)
+       
+    }
+    
+    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String) {
+        let marker = GMSMarker()
+        marker.position = position
+        marker.title = title
+        marker.snippet = snippet
+        marker.map = mapView
+    }
+    
+    func fetchRoute(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) {
+        let origin = "\(self.doublePlaceStartLat!),\(self.doublePlaceStartLong!)"
+        let destination = "\(self.doublePlaceFinalLat!),\(self.doublePlaceFinalLong!)"
+        let apiKey = GOOGLE_MAP_API
+        
+        debugPrint(origin)
+        debugPrint(destination)
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
+        
+        let urlString = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&key=\(apiKey)"
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Network error")
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let routes = json["routes"] as? [[String: Any]],
+                   let route = routes.first,
+                   let overviewPolyline = route["overview_polyline"] as? [String: Any],
+                   let points = overviewPolyline["points"] as? String {
+                    
+                    DispatchQueue.main.async {
+                        self.drawPath(fromEncodedPath: points)
+                    }
+                }
+            } catch {
+                print("JSON parsing error")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func drawPath(fromEncodedPath encodedPath: String) {
+        guard let path = GMSPath(fromEncodedPath: encodedPath) else {
+            print("Failed to decode path")
+            return
+        }
+        
+        let polyline = GMSPolyline(path: path)
+        polyline.strokeColor = .blue
+        polyline.strokeWidth = 5.0
+        polyline.map = mapView
+        
+        // Call zoom function
+        zoomToFitRoute(withPath: path)
+    }
+    
+    func zoomToFitRoute(withPath path: GMSPath) {
+        let bounds = GMSCoordinateBounds(path: path)
+        let update = GMSCameraUpdate.fit(bounds, withPadding: 100.0) // Adjust padding as needed
+        mapView.animate(with: update)
+        
+        self.list_by_car_WB(str_show_loader: "yes")
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    @objc func please_select_atleast_one_vehicle2() {
+        
+        UserDefaults.standard.set("userLocationFrom", forKey: "keyUserSelectWhichProfile")
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        push!.userSelectedIs = "2"
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
+    @objc func please_select_atleast_one_vehicle() {
+        
+        UserDefaults.standard.set("userLocationTo", forKey: "keyUserSelectWhichProfile")
+        
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        push!.userSelectedIs = "1"
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
+    
+    
     
     @objc func search_click_method() {
         
@@ -417,7 +693,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
     }
     
-    @objc func updateCounter() {
+   /* @objc func updateCounter() {
         
         if (counter == 2) {
             counter -= 1
@@ -428,9 +704,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             timer.invalidate()
         }
         
-    }
+    }*/
     
-    @objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
+   /* @objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
         if gestureReconizer.state != UIGestureRecognizer.State.ended {
             let touchLocation = gestureReconizer.location(in: self.mapView)
             let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
@@ -455,12 +731,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             UserDefaults.standard.set(String(self.set_new_long), forKey: "key_save_long_for_address")
             
             
-            convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+            // convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
             return
         }
-    }
+    }*/
     
-    override func viewWillAppear(_ animated: Bool) {
+    /*override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
         /*UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
@@ -501,9 +777,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
         
         
-    }
+    }*/
     
-    func convertLatLongToAddress(latitude:Double,longitude:Double){
+    
+    
+    /*func convertLatLongToAddress(latitude:Double,longitude:Double){
         self.mapView.removeAnnotations(self.mapView.annotations)
         
         let geoCoder = CLGeocoder()
@@ -624,9 +902,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             // self.find_driver_WB()
         })
         
-    }
+    }*/
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    /*func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         mapView.removeAnnotation(newPin)
         
@@ -646,7 +924,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
             mapView.addAnnotation(newPin)
         }
         
-    }
+    }*/
     
     @objc func current_location_click_method() {
         
@@ -758,7 +1036,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                                 print(self.arr_all_locations_pin as Any)
                                 print(self.arr_all_locations_pin.count as Any)
                                 
-                                self.annotationsOnMap()
+                               // self.annotationsOnMap()
                                 
                             }
                             else {
@@ -782,7 +1060,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     /// **************************************************************
     /// ************* ALL ANNOTATIONS ON MAP *********************************
     /// **************************************************************
-    func annotationsOnMap() {
+    /*func annotationsOnMap() {
         
         for location in 0..<arr_all_locations_pin.count {
             let item = self.arr_all_locations_pin[location] as? [String:Any]
@@ -807,7 +1085,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         self.hide_loading_UI()
         
-    }
+    }*/
     
     /// **************************************************************
     /// ************* RIDE NOW CLICK *********************************
@@ -857,20 +1135,22 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 
                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
                 
+                debugPrint(self.str_user_select_vehicle as Any)
+                
                 push!.str_vehicle_type = String(self.str_user_select_vehicle)
                 
                 push!.str_get_category_id = String(self.str_category_id)
                 // push!.str_from_location = String(self.lbl_location_from.text!)
                 // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
                 
-                push!.str_from_location = String(self.search_place_pickup.text!)
-                push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
+                push!.str_from_location = String(self.getLoginUserAddressTo)
+                push!.str_to_location = String(self.getLoginUserAddressFrom)
                 
-                push!.my_location_lat = String(self.strSaveLatitude)
-                push!.my_location_long = String(self.strSaveLongitude)
+                push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+                push!.my_location_long = String(self.getLoginUserLongitudeTo)
                 
-                push!.searched_place_location_lat = String(self.searchLat)
-                push!.searched_place_location_long = String(self.searchLong)
+                push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+                push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
                 
                 self.navigationController?.pushViewController(push!, animated: true)
                 
@@ -1122,7 +1402,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
      
      }*/
     
-    @nonobjc func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+   /* @nonobjc func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard annotation is MKPointAnnotation else { return nil }
         
         let identifier = "Annotation"
@@ -1137,12 +1417,12 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         }
         
         return annotationView
-    }
+    }*/
     
-    @nonobjc func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+    /*@nonobjc func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
         self.mapView.setRegion(region, animated: true)
-    }
+    }*/
     
     
     
@@ -1151,7 +1431,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         // self.show_loading_UI()
         
         if (str_show_loader == "yes") {
-            ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
+            // ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
         }
         
         
@@ -1181,11 +1461,19 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                     }
                 }
                 
+                /*
+                 var getLoginUserLatitudeTo:String!
+                 var getLoginUserLongitudeTo:String!
+                 var getLoginUserAddressTo:String!
+                 var getLoginUserLatitudeFrom:String!
+                 var getLoginUserLongitudeFrom:String!
+                 var getLoginUserAddressFrom:String!
+                 */
                 parameters = [
                     "action"            : "listbyprice",
                     "userId"            : String(myString),
-                    "pickuplatLong"     : String(self.str_get_login_user_lat)+","+String(self.str_get_login_user_long),
-                    "droplatLong"       : String(self.pick_lat)+","+String(self.pick_long),
+                    "pickuplatLong"     : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
+                    "droplatLong"       : String(self.getLoginUserLatitudeFrom)+","+String(self.getLoginUserLongitudeFrom),
                     "language"          : String(lan)
                 ]
                 
@@ -1254,6 +1542,10 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                                 
                                 self.collectionView.dataSource = self
                                 self.collectionView.delegate = self
+                                
+                                self.view.bringSubviewToFront(self.collectionView)
+                                self.collectionView.backgroundColor = .white
+                                
                                 self.collectionView.reloadData()
                                 
                                 self.hide_loading_UI()
@@ -1518,6 +1810,8 @@ extension map_view: UICollectionViewDelegate,UICollectionViewDataSource,UICollec
         
         print(self.str_category_id as Any)
         
+        self.view.bringSubviewToFront(self.btnRideNow)
+        
         // self.str_category_id = "\(item!["id"]!)"
         
         self.collectionView.reloadData()
@@ -1622,13 +1916,78 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         
         self.view.endEditing(true)
         
-        print(self.search_place_drop.text as Any)
+        if (self.str_user_select_vehicle == "BIKE") {
+            print("bike")
+            
+            print(self.str_get_login_user_lat as Any)
+            print(self.str_get_login_user_long as Any)
+            print(self.pick_lat as Any)
+            print(self.pick_long as Any)
+             print(self.str_user_select_vehicle)
+             print(self.str_user_option)
+             
+            if (self.str_user_option == "schedule") {
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_a_ride_id") as? schedule_a_ride
+                
+                push!.str_get_category_id = "10"//String(self.str_category_id)
+                push!.str_from_location = String(self.lbl_location_from.text!)
+                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                
+                push!.my_location_lat = String(self.strSaveLatitude)
+                push!.my_location_long = String(self.strSaveLongitude)
+                
+                push!.searched_place_location_lat = String(self.searchLat)
+                push!.searched_place_location_long = String(self.searchLong)
+                
+                self.navigationController?.pushViewController(push!, animated: true)
+            } else {
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                
+                push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                
+                push!.str_get_category_id = String(self.str_bike_cat_id)
+                // push!.str_from_location = String(self.lbl_location_from.text!)
+                // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                
+                push!.str_from_location = String(self.search_place_pickup.text!)
+                push!.str_to_location = String(self.search_place_drop.text!)
+                
+                push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+                push!.my_location_long = String(self.getLoginUserLongitudeTo)
+                
+                push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+                push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
+                
+                self.navigationController?.pushViewController(push!, animated: true)
+            }
+        } else {
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+            
+            push!.str_vehicle_type = String(self.str_user_select_vehicle)
+            
+            push!.str_get_category_id = String(self.str_bike_cat_id)
+//                                push!.str_from_location = String(self.lbl_location_from.text!)
+//                                push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+            
+            push!.str_from_location = String(self.search_place_pickup.text!)
+            push!.str_to_location = String(self.search_place_drop.text!)//+" "+String(self.stateAndCountry)
+            
+            push!.my_location_lat = String(self.str_get_login_user_lat)
+            push!.my_location_long = String(self.str_get_login_user_long)
+            
+            push!.searched_place_location_lat = String(self.searchLat)
+            push!.searched_place_location_long = String(self.searchLong)
+            
+            self.navigationController?.pushViewController(push!, animated: true)
+        }
+        
+        /*print(self.search_place_drop.text as Any)
         print(self.search_place_pickup.text as Any)
         
         self.searchResultsTableView.isHidden = true
         
         // here all prevoius annotations removed before insert new
-        self.mapView.removeAnnotations(self.mapView.annotations)
+        // self.mapView.removeAnnotations(self.mapView.annotations)
         
         
         
@@ -1637,9 +1996,9 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
         print(completion.title as Any)
         print(completion.subtitle as Any)
         
-        if self.mapView.annotations.isEmpty != true {
+        /*if self.mapView.annotations.isEmpty != true {
             self.mapView.removeAnnotation(self.mapView.annotations.last!)
-        }
+        }*/
         
         if (self.str_which_textfield == "0") {
             
@@ -1687,22 +2046,22 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                 let london = MKPointAnnotation()
                 london.title = completion.title
                 london.subtitle = completion.subtitle
-                mapView.delegate = self
+                // mapView.delegate = self
                 london.coordinate = CLLocationCoordinate2D(latitude: coordinate!.latitude, longitude: coordinate!.longitude)
-                mapView.removeAnnotation(london)
-                mapView.addAnnotation(london)
+                // mapView.removeAnnotation(london)
+                // mapView.addAnnotation(london)
                 
                 
-                var zoomRect: MKMapRect = MKMapRect.null
+                /*var zoomRect: MKMapRect = MKMapRect.null
                 for annotation in mapView.annotations {
                     let annotationPoint = MKMapPoint(annotation.coordinate)
                     let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
                     zoomRect = zoomRect.union(pointRect)
-                }
+                }*/
                 
                 // mapView.setVisibleMapRect(zoomRect, animated: true)
                 
-                self.mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
+                // self.mapView.setVisibleMapRect(zoomRect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
                 
                 self.locManager.stopUpdatingLocation()
                 
@@ -1803,16 +2162,16 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                 
                 db.insert(id: randomCGFloat, name: "\(completion.title), \(completion.subtitle)", lat_long: "\(self.searchLat!),\(self.searchLong!)", age: 2)
                 
-                let london = MKPointAnnotation()
+                /*let london = MKPointAnnotation()
                 london.title = completion.title
                 london.subtitle = completion.subtitle
                 mapView.delegate = self
                 london.coordinate = CLLocationCoordinate2D(latitude: coordinate!.latitude, longitude: coordinate!.longitude)
                 mapView.removeAnnotation(london)
-                mapView.addAnnotation(london)
+                mapView.addAnnotation(london)*/
                 
                 
-                var zoomRect: MKMapRect = MKMapRect.null
+                /*var zoomRect: MKMapRect = MKMapRect.null
                 for annotation in mapView.annotations {
                     let annotationPoint = MKMapPoint(annotation.coordinate)
                     let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
@@ -1824,7 +2183,7 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                 
                 
                 self.locManager.stopUpdatingLocation()
-                 
+                 */
                 
                 if (self.str_get_login_user_lat != "") {
                     if (self.str_get_login_user_lat == nil) {
@@ -1885,7 +2244,7 @@ extension map_view: UITableViewDataSource , UITableViewDelegate {
                 
             }
             
-        }
+        }*/
     }
     
 }

@@ -87,6 +87,11 @@ class select_vehicle: UIViewController {
         initializeMap()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        debugPrint("called")
+    }
+    
     func initializeMap() {
         // Create and configure the mapView
         let camera = GMSCameraPosition.camera(withLatitude: -33.86, longitude: 151.20, zoom: 10.0)

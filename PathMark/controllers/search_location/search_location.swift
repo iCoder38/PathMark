@@ -11,6 +11,8 @@ import GooglePlaces
 
 class search_location: UIViewController, UITextFieldDelegate {
     
+    var userSelectedIs:String!
+    
     var placesClient: GMSPlacesClient!
     var predictions: [GMSAutocompletePrediction] = []
     
@@ -28,7 +30,7 @@ class search_location: UIViewController, UITextFieldDelegate {
                                       tfBorderWidth: 0,
                                       tfBorderColor: .clear,
                                       tfAppearance: .dark,
-                                      tfKeyboardType: .emailAddress,
+                                      tfKeyboardType: .default,
                                       tfBackgroundColor: .white,
                                       tfPlaceholderText: "Search location")
                 } else {
@@ -39,7 +41,7 @@ class search_location: UIViewController, UITextFieldDelegate {
                                       tfBorderWidth: 0,
                                       tfBorderColor: .clear,
                                       tfAppearance: .dark,
-                                      tfKeyboardType: .emailAddress,
+                                      tfKeyboardType: .default,
                                       tfBackgroundColor: .white,
                                       tfPlaceholderText: "ই-মেইল/মোবাইল নম্বর")
                 }
@@ -111,6 +113,9 @@ class search_location: UIViewController, UITextFieldDelegate {
         
         self.txtSearchLocationFromGoogle.delegate = self
         
+        // init place client
+        placesClient = GMSPlacesClient.shared()
+        
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
             
@@ -122,7 +127,7 @@ class search_location: UIViewController, UITextFieldDelegate {
             
         }
         
-        self.tableViewForGoogleSearch.isHidden = true
+        // self.tableViewForGoogleSearch.isHidden = true
         
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
@@ -347,8 +352,8 @@ class search_location: UIViewController, UITextFieldDelegate {
     func searchPlaces(query: String) {
         if query.isEmpty {
             predictions = []
-            tableViewForGoogleSearch.isHidden = true
-            tableViewForGoogleSearch.reloadData()
+            // tableViewForGoogleSearch.isHidden = true
+            // tableViewForGoogleSearch.reloadData()
             return
         }
         
@@ -364,12 +369,37 @@ class search_location: UIViewController, UITextFieldDelegate {
                 return
             }
             
+            // self.tableViewForGoogleSearch.isHidden = false
             self.predictions = results ?? []
-            self.tableViewForGoogleSearch.isHidden = self.predictions.isEmpty
-            self.tableViewForGoogleSearch.reloadData()
+            self.tbleView.isHidden = self.predictions.isEmpty
+            self.tbleView.reloadData()
+            // self.tableViewForGoogleSearch.reloadData()
         }
     }
     
+    
+    // import GooglePlaces
+
+    func getCoordinates(for placeID: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
+        let placesClient = GMSPlacesClient.shared()
+
+        placesClient.fetchPlace(fromPlaceID: placeID, placeFields: .coordinate, sessionToken: nil) { (place, error) in
+            if let error = error {
+                print("Error fetching place details: \(error.localizedDescription)")
+                completion(nil, error)
+                return
+            }
+
+            if let place = place {
+                let coordinates = place.coordinate
+                print("Latitude: \(coordinates.latitude), Longitude: \(coordinates.longitude)")
+                completion(coordinates, nil)
+            } else {
+                completion(nil, NSError(domain: "Place not found", code: 404, userInfo: nil))
+            }
+        }
+    }
+
 }
 
 
@@ -381,8 +411,8 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        if (self.predictions == []) {
+        
+        if (self.predictions.count != 0) {
             return self.predictions.count
         } else {
             return self.arr_address_list.count
@@ -392,131 +422,145 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let item = self.arr_address_list[indexPath.row] as? [String:Any]
-        print(item as Any)
-        
-        if (item!["type"] as! String) == "0" {
-            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "one") as! search_location_table_cell
-                
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .clear
-            cell.selectedBackgroundView = backgroundView
+        if (self.predictions.count != 0) {
             
-            cell.backgroundColor = .clear
+            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "googleSearchedLocations") as! search_location_table_cell
+            print(predictions[indexPath.row])
             
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    cell.lbl_added_address.text = "Added Address"
-                } else {
-                    cell.lbl_added_address.text = "যোগ করা ঠিকানা"
-                }
-                    
-            }
-            
-            
+            let prediction = predictions[indexPath.row]
+            cell.lblGoogleSearchedLocationName.text = prediction.attributedFullText.string
+            // cell.lblLocationName.text = prediction.attributedFullText.string
             
             return cell
-        } else if (item!["type"] as! String) == "2" {
-            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! search_location_table_cell
-                
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .clear
-            cell.selectedBackgroundView = backgroundView
             
-            cell.backgroundColor = .clear
-            
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    cell.lbl_recent_address.text = "Recent Address"
-                } else {
-                    cell.lbl_recent_address.text = "সাম্প্রতিক ঠিকানা"
-                }
-                    
-            }
-            
-            
-            
-            return cell
-        } else if (item!["type"] as! String) == "1" {
-            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "search_location_table_cell") as! search_location_table_cell
-                
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .clear
-            cell.selectedBackgroundView = backgroundView
-            
-            cell.backgroundColor = .clear
-             
-            let item = self.arr_address_list[indexPath.row] as? [String:Any]
-            print(item as Any)
-            
-            if "\(item!["address_type"]!)" == "0" {
-                
-                
-                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                    print(language as Any)
-                    
-                    if (language == "en") {
-                        cell.lbl_title.text = "Home"
-                    } else {
-                        cell.lbl_title.text = "বাড়ি"
-                    }
-                        
-                }
-                
-            } else if "\(item!["address_type"]!)" == "1" {
-                cell.lbl_title.text = "Work"
-                
-                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                    print(language as Any)
-                    
-                    if (language == "en") {
-                        cell.lbl_title.text = "Work"
-                    } else {
-                        cell.lbl_title.text = "কাজ"
-                    }
-                        
-                }
-                
-            } else {
-                cell.lbl_title.text = "Other"
-                
-                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                    print(language as Any)
-                    
-                    if (language == "en") {
-                        cell.lbl_title.text = "Other"
-                    } else {
-                        cell.lbl_title.text = "অন্যান্য"
-                    }
-                        
-                }
-                
-            }
-            
-            cell.lbl_sub_title.text = (item!["address"] as! String)
-            
-            return cell
         } else {
-            let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "three") as! search_location_table_cell
-                
-            let backgroundView = UIView()
-            backgroundView.backgroundColor = .clear
-            cell.selectedBackgroundView = backgroundView
-            
-            cell.backgroundColor = .clear
-             
             let item = self.arr_address_list[indexPath.row] as? [String:Any]
             print(item as Any)
             
-            cell.lbl_recent_address2.text = (item!["address"] as! String)
-             
-            
-            return cell
+            if (item!["type"] as! String) == "0" {
+                let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "one") as! search_location_table_cell
+                
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = .clear
+                cell.selectedBackgroundView = backgroundView
+                
+                cell.backgroundColor = .clear
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_added_address.text = "Added Address"
+                    } else {
+                        cell.lbl_added_address.text = "যোগ করা ঠিকানা"
+                    }
+                    
+                }
+                
+                
+                
+                return cell
+            } else if (item!["type"] as! String) == "2" {
+                let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "two") as! search_location_table_cell
+                
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = .clear
+                cell.selectedBackgroundView = backgroundView
+                
+                cell.backgroundColor = .clear
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        cell.lbl_recent_address.text = "Recent Address"
+                    } else {
+                        cell.lbl_recent_address.text = "সাম্প্রতিক ঠিকানা"
+                    }
+                    
+                }
+                
+                
+                
+                return cell
+            } else if (item!["type"] as! String) == "1" {
+                let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "search_location_table_cell") as! search_location_table_cell
+                
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = .clear
+                cell.selectedBackgroundView = backgroundView
+                
+                cell.backgroundColor = .clear
+                
+                let item = self.arr_address_list[indexPath.row] as? [String:Any]
+                print(item as Any)
+                
+                if "\(item!["address_type"]!)" == "0" {
+                    
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.lbl_title.text = "Home"
+                        } else {
+                            cell.lbl_title.text = "বাড়ি"
+                        }
+                        
+                    }
+                    
+                } else if "\(item!["address_type"]!)" == "1" {
+                    cell.lbl_title.text = "Work"
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.lbl_title.text = "Work"
+                        } else {
+                            cell.lbl_title.text = "কাজ"
+                        }
+                        
+                    }
+                    
+                } else {
+                    cell.lbl_title.text = "Other"
+                    
+                    if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                        print(language as Any)
+                        
+                        if (language == "en") {
+                            cell.lbl_title.text = "Other"
+                        } else {
+                            cell.lbl_title.text = "অন্যান্য"
+                        }
+                        
+                    }
+                    
+                }
+                
+                cell.lbl_sub_title.text = (item!["address"] as! String)
+                
+                return cell
+            } else {
+                let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "three") as! search_location_table_cell
+                
+                let backgroundView = UIView()
+                backgroundView.backgroundColor = .clear
+                cell.selectedBackgroundView = backgroundView
+                
+                cell.backgroundColor = .clear
+                
+                let item = self.arr_address_list[indexPath.row] as? [String:Any]
+                print(item as Any)
+                
+                cell.lbl_recent_address2.text = (item!["address"] as! String)
+                
+                
+                return cell
+            }
         }
+        
         
     }
     
@@ -525,33 +569,92 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView .deselectRow(at: indexPath, animated: true)
         
-        let item = self.arr_address_list[indexPath.row] as? [String:Any]
-        print(item as Any)
+        if (self.predictions.count != 0) {
+            
+            let prediction = predictions[indexPath.row]
+            // print(prediction.placeID as Any)
+            
+            let placeID = prediction.placeID
+            print(placeID as Any)
+            getCoordinates(for: placeID) { coordinates, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                } else if let coordinates = coordinates {
+                    print("Latitude: \(coordinates.latitude), Longitude: \(coordinates.longitude)")
+                    
+                    debugPrint("\(coordinates.latitude),\(coordinates.longitude)")
+                    debugPrint(prediction.attributedFullText.string)
+                    
+                    UserDefaults.standard.set("\(coordinates.latitude),\(coordinates.longitude)", forKey: "key_map_view_lat_long")
+                    UserDefaults.standard.set(prediction.attributedFullText.string, forKey: "key_map_view_address")
+                    
+                    let randomCGFloat = Int.random(in: 1...1000)
+                    // print(randomCGFloat as Any)
+                    self.db.insert(id: randomCGFloat, name: prediction.attributedFullText.string,
+                                   lat_long: "\(coordinates.latitude),\(coordinates.longitude)",
+                                   age: 2)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+
+                    
+                    
+                    
+                }
+            }
+
+            
+            // cell.lblGoogleSearchedLocationName.text = prediction.attributedFullText.string
+            
+            /*if (self.userSelectedIs) == "1" {
+                UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
+                self.navigationController?.popViewController(animated: true)
+            }
+            else if (self.userSelectedIs) == "2" {
+                UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
+                self.navigationController?.popViewController(animated: true)
+            }*/
+        } else {
+            let item = self.arr_address_list[indexPath.row] as? [String:Any]
+            print(item as Any)
+            
+            if (item!["type"] as! String) == "1" {
+                UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
+                self.navigationController?.popViewController(animated: true)
+            }
+            else if (item!["type"] as! String) == "3" {
+                UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
         
-        if (item!["type"] as! String) == "1" {
-            UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
-            UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
-            self.navigationController?.popViewController(animated: true)
-        }
-        else if (item!["type"] as! String) == "3" {
-            UserDefaults.standard.set((item!["lat_long"] as! String), forKey: "key_map_view_lat_long")
-            UserDefaults.standard.set((item!["address"] as! String), forKey: "key_map_view_address")
-            self.navigationController?.popViewController(animated: true)
-        }
         
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let item = self.arr_address_list[indexPath.row] as? [String:Any]
-        print(item as Any)
         
-        if (item!["type"] as! String) == "1"  {
+        if (self.predictions.count != 0) {
+            
             return UITableView.automaticDimension
-        } else  if (item!["type"] as! String) == "3"  {
-            return UITableView.automaticDimension
+            
         } else {
-            return 70
+            let item = self.arr_address_list[indexPath.row] as? [String:Any]
+            print(item as Any)
+            
+            if (item!["type"] as! String) == "1"  {
+                return UITableView.automaticDimension
+            } else  if (item!["type"] as! String) == "3"  {
+                return UITableView.automaticDimension
+            } else {
+                return 70
+            }
         }
+        
         
     }
     
@@ -562,6 +665,8 @@ class searchLocationFromGoogleTableViewCell: UITableViewCell {
 }
 
 class search_location_table_cell: UITableViewCell {
+    
+    @IBOutlet weak var lblGoogleSearchedLocationName:UILabel!
     
     @IBOutlet weak var view_bg:UIView! {
         didSet {
