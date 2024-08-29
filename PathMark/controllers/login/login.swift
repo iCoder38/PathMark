@@ -130,7 +130,10 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             print("=============================")
             UserDefaults.standard.set("en", forKey: str_language_convert)
         }
-        self.iAmHereForLocationPermission()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            self.iAmHereForLocationPermission()
+        }
     }
     
     @objc func signInViaGoogle() {

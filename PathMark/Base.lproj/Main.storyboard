@@ -2673,14 +2673,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="930"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="q9U-MY-Qfg">
-                                                    <rect key="frame" x="20" y="0.0" width="374" height="909"/>
-                                                </mapView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nAu-E2-1Rq">
-                                                    <rect key="frame" x="32" y="21" width="350" height="120"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="130"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label sdfsbjfbsdf fsdnfjdsbfsdbs sdgnjisdijfsdbhfjbsdhf bfhdsbf" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sdj-Lu-qe0">
-                                                            <rect key="frame" x="40" y="8" width="302" height="40"/>
+                                                            <rect key="frame" x="40" y="8" width="366" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="40" id="tws-d6-wad"/>
                                                             </constraints>
@@ -2689,7 +2686,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label sdfsbjfbsdf fsdnfjdsbfsdbs sdgnjisdijfsdbhfjbsdhf bfhdsbf" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ELA-LI-cUb">
-                                                            <rect key="frame" x="40" y="72" width="302" height="40"/>
+                                                            <rect key="frame" x="40" y="72" width="366" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="40" id="JSv-5A-owd"/>
                                                             </constraints>
@@ -2715,16 +2712,16 @@
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="Sdj-Lu-qe0" secondAttribute="trailing" constant="8" id="5DT-g2-QQe"/>
                                                         <constraint firstItem="Sdj-Lu-qe0" firstAttribute="leading" secondItem="BSY-VK-TAN" secondAttribute="trailing" constant="8" symbolic="YES" id="J9P-me-uod"/>
                                                         <constraint firstItem="BSY-VK-TAN" firstAttribute="leading" secondItem="nAu-E2-1Rq" secondAttribute="leading" constant="8" id="MKj-Ev-czt"/>
-                                                        <constraint firstAttribute="trailing" secondItem="Ymc-8z-Ajg" secondAttribute="trailing" id="QhT-kl-iye"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Ymc-8z-Ajg" secondAttribute="trailing" constant="64" id="QhT-kl-iye"/>
                                                         <constraint firstItem="ELA-LI-cUb" firstAttribute="leading" secondItem="BSY-VK-TAN" secondAttribute="trailing" constant="8" symbolic="YES" id="Rl4-He-P8j"/>
-                                                        <constraint firstAttribute="height" constant="120" id="Uq5-2b-a4V"/>
+                                                        <constraint firstAttribute="height" constant="130" id="Uq5-2b-a4V"/>
                                                         <constraint firstItem="Ymc-8z-Ajg" firstAttribute="leading" secondItem="nAu-E2-1Rq" secondAttribute="leading" constant="40" id="eG9-8D-T9w"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ELA-LI-cUb" secondAttribute="bottom" constant="8" id="eSw-63-SFO"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ELA-LI-cUb" secondAttribute="bottom" constant="18" id="eSw-63-SFO"/>
                                                         <constraint firstItem="BSY-VK-TAN" firstAttribute="top" secondItem="nAu-E2-1Rq" secondAttribute="top" constant="20" id="fN7-53-B6d"/>
                                                         <constraint firstItem="Ymc-8z-Ajg" firstAttribute="top" secondItem="Sdj-Lu-qe0" secondAttribute="bottom" constant="11" id="gnf-dQ-gz7"/>
                                                         <constraint firstAttribute="trailing" secondItem="ELA-LI-cUb" secondAttribute="trailing" constant="8" id="t9c-jU-YsK"/>
@@ -2733,19 +2730,14 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="q9U-MY-Qfg" secondAttribute="bottom" constant="21" id="2Kr-MY-vHE"/>
-                                                <constraint firstItem="q9U-MY-Qfg" firstAttribute="leading" secondItem="K11-yE-ibE" secondAttribute="leading" constant="20" id="EdL-I5-1LN"/>
-                                                <constraint firstAttribute="trailing" secondItem="q9U-MY-Qfg" secondAttribute="trailing" constant="20" id="FTf-Tv-Eov"/>
-                                                <constraint firstItem="nAu-E2-1Rq" firstAttribute="top" secondItem="K11-yE-ibE" secondAttribute="topMargin" constant="10" id="Fqk-QM-1c5"/>
-                                                <constraint firstItem="q9U-MY-Qfg" firstAttribute="top" secondItem="K11-yE-ibE" secondAttribute="top" id="T0p-gS-2dc"/>
-                                                <constraint firstItem="nAu-E2-1Rq" firstAttribute="leading" secondItem="K11-yE-ibE" secondAttribute="leadingMargin" constant="12" id="w3x-rT-PVr"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="nAu-E2-1Rq" secondAttribute="trailing" constant="12" id="zxW-sd-A5G"/>
+                                                <constraint firstItem="nAu-E2-1Rq" firstAttribute="top" secondItem="K11-yE-ibE" secondAttribute="topMargin" constant="-11" id="Fqk-QM-1c5"/>
+                                                <constraint firstItem="nAu-E2-1Rq" firstAttribute="leading" secondItem="K11-yE-ibE" secondAttribute="leadingMargin" constant="-20" id="w3x-rT-PVr"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="nAu-E2-1Rq" secondAttribute="trailing" constant="-20" id="zxW-sd-A5G"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="lbl_from" destination="Sdj-Lu-qe0" id="P7z-Cv-oVQ"/>
                                             <outlet property="lbl_to" destination="ELA-LI-cUb" id="Ynx-eh-K7P"/>
-                                            <outlet property="mapView" destination="q9U-MY-Qfg" id="uW7-gY-KUr"/>
                                             <outlet property="viewCellbg" destination="nAu-E2-1Rq" id="NHn-Gq-0tU"/>
                                         </connections>
                                     </tableViewCell>
@@ -3770,7 +3762,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Egc-mW-o8b">
-                                                                    <rect key="frame" x="36" y="7.3333333333333526" width="16" height="15.666666666666661"/>
+                                                                    <rect key="frame" x="36" y="7.3333333333333517" width="16" height="15.666666666666666"/>
                                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="Hdr-DM-il6"/>

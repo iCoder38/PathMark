@@ -212,6 +212,7 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         filter.type = .noFilter
         // filter.countries = [countryCodeForGoogleSearch]
         
+        
         placesClient.findAutocompletePredictions(fromQuery: query,
                                                  filter: filter,
                                                  sessionToken: nil) { (results, error) in
