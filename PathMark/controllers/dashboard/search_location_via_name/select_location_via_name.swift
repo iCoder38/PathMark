@@ -19,6 +19,9 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
     var db:DBHelper = DBHelper()
     var persons:[Person] = []
     
+    var mapView: GMSMapView!
+    let locationManager = CLLocationManager()
+    var centerPinImageView: UIImageView!
     
     @IBOutlet weak var btnBack:UIButton! {
         didSet {
@@ -64,8 +67,6 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         }
     }
     
-    var mapView: GMSMapView!
-    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,6 +98,20 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         
+        // Step 1: Add a static pin image view at the center of the map
+        centerPinImageView = UIImageView(image: UIImage(named: "pin")) // Replace "pin" with your pin image name
+        centerPinImageView.contentMode = .scaleAspectFit
+        centerPinImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(centerPinImageView)
+        
+        // Center the pin image view in the map view
+        NSLayoutConstraint.activate([
+            centerPinImageView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
+            centerPinImageView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor),
+            centerPinImageView.widthAnchor.constraint(equalToConstant: 40), // Adjust width as needed
+            centerPinImageView.heightAnchor.constraint(equalToConstant: 40) // Adjust height as needed
+        ])
+        
         // Set up location manager
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -107,6 +122,51 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         
         self.view.bringSubviewToFront(self.viewMainSearch)
     }
+    
+    // Step 2: Track when the map starts moving
+    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+        let centerCoordinate = mapView.camera.target
+        fetchLocationDetails(for: centerCoordinate)
+    }
+    
+    // Step 3: Fetch Location Details (Lat, Long, and Address)
+    func fetchLocationDetails(for coordinate: CLLocationCoordinate2D) {
+        let latitude = coordinate.latitude
+        let longitude = coordinate.longitude
+        
+        debugPrint("Center location - Latitude: \(latitude), Longitude: \(longitude)")
+        
+        // Reverse Geocode to Get Address
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(coordinate) { response, error in
+            if let error = error {
+                print("Error while reverse geocoding: \(error.localizedDescription)")
+                return
+            }
+            
+            if let address = response?.firstResult() {
+                let lines = address.lines ?? []
+                let fullAddress = lines.joined(separator: ", ")
+                
+                debugPrint("Center location address: \(fullAddress)")
+                
+                // Save data in UserDefaults
+                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                
+                self.txtSearchGoogleLocation.text = String(fullAddress)
+                
+                // Optionally, add data to the database
+                let randomCGFloat = Int.random(in: 1...1000)
+                self.db.insert(id: randomCGFloat, name: fullAddress,
+                               lat_long: "\(latitude),\(longitude)",
+                               age: 2)
+                
+                self.view.bringSubviewToFront(self.btnAddLocation)
+            }
+        }
+    }
+    
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
@@ -245,11 +305,11 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         // Save data in UserDefaults
         
         
-//        // Optionally, add data to the database
-//        let randomCGFloat = Int.random(in: 1...1000)
-//        self.db.insert(id: randomCGFloat, name: "Selected Location",
-//                       lat_long: "\(latitude),\(longitude)",
-//                       age: 2)
+        //        // Optionally, add data to the database
+        //        let randomCGFloat = Int.random(in: 1...1000)
+        //        self.db.insert(id: randomCGFloat, name: "Selected Location",
+        //                       lat_long: "\(latitude),\(longitude)",
+        //                       age: 2)
     }
     
 }

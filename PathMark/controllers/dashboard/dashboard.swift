@@ -130,8 +130,16 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        
+//        
+//        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+//        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+//        
+//        UserDefaults.standard.set("", forKey: "key_map_view_address")
+//        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+//        
+//        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+//        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+//  
         if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
             debugPrint(profileUpOrBottom)
             
