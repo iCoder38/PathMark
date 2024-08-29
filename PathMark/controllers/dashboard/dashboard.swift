@@ -212,8 +212,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var strIndex:Int! = 0
 
     @objc func please_select_atleast_one_vehicle2() {
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
         
         UserDefaults.standard.set("userLocationFrom", forKey: "keyUserSelectWhichProfile")
         
@@ -224,8 +224,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     }
     
     @objc func please_select_atleast_one_vehicle() {
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+        // let indexPath = IndexPath.init(row: 0, section: 0)
+        // let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
         
         UserDefaults.standard.set("userLocationTo", forKey: "keyUserSelectWhichProfile")
         
@@ -441,6 +441,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                                    vehicleOption:String) {
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+        
+        debugPrint(vehicleType as Any)
         
         push!.str_user_select_vehicle = String(vehicleType)
         //"CAR"

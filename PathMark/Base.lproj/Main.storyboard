@@ -1321,19 +1321,34 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VRb-fZ-6vO">
+                                <rect key="frame" x="0.0" y="792" width="393" height="60"/>
+                                <color key="backgroundColor" red="0.92781108619999997" green="0.39252030850000003" blue="0.3685536385" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="ek5-k8-g3o"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="24"/>
+                                <state key="normal" title="CONFIRM BOOKING">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="h8l-OY-mcl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="h8l-OY-mcl" firstAttribute="trailing" secondItem="frv-8W-1A9" secondAttribute="trailing" constant="16" id="8jC-P3-hmq"/>
+                            <constraint firstAttribute="bottom" secondItem="VRb-fZ-6vO" secondAttribute="bottom" id="JZ2-Uf-9t0"/>
                             <constraint firstItem="KxQ-0T-WJO" firstAttribute="top" secondItem="h8l-OY-mcl" secondAttribute="top" id="TVW-B9-6UH"/>
                             <constraint firstItem="frv-8W-1A9" firstAttribute="top" secondItem="KxQ-0T-WJO" secondAttribute="bottom" constant="8" symbolic="YES" id="czQ-ZG-7eZ"/>
                             <constraint firstItem="h8l-OY-mcl" firstAttribute="trailing" secondItem="KxQ-0T-WJO" secondAttribute="trailing" constant="16" id="fh1-Kq-6dO"/>
+                            <constraint firstItem="VRb-fZ-6vO" firstAttribute="trailing" secondItem="h8l-OY-mcl" secondAttribute="trailing" id="kyl-wZ-Vmh"/>
+                            <constraint firstItem="VRb-fZ-6vO" firstAttribute="leading" secondItem="h8l-OY-mcl" secondAttribute="leading" id="mc2-Gl-9Nl"/>
                             <constraint firstItem="frv-8W-1A9" firstAttribute="leading" secondItem="h8l-OY-mcl" secondAttribute="leading" constant="16" id="nb1-vf-azi"/>
                             <constraint firstItem="KxQ-0T-WJO" firstAttribute="leading" secondItem="h8l-OY-mcl" secondAttribute="leading" constant="16" id="xHp-Mu-Txl"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnAddLocation" destination="VRb-fZ-6vO" id="sCa-hJ-4dU"/>
                         <outlet property="btnBack" destination="xdr-CW-gWE" id="r2i-oC-33n"/>
                         <outlet property="btnSearchGoogle" destination="YH1-Ml-fXd" id="qK1-ri-P5A"/>
                         <outlet property="tableViewForGoogleSearch" destination="frv-8W-1A9" id="cq5-HK-G3T"/>
@@ -3755,7 +3770,7 @@
                                                                     </constraints>
                                                                 </imageView>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="star.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Egc-mW-o8b">
-                                                                    <rect key="frame" x="36" y="7.3333333333333517" width="16" height="15.666666666666666"/>
+                                                                    <rect key="frame" x="36" y="7.3333333333333526" width="16" height="15.666666666666661"/>
                                                                     <color key="tintColor" systemColor="systemYellowColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="Hdr-DM-il6"/>

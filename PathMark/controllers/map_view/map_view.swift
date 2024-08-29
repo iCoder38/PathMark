@@ -462,9 +462,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         
         
-        if (self.str_user_select_vehicle == "BIKE"){
-            list_of_all_category_WB()
-        }
+        
         // self.show_loading_UI()
         // self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
         
@@ -476,7 +474,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         
         
-        
+        if (self.str_user_select_vehicle == "BIKE"){
+            list_of_all_category_WB()
+        }
         
         
          self.txtFieldUp.text = String(getLoginUserAddressTo)
@@ -485,12 +485,14 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     }
     
     @objc func locationOneClickMethod() {
+        UserDefaults.standard.set("userLocationTo", forKey: "keyUserSelectWhichProfile")
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
         push!.userSelectOriginOrDestination = "origin"
         self.navigationController?.pushViewController(push!, animated: true)
     }
     
     @objc func locationTwoClickMethod() {
+        UserDefaults.standard.set("userLocationFrom", forKey: "keyUserSelectWhichProfile")
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
         push!.userSelectOriginOrDestination = "destination"
         self.navigationController?.pushViewController(push!, animated: true)
@@ -705,7 +707,9 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         let update = GMSCameraUpdate.fit(bounds, withPadding: 100.0) // Adjust padding as needed
         mapView.animate(with: update)
         
-        self.list_by_car_WB(str_show_loader: "yes")
+        
+            self.list_by_car_WB(str_show_loader: "yes")
+        
     }
     
     
@@ -1524,6 +1528,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                  */
                 parameters = [
                     "action"            : "listbyprice",
+                    "TYPE"              : String(self.self.str_user_select_vehicle),
                     "userId"            : String(myString),
                     "pickuplatLong"     : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
                     "droplatLong"       : String(self.getLoginUserLatitudeFrom)+","+String(self.getLoginUserLongitudeFrom),
@@ -1597,7 +1602,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                                 self.collectionView.delegate = self
                                 
                                 self.view.bringSubviewToFront(self.collectionView)
-                                self.collectionView.backgroundColor = .white
+                                self.collectionView.backgroundColor = .clear
                                 
                                 self.collectionView.reloadData()
                                 

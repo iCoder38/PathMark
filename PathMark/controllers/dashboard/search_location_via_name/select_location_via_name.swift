@@ -9,7 +9,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocationManagerDelegate {
+class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocationManagerDelegate, GMSMapViewDelegate {
     
     var userSelectOriginOrDestination:String!
     
@@ -27,7 +27,11 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         }
     }
     
-    @IBOutlet weak var txtSearchGoogleLocation:UITextField!
+    @IBOutlet weak var txtSearchGoogleLocation:UITextField! {
+        didSet {
+            txtSearchGoogleLocation.placeholder = "Search here"
+        }
+    }
     
     @IBOutlet weak var btnSearchGoogle:UIButton!
     
@@ -52,6 +56,13 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         }
     }
     
+    @IBOutlet weak var btnAddLocation:UIButton! {
+        didSet {
+            btnAddLocation.backgroundColor = navigation_color
+            btnAddLocation.setTitle("Confirm", for: .normal)
+            btnAddLocation.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+        }
+    }
     
     var mapView: GMSMapView!
     let locationManager = CLLocationManager()
@@ -64,6 +75,7 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         // init place client
         placesClient = GMSPlacesClient.shared()
         
+        
         self.txtSearchGoogleLocation.delegate = self
         
         self.initGoogleMap()
@@ -73,6 +85,7 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
         // Set up mapView
         let camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 10.0)
         mapView = GMSMapView(frame: self.view.bounds, camera: camera)
+        mapView.delegate = self
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
         
@@ -119,6 +132,7 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        self.tableViewForGoogleSearch.isHidden = false
         let currentText = textField.text ?? ""
         let updatedText = (currentText as NSString).replacingCharacters(in: range, with: string)
         
@@ -182,6 +196,62 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
     }
+    
+    // Step 1: Handle Tap on the Map
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        // Step 2: Clear existing markers and add a new marker at the tapped location
+        mapView.clear()
+        let marker = GMSMarker(position: coordinate)
+        marker.map = mapView
+        
+        // Step 3: Get the coordinates and perform actions
+        let latitude = coordinate.latitude
+        let longitude = coordinate.longitude
+        
+        debugPrint("Tapped location - Latitude: \(latitude), Longitude: \(longitude)")
+        
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(coordinate) { response, error in
+            if let error = error {
+                print("Error while reverse geocoding: \(error.localizedDescription)")
+                return
+            }
+            
+            if let address = response?.firstResult() {
+                let lines = address.lines ?? []
+                let fullAddress = lines.joined(separator: ", ")
+                
+                debugPrint("Tapped location address: \(fullAddress)")
+                
+                // Save data in UserDefaults
+                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                
+                self.txtSearchGoogleLocation.text = String(fullAddress)
+                
+                // Optionally, add data to the database
+                let randomCGFloat = Int.random(in: 1...1000)
+                self.db.insert(id: randomCGFloat, name: fullAddress,
+                               lat_long: "\(latitude),\(longitude)",
+                               age: 2)
+                
+                // Update marker's title with the address
+                marker.title = fullAddress
+                
+                self.view.bringSubviewToFront(self.btnAddLocation)
+            }
+        }
+        
+        // Save data in UserDefaults
+        
+        
+//        // Optionally, add data to the database
+//        let randomCGFloat = Int.random(in: 1...1000)
+//        self.db.insert(id: randomCGFloat, name: "Selected Location",
+//                       lat_long: "\(latitude),\(longitude)",
+//                       age: 2)
+    }
+    
 }
 
 extension select_location_via_name: UITableViewDataSource , UITableViewDelegate {
@@ -233,13 +303,30 @@ extension select_location_via_name: UITableViewDataSource , UITableViewDelegate 
                                lat_long: "\(coordinates.latitude),\(coordinates.longitude)",
                                age: 2)
                 
+                
+                DispatchQueue.main.async {
+                    self.view.endEditing(true)
+                    self.tableViewForGoogleSearch.isHidden = true
+                    self.mapView.clear() // Clear any existing markers
+                    let marker = GMSMarker(position: coordinates)
+                    marker.title = prediction.attributedFullText.string
+                    marker.map = self.mapView
+                    
+                    // Center the map on the selected location
+                    let cameraUpdate = GMSCameraUpdate.setTarget(coordinates)
+                    self.mapView.animate(with: cameraUpdate)
+                }
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.navigationController?.popViewController(animated: true)
+                    self.view.bringSubviewToFront(self.btnAddLocation)
+                    // self.navigationController?.popViewController(animated: true)
                 }
                 
             }
         }
     }
+    
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
