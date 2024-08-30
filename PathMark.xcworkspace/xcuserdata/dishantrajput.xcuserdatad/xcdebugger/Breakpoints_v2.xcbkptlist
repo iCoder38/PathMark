@@ -114,50 +114,6 @@
             endingLineNumber = "891"
             landmarkName = "social_login_via_apple_two(social_id:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - ddfe9500ba9ab508"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "PathMark.login.social_login_via_apple_two(social_id: Swift.String) -&gt; ()"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs/PathMark/PathMark/controllers/login/login.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "890"
-                  endingLineNumber = "890">
-               </Location>
-               <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - 8544daa99e66b239"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.login.social_login_via_apple_two(social_id: Swift.String) -&gt; ()"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs/PathMark/PathMark/controllers/login/login.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "890"
-                  endingLineNumber = "890">
-               </Location>
-               <Location
-                  uuid = "7C51455D-7349-45F5-8C5D-06CBE544B0F0 - 8544daa99e66b19c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any, Alamofire.AFError&gt;) -&gt; () in PathMark.login.social_login_via_apple_two(social_id: Swift.String) -&gt; ()"
-                  moduleName = "PathMark"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dishantrajput/Documents/evs/PathMark/PathMark/controllers/login/login.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "893"
-                  endingLineNumber = "893">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -378,8 +334,8 @@
             filePath = "PathMark/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "616"
-            endingLineNumber = "616"
+            startingLineNumber = "725"
+            endingLineNumber = "725"
             landmarkName = "application(_:open:options:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -394,8 +350,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1681"
-            endingLineNumber = "1681"
+            startingLineNumber = "1679"
+            endingLineNumber = "1679"
             landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
          </BreakpointContent>
@@ -506,8 +462,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1189"
-            endingLineNumber = "1189"
+            startingLineNumber = "1187"
+            endingLineNumber = "1187"
             landmarkName = "ride_now_click_method()"
             landmarkType = "7">
          </BreakpointContent>
@@ -563,22 +519,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B8ABD5AC-17A4-4B5B-9419-0AD7982B1A16"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/ride_status_screen/ride_status.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1043"
-            endingLineNumber = "1043"
-            landmarkName = "booking_history_details_WB(str_show_loader:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "B1B04157-69F9-47BF-94AD-63092490C9F4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -586,73 +526,9 @@
             filePath = "PathMark/controllers/ride_status_screen/ride_status.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1321"
-            endingLineNumber = "1321"
+            startingLineNumber = "1339"
+            endingLineNumber = "1339"
             landmarkName = "login_refresh_token_wb()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "32643BF1-F72A-4FD8-B3F3-8C29961A58D5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/ride_status_screen/ride_status.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1111"
-            endingLineNumber = "1111"
-            landmarkName = "booking_history_details_WB(str_show_loader:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "4F8CB9FA-BA8C-4655-B85A-2A30E9DC72A4"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/ride_status_screen/ride_status.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1155"
-            endingLineNumber = "1155"
-            landmarkName = "booking_history_details_WB(str_show_loader:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0D196A0F-3B69-4DC5-B7B1-B0F398CA43CE"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/AppDelegate.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "518"
-            endingLineNumber = "518"
-            landmarkName = "userNotificationCenter(_:didReceive:withCompletionHandler:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6D54D6A4-8F11-4B00-80C3-13D766DE7038"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/ride_status_screen/ride_status.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "624"
-            endingLineNumber = "624"
-            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -682,8 +558,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2002"
-            endingLineNumber = "2002"
+            startingLineNumber = "2000"
+            endingLineNumber = "2000"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,8 +574,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2022"
-            endingLineNumber = "2022"
+            startingLineNumber = "2020"
+            endingLineNumber = "2020"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -717,6 +593,22 @@
             startingLineNumber = "512"
             endingLineNumber = "512"
             landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A978FDE-AEB7-4C4F-9E07-DFFEF1722218"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PathMark/controllers/total_fare_distance_mpa_route/total_fare_distance_mpa_route.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "667"
+            endingLineNumber = "667"
+            landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

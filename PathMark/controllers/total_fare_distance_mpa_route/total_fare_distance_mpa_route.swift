@@ -554,6 +554,12 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
 
                 // let doubleStr = String(format: "%.2f", self.str_total_rupees)
                 
+                var estAmountAfterDecimal:String!
+                
+                let doubleTotalRupees = Double(self.str_total_rupees)
+                let formattedNumber = String(format: "%.2f", doubleTotalRupees!)
+                estAmountAfterDecimal = String(formattedNumber)
+                
                 parameters = [
                     
                     "action"                : "addbooking",
@@ -567,7 +573,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "RequestDropLatLong"    : String(drop_lat)+","+String(drop_long),
                     "duration"              : String(self.str_total_duration),
                     "distance"              : String(self.str_total_distance),
-                    "estimateAmount"        : String(self.str_total_rupees), // "\(doubleStr)",
+                    "estimateAmount"        : String(estAmountAfterDecimal), // "\(doubleStr)",
                     "language"              : String(self.str_selected_language_is)
                     
                 ]
@@ -583,6 +589,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                             
                             let JSON = data as! NSDictionary
                             print(JSON)
+                            debugPrint("Action: Add booking")
                             
                             var strSuccess : String!
                             strSuccess = JSON["status"] as? String

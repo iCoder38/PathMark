@@ -1168,8 +1168,6 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 
             }
             
-            
-            
         } else {
             
             if (self.str_user_option == "schedule") {

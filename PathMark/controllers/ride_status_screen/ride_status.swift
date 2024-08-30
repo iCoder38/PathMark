@@ -618,7 +618,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     
                     self.btnConfirmBooking.isHidden = true
                     
-                }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend" {
+                }  else if (self.dict_get_all_data_from_notification["type"] as! String) == "rideend1" {
                     // self.lbl_OTP.isHidden = true
                     
                     self.lblNavigationTitle.text = "Ride Complete - Please pay"
@@ -954,13 +954,20 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         
         //
+        print(self.dict_get_all_data_from_notification as Any)
         
-        if(self.dict_get_all_data_from_notification["type"] != nil) {
-           debugPrint("NO DATA FOUND")
+        if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
+           debugPrint("COMPLETED: RIDE END % Show popup now")
             
-            if (self.dict_get_all_data_from_notification["type"] as! String) != "rideend" {
-                self.handleEveythingFromGoogleMapInit()
-            }
+            
+            /*let delayInSeconds = Double(500) / 1000.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                // Call the hitWebservice function after the delay
+                debugPrint("Show popup now")
+                // self.booking_history_details_WB(str_show_loader: "yes")
+            }*/
+            
+            self.handleEveythingFromGoogleMapInit()
             
         } else {
             debugPrint("DATA IS NOT NIL")
@@ -979,18 +986,19 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     @objc func booking_history_details_WB(str_show_loader:String) {
         
-        if (str_show_loader == "yes") {
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+        if(self.dict_get_all_data_from_notification["type"] as! String != "rideend") {
+            if (str_show_loader == "yes") {
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+                    } else {
+                        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+                    }
                 }
             }
         }
-        
         
         self.view.endEditing(true)
         
@@ -1023,12 +1031,22 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                      
                 }
                 
-                parameters = [
-                    "action"        : "bookingdetail",
-                    "bookingId"     : String(self.str_booking_id),
-                    "userId"        : String(myString),
-                    "language"      : String(lan),
-                ]
+                if(self.dict_get_all_data_from_notification["type"] as! String != "rideend") {
+                    parameters = [
+                        "action"        : "bookingdetail",
+                        "bookingId"     : String(self.str_booking_id),
+                        "userId"        : String(myString),
+                        "language"      : String(lan),
+                    ]
+                } else {
+                    parameters = [
+                        "action"        : "bookingdetail",
+                        "bookingId"     : "\(self.dict_get_all_data_from_notification["bookingId"]!)",
+                        "userId"        : String(myString),
+                        "language"      : String(lan),
+                    ]
+                }
+                
                 
                 print(parameters as Any)
                 
@@ -2203,7 +2221,28 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         mapView.animate(with: update)
         
         
-        ERProgressHud.sharedInstance.hide()
+        
+        
+        
+        if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
+            print(self.dict_get_all_data_from_notification as Any)
+            
+            let delayInSeconds = Double(600) / 1000.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                // Call the hitWebservice function after the delay
+                debugPrint("Show popup now")
+                ERProgressHud.sharedInstance.hide()
+                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "pay_after_ride_cancel_id") as? pay_after_ride_cancel
+                push!.dictGetAllData = self.dict_get_all_data_from_notification
+                self.navigationController?.pushViewController(push!, animated: true)
+                
+                // self.booking_history_details_WB(str_show_loader: "yes")
+            }
+            
+        } else {
+            ERProgressHud.sharedInstance.hide()
+        }
+        
         
     }
     

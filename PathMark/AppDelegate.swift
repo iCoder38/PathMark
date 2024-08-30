@@ -16,11 +16,13 @@ import GooglePlaces
 import GoogleSignIn
 import FacebookCore
 import AuthenticationServices
+import SwiftyJSON
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
     var window: UIWindow?
+    var dict:NSDictionary!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -199,17 +201,247 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         //print("User Info = ",notification.request.content.userInfo)
         // completionHandler([.alert, .badge, .sound])
-        completionHandler([.alert, .badge, .sound,.banner])
+         completionHandler([.alert, .badge, .sound,.banner])
         
         // print("User Info dishu = ",notification.request.content.userInfo)
         
-        let dict = notification.request.content.userInfo
+        let dictFromNotification = notification.request.content.userInfo
+        // print(dict as Any)
+        // print(dict["data"] as Any)
+        // print(type(of: dict["data"]))
+        // print(type(of: dict))
+       
+        if let jsonString = dictFromNotification[AnyHashable("data")] as? String {
+            // Convert the JSON string to Data
+            if let jsonData = jsonString.data(using: .utf8) {
+                do {
+                    // Deserialize JSON data to NSDictionary
+                    if let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                        // Successfully converted to NSDictionary
+                        print("Data dictionary: \(jsonDict)")
+                        print(type(of: jsonDict))
+                        
+                        dict = jsonDict as NSDictionary
+                        print(self.dict as Any)
+                        
+                        
+                        // Handle optional values safely
+                        
+                    } else {
+                        print("Failed to convert JSON to NSDictionary")
+                    }
+                } catch {
+                    print("Error deserializing JSON: \(error)")
+                }
+            } else {
+                print("Failed to convert JSON string to Data")
+            }
+        } else {
+            print("No valid JSON string found for 'data' key")
+        }
+       
+        
+        handleNotification()
+        
+    }
+    
+    func handleNotification() {
         print(dict as Any)
         
-        // if user send request
-        if (dict["type"] == nil) {
-            print("NOTIFICATION FROM SOMEWHERE ELSE")
-        } else if (dict["type"] as! String) == "confirm" { // when driver confirm booking
+        if (dict["type"] as! String) == "confirm" {
+           
+            if let bookingTime = dict["bookingTime"] as? String {
+                print("Booking Time: \(bookingTime)")
+                self.handleConfirmNotificationTimeNotNil()
+            } else {
+                print("Booking Time is nil")
+                self.handleConfirmNotificationTimeNil()
+            }
+            
+        } else if (dict["type"] as! String) == "arrived" {
+            self.handleNotificationWhenDriverArrived()
+        } else if (dict["type"] as! String) == "ridestart" {
+            self.handleNotificationWhenDriverRideStart()
+        } else if (dict["type"] as! String) == "rideend" {
+            self.handleNotificationWhenDriverRideEnd()
+        } else if (dict["type"] as! String) == "cancel" {
+            self.handleNotificationWhenDriverCancel()
+        } else if (dict["type"] as! String) == "Chat" {
+            self.handleNotificationWhenDriverChat()
+        }/* else if (dict["type"] as! String) == "Payment" {
+            self.handleNotificationWhenDriverChat()
+        }*/
+    
+    }
+    
+    @objc func handleNotificationWhenDriverRideStart() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
+        
+        destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
+        
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleNotificationWhenDriverRideEnd() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
+        
+        destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
+        
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleNotificationWhenDriverCancel() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"cancel_your_ride_id") as? cancel_your_ride
+        destinationController?.dict_get_data_from_notification = dict as NSDictionary
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleNotificationWhenDriverChat() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"BooCheckChatId") as? BooCheckChat
+        
+        destinationController?.str_back_home = "home"
+        destinationController?.str_booking_id = "\(dict["bookingId"]!)"
+        destinationController?.get_all_data = dict as NSDictionary
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleNotificationWhenDriverArrived() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
+        
+        destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
+        
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleConfirmNotificationTimeNotNil() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"schedule_ride_details_id") as? schedule_ride_details
+        
+        destinationController?.dict_get_booking_details = dict as NSDictionary
+        destinationController?.str_from_history = "no"
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func handleConfirmNotificationTimeNil() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
+        
+        destinationController?.dict_get_all_data_from_notification = dict
+        destinationController?.str_from_history = "no"
+        
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        
+        let mainRevealController = SWRevealViewController()
+        
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
+    }
+    
+    @objc func pushWithData() {
+        
+    }
+
+    
+    /*@objc func confirmNotificationSetup() {
+        if (dict["type"] as! String) == "confirm" { // when driver confirm booking
             
             // bookingTime
             if (dict["bookingTime"] != nil) {
@@ -263,143 +495,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             
             
-        }  else if (dict["type"] as! String) == "arrived" { // when driver arrived at your location
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  
-            let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
-                
-            destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
-                
-            let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-            let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-            let mainRevealController = SWRevealViewController()
-
-            mainRevealController.rearViewController = rearViewController
-            mainRevealController.frontViewController = frontNavigationController
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-            }
-            
-            window?.makeKeyAndVisible()
-            
-        }  else if (dict["type"] as! String) == "ridestart" { // when driver start your ride
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  
-            let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
-                
-            destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
-                
-            let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-            let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-            let mainRevealController = SWRevealViewController()
-
-            mainRevealController.rearViewController = rearViewController
-            mainRevealController.frontViewController = frontNavigationController
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-            }
-            
-            window?.makeKeyAndVisible()
-            
-        }  else if (dict["type"] as! String) == "rideend" { // when driver end your ride
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  
-            let destinationController = storyboard.instantiateViewController(withIdentifier:"ride_status_id") as? ride_status
-                
-            destinationController?.dict_get_all_data_from_notification = dict as NSDictionary
-                
-            let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-            let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-            let mainRevealController = SWRevealViewController()
-
-            mainRevealController.rearViewController = rearViewController
-            mainRevealController.frontViewController = frontNavigationController
-            
-            DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-            }
-            
-            window?.makeKeyAndVisible()
-            
         }
-        else if (dict["type"] as! String) == "cancel" { // when driver cancel your ride
-          
-          let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-          let destinationController = storyboard.instantiateViewController(withIdentifier:"cancel_your_ride_id") as? cancel_your_ride
-            destinationController?.dict_get_data_from_notification = dict as NSDictionary
-          let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-          let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-          let mainRevealController = SWRevealViewController()
-
-          mainRevealController.rearViewController = rearViewController
-          mainRevealController.frontViewController = frontNavigationController
-          
-          DispatchQueue.main.async {
-              UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-          }
-          
-          window?.makeKeyAndVisible()
-          
-      } /*else if (dict["type"] as! String) == "Payment" {
-          
-          let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-          let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
-            // destinationController?.dict_get_data_from_notification = dict as NSDictionary
-          let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-          let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-          let mainRevealController = SWRevealViewController()
-
-          mainRevealController.rearViewController = rearViewController
-          mainRevealController.frontViewController = frontNavigationController
-          
-          DispatchQueue.main.async {
-              UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-          }
-          
-          window?.makeKeyAndVisible()
-          
-      }*//* else if (dict["type"] as! String) == "Chat" {
-          
-          /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-          let destinationController = storyboard.instantiateViewController(withIdentifier:"BooCheckChatId") as? BooCheckChat
-          
-          destinationController?.str_booking_id = "\(dict["bookingId"]!)"
-          destinationController?.get_all_data = dict as NSDictionary
-          let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-
-          let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-
-          let mainRevealController = SWRevealViewController()
-
-          mainRevealController.rearViewController = rearViewController
-          mainRevealController.frontViewController = frontNavigationController
-          
-          DispatchQueue.main.async {
-              UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-          }
-          
-          window?.makeKeyAndVisible()*/
-          
-      }*/
-    }
+    }*/
+    
     
     
     // MARK:- WHEN APP IS IN BACKGROUND - ( after click popup ) -
@@ -588,6 +686,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
    
     // MARK: UISceneSession Lifecycle
 
+    
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.

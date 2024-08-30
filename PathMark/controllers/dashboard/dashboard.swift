@@ -444,7 +444,6 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     }
     
-    
     @objc func pushAfterEverything(vehicleType:String,
                                    vehicleOption:String) {
         
