@@ -624,8 +624,8 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         
         
-        addMarker(at: placeACoordinate, title: "Origin", snippet: String(self.getLoginUserAddressTo))
-        addMarker(at: placeBCoordinate, title: "Destination", snippet: String(self.getLoginUserAddressFrom))
+        addMarker(at: placeACoordinate, title: "Origin", snippet: String(self.getLoginUserAddressTo), color: .green)
+        addMarker(at: placeBCoordinate, title: "Destination", snippet: String(self.getLoginUserAddressFrom), color: .yellow)
         
         fetchRoute(from: placeACoordinate, to: placeBCoordinate)
     }
@@ -637,11 +637,15 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
        
     }
     
-    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String) {
+    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String,color: UIColor) {
         let marker = GMSMarker()
         marker.position = position
         marker.title = title
         marker.snippet = snippet
+        
+        // Set marker icon color
+            marker.icon = GMSMarker.markerImage(with: color)
+        
         marker.map = mapView
     }
     

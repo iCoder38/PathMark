@@ -90,7 +90,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     
     var doublePlaceStartLat:Double!
     var doublePlaceStartLong:Double!
-            
+    
     var doublePlaceFinalLat:Double!
     var doublePlaceFinalLong:Double!
     
@@ -130,7 +130,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         }
     }
     
-//    @IBOutlet weak var mapView:MKMapView!
+    //    @IBOutlet weak var mapView:MKMapView!
     
     @IBOutlet weak var view_bg:UIView! {
         didSet {
@@ -265,7 +265,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         // self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-
+        
         self.tbleView.delegate = self
         self.tbleView.dataSource = self
         
@@ -281,7 +281,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
          RequestPickupLatLong = "28.587152917200502,77.06061415697155";
          VehicleColor = red;
          aps =     {
-             alert = "iDriver5 has confirmed your booling.";
+         alert = "iDriver5 has confirmed your booling.";
          };
          bookingId = 87;
          driverContact = 8287632345;
@@ -369,11 +369,11 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 }
                 
             } else if ("\(self.dict_get_all_data_from_notification["rideStatus"]!)" == "2") {
-                 
+                
                 self.navigationBar.backgroundColor = navigation_color
                 
                 self.btn_booking_confirmed.isHidden = true
-                 
+                
                 // self.lbl_OTP.isHidden = true
                 if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                     print(language as Any)
@@ -399,7 +399,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     self.btnConfirmBooking.isHidden = false
                     self.btnConfirmBooking.setTitle("Driver arrived", for: .normal)
                     self.btnConfirmBooking.tag = 100
-                   
+                    
                 } else {
                     self.btnConfirmBooking.isHidden = false
                     self.btnConfirmBooking.addTarget(self, action: #selector(confirmBookingSetOTP), for: .touchUpInside)
@@ -423,7 +423,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     
                     if (language == "en") {
                         self.lblNavigationTitle.text = "Booking Confirmed"
-                         
+                        
                         
                     } else {
                         self.lblNavigationTitle.text = "বুকিং নিশ্চিত করা হয়েছে"
@@ -437,7 +437,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 }
                 
             }
-              
+            
             
             
             self.lbl_car_details.text = (self.dict_get_all_data_from_notification["vehicleNumber"] as! String)+" ("+(self.dict_get_all_data_from_notification["VehicleColor"] as! String)+" )"
@@ -519,7 +519,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             if (self.dict_get_all_data_from_notification == nil) {
                 
             } else {
-                 
+                
                 if (self.dict_get_all_data_from_notification["type"] as! String) == "confirm" {
                     
                     self.navigationBar.backgroundColor = navigation_color
@@ -555,7 +555,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     // self.lbl_OTP.isHidden = false
                     // self.lbl_OTP.text = "OTP : \(self.dict_get_all_data_from_notification["RideCode"]!)"
                     
-                     
+                    
                     self.navigationBar.backgroundColor = navigation_color
                     
                     self.btn_booking_confirmed.isHidden = true
@@ -637,8 +637,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             print(self.dict_get_all_data_from_notification as Any)
                             
                             /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done"), style: .alert)
-                            let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                                _ in
+                             let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                             _ in
+                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                             
+                             push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                             push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                             push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                             
+                             self.navigationController?.pushViewController(push!, animated: true)
+                             }
+                             let cancel = NewYorkButton(title: "Home", style: .default) {
+                             _ in
+                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                             self.navigationController?.pushViewController(push!, animated: true)
+                             }
+                             alert.addButtons([pay,cancel])
+                             self.present(alert, animated: true)*/
+                            
+                            
+                            let alert = UIAlertController(title: "Alert", message: String("Ride done"), preferredStyle: .alert)
+                            
+                            // Add actions
+                            let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                 
                                 push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
@@ -647,38 +668,17 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                 
                                 self.navigationController?.pushViewController(push!, animated: true)
                             }
-                            let cancel = NewYorkButton(title: "Home", style: .default) {
-                                _ in
+                            let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                                 self.navigationController?.pushViewController(push!, animated: true)
                             }
-                            alert.addButtons([pay,cancel])
-                            self.present(alert, animated: true)*/
                             
+                            alert.addAction(okAction)
+                            alert.addAction(cancelAction)
                             
-                            let alert = UIAlertController(title: "Alert", message: String("Ride done"), preferredStyle: .alert)
-                                
-                                // Add actions
-                                let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                    
-                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                    push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                    
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
-                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                    self.navigationController?.pushViewController(push!, animated: true)
-                                }
-                                
-                                alert.addAction(okAction)
-                                alert.addAction(cancelAction)
-                                
-                                // Present the alert
+                            // Present the alert
                             self.present(alert, animated: true, completion: nil)
-                           
+                            
                         } else {
                             let a = Double("\(self.dict_get_all_data_from_notification["last_cancel_amount"]!)")
                             let b = Double("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
@@ -695,8 +695,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                 
                                 if (language == "en") {
                                     /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
-                                    let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                                        _ in
+                                     let pay = NewYorkButton(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                                     _ in
+                                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                     
+                                     push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                     push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                     push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                     
+                                     self.navigationController?.pushViewController(push!, animated: true)
+                                     }
+                                     
+                                     let cancel = NewYorkButton(title: "Home", style: .default) {
+                                     _ in
+                                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                     self.navigationController?.pushViewController(push!, animated: true)
+                                     }
+                                     alert.addButtons([pay,cancel])
+                                     self.present(alert, animated: true)*/
+                                    
+                                    let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
+                                    
+                                    // Add actions
+                                    let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                         
                                         push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
@@ -705,43 +726,43 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         
                                         self.navigationController?.pushViewController(push!, animated: true)
                                     }
-                                    
-                                    let cancel = NewYorkButton(title: "Home", style: .default) {
-                                        _ in
+                                    let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                                         self.navigationController?.pushViewController(push!, animated: true)
                                     }
-                                    alert.addButtons([pay,cancel])
-                                    self.present(alert, animated: true)*/
                                     
-                                    let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
-                                        
-                                        // Add actions
-                                        let okAction = UIAlertAction(title: "Pay : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
-                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                            
-                                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                            
-                                            self.navigationController?.pushViewController(push!, animated: true)
-                                        }
-                                        let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
-                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                            self.navigationController?.pushViewController(push!, animated: true)
-                                        }
-                                        
-                                        alert.addAction(okAction)
-                                        alert.addAction(cancelAction)
-                                        
-                                        // Present the alert
+                                    alert.addAction(okAction)
+                                    alert.addAction(cancelAction)
+                                    
+                                    // Present the alert
                                     self.present(alert, animated: true, completion: nil)
                                     
                                     
                                 } else {
                                     /*let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", style: .alert)
-                                    let pay = NewYorkButton(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
-                                        _ in
+                                     let pay = NewYorkButton(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) {
+                                     _ in
+                                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                     
+                                     push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                     push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
+                                     push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                     
+                                     self.navigationController?.pushViewController(push!, animated: true)
+                                     }
+                                     
+                                     let cancel = NewYorkButton(title: "হোম", style: .default) {
+                                     _ in
+                                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                     self.navigationController?.pushViewController(push!, animated: true)
+                                     }
+                                     alert.addButtons([pay,cancel])
+                                     self.present(alert, animated: true)
+                                     */
+                                    let alert = UIAlertController(title: "Alert", message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
+                                    
+                                    // Add actions
+                                    let okAction = UIAlertAction(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                         
                                         push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
@@ -750,36 +771,15 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         
                                         self.navigationController?.pushViewController(push!, animated: true)
                                     }
-                                    
-                                    let cancel = NewYorkButton(title: "হোম", style: .default) {
-                                        _ in
+                                    let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
                                         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                                         self.navigationController?.pushViewController(push!, animated: true)
                                     }
-                                    alert.addButtons([pay,cancel])
-                                    self.present(alert, animated: true)
-                                    */
-                                    let alert = UIAlertController(title: "Alert", message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["last_cancel_amount"]!)", preferredStyle: .alert)
-                                        
-                                        // Add actions
-                                        let okAction = UIAlertAction(title: "বেতন : \(self.dict_get_all_data_from_notification["FinalFare"]!)", style: .default) { _ in
-                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                            
-                                            push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                            push!.str_get_total_price2 = "\(self.dict_get_all_data_from_notification!["FinalFare"]!)"
-                                            push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                            
-                                            self.navigationController?.pushViewController(push!, animated: true)
-                                        }
-                                        let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
-                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                            self.navigationController?.pushViewController(push!, animated: true)
-                                        }
-                                        
-                                        alert.addAction(okAction)
-                                        alert.addAction(cancelAction)
-                                        
-                                        // Present the alert
+                                    
+                                    alert.addAction(okAction)
+                                    alert.addAction(cancelAction)
+                                    
+                                    // Present the alert
                                     self.present(alert, animated: true, completion: nil)
                                     
                                 }
@@ -787,7 +787,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             }
                             
                             /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
-                            self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
+                             self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
                         }
                         
                     } else {
@@ -800,49 +800,49 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         
                         
                         /*var total_Amount_is:String!
-                        
-                        let cancellationFees:Double!
-                        
-                        if let amount = self.convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)"),
-                           let bookingFees = self.convertToDouble("\(self.dict_get_all_data_from_notification["bookingFee"]!)") {
-                            
-                            if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
-                                 cancellationFees = convertToDouble("0.0")
-                            } else if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
-                                cancellationFees = convertToDouble("0.0")
-                           } else {
-                                 cancellationFees = convertToDouble("\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)")
-                            }
-                            
-                            let totalAmount = amount + bookingFees + cancellationFees!
-                            
-                            if "\(self.dict_get_all_data_from_notification["Promotional_total"]!)" != "" {
-                                let pro_dis = convertToDouble("\(self.dict_get_all_data_from_notification["Promotional_total"]!)")
-                                print(pro_dis as Any)
-                                let complete_cal = totalAmount - pro_dis!
-                                print("Complete cal: \(complete_cal)")
-                                
-                                // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
-                                // // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
-                                
-                                // also manage trip fare
-                                // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["FinalFare"]!)"
-                                
-                                let final_fare = convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
-                                print("Final fare: \(final_fare!)")
-                                
-                                let f_f_total = final_fare! - pro_dis!
-                                // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
-                                total_Amount_is = "\(f_f_total)"
-                            } else {
-                                total_Amount_is = "\(totalAmount)"
-                                // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
-                                // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
-                            }
-                            
-                        } else {
-                            print("Invalid number format in one of the strings.")
-                        }*/
+                         
+                         let cancellationFees:Double!
+                         
+                         if let amount = self.convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)"),
+                         let bookingFees = self.convertToDouble("\(self.dict_get_all_data_from_notification["bookingFee"]!)") {
+                         
+                         if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
+                         cancellationFees = convertToDouble("0.0")
+                         } else if "\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)" == "" {
+                         cancellationFees = convertToDouble("0.0")
+                         } else {
+                         cancellationFees = convertToDouble("\(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)")
+                         }
+                         
+                         let totalAmount = amount + bookingFees + cancellationFees!
+                         
+                         if "\(self.dict_get_all_data_from_notification["Promotional_total"]!)" != "" {
+                         let pro_dis = convertToDouble("\(self.dict_get_all_data_from_notification["Promotional_total"]!)")
+                         print(pro_dis as Any)
+                         let complete_cal = totalAmount - pro_dis!
+                         print("Complete cal: \(complete_cal)")
+                         
+                         // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                         // // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(complete_cal)"
+                         
+                         // also manage trip fare
+                         // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["FinalFare"]!)"
+                         
+                         let final_fare = convertToDouble("\(self.dict_get_all_data_from_notification["FinalFare"]!)")
+                         print("Final fare: \(final_fare!)")
+                         
+                         let f_f_total = final_fare! - pro_dis!
+                         // self.lbl_trip_fare.text = "\(str_bangladesh_currency_symbol) \(f_f_total)"
+                         total_Amount_is = "\(f_f_total)"
+                         } else {
+                         total_Amount_is = "\(totalAmount)"
+                         // self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                         // self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(totalAmount)"
+                         }
+                         
+                         } else {
+                         print("Invalid number format in one of the strings.")
+                         }*/
                         
                         self.str_booking_id = "\(self.dict_get_all_data_from_notification["bookingId"]!)"
                         
@@ -853,7 +853,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         }
                         
                         /*self.lbl_total.text = "\(str_bangladesh_currency_symbol) \(sum)"
-                        self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
+                         self.lbl_price.text = "\(str_bangladesh_currency_symbol) \(sum)"*/
                     }
                     self.btnConfirmBooking.isHidden = true
                 } else if (self.dict_get_all_data_from_notification["type"] as! String) == "Chat" {
@@ -958,15 +958,15 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         if (self.dict_get_all_data_from_notification["type"] != nil) {
             if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
-               debugPrint("COMPLETED: RIDE END % Show popup now")
+                debugPrint("COMPLETED: RIDE END % Show popup now")
                 
                 
                 /*let delayInSeconds = Double(500) / 1000.0
-                DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
-                    // Call the hitWebservice function after the delay
-                    debugPrint("Show popup now")
-                    // self.booking_history_details_WB(str_show_loader: "yes")
-                }*/
+                 DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                 // Call the hitWebservice function after the delay
+                 debugPrint("Show popup now")
+                 // self.booking_history_details_WB(str_show_loader: "yes")
+                 }*/
                 
                 self.handleEveythingFromGoogleMapInit()
                 
@@ -978,7 +978,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         } else {
             self.handleEveythingFromGoogleMapInit()
         }
-       
+        
         
     }
     
@@ -1012,8 +1012,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
             print(person)
             
-             let x : Int = person["userId"] as! Int
-             let myString = String(x)
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
             
             if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
                 print(token_id_is as Any)
@@ -1033,7 +1033,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                         lan = "bn"
                     }
                     
-                     
+                    
                 }
                 
                 if(self.dict_get_all_data_from_notification["type"] as! String != "rideend") {
@@ -1113,95 +1113,95 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                                         if (language == "en") {
                                             
                                             /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                                            let pay = NewYorkButton(title: "Pay : \(complete_cal)", style: .default) {
-                                                _ in
-                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                             let pay = NewYorkButton(title: "Pay : \(complete_cal)", style: .default) {
+                                             _ in
+                                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                             
+                                             push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                             push!.str_get_total_price2 = "\(complete_cal)"
+                                             push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                             
+                                             self.navigationController?.pushViewController(push!, animated: true)
+                                             }
+                                             let cancel = NewYorkButton(title: "Home", style: .default) {
+                                             _ in
+                                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                             self.navigationController?.pushViewController(push!, animated: true)
+                                             }
+                                             alert.addButtons([pay,cancel])
+                                             self.present(alert, animated: true)*/
+                                            
+                                            let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
+                                            
+                                            // Add actions
+                                            let okAction = UIAlertAction(title: "Pay : \(complete_cal)", style: .default) { _ in
                                                 
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                                 push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
                                                 push!.str_get_total_price2 = "\(complete_cal)"
                                                 push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                                
                                                 self.navigationController?.pushViewController(push!, animated: true)
+                                                
                                             }
-                                            let cancel = NewYorkButton(title: "Home", style: .default) {
-                                                _ in
+                                            let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
                                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                                                 self.navigationController?.pushViewController(push!, animated: true)
                                             }
-                                            alert.addButtons([pay,cancel])
-                                            self.present(alert, animated: true)*/
                                             
-                                            let alert = UIAlertController(title: "Alert", message: String("Ride done")+"\n\nLast cancel ride amount: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
-                                                
-                                                // Add actions
-                                                let okAction = UIAlertAction(title: "Pay : \(complete_cal)", style: .default) { _ in
-                                                    
-                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                                    push!.str_get_total_price2 = "\(complete_cal)"
-                                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                                    self.navigationController?.pushViewController(push!, animated: true)
-                                                    
-                                                }
-                                                let cancelAction = UIAlertAction(title: "Home", style: .cancel) { _ in
-                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                                    self.navigationController?.pushViewController(push!, animated: true)
-                                                }
-                                                
-                                                alert.addAction(okAction)
-                                                alert.addAction(cancelAction)
-                                                
-                                                // Present the alert
+                                            alert.addAction(okAction)
+                                            alert.addAction(cancelAction)
+                                            
+                                            // Present the alert
                                             self.present(alert, animated: true, completion: nil)
                                             
                                         } else {
                                             
                                             /*let alert = NewYorkAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", style: .alert)
-                                            let pay = NewYorkButton(title: "বেতন : \(complete_cal)", style: .default) {
-                                                _ in
-                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                             let pay = NewYorkButton(title: "বেতন : \(complete_cal)", style: .default) {
+                                             _ in
+                                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
+                                             
+                                             push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
+                                             push!.str_get_total_price2 = "\(complete_cal)"
+                                             push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
+                                             
+                                             self.navigationController?.pushViewController(push!, animated: true)
+                                             }
+                                             let cancel = NewYorkButton(title: "হোম", style: .default) {
+                                             _ in
+                                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+                                             self.navigationController?.pushViewController(push!, animated: true)
+                                             }
+                                             alert.addButtons([pay,cancel])
+                                             self.present(alert, animated: true)*/
+                                            
+                                            let alert = UIAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
+                                            
+                                            // Add actions
+                                            let okAction = UIAlertAction(title: "বেতন : \(complete_cal)", style: .default) { _ in
                                                 
+                                                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
                                                 push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
                                                 push!.str_get_total_price2 = "\(complete_cal)"
                                                 push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                                
                                                 self.navigationController?.pushViewController(push!, animated: true)
+                                                
                                             }
-                                            let cancel = NewYorkButton(title: "হোম", style: .default) {
-                                                _ in
+                                            let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
                                                 let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
                                                 self.navigationController?.pushViewController(push!, animated: true)
                                             }
-                                            alert.addButtons([pay,cancel])
-                                            self.present(alert, animated: true)*/
                                             
-                                            let alert = UIAlertController(title: nil, message: "\n\nশেষ বাতিল রাইড পরিমাণ: "+"\(str_bangladesh_currency_symbol) \(self.dict_get_all_data_from_notification["Last_cancel_amount"]!)", preferredStyle: .alert)
-                                                
-                                                // Add actions
-                                                let okAction = UIAlertAction(title: "বেতন : \(complete_cal)", style: .default) { _ in
-                                                    
-                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "before_payment_id") as? before_payment
-                                                    push!.str_booking_id2 = "\(self.dict_get_all_data_from_notification!["bookingId"]!)"
-                                                    push!.str_get_total_price2 = "\(complete_cal)"
-                                                    push!.get_full_data_for_payment2 = self.dict_get_all_data_from_notification
-                                                    self.navigationController?.pushViewController(push!, animated: true)
-                                                    
-                                                }
-                                                let cancelAction = UIAlertAction(title: "হোম", style: .cancel) { _ in
-                                                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                                                    self.navigationController?.pushViewController(push!, animated: true)
-                                                }
-                                                
-                                                alert.addAction(okAction)
-                                                alert.addAction(cancelAction)
-                                                
-                                                // Present the alert
+                                            alert.addAction(okAction)
+                                            alert.addAction(cancelAction)
+                                            
+                                            // Present the alert
                                             self.present(alert, animated: true, completion: nil)
                                             
                                         }
                                         
                                     }
-                                   
+                                    
                                     
                                 } else {
                                     if let language = UserDefaults.standard.string(forKey: str_language_convert) {
@@ -1261,10 +1261,10 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                             
                             
                             /*// self.dict_get_booking_details = JSON
-                            self.str_starrating = "\(dict["bookingrating"]!)"
-                            self.tbleView.delegate = self
-                            self.tbleView.dataSource = self
-                            self.tbleView.reloadData()*/
+                             self.str_starrating = "\(dict["bookingrating"]!)"
+                             self.tbleView.delegate = self
+                             self.tbleView.dataSource = self
+                             self.tbleView.reloadData()*/
                             
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
@@ -1409,176 +1409,176 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         } else if (counter == 0) {
             timer.invalidate()
         }
-
+        
     }
     
     
     /*@objc func iAmHereForLocationPermission() {
-        // Ask for Authorisation from the User.
-        self.locManager.requestAlwaysAuthorization()
-        
-        // For use in foreground
-        self.locManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                print("No access")
-                // self.strSaveLatitude = "0"
-                // self.strSaveLongitude = "0"
-                
-            case .authorizedAlways, .authorizedWhenInUse:
-                print("Access")
-                
-                locManager.delegate = self
-                locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-                locManager.startUpdatingLocation()
-                
-            @unknown default:
-                break
-            }
-        }
-    }*/
+     // Ask for Authorisation from the User.
+     self.locManager.requestAlwaysAuthorization()
+     
+     // For use in foreground
+     self.locManager.requestWhenInUseAuthorization()
+     
+     if CLLocationManager.locationServicesEnabled() {
+     switch CLLocationManager.authorizationStatus() {
+     case .notDetermined, .restricted, .denied:
+     print("No access")
+     // self.strSaveLatitude = "0"
+     // self.strSaveLongitude = "0"
+     
+     case .authorizedAlways, .authorizedWhenInUse:
+     print("Access")
+     
+     locManager.delegate = self
+     locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+     locManager.startUpdatingLocation()
+     
+     @unknown default:
+     break
+     }
+     }
+     }*/
     
     
     
     /*func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-         print(location)
-        
-        self.strSaveLatitude = "\(locValue.latitude)"
-        self.strSaveLongitude = "\(locValue.longitude)"
-        
-        self.tbleView.delegate = self
-        self.tbleView.dataSource = self
-        self.tbleView.reloadData()
-        
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! ride_status_table_cell
-        
-        // cell.lblStartingLocation.text = String(self.str_from_location)
-        // cell.lblEndLocation.text = String(self.str_to_location)
-        cell.viewCellbg.isHidden = false
-        
-        // print(self.str_from_location as Any)
-        // print(self.str_to_location as Any)
-        
-        // cell.lbl_from.text = String(self.str_from_location)
-        // cell.lbl_to.text = String(self.str_to_location)
-        
-        print("**********************")
-        
-        let pickUp_lat_long = (self.dict_get_all_data_from_notification["RequestPickupLatLong"] as! String)
-        let drop_lat_long = (self.dict_get_all_data_from_notification["RequestDropLatLong"] as! String)
-        
-        let pickUp = pickUp_lat_long.components(separatedBy: ",")
-        let drop = drop_lat_long.components(separatedBy: ",")
-        
-        print(pickUp)
-        print(drop)
-        
-        let restaurantLatitudeDouble    = Double(pickUp[0])
-        let restaurantLongitudeDouble   = Double(pickUp[1])
-        let driverLatitudeDouble        = Double(drop[0])
-        let driverLongitudeDouble       = Double(drop[1])
-        
-        let coordinate₀ = CLLocation(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
-        let coordinate₁ = CLLocation(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
-        
-        /************************************** RESTAURANT LATITUTDE AND LINGITUDE  ********************************/
-        // first location
-        let sourceLocation = CLLocationCoordinate2D(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
-        /********************************************************************************************************************/
-        
-        
-        /************************************* DRIVER LATITUTDE AND LINGITUDE ******************************************/
-        // second location
-        let destinationLocation = CLLocationCoordinate2D(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
-        /********************************************************************************************************************/
-        
-        //print(sourceLocation)
-        //print(destinationLocation)
-        
-        let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation,image:UIImage(systemName: "car")!)
-         
-        let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation,image:UIImage(systemName: "car")!)
-        
-        /***************** REMOVE PREVIUOS ANNOTATION TO GENERATE NEW ANNOTATION *******************************************/
-        cell.mapView.removeAnnotations(cell.mapView.annotations)
-        /********************************************************************************************************************/
-        
-        cell.mapView.addAnnotation(sourcePin)
-        cell.mapView.addAnnotation(destinationPin)
-        
-        let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
-        let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
-        
-        let directionRequest = MKDirections.Request()
-        directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
-        directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
-        directionRequest.transportType = .automobile
-        
-        let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response, error) in
-            guard let directionResonse = response else {
-                if let error = error {
-                    print("we have error getting directions==\(error.localizedDescription)")
-                }
-                return
-            }
-            
-            /***************** REMOVE PREVIUOS POLYLINE TO GENERATE NEW POLYLINE *******************************/
-            let overlays = cell.mapView.overlays
-            cell.mapView.removeOverlays(overlays)
-            /************************************************************************************/
-            
-            
-            /***************** GET DISTANCE BETWEEN TWO CORDINATES *******************************/
-            
-            let distanceInMeters = coordinate₀.distance(from: coordinate₁)
-            // print(distanceInMeters as Any)
-            
-            // remove decimal
-            let distanceFloat: Double = (distanceInMeters as Any as! Double)
-            
-//            cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
-            // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
-            
-            print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
-            print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
-            
-            /************************************************************************/
-            
-            /***************** GENERATE NEW POLYLINE *******************************/
-            
-            let route = directionResonse.routes[0]
-            cell.mapView.addOverlay(route.polyline, level: .aboveRoads)
-            let rect = route.polyline.boundingMapRect
-            cell.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
-            
-            /***********************************************************************/
-            
-        }
-        
-        cell.mapView.delegate = self
-        
-        // self.locManager.stopUpdatingLocation()
-        
-        // self.locManager.startUpdatingLocation()
-        
-        self.locManager.stopUpdatingLocation()
-        
-        print("=================================")
-        print("LOCATION UPDATE")
-        print("=================================")
-        
-        self.tbleView.reloadData()
-        
-        // speed = distance / time
-    }*/
+     guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+     print("locations = \(locValue.latitude) \(locValue.longitude)")
+     
+     let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+     print(location)
+     
+     self.strSaveLatitude = "\(locValue.latitude)"
+     self.strSaveLongitude = "\(locValue.longitude)"
+     
+     self.tbleView.delegate = self
+     self.tbleView.dataSource = self
+     self.tbleView.reloadData()
+     
+     let indexPath = IndexPath.init(row: 0, section: 0)
+     let cell = self.tbleView.cellForRow(at: indexPath) as! ride_status_table_cell
+     
+     // cell.lblStartingLocation.text = String(self.str_from_location)
+     // cell.lblEndLocation.text = String(self.str_to_location)
+     cell.viewCellbg.isHidden = false
+     
+     // print(self.str_from_location as Any)
+     // print(self.str_to_location as Any)
+     
+     // cell.lbl_from.text = String(self.str_from_location)
+     // cell.lbl_to.text = String(self.str_to_location)
+     
+     print("**********************")
+     
+     let pickUp_lat_long = (self.dict_get_all_data_from_notification["RequestPickupLatLong"] as! String)
+     let drop_lat_long = (self.dict_get_all_data_from_notification["RequestDropLatLong"] as! String)
+     
+     let pickUp = pickUp_lat_long.components(separatedBy: ",")
+     let drop = drop_lat_long.components(separatedBy: ",")
+     
+     print(pickUp)
+     print(drop)
+     
+     let restaurantLatitudeDouble    = Double(pickUp[0])
+     let restaurantLongitudeDouble   = Double(pickUp[1])
+     let driverLatitudeDouble        = Double(drop[0])
+     let driverLongitudeDouble       = Double(drop[1])
+     
+     let coordinate₀ = CLLocation(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
+     let coordinate₁ = CLLocation(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
+     
+     /************************************** RESTAURANT LATITUTDE AND LINGITUDE  ********************************/
+     // first location
+     let sourceLocation = CLLocationCoordinate2D(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
+     /********************************************************************************************************************/
+     
+     
+     /************************************* DRIVER LATITUTDE AND LINGITUDE ******************************************/
+     // second location
+     let destinationLocation = CLLocationCoordinate2D(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
+     /********************************************************************************************************************/
+     
+     //print(sourceLocation)
+     //print(destinationLocation)
+     
+     let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation,image:UIImage(systemName: "car")!)
+     
+     let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation,image:UIImage(systemName: "car")!)
+     
+     /***************** REMOVE PREVIUOS ANNOTATION TO GENERATE NEW ANNOTATION *******************************************/
+     cell.mapView.removeAnnotations(cell.mapView.annotations)
+     /********************************************************************************************************************/
+     
+     cell.mapView.addAnnotation(sourcePin)
+     cell.mapView.addAnnotation(destinationPin)
+     
+     let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
+     let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
+     
+     let directionRequest = MKDirections.Request()
+     directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
+     directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
+     directionRequest.transportType = .automobile
+     
+     let directions = MKDirections(request: directionRequest)
+     directions.calculate { (response, error) in
+     guard let directionResonse = response else {
+     if let error = error {
+     print("we have error getting directions==\(error.localizedDescription)")
+     }
+     return
+     }
+     
+     /***************** REMOVE PREVIUOS POLYLINE TO GENERATE NEW POLYLINE *******************************/
+     let overlays = cell.mapView.overlays
+     cell.mapView.removeOverlays(overlays)
+     /************************************************************************************/
+     
+     
+     /***************** GET DISTANCE BETWEEN TWO CORDINATES *******************************/
+     
+     let distanceInMeters = coordinate₀.distance(from: coordinate₁)
+     // print(distanceInMeters as Any)
+     
+     // remove decimal
+     let distanceFloat: Double = (distanceInMeters as Any as! Double)
+     
+     //            cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
+     // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
+     
+     print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
+     print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
+     
+     /************************************************************************/
+     
+     /***************** GENERATE NEW POLYLINE *******************************/
+     
+     let route = directionResonse.routes[0]
+     cell.mapView.addOverlay(route.polyline, level: .aboveRoads)
+     let rect = route.polyline.boundingMapRect
+     cell.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+     
+     /***********************************************************************/
+     
+     }
+     
+     cell.mapView.delegate = self
+     
+     // self.locManager.stopUpdatingLocation()
+     
+     // self.locManager.startUpdatingLocation()
+     
+     self.locManager.stopUpdatingLocation()
+     
+     print("=================================")
+     print("LOCATION UPDATE")
+     print("=================================")
+     
+     self.tbleView.reloadData()
+     
+     // speed = distance / time
+     }*/
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(overlay: overlay)
@@ -1592,10 +1592,10 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         guard !(annotation is MKUserLocation) else {
             return nil
         }
-
+        
         // Better to make this class property
         let annotationIdentifier = "AnnotationIdentifier"
-
+        
         var annotationView: MKAnnotationView?
         if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
             annotationView = dequeuedAnnotationView
@@ -1605,7 +1605,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
             annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
-
+        
         if let annotationView = annotationView {
             // Configure your annotation view here
             annotationView.canShowCallout = true
@@ -1619,26 +1619,26 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             
             
         }
-
+        
         return annotationView
     }
     
     @objc func validation_before_confirm_booking() {
         
         /*let alert = NewYorkAlertController(title: String("Alert"), message: String("Are you sure you want to confirm this booking?"), style: .alert)
-        
-        let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
-            _ in
-
-            self.confirm_booking_WB()
-        }
-        
-        let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
-            _ in
-        }
-        
-        alert.addButtons([yes_confirm,cancel])
-        self.present(alert, animated: true)*/
+         
+         let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
+         _ in
+         
+         self.confirm_booking_WB()
+         }
+         
+         let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+         _ in
+         }
+         
+         alert.addButtons([yes_confirm,cancel])
+         self.present(alert, animated: true)*/
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
@@ -1648,7 +1648,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 
                 let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
                     _ in
-
+                    
                     self.confirm_booking_WB()
                 }
                 
@@ -1664,7 +1664,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 
                 let yes_confirm = NewYorkButton(title: "হ্যাঁ, নিশ্চিত করুন", style: .default) {
                     _ in
-
+                    
                     self.confirm_booking_WB()
                 }
                 
@@ -1689,7 +1689,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @objc func confirm_booking_WB() {
         
         self.view.endEditing(true)
-
+        
     }
     
     @objc func share_click_method() {
@@ -1705,9 +1705,9 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             self.str_user_save_phone_number = String(firstTextField.text!)
             self.share_to_my_friend_WB(str_show_loader: "yes")
         })
-         
+        
         alertController.addAction(saveAction)
-         
+        
         
         self.present(alertController, animated: true, completion: nil)
     }
@@ -1715,7 +1715,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
     @objc func share_to_my_friend_WB(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
-             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                 print(language as Any)
                 
                 if (language == "en") {
@@ -1724,7 +1724,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                     ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
                 }
                 
-             
+                
             }
         }
         
@@ -1751,7 +1751,7 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
-               
+                
                 parameters = [
                     "action"        : "shareride",
                     "shreFrom"        : String(myString),
@@ -2070,29 +2070,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         
         /*print(self.getLoginUserLatitudeTo as Any)
-        print(self.getLoginUserLongitudeTo as Any)
-        print(self.getLoginUserAddressTo as Any)
-        
-        print(self.getLoginUserLatitudeFrom as Any)
-        print(self.getLoginUserLongitudeFrom as Any)
-        print(self.getLoginUserAddressFrom as Any)
-        
-        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
-        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
-        
-        UserDefaults.standard.set("", forKey: "key_map_view_address")
-        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
-        
-        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
-        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
-        */
+         print(self.getLoginUserLongitudeTo as Any)
+         print(self.getLoginUserAddressTo as Any)
+         
+         print(self.getLoginUserLatitudeFrom as Any)
+         print(self.getLoginUserLongitudeFrom as Any)
+         print(self.getLoginUserAddressFrom as Any)
+         
+         UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+         UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+         
+         UserDefaults.standard.set("", forKey: "key_map_view_address")
+         UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+         
+         UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+         UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+         */
         self.initializeMap()
     }
     
     func initializeMap() {
         
         print(dict_get_all_data_from_notification as Any)
-       
+        
         let separateDropLocation    = (self.dict_get_all_data_from_notification["RequestDropLatLong"] as! String)
         let separateRequestLocation    = (self.dict_get_all_data_from_notification["RequestPickupLatLong"] as! String)
         
@@ -2142,8 +2142,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         let placeACoordinate = CLLocationCoordinate2D(latitude: doublePlaceStartLat!, longitude: doublePlaceStartLong!)
         let placeBCoordinate = CLLocationCoordinate2D(latitude: doublePlaceFinalLat!, longitude: doublePlaceFinalLong!)
         
-        addMarker(at: placeACoordinate, title: "Origin", snippet: (self.dict_get_all_data_from_notification["RequestPickupAddress"] as! String))
-        addMarker(at: placeBCoordinate, title: "Destination", snippet: (self.dict_get_all_data_from_notification["RequestDropAddress"] as! String))
+        addMarker(at: placeACoordinate, title: "Origin", snippet: (self.dict_get_all_data_from_notification["RequestPickupAddress"] as! String), color: .green)
+        addMarker(at: placeBCoordinate, title: "Destination", snippet: (self.dict_get_all_data_from_notification["RequestDropAddress"] as! String), color: .yellow)
         
         fetchRoute(from: placeACoordinate, to: placeBCoordinate)
     }
@@ -2152,14 +2152,18 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
         self.navigationController?.pushViewController(push!, animated: true)
-       
+        
     }
     
-    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String) {
+    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String,color: UIColor) {
         let marker = GMSMarker()
         marker.position = position
         marker.title = title
         marker.snippet = snippet
+        
+        // Set marker icon color
+        marker.icon = GMSMarker.markerImage(with: color)
+        
         marker.map = mapView
     }
     
@@ -2225,9 +2229,6 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         let update = GMSCameraUpdate.fit(bounds, withPadding: 100.0)
         mapView.animate(with: update)
         
-        
-        
-        
         if (self.dict_get_all_data_from_notification["type"] != nil) {
             if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
                 print(self.dict_get_all_data_from_notification as Any)
@@ -2250,11 +2251,8 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         } else {
             ERProgressHud.sharedInstance.hide()
         }
-      
-        
         
     }
-    
 }
 
 
