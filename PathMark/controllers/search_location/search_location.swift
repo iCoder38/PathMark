@@ -8,13 +8,25 @@
 import UIKit
 import Alamofire
 import GooglePlaces
-
-class search_location: UIViewController, UITextFieldDelegate {
+import CoreLocation
+class search_location: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
     
     var userSelectedIs:String!
     
     var placesClient: GMSPlacesClient!
     var predictions: [GMSAutocompletePrediction] = []
+    
+    let locationManager = CLLocationManager()
+    
+    // MARK:- SAVE LOCATION STRING -
+    var strSaveLatitude:String!
+    var strSaveLongitude:String!
+    var strSaveCountryName:String!
+    var strSaveLocalAddress:String!
+    var strSaveLocality:String!
+    var strSaveLocalAddressMini:String!
+    var strSaveStateName:String!
+    var strSaveZipcodeName:String!
     
     @IBOutlet weak var txtSearchLocationFromGoogle:UITextField! {
         didSet {
@@ -131,6 +143,34 @@ class search_location: UIViewController, UITextFieldDelegate {
         
         self.btn_add.addTarget(self, action: #selector(add_contacts_click_method), for: .touchUpInside)
         
+        
+    }
+    
+    @objc func iAmHereForLocationPermission() {
+        // Ask for Authorisation from the User.
+        self.locationManager.requestAlwaysAuthorization()
+
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
+              
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                print("No access")
+                self.strSaveLatitude = "0"
+                self.strSaveLongitude = "0"
+                
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("Access")
+                          
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                locationManager.startUpdatingLocation()
+                      
+            @unknown default:
+                break
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

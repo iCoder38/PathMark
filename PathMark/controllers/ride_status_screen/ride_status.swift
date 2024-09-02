@@ -956,24 +956,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         //
         print(self.dict_get_all_data_from_notification as Any)
         
-        if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
-           debugPrint("COMPLETED: RIDE END % Show popup now")
-            
-            
-            /*let delayInSeconds = Double(500) / 1000.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
-                // Call the hitWebservice function after the delay
-                debugPrint("Show popup now")
-                // self.booking_history_details_WB(str_show_loader: "yes")
-            }*/
-            
-            self.handleEveythingFromGoogleMapInit()
-            
+        if (self.dict_get_all_data_from_notification["type"] != nil) {
+            if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
+               debugPrint("COMPLETED: RIDE END % Show popup now")
+                
+                
+                /*let delayInSeconds = Double(500) / 1000.0
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                    // Call the hitWebservice function after the delay
+                    debugPrint("Show popup now")
+                    // self.booking_history_details_WB(str_show_loader: "yes")
+                }*/
+                
+                self.handleEveythingFromGoogleMapInit()
+                
+            } else {
+                debugPrint("DATA IS NOT NIL")
+                
+                self.handleEveythingFromGoogleMapInit()
+            }
         } else {
-            debugPrint("DATA IS NOT NIL")
-            
             self.handleEveythingFromGoogleMapInit()
         }
+       
         
     }
     
@@ -2223,25 +2228,29 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
         
         
         
-        
-        if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
-            print(self.dict_get_all_data_from_notification as Any)
-            
-            let delayInSeconds = Double(600) / 1000.0
-            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
-                // Call the hitWebservice function after the delay
-                debugPrint("Show popup now")
-                ERProgressHud.sharedInstance.hide()
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "pay_after_ride_cancel_id") as? pay_after_ride_cancel
-                push!.dictGetAllData = self.dict_get_all_data_from_notification
-                self.navigationController?.pushViewController(push!, animated: true)
+        if (self.dict_get_all_data_from_notification["type"] != nil) {
+            if(self.dict_get_all_data_from_notification["type"] as! String == "rideend") {
+                print(self.dict_get_all_data_from_notification as Any)
                 
-                // self.booking_history_details_WB(str_show_loader: "yes")
+                let delayInSeconds = Double(600) / 1000.0
+                DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                    // Call the hitWebservice function after the delay
+                    debugPrint("Show popup now")
+                    ERProgressHud.sharedInstance.hide()
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "pay_after_ride_cancel_id") as? pay_after_ride_cancel
+                    push!.dictGetAllData = self.dict_get_all_data_from_notification
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                    // self.booking_history_details_WB(str_show_loader: "yes")
+                }
+                
+            } else {
+                ERProgressHud.sharedInstance.hide()
             }
-            
         } else {
             ERProgressHud.sharedInstance.hide()
         }
+      
         
         
     }

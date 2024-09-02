@@ -206,11 +206,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // print("User Info dishu = ",notification.request.content.userInfo)
         
         let dictFromNotification = notification.request.content.userInfo
-        // print(dict as Any)
-        // print(dict["data"] as Any)
-        // print(type(of: dict["data"]))
-        // print(type(of: dict))
-       
+        
         if let jsonString = dictFromNotification[AnyHashable("data")] as? String {
             // Convert the JSON string to Data
             if let jsonData = jsonString.data(using: .utf8) {
@@ -505,11 +501,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         print("User Info = ",response.notification.request.content.userInfo)
         
-        let dict = response.notification.request.content.userInfo
-        print(dict as Any)
+        let dictFromNotification = response.notification.request.content.userInfo
+        
+        if let jsonString = dictFromNotification[AnyHashable("data")] as? String {
+            // Convert the JSON string to Data
+            if let jsonData = jsonString.data(using: .utf8) {
+                do {
+                    // Deserialize JSON data to NSDictionary
+                    if let jsonDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                        // Successfully converted to NSDictionary
+                        print("Data dictionary: \(jsonDict)")
+                        print(type(of: jsonDict))
+                        
+                        dict = jsonDict as NSDictionary
+                        print(self.dict as Any)
+                        
+                        // Handle optional values safely
+                        
+                    } else {
+                        print("Failed to convert JSON to NSDictionary")
+                    }
+                } catch {
+                    print("Error deserializing JSON: \(error)")
+                }
+            } else {
+                print("Failed to convert JSON string to Data")
+            }
+        } else {
+            print("No valid JSON string found for 'data' key")
+        }
+       
+        
+        handleNotification()
+        
         
         // if user send request
-        if (dict["type"] == nil) {
+        /*if (dict["type"] == nil) {
             print("NOTIFICATION FROM SOMEWHERE ELSE")
         } else if (dict["type"] as! String) == "confirm" { // when driver confirm booking
             
@@ -681,7 +708,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           window?.makeKeyAndVisible()
           
       }
-        
+        */
     }
    
     // MARK: UISceneSession Lifecycle

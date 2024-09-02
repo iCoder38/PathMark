@@ -129,11 +129,13 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             print("LOGIN : Select language error")
             print("=============================")
             UserDefaults.standard.set("en", forKey: str_language_convert)
+            self.tbleView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                self.iAmHereForLocationPermission()
+            }
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
-            self.iAmHereForLocationPermission()
-        }
+        
     }
     
     @objc func signInViaGoogle() {
@@ -807,7 +809,41 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         cell.selectedBackgroundView = backgroundView
         
         cell.txtEmailAddress.delegate = self
-        // cell.txtPassword.delegate = self
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                Utils.textFieldUI(textField: cell.txtEmailAddress,
+                                  tfName: cell.txtEmailAddress.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "E-mail/Mobile No.")
+            } else {
+                Utils.textFieldUI(textField: cell.txtEmailAddress,
+                                  tfName: cell.txtEmailAddress.text!,
+                                  tfCornerRadius: 12,
+                                  tfpadding: 20,
+                                  tfBorderWidth: 0,
+                                  tfBorderColor: .clear,
+                                  tfAppearance: .dark,
+                                  tfKeyboardType: .emailAddress,
+                                  tfBackgroundColor: .white,
+                                  tfPlaceholderText: "ই-মেইল/মোবাইল নম্বর")
+            }
+            
+        }
+        
+        
+        cell.txtEmailAddress.layer.masksToBounds = false
+        cell.txtEmailAddress.layer.shadowColor = UIColor.black.cgColor
+        cell.txtEmailAddress.layer.shadowOffset =  CGSize.zero
+        cell.txtEmailAddress.layer.shadowOpacity = 0.5
+        cell.txtEmailAddress.layer.shadowRadius = 2
         
         cell.btnSignIn.addTarget(self, action: #selector(home_click_method), for: .touchUpInside)
         cell.btnDontHaveAnAccount.addTarget(self, action: #selector(dontHaveAntAccountClickMethod), for: .touchUpInside)
@@ -1122,41 +1158,7 @@ class login_table_cell: UITableViewCell {
     @IBOutlet weak var txtEmailAddress:UITextField! {
         didSet {
             
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    Utils.textFieldUI(textField: txtEmailAddress,
-                                      tfName: txtEmailAddress.text!,
-                                      tfCornerRadius: 12,
-                                      tfpadding: 20,
-                                      tfBorderWidth: 0,
-                                      tfBorderColor: .clear,
-                                      tfAppearance: .dark,
-                                      tfKeyboardType: .emailAddress,
-                                      tfBackgroundColor: .white,
-                                      tfPlaceholderText: "E-mail/Mobile No.")
-                } else {
-                    Utils.textFieldUI(textField: txtEmailAddress,
-                                      tfName: txtEmailAddress.text!,
-                                      tfCornerRadius: 12,
-                                      tfpadding: 20,
-                                      tfBorderWidth: 0,
-                                      tfBorderColor: .clear,
-                                      tfAppearance: .dark,
-                                      tfKeyboardType: .emailAddress,
-                                      tfBackgroundColor: .white,
-                                      tfPlaceholderText: "ই-মেইল/মোবাইল নম্বর")
-                }
-                
-            }
             
-            
-            txtEmailAddress.layer.masksToBounds = false
-            txtEmailAddress.layer.shadowColor = UIColor.black.cgColor
-            txtEmailAddress.layer.shadowOffset =  CGSize.zero
-            txtEmailAddress.layer.shadowOpacity = 0.5
-            txtEmailAddress.layer.shadowRadius = 2
              
         }
     }
