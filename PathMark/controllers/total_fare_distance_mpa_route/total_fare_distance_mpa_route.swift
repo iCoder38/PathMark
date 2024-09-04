@@ -15,8 +15,6 @@ import CoreLocation
 
 class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegate , MKMapViewDelegate, UITextFieldDelegate {
     
-    
-    
     var str_vehicle_type:String!
     
     let locationManager = CLLocationManager()
@@ -31,7 +29,6 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
-    
     var counter = 2
     var timer:Timer!
     
@@ -42,9 +39,6 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     
     let annotation = MKPointAnnotation()
     let annotation2 = MKPointAnnotation()
-    
-    
-    
     
     // MARK:- MY LOCATION -
     var my_location_lat:String!
@@ -70,6 +64,21 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     var strGetTotalDistance:String! = ""
     
     // ***************************************************************** // nav
+    
+    // NEW
+    var getLoginUserLatitudeTo:String!
+    var getLoginUserLongitudeTo:String!
+    var getLoginUserAddressTo:String!
+    var getLoginUserLatitudeFrom:String!
+    var getLoginUserLongitudeFrom:String!
+    var getLoginUserAddressFrom:String!
+    var mapView: GMSMapView!
+    
+    var doublePlaceStartLat:Double!
+    var doublePlaceStartLong:Double!
+    
+    var doublePlaceFinalLat:Double!
+    var doublePlaceFinalLong:Double!
     
     @IBOutlet weak var navigationBar:UIView! {
         didSet {
@@ -107,7 +116,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         }
     }
     
-//    @IBOutlet weak var mapView:MKMapView!
+    //    @IBOutlet weak var mapView:MKMapView!
     
     var str_selected_language_is:String!
     
@@ -127,13 +136,13 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
         self.show_loading_UI()
         self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateCounter), userInfo: nil, repeats: true)
-
+        
         
         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
             print(language as Any)
             
             if (language == "en") {
-                 
+                
                 self.btnConfirmBooking.setTitle("Confirm booking", for: .normal)
                 self.str_selected_language_is = "en"
                 lblNavigationTitle.text = "Confirm booking"
@@ -171,233 +180,233 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         } else if (counter == 0) {
             timer.invalidate()
         }
-
+        
     }
     
     
-    @objc func iAmHereForLocationPermission() {
-        // Ask for Authorisation from the User.
-        self.locManager.requestAlwaysAuthorization()
-        
-        // For use in foreground
-        self.locManager.requestWhenInUseAuthorization()
-        
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                print("No access")
-                // self.strSaveLatitude = "0"
-                // self.strSaveLongitude = "0"
-                
-            case .authorizedAlways, .authorizedWhenInUse:
-                print("Access")
-                
-                locManager.delegate = self
-                locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-                locManager.startUpdatingLocation()
-                
-            @unknown default:
-                break
-            }
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-         print(location)
-        
-        self.strSaveLatitude = "\(locValue.latitude)"
-        self.strSaveLongitude = "\(locValue.longitude)"
-        
-        self.tbleView.delegate = self
-        self.tbleView.dataSource = self
-        self.tbleView.reloadData()
-        
-        let indexPath = IndexPath.init(row: 0, section: 0)
-        let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
-        
-        cell.lblStartingLocation.text = String(self.str_from_location)
-        cell.lblEndLocation.text = String(self.str_to_location)
-        cell.viewCellbg.isHidden = true
-        
-        // print(self.str_from_location as Any)
-        // print(self.str_to_location as Any)
-        
-        cell.lbl_from.text = String(self.str_from_location)
-        cell.lbl_to.text = String(self.str_to_location)
-        
-        print("**********************")
-        
-        let restaurantLatitudeDouble    = Double(self.searched_place_location_lat)
-        let restaurantLongitudeDouble   = Double(self.searched_place_location_long)
-        let driverLatitudeDouble        = Double(self.my_location_lat)
-        let driverLongitudeDouble       = Double(self.my_location_long)
-        
-        let coordinate₀ = CLLocation(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
-        let coordinate₁ = CLLocation(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
-        
-        /************************************** RESTAURANT LATITUTDE AND LINGITUDE  ********************************/
-        // first location
-        let sourceLocation = CLLocationCoordinate2D(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
-        /********************************************************************************************************************/
-        
-        
-        /************************************* DRIVER LATITUTDE AND LINGITUDE ******************************************/
-        // second location
-        let destinationLocation = CLLocationCoordinate2D(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
-        /********************************************************************************************************************/
-        
-        //print(sourceLocation)
-        //print(destinationLocation)
-        
-        let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation,image:UIImage(systemName: "car")!)
-         
-        let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation,image:UIImage(systemName: "car")!)
-        
-        /***************** REMOVE PREVIUOS ANNOTATION TO GENERATE NEW ANNOTATION *******************************************/
-        cell.mapView.removeAnnotations(cell.mapView.annotations)
-        /********************************************************************************************************************/
-        
-        cell.mapView.addAnnotation(sourcePin)
-        cell.mapView.addAnnotation(destinationPin)
-        
-         
-         
-        
-        let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
-        let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
-        
-        let directionRequest = MKDirections.Request()
-        directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
-        directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
-        directionRequest.transportType = .automobile
-        
-        let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response, error) in
-            guard let directionResonse = response else {
-                if let error = error {
-                    print("we have error getting directions==\(error.localizedDescription)")
-                }
-                return
-            }
-            
-            /***************** REMOVE PREVIUOS POLYLINE TO GENERATE NEW POLYLINE *******************************/
-            let overlays = cell.mapView.overlays
-            cell.mapView.removeOverlays(overlays)
-            /************************************************************************************/
-            
-            
-            /***************** GET DISTANCE BETWEEN TWO CORDINATES *******************************/
-            
-            let distanceInMeters = coordinate₀.distance(from: coordinate₁)
-            // print(distanceInMeters as Any)
-            
-            // remove decimal
-            let distanceFloat: Double = (distanceInMeters as Any as! Double)
-            
-            // cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
-            // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
-            
-            print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
-            print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
-            
-            /************************************************************************/
-            
-            /***************** GENERATE NEW POLYLINE *******************************/
-            
-            let route = directionResonse.routes[0]
-            cell.mapView.addOverlay(route.polyline, level: .aboveRoads)
-            let rect = route.polyline.boundingMapRect
-            cell.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
-            
-            /***********************************************************************/
-            
-        }
-        
-        cell.mapView.delegate = self
-        
-        // self.locManager.stopUpdatingLocation()
-        
-        // self.locManager.startUpdatingLocation()
-        
-        self.locManager.stopUpdatingLocation()
-        
-        print("=================================")
-        print("LOCATION UPDATE")
-        print("=================================")
-        
-        self.tbleView.reloadData()
-        
-        
-        
-         
-        // Set up the camera with an initial location
-                let camera = GMSCameraPosition.camera(withLatitude: 37.7749, longitude: -122.4194, zoom: 10.0)
-        cell.mapViewG.camera = camera
-                
-                // Sample coordinates for user and driver
-        let userCoordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
-        let driverCoordinate = CLLocationCoordinate2D(latitude: 37.7849, longitude: -122.4294)
-                
-                // Add markers for user and driver
-        self.addMarker(at: userCoordinate, title: "User Location")
-        self.addMarker(at: driverCoordinate, title: "Driver Location")
-                
-                // Draw polyline between user and driver
-        self.drawPolyline(from: userCoordinate, to: driverCoordinate)
-        // speed = distance / time
-    }
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // Don't want to show a custom image if the annotation is the user's location.
-        guard !(annotation is MKUserLocation) else {
-            return nil
-        }
-
-        // Better to make this class property
-        let annotationIdentifier = "AnnotationIdentifier"
-
-        var annotationView: MKAnnotationView?
-        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
-            annotationView = dequeuedAnnotationView
-            annotationView?.annotation = annotation
-        }
-        else {
-            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
-            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-
-        if let annotationView = annotationView {
-            // Configure your annotation view here
-            annotationView.canShowCallout = true
-            
-            if(annotation.title == "Drop Location") {
-                if (self.str_vehicle_type == "BIKE") {
-                    annotationView.image = UIImage(systemName: "bicycle")
-                } else {
-                    annotationView.image = UIImage(systemName: "car")
-                }
-                
-            } else {
-                annotationView.image = UIImage(systemName: "person")
-            }
-            annotationView.tintColor = .systemBlue
-            
-            
-        }
-
-        return annotationView
-    }
-    
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.blue
-        renderer.lineWidth = 4.0
-        return renderer
-    }
+    /*@objc func iAmHereForLocationPermission() {
+     // Ask for Authorisation from the User.
+     self.locManager.requestAlwaysAuthorization()
+     
+     // For use in foreground
+     self.locManager.requestWhenInUseAuthorization()
+     
+     if CLLocationManager.locationServicesEnabled() {
+     switch CLLocationManager.authorizationStatus() {
+     case .notDetermined, .restricted, .denied:
+     print("No access")
+     // self.strSaveLatitude = "0"
+     // self.strSaveLongitude = "0"
+     
+     case .authorizedAlways, .authorizedWhenInUse:
+     print("Access")
+     
+     locManager.delegate = self
+     locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+     locManager.startUpdatingLocation()
+     
+     @unknown default:
+     break
+     }
+     }
+     }
+     
+     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+     guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+     print("locations = \(locValue.latitude) \(locValue.longitude)")
+     
+     let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+     print(location)
+     
+     self.strSaveLatitude = "\(locValue.latitude)"
+     self.strSaveLongitude = "\(locValue.longitude)"
+     
+     self.tbleView.delegate = self
+     self.tbleView.dataSource = self
+     self.tbleView.reloadData()
+     
+     let indexPath = IndexPath.init(row: 0, section: 0)
+     let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
+     
+     cell.lblStartingLocation.text = String(self.str_from_location)
+     cell.lblEndLocation.text = String(self.str_to_location)
+     cell.viewCellbg.isHidden = true
+     
+     // print(self.str_from_location as Any)
+     // print(self.str_to_location as Any)
+     
+     cell.lbl_from.text = String(self.str_from_location)
+     cell.lbl_to.text = String(self.str_to_location)
+     
+     print("**********************")
+     
+     let restaurantLatitudeDouble    = Double(self.searched_place_location_lat)
+     let restaurantLongitudeDouble   = Double(self.searched_place_location_long)
+     let driverLatitudeDouble        = Double(self.my_location_lat)
+     let driverLongitudeDouble       = Double(self.my_location_long)
+     
+     let coordinate₀ = CLLocation(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
+     let coordinate₁ = CLLocation(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
+     
+     /************************************** RESTAURANT LATITUTDE AND LINGITUDE  ********************************/
+     // first location
+     let sourceLocation = CLLocationCoordinate2D(latitude: restaurantLatitudeDouble!, longitude: restaurantLongitudeDouble!)
+     /********************************************************************************************************************/
+     
+     
+     /************************************* DRIVER LATITUTDE AND LINGITUDE ******************************************/
+     // second location
+     let destinationLocation = CLLocationCoordinate2D(latitude: driverLatitudeDouble!, longitude: driverLongitudeDouble!)
+     /********************************************************************************************************************/
+     
+     //print(sourceLocation)
+     //print(destinationLocation)
+     
+     let sourcePin = customPin(pinTitle: "Drop Location", pinSubTitle: "", location: sourceLocation,image:UIImage(systemName: "car")!)
+     
+     let destinationPin = customPin(pinTitle: "Pick Location", pinSubTitle: "", location: destinationLocation,image:UIImage(systemName: "car")!)
+     
+     /***************** REMOVE PREVIUOS ANNOTATION TO GENERATE NEW ANNOTATION *******************************************/
+     cell.mapView.removeAnnotations(cell.mapView.annotations)
+     /********************************************************************************************************************/
+     
+     cell.mapView.addAnnotation(sourcePin)
+     cell.mapView.addAnnotation(destinationPin)
+     
+     
+     
+     
+     let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
+     let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
+     
+     let directionRequest = MKDirections.Request()
+     directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
+     directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
+     directionRequest.transportType = .automobile
+     
+     let directions = MKDirections(request: directionRequest)
+     directions.calculate { (response, error) in
+     guard let directionResonse = response else {
+     if let error = error {
+     print("we have error getting directions==\(error.localizedDescription)")
+     }
+     return
+     }
+     
+     /***************** REMOVE PREVIUOS POLYLINE TO GENERATE NEW POLYLINE *******************************/
+     let overlays = cell.mapView.overlays
+     cell.mapView.removeOverlays(overlays)
+     /************************************************************************************/
+     
+     
+     /***************** GET DISTANCE BETWEEN TWO CORDINATES *******************************/
+     
+     let distanceInMeters = coordinate₀.distance(from: coordinate₁)
+     // print(distanceInMeters as Any)
+     
+     // remove decimal
+     let distanceFloat: Double = (distanceInMeters as Any as! Double)
+     
+     // cell.lbl_distance.text = (String(format: "%.0f Miles away", distanceFloat/1609.344))
+     // cell.lbl_distance.text = (String(format: "%.0f", distanceFloat/1000))
+     
+     print(String(format: "Distance : %.0f KM away", distanceFloat/1000))
+     print(String(format: "Distance : %.0f Miles away", distanceFloat/1609.344))
+     
+     /************************************************************************/
+     
+     /***************** GENERATE NEW POLYLINE *******************************/
+     
+     let route = directionResonse.routes[0]
+     cell.mapView.addOverlay(route.polyline, level: .aboveRoads)
+     let rect = route.polyline.boundingMapRect
+     cell.mapView.setRegion(MKCoordinateRegion(rect), animated: true)
+     
+     /***********************************************************************/
+     
+     }
+     
+     cell.mapView.delegate = self
+     
+     // self.locManager.stopUpdatingLocation()
+     
+     // self.locManager.startUpdatingLocation()
+     
+     self.locManager.stopUpdatingLocation()
+     
+     print("=================================")
+     print("LOCATION UPDATE")
+     print("=================================")
+     
+     self.tbleView.reloadData()
+     
+     
+     
+     
+     // Set up the camera with an initial location
+     let camera = GMSCameraPosition.camera(withLatitude: 37.7749, longitude: -122.4194, zoom: 10.0)
+     cell.mapViewG.camera = camera
+     
+     // Sample coordinates for user and driver
+     let userCoordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
+     let driverCoordinate = CLLocationCoordinate2D(latitude: 37.7849, longitude: -122.4294)
+     
+     // Add markers for user and driver
+     self.addMarker(at: userCoordinate, title: "User Location")
+     self.addMarker(at: driverCoordinate, title: "Driver Location")
+     
+     // Draw polyline between user and driver
+     self.drawPolyline(from: userCoordinate, to: driverCoordinate)
+     // speed = distance / time
+     }
+     
+     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+     // Don't want to show a custom image if the annotation is the user's location.
+     guard !(annotation is MKUserLocation) else {
+     return nil
+     }
+     
+     // Better to make this class property
+     let annotationIdentifier = "AnnotationIdentifier"
+     
+     var annotationView: MKAnnotationView?
+     if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: annotationIdentifier) {
+     annotationView = dequeuedAnnotationView
+     annotationView?.annotation = annotation
+     }
+     else {
+     annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: annotationIdentifier)
+     annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+     }
+     
+     if let annotationView = annotationView {
+     // Configure your annotation view here
+     annotationView.canShowCallout = true
+     
+     if(annotation.title == "Drop Location") {
+     if (self.str_vehicle_type == "BIKE") {
+     annotationView.image = UIImage(systemName: "bicycle")
+     } else {
+     annotationView.image = UIImage(systemName: "car")
+     }
+     
+     } else {
+     annotationView.image = UIImage(systemName: "person")
+     }
+     annotationView.tintColor = .systemBlue
+     
+     
+     }
+     
+     return annotationView
+     }
+     
+     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+     let renderer = MKPolylineRenderer(overlay: overlay)
+     renderer.strokeColor = UIColor.blue
+     renderer.lineWidth = 4.0
+     return renderer
+     }*/
     
     @objc func payment_method_click_method() {
         
@@ -423,32 +432,32 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         if (self.str_active_ride == "1") {
             
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-               print(language as Any)
-               
-               if (language == "en") {
-                   let alert = NewYorkAlertController(title: String("Alert"), message: String("Please complete your previous rides before book any new ride."), style: .alert)
-                   
-                   let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
-                       _ in
-                   }
-                   
-                   alert.addButtons([ cancel])
-                   self.present(alert, animated: true)
-                   return
-               } else {
-                   let alert = NewYorkAlertController(title: nil, message: String("নতুন বুকিংয়ের আগে আপনার রাইড সম্পূর্ণ করুন।"), style: .alert)
-                   
-                   let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
-                       _ in
-                   }
-                   
-                   alert.addButtons([ cancel])
-                   self.present(alert, animated: true)
-                   return
-               }
-               
-            
-           }
+                print(language as Any)
+                
+                if (language == "en") {
+                    let alert = NewYorkAlertController(title: String("Alert"), message: String("Please complete your previous rides before book any new ride."), style: .alert)
+                    
+                    let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                        _ in
+                    }
+                    
+                    alert.addButtons([ cancel])
+                    self.present(alert, animated: true)
+                    return
+                } else {
+                    let alert = NewYorkAlertController(title: nil, message: String("নতুন বুকিংয়ের আগে আপনার রাইড সম্পূর্ণ করুন।"), style: .alert)
+                    
+                    let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
+                        _ in
+                    }
+                    
+                    alert.addButtons([ cancel])
+                    self.present(alert, animated: true)
+                    return
+                }
+                
+                
+            }
             
             
             
@@ -464,7 +473,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 
                 let yes_confirm = NewYorkButton(title: "yes, confirm", style: .default) {
                     _ in
-
+                    
                     self.confirm_booking_WB()
                 }
                 
@@ -480,7 +489,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 
                 let yes_confirm = NewYorkButton(title: "হ্যাঁ, নিশ্চিত করুন", style: .default) {
                     _ in
-
+                    
                     self.confirm_booking_WB()
                 }
                 
@@ -507,27 +516,27 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     @objc func confirm_booking_WB() {
         
         self.view.endEditing(true)
-
+        
         self.find_driver_WB(str_show_loader: "yes")
     }
     
     
     @objc func find_driver_WB(str_show_loader:String) {
-
+        
         if (str_show_loader == "yes") {
             // self.show_loading_UI()
             
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-               print(language as Any)
-               
-               if (language == "en") {
-                   ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Finding an available driver near you")
-               } else {
-                   ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
-               }
-               
-            
-           }
+                print(language as Any)
+                
+                if (language == "en") {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Finding an available driver near you")
+                } else {
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                }
+                
+                
+            }
             
         }
         
@@ -551,7 +560,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 
                 let drop_lat = String(self.searched_place_location_lat)
                 let drop_long = String(self.searched_place_location_long)
-
+                
                 // let doubleStr = String(format: "%.2f", self.str_total_rupees)
                 
                 var estAmountAfterDecimal:String!
@@ -607,15 +616,15 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
                                 
                                 /*var dict: Dictionary<AnyHashable, Any>
-                                dict = JSON["data"] as! Dictionary<AnyHashable, Any>
-                                
-                                self.hide_loading_UI()
-                                self.tbleView.separatorColor = .clear
-                                self.iAmHereForLocationPermission()
-                                
-                                self.str_total_distance = (dict["distance"] as! String)
-                                self.str_total_rupees = "\(dict["total"]!)"
-                                self.str_total_duration = (dict["duration"] as! String)*/
+                                 dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                                 
+                                 self.hide_loading_UI()
+                                 self.tbleView.separatorColor = .clear
+                                 self.iAmHereForLocationPermission()
+                                 
+                                 self.str_total_distance = (dict["distance"] as! String)
+                                 self.str_total_rupees = "\(dict["total"]!)"
+                                 self.str_total_duration = (dict["duration"] as! String)*/
                                 
                             } else if message == String(not_authorize_api) {
                                 self.login_refresh_token_wb()
@@ -705,7 +714,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
     }
     
-
+    
     // MARK:- GET TOTAL DISTANCE FARE -
     @objc func get_fare_WB() {
         
@@ -753,17 +762,18 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 
                                 self.hide_loading_UI()
                                 self.tbleView.separatorColor = .clear
-                                self.iAmHereForLocationPermission()
+                                // self.iAmHereForLocationPermission()
+                                
                                 
                                 self.str_total_distance = (dict["distance"] as! String)
                                 
-//                                var doubleTotal = Double("\(dict["total"]!)")
-//                                var doublePromotionalTotal = Double("\(dict["Promotional_total"]!)")
-//                                var calculateTotal = doubleTotal - doublePromotionalTotal
+                                //                                var doubleTotal = Double("\(dict["total"]!)")
+                                //                                var doublePromotionalTotal = Double("\(dict["Promotional_total"]!)")
+                                //                                var calculateTotal = doubleTotal - doublePromotionalTotal
                                 
                                 let string1 = "\(dict["total"]!)"
                                 let string2 = "\(dict["Promotional_total"]!)"
-
+                                
                                 if let value1 = Double(string1), let value2 = Double(string2) {
                                     
                                     let result = value1 - value2
@@ -773,11 +783,16 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                                 } else {
                                     print("One or both values are not valid Doubles")
                                 }
-
+                                
                                 self.str_total_duration = (dict["duration"] as! String)
                                 self.str_active_ride = "\(dict["activeRide"]!)"
                                 self.strGetTotalDistance = "\(dict["distance"]!)"
                                 
+                                self.tbleView.delegate = self
+                                self.tbleView.dataSource = self
+                                self.tbleView.reloadData()
+                                
+                                self.handleEveythingFromGoogleMapInit()
                             }
                             else {
                                 self.hide_loading_UI()
@@ -800,26 +815,229 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
     
     
     
-    func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
+    /*func addMarker(at coordinate: CLLocationCoordinate2D, title: String) {
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
-            let marker = GMSMarker(position: coordinate)
-            marker.title = title
+        let marker = GMSMarker(position: coordinate)
+        marker.title = title
         marker.map = cell.mapViewG
-        }
+    }
     
     func drawPolyline(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) {
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
-            let path = GMSMutablePath()
-            path.add(from)
-            path.add(to)
-            
-            let polyline = GMSPolyline(path: path)
-            polyline.strokeColor = .blue
-            polyline.strokeWidth = 5.0
+        let path = GMSMutablePath()
+        path.add(from)
+        path.add(to)
+        
+        let polyline = GMSPolyline(path: path)
+        polyline.strokeColor = .blue
+        polyline.strokeWidth = 5.0
         polyline.map = cell.mapViewG
+    }*/
+    
+    
+    
+    
+    
+    @objc func handleEveythingFromGoogleMapInit() {
+        
+        
+        /*print(self.getLoginUserLatitudeTo as Any)
+         print(self.getLoginUserLongitudeTo as Any)
+         print(self.getLoginUserAddressTo as Any)
+         
+         print(self.getLoginUserLatitudeFrom as Any)
+         print(self.getLoginUserLongitudeFrom as Any)
+         print(self.getLoginUserAddressFrom as Any)
+         
+         UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+         UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+         
+         UserDefaults.standard.set("", forKey: "key_map_view_address")
+         UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+         
+         UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+         UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+         */
+        
+        self.initializeMap()
+    }
+    
+    func initializeMap() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! total_fare_distance_mpa_route_table_cell
+         
+        /*
+         let restaurantLatitudeDouble    = Double(self.searched_place_location_lat)
+         let restaurantLongitudeDouble   = Double(self.searched_place_location_long)
+         */
+        
+        /*let separateDropLocation    = "\(self.searched_place_location_lat!)"
+        let separateRequestLocation = "\(self.searched_place_location_long!)"
+        
+        print(separateDropLocation as Any)
+        print(separateRequestLocation as Any)
+        
+        let separateDropLocationArr = separateDropLocation.components(separatedBy: ",")
+        let separateRequestLocationArr = separateRequestLocation.components(separatedBy: ",")
+        
+        let dropLatitude    = separateDropLocationArr[0]
+        let dropLongitude   = separateDropLocationArr[1]
+        
+        let requestLatitude    = separateRequestLocationArr[0]
+        let requestLongitude   = separateRequestLocationArr[1]*/
+        
+        /*
+         push!.str_vehicle_type = String(self.str_user_select_vehicle)
+         
+         push!.str_get_category_id = String(self.str_category_id)
+         // push!.str_from_location = String(self.lbl_location_from.text!)
+         // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+         
+         push!.str_from_location = String(self.getLoginUserAddressTo)
+         push!.str_to_location = String(self.getLoginUserAddressFrom)
+         
+         push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+         push!.my_location_long = String(self.getLoginUserLongitudeTo)
+         
+         push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+         push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
+         */
+        
+        cell.lblStartingLocation.text = String(self.str_from_location)
+        cell.lblEndLocation.text = String(self.str_to_location)
+        
+        self.doublePlaceStartLat = Double("\(self.searched_place_location_lat!)")
+        self.doublePlaceStartLong = Double("\(self.searched_place_location_long!)")
+        
+        self.doublePlaceFinalLat = Double(self.my_location_lat)
+        self.doublePlaceFinalLong = Double(self.my_location_long)
+        
+        debugPrint(doublePlaceStartLat as Any)
+        debugPrint(doublePlaceStartLong as Any)
+        debugPrint(doublePlaceFinalLat as Any)
+        debugPrint(doublePlaceFinalLong as Any)
+        
+        let camera = GMSCameraPosition.camera(withLatitude: doublePlaceStartLat!, longitude: doublePlaceStartLong!, zoom: 10.0)
+        mapView = GMSMapView(frame: .zero)
+        mapView.camera = camera
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mapView)
+        
+        // Add the mapView to the cell's content view
+        
+        
+        // Set up constraints for mapView
+        NSLayoutConstraint.activate([
+            // Set mapView's leading and trailing constraints to the view's leading and trailing edges
+            mapView.leadingAnchor.constraint(equalTo: cell.customView.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: cell.customView.trailingAnchor),
+            
+            // Set mapView's top constraint to 220 points from the top of the view
+            mapView.topAnchor.constraint(equalTo: cell.customView.topAnchor),
+            
+            // Set mapView's bottom constraint to be equal to the view's bottom anchor to make it extend to the bottom
+            mapView.bottomAnchor.constraint(equalTo: cell.customView.bottomAnchor)
+        ])
+        
+        cell.customView.bringSubviewToFront(navigationBar)
+        cell.customView.bringSubviewToFront(cell.view_big)
+        
+        let placeACoordinate = CLLocationCoordinate2D(latitude: doublePlaceStartLat!, longitude: doublePlaceStartLong!)
+        let placeBCoordinate = CLLocationCoordinate2D(latitude: doublePlaceFinalLat!, longitude: doublePlaceFinalLong!)
+        
+        addMarker(at: placeACoordinate, title: "Origin", snippet: "Pickup", color: .green)
+        addMarker(at: placeBCoordinate, title: "Destination", snippet: "Drop", color: .yellow)
+        
+        fetchRoute(from: placeACoordinate, to: placeBCoordinate)
+        
+    }
+    
+    @objc func buttonUpClickMethod() {
+        
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
+        self.navigationController?.pushViewController(push!, animated: true)
+        
+    }
+    
+    func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String,color: UIColor) {
+        let marker = GMSMarker()
+        marker.position = position
+        marker.title = title
+        marker.snippet = snippet
+        
+        // Set marker icon color
+        marker.icon = GMSMarker.markerImage(with: color)
+        
+        marker.map = mapView
+    }
+    
+    func fetchRoute(from start: CLLocationCoordinate2D, to end: CLLocationCoordinate2D) {
+        let origin = "\(self.doublePlaceStartLat!),\(self.doublePlaceStartLong!)"
+        let destination = "\(self.doublePlaceFinalLat!),\(self.doublePlaceFinalLong!)"
+        let apiKey = GOOGLE_MAP_API
+        
+        debugPrint(origin)
+        debugPrint(destination)
+        
+        ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
+        
+        let urlString = "https://maps.googleapis.com/maps/api/directions/json?origin=\(origin)&destination=\(destination)&key=\(apiKey)"
+        
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return
         }
+        
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Network error")
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let routes = json["routes"] as? [[String: Any]],
+                   let route = routes.first,
+                   let overviewPolyline = route["overview_polyline"] as? [String: Any],
+                   let points = overviewPolyline["points"] as? String {
+                    
+                    DispatchQueue.main.async {
+                        self.drawPath(fromEncodedPath: points)
+                    }
+                }
+            } catch {
+                print("JSON parsing error")
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func drawPath(fromEncodedPath encodedPath: String) {
+        guard let path = GMSPath(fromEncodedPath: encodedPath) else {
+            print("Failed to decode path")
+            return
+        }
+        
+        let polyline = GMSPolyline(path: path)
+        polyline.strokeColor = .blue
+        polyline.strokeWidth = 5.0
+        polyline.map = mapView
+        
+        // Call zoom function
+        zoomToFitRoute(withPath: path)
+    }
+    
+    func zoomToFitRoute(withPath path: GMSPath) {
+        let bounds = GMSCoordinateBounds(path: path)
+        let update = GMSCameraUpdate.fit(bounds, withPadding: 100.0)
+        mapView.animate(with: update)
+        
+        ERProgressHud.sharedInstance.hide()
+        
+    }
     
 }
 
@@ -894,6 +1112,9 @@ extension total_fare_distance_mpa_route: UITableViewDataSource , UITableViewDele
         
         cell.lbl_distance.text = String(self.strGetTotalDistance)
         
+        
+         
+        
         return cell
     }
     
@@ -931,7 +1152,7 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
         }
     }
     
-    @IBOutlet weak var mapView:MKMapView!
+    // @IBOutlet weak var mapView:MKMapView!
     
     @IBOutlet weak var viewCellbg:UIView! {
         didSet {
@@ -1005,6 +1226,13 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
     }
     
     //
+    
+    @IBOutlet weak var customView:UIView! {
+        didSet {
+            customView.backgroundColor = .white
+        }
+    }
+    
     @IBOutlet weak var view_big:UIView! {
         didSet {
             view_big.backgroundColor = .white
@@ -1019,6 +1247,7 @@ class total_fare_distance_mpa_route_table_cell: UITableViewCell {
             btn_distance.backgroundColor = UIColor.init(red: 227.0/255.0, green: 230.0/255.0, blue: 244.0/255.0, alpha: 1)
         }
     }
+    
     @IBOutlet weak var btn_est_earn:UIButton! {
         didSet {
             btn_est_earn.setTitleColor(.white, for: .normal)

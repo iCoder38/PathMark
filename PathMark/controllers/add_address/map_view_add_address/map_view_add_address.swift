@@ -19,6 +19,8 @@ import CoreLocation
 import CryptoKit
 import JWTDecode
 
+import GooglePlaces
+
 class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate , MKMapViewDelegate, UIGestureRecognizerDelegate {
     /*func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         print("Place name: \(place.name!)")
@@ -86,6 +88,12 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     
     var arr_all_locations_pin:NSMutableArray! = []
     
+    // new
+    
+    var placesClient: GMSPlacesClient!
+    var predictions: [GMSAutocompletePrediction] = []
+    
+    
     @IBOutlet weak var txt_search:UITextField!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
@@ -108,7 +116,7 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         }
     }
     
-    @IBOutlet weak var mapView:MKMapView!
+    // @IBOutlet weak var mapView:MKMapView!
     
     // ***************************************************************** // nav
     
@@ -200,12 +208,12 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         
         // self.txt_search.delegate = self
         
-          self.current_location_click_method()
+         //  self.current_location_click_method()
         
         // apple maps
-        self.mapView.delegate = self
-        self.searchCompleter.delegate = self
-        self.searchResultsTableView.isHidden = true
+        // self.mapView.delegate = self
+       //  self.searchCompleter.delegate = self
+       //  self.searchResultsTableView.isHidden = true
         
         // self.annotationsOnMap()
         
@@ -215,15 +223,15 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
         self.searchLat = "0"
         self.searchLong = "0"
         
-        let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
-          // lpgr.minimumPressDuration = 0.5
-        lpgr.delaysTouchesBegan = true
-        lpgr.delegate = self
-        self.mapView.addGestureRecognizer(lpgr)
+//        let lpgr = UITapGestureRecognizer(target: self, action: #selector(handleLongPress(gestureReconizer:)))
+//          // lpgr.minimumPressDuration = 0.5
+//        lpgr.delaysTouchesBegan = true
+//        lpgr.delegate = self
+//        self.mapView.addGestureRecognizer(lpgr)
         
     }
 
-    @objc func current_location_click_method() {
+    /*@objc func current_location_click_method() {
         
          self.iAmHereForLocationPermission()
     }
@@ -253,7 +261,7 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
                 break
             }
         }
-    }
+    }*/
     
     
     
@@ -529,7 +537,7 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
     
     
     
-    @objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
+    /*@objc func handleLongPress(gestureReconizer: UITapGestureRecognizer) {
         if gestureReconizer.state != UIGestureRecognizer.State.ended {
         let touchLocation = gestureReconizer.location(in: self.mapView)
         let locationCoordinate = self.mapView.convert(touchLocation,toCoordinateFrom: self.mapView)
@@ -553,9 +561,9 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
             convertLatLongToAddress(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
         return
       }
-    }
+    }*/
     
-    func convertLatLongToAddress(latitude:Double,longitude:Double){
+    /*func convertLatLongToAddress(latitude:Double,longitude:Double){
         
         let geoCoder = CLGeocoder()
         let location = CLLocation(latitude: latitude, longitude: longitude)
@@ -647,11 +655,11 @@ class map_view_add_address: UIViewController , UITextFieldDelegate, CLLocationMa
             mapView.addAnnotation(newPin)
         }
         
-    }
+    }*/
 
 }
 
-extension map_view_add_address: UISearchBarDelegate {
+/*extension map_view_add_address: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
@@ -659,9 +667,9 @@ extension map_view_add_address: UISearchBarDelegate {
         
         self.searchResultsTableView.isHidden = false
     }
-}
+}*/
 
-extension map_view_add_address: MKLocalSearchCompleterDelegate {
+/*extension map_view_add_address: MKLocalSearchCompleterDelegate {
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         searchResults = completer.results
@@ -671,7 +679,7 @@ extension map_view_add_address: MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // handle error
     }
-}
+}*/
 
 extension map_view_add_address: UITableViewDataSource , UITableViewDelegate {
     
@@ -698,7 +706,7 @@ extension map_view_add_address: UITableViewDataSource , UITableViewDelegate {
         
         self.view.endEditing(true)
         
-        self.searchResultsTableView.isHidden = true
+        /*self.searchResultsTableView.isHidden = true
         // mapView.removeOverlay(T##overlay: MKOverlay##MKOverlay)
         
         // let overlays = self.mapView.overlays
@@ -776,7 +784,7 @@ extension map_view_add_address: UITableViewDataSource , UITableViewDelegate {
             self.locManager.stopUpdatingLocation()
             //
             self.navigationController?.popViewController(animated: true)
-        }
+        }*/
     }
     
 }

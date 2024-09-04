@@ -15,8 +15,6 @@ import ZKCarousel
 import Alamofire
 
 class dashboard: UIViewController , CLLocationManagerDelegate {
-
-    let locationManager = CLLocationManager()
     
     // MARK:- SAVE LOCATION STRING -
     var strSaveLatitude:String!
@@ -55,7 +53,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 } else {
                     view_navigation_title.text = "ড্যাশবোর্ড"
                 }
-                    
+                
             }
             
             view_navigation_title.textColor = .white
@@ -79,6 +77,15 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var str_vehicle_type:String! = "0"
     var str_select_option:String! = "0"
     
+    // new
+    var userLatitude: Double?
+    var userLongitude: Double?
+    
+    private let locationManager = CLLocationManager()
+    private let geocoder = CLGeocoder()
+    
+    var userAddress: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,7 +93,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.sideBarMenu(button: self.btn_back)
         
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
-        self.navigationController?.pushViewController(push!, animated: true)*/
+         self.navigationController?.pushViewController(push!, animated: true)*/
         
         self.tbleView.delegate = self
         self.tbleView.dataSource = self
@@ -108,7 +115,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         }
         
         // location
-        self.iAmHereForLocationPermission()
+        // self.iAmHereForLocationPermission()
         
         
         
@@ -124,22 +131,26 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         //
         
         
-         // self.dummy_notification()
+        // self.dummy_notification()
+        
+        self.getUsersCurrentLatLong()
         
     }
     
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-//        
-//        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
-//        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
-//        
-//        UserDefaults.standard.set("", forKey: "key_map_view_address")
-//        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
-//        
-//        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
-//        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
-//  
+        //
+        //        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        //        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+        //
+        //        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        //        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+        //
+        //        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+        //        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+        
         if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
             debugPrint(profileUpOrBottom)
             
@@ -215,10 +226,122 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
     }
     
+    /*func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+     switch manager.authorizationStatus {
+     case .authorizedWhenInUse, .authorizedAlways:
+     // Start updating location if authorized
+     locationManager.startUpdatingLocation()
+     case .denied, .restricted:
+     // Handle the case where the user denied or restricted location access
+     print("Location access denied or restricted")
+     case .notDetermined:
+     // Authorization not yet determined; wait for user action
+     break
+     @unknown default:
+     // Handle any future cases
+     break
+     }
+     }*/
+    
+    @objc func getUsersCurrentLatLong() {
+        //        // Request location authorization
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
+        // Check if location services are enabled
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        } else {
+            // Handle the case where location services are not enabled
+            print("Location services are not enabled")
+        }
+        // locationManager.delegate = self
+        
+        // Request location authorization
+        // locationManager.requestWhenInUseAuthorization()
+        // locationManager.requestAlwaysAuthorization()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            
+            userLatitude = location.coordinate.latitude
+            userLongitude = location.coordinate.longitude
+            
+            loginUserLatitudeTo = "\(userLatitude!)"
+            loginUserLongitudeTo = "\(userLongitude!)"
+            
+            // get user's latitude and longitude
+            print("Latitude: \(userLatitude ?? 0.0), Longitude: \(userLongitude ?? 0.0)")
+            
+            // get user's full address
+            getAddressFromLocation(location)
+            
+            // Stop updating location to save battery life
+            locationManager.stopUpdatingLocation()
+            
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.startUpdatingLocation()
+        case .denied, .restricted:
+            // Handle the case where user denied or restricted location access
+            print("Location access denied or restricted")
+        default:
+            break
+        }
+    }
+    
+    // Handle location errors
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to get user location: \(error.localizedDescription)")
+    }
+    
+    // Reverse geocoding to get address from coordinates
+    private func getAddressFromLocation(_ location: CLLocation) {
+        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+            if let error = error {
+                print("Failed to reverse geocode location: \(error.localizedDescription)")
+                return
+            }
+            
+            if let placemark = placemarks?.first {
+                var addressString = ""
+                
+                if let name = placemark.name {
+                    addressString += name + ", "
+                }
+                if let locality = placemark.locality {
+                    addressString += locality + ", "
+                }
+                if let administrativeArea = placemark.administrativeArea {
+                    addressString += administrativeArea + ", "
+                }
+                if let country = placemark.country {
+                    addressString += country
+                }
+                
+                self?.userAddress = addressString
+                print("User's Address: \(addressString)")
+                
+                let indexPath = IndexPath.init(row: 0, section: 0)
+                let cell = self!.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+                
+                cell.lbl_my_full_address.text = "\(addressString)"
+                self!.loginUserAddressTo = "\(addressString)"
+                
+            }
+        }
+    }
+    
     var _lastContentOffset: CGPoint!
     var panGesture : UIPanGestureRecognizer!
     var strIndex:Int! = 0
-
+    
     @objc func please_select_atleast_one_vehicle2() {
         // let indexPath = IndexPath.init(row: 0, section: 0)
         // let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
@@ -243,113 +366,113 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.navigationController?.pushViewController(push!, animated: true)
         
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_vehicle_id") as? select_vehicle
-        push!.userCurrentLocationIs = cell.lbl_my_full_address.text
-        self.navigationController?.pushViewController(push!, animated: true)*/
+         push!.userCurrentLocationIs = cell.lbl_my_full_address.text
+         self.navigationController?.pushViewController(push!, animated: true)*/
         
-//        if (self.str_vehicle_type == "0") {
-//            
-//            debugPrint("PLEASE SELECT VEHICLE TYPE")
-//            
-//        } else if (self.str_select_option == "0") {
-//            
-//            debugPrint("PLEASE SELECT OPTIONS")
-//            
-//        } else {
-//            
-//        }
+        //        if (self.str_vehicle_type == "0") {
+        //
+        //            debugPrint("PLEASE SELECT VEHICLE TYPE")
+        //
+        //        } else if (self.str_select_option == "0") {
+        //
+        //            debugPrint("PLEASE SELECT OPTIONS")
+        //
+        //        } else {
+        //
+        //        }
         
         
         /*if (self.str_vehicle_type == "0") {
-            /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
-            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-            alert.addButtons([cancel])
-            self.present(alert, animated: true)*/
-            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
-                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                    alert.addButtons([cancel])
-                    self.present(alert, animated: true)
-                } else {
-                    let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("একটি গাড়ির ধরন নির্বাচন করুন."), style: .alert)
-                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                    alert.addButtons([cancel])
-                    self.present(alert, animated: true)
-                    
-                    
-                }
-                
-            }
-        } else {
-            if (self.str_select_option == "0") {
-               
-                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                    print(language as Any)
-                    
-                    if (language == "en") {
-                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
-                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-                        alert.addButtons([cancel])
-                        self.present(alert, animated: true)
-                    } else {
-                        let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("অনুগ্রহ করে একটি বিকল্প নির্বাচন করুন (এখন একটি রাইড বুক করুন বা একটি যাত্রার সময়সূচী করুন)।"), style: .alert)
-                        let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
-                        alert.addButtons([cancel])
-                        self.present(alert, animated: true)
-                        
-                        
-                    }
-                    
-                }
-                
-            } else {
-                // push to next screen
-                
-                if (self.str_vehicle_type == "CAR") {
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-                    push!.str_user_select_vehicle = "CAR"
-                    push!.str_user_option = self.str_select_option
-                    
-                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
-                    
-                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
-                    push!.str_get_login_user_long = String(self.strSaveLongitude)
-                    
-                    self.navigationController?.pushViewController(push!, animated: true)
-                } else if (self.str_vehicle_type == "INTERCITY") {
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-                    push!.str_user_select_vehicle = "CAR"
-                    push!.str_user_option = self.str_select_option
-                    
-                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
-                    
-                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
-                    push!.str_get_login_user_long = String(self.strSaveLongitude)
-                    
-                    self.navigationController?.pushViewController(push!, animated: true)
-                } else {
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-                    push!.str_user_select_vehicle = self.str_vehicle_type
-                    push!.str_user_option = self.str_select_option
-                    
-                    push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
-                    
-                    push!.str_get_login_user_lat = String(self.strSaveLatitude)
-                    push!.str_get_login_user_long = String(self.strSaveLongitude)
-                    
-                    self.navigationController?.pushViewController(push!, animated: true)
-                }
-                
-                
-            }
-        }*/
+         /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
+          let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+          alert.addButtons([cancel])
+          self.present(alert, animated: true)*/
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+         print(language as Any)
+         
+         if (language == "en") {
+         let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
+         let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+         alert.addButtons([cancel])
+         self.present(alert, animated: true)
+         } else {
+         let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("একটি গাড়ির ধরন নির্বাচন করুন."), style: .alert)
+         let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+         alert.addButtons([cancel])
+         self.present(alert, animated: true)
+         
+         
+         }
+         
+         }
+         } else {
+         if (self.str_select_option == "0") {
+         
+         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+         print(language as Any)
+         
+         if (language == "en") {
+         let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select an option ( Book a ride now or Schedulae a ride )."), style: .alert)
+         let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+         alert.addButtons([cancel])
+         self.present(alert, animated: true)
+         } else {
+         let alert = NewYorkAlertController(title: String("সতর্কতা").uppercased(), message: String("অনুগ্রহ করে একটি বিকল্প নির্বাচন করুন (এখন একটি রাইড বুক করুন বা একটি যাত্রার সময়সূচী করুন)।"), style: .alert)
+         let cancel = NewYorkButton(title: "বরখাস্ত করা", style: .cancel)
+         alert.addButtons([cancel])
+         self.present(alert, animated: true)
+         
+         
+         }
+         
+         }
+         
+         } else {
+         // push to next screen
+         
+         if (self.str_vehicle_type == "CAR") {
+         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+         push!.str_user_select_vehicle = "CAR"
+         push!.str_user_option = self.str_select_option
+         
+         push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+         
+         push!.str_get_login_user_lat = String(self.strSaveLatitude)
+         push!.str_get_login_user_long = String(self.strSaveLongitude)
+         
+         self.navigationController?.pushViewController(push!, animated: true)
+         } else if (self.str_vehicle_type == "INTERCITY") {
+         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+         push!.str_user_select_vehicle = "CAR"
+         push!.str_user_option = self.str_select_option
+         
+         push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+         
+         push!.str_get_login_user_lat = String(self.strSaveLatitude)
+         push!.str_get_login_user_long = String(self.strSaveLongitude)
+         
+         self.navigationController?.pushViewController(push!, animated: true)
+         } else {
+         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
+         push!.str_user_select_vehicle = self.str_vehicle_type
+         push!.str_user_option = self.str_select_option
+         
+         push!.str_get_user_current_full_address = cell.lbl_my_full_address.text
+         
+         push!.str_get_login_user_lat = String(self.strSaveLatitude)
+         push!.str_get_login_user_long = String(self.strSaveLongitude)
+         
+         self.navigationController?.pushViewController(push!, animated: true)
+         }
+         
+         
+         }
+         }*/
         
         /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select one vehicle type."), style: .alert)
-        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
-        alert.addButtons([cancel])
-        self.present(alert, animated: true)*/
+         let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+         alert.addButtons([cancel])
+         self.present(alert, animated: true)*/
         
     }
     @objc func push_to_car_map_click_method() {
@@ -357,8 +480,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.str_vehicle_type = "CAR"
         self.tbleView.reloadData()
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-        push!.str_user_select_vehicle = "CAR"
-        self.navigationController?.pushViewController(push!, animated: true)*/
+         push!.str_user_select_vehicle = "CAR"
+         self.navigationController?.pushViewController(push!, animated: true)*/
         
     }
     
@@ -367,8 +490,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         self.str_vehicle_type = "BIKE"
         self.tbleView.reloadData()
         /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_id") as? map_view
-        push!.str_user_select_vehicle = "BIKE"
-        self.navigationController?.pushViewController(push!, animated: true)*/
+         push!.str_user_select_vehicle = "BIKE"
+         self.navigationController?.pushViewController(push!, animated: true)*/
         
     }
     
@@ -441,7 +564,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                                      vehicleOption: String(self.str_select_option))
             
         }
-    
+        
     }
     
     @objc func pushAfterEverything(vehicleType:String,
@@ -457,7 +580,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         push!.str_user_option = String(vehicleOption)
         // self.str_select_option
         
-        push!.str_get_user_current_full_address = String(loginUserAddressTo)
+        push!.str_get_user_current_full_address = String(self.loginUserAddressTo)
         // cell.lbl_my_full_address.text
         
         push!.str_get_login_user_lat = String(loginUserLatitudeTo)
@@ -510,115 +633,115 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             }
         }
     }
-     
+    
     // MARK:- GET CUSTOMER LOCATION -
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! PDBagPurchaseTableCell
-        
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-        
-        location.fetchCityAndCountry { city, country, zipcode,localAddress,localAddressMini,locality, error in
-            guard let city = city, let country = country,let zipcode = zipcode,let localAddress = localAddress,let localAddressMini = localAddressMini,let locality = locality, error == nil else { return }
-            
-            self.strSaveCountryName     = country
-            self.strSaveStateName       = city
-            self.strSaveZipcodeName     = zipcode
-            
-            self.strSaveLocalAddress     = localAddress
-            self.strSaveLocality         = locality
-            self.strSaveLocalAddressMini = localAddressMini
-            
-            let doubleLat = locValue.latitude
-            let doubleStringLat = String(doubleLat)
-            
-            let doubleLong = locValue.longitude
-            let doubleStringLong = String(doubleLong)
-            
-            self.strSaveLatitude = String(doubleStringLat)
-            self.strSaveLongitude = String(doubleStringLong)
-            
-            
-            
-            
-            
-            
-            
-            print("local address ==> "+localAddress as Any) // south west delhi
-            print("local address mini ==> "+localAddressMini as Any) // new delhi
-            print("locality ==> "+locality as Any) // sector 10 dwarka
-            
-            print(self.strSaveCountryName as Any) // india
-            print(self.strSaveStateName as Any) // new delhi
-            print(self.strSaveZipcodeName as Any) // 110075
-            
-            //MARK:- STOP LOCATION -
-            self.locationManager.stopUpdatingLocation()
-            
-            let indexPath = IndexPath.init(row: 0, section: 0)
-            let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
-            
-            let str_locality = String(self.strSaveLocality)
-            let str_local_address = String(self.strSaveLocalAddress)
-            let str_local_state = String(self.strSaveStateName)
-            let str_local_country = String(self.strSaveCountryName)
-            let str_local_zipcode = String(self.strSaveZipcodeName)
-            
-            cell.lbl_my_full_address.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
-            
-            self.loginUserLatitudeTo = String(doubleStringLat)
-            self.loginUserLongitudeTo = String(doubleStringLong)
-            self.loginUserAddressTo = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
-            
-            
-            
-            
-            
-            
-            
-            UserDefaults.standard.set(self.strSaveLatitude, forKey: "key_current_latitude")
-            UserDefaults.standard.set(self.strSaveLongitude, forKey: "key_current_latitude")
-            UserDefaults.standard.set(locality+","+localAddress+","+localAddressMini, forKey: "key_current_address")
-            
-            /*print(self.strSaveLocality as Any)
-            print(self.strSaveLocalAddress as Any)
-            print(self.strSaveLocalAddressMini as Any)
-            print(self.strSaveStateName as Any)
-            print(self.strSaveCountryName as Any)*/
-
-            self.update_token_WB(str_show_loader: "yes")
-            
-        }
-    }
+    /*func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+     guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+     print("locations = \(locValue.latitude) \(locValue.longitude)")
+     // let indexPath = IndexPath.init(row: 0, section: 0)
+     // let cell = self.tbleView.cellForRow(at: indexPath) as! PDBagPurchaseTableCell
+     
+     let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+     
+     location.fetchCityAndCountry { city, country, zipcode,localAddress,localAddressMini,locality, error in
+     guard let city = city, let country = country,let zipcode = zipcode,let localAddress = localAddress,let localAddressMini = localAddressMini,let locality = locality, error == nil else { return }
+     
+     self.strSaveCountryName     = country
+     self.strSaveStateName       = city
+     self.strSaveZipcodeName     = zipcode
+     
+     self.strSaveLocalAddress     = localAddress
+     self.strSaveLocality         = locality
+     self.strSaveLocalAddressMini = localAddressMini
+     
+     let doubleLat = locValue.latitude
+     let doubleStringLat = String(doubleLat)
+     
+     let doubleLong = locValue.longitude
+     let doubleStringLong = String(doubleLong)
+     
+     self.strSaveLatitude = String(doubleStringLat)
+     self.strSaveLongitude = String(doubleStringLong)
+     
+     
+     
+     
+     
+     
+     
+     print("local address ==> "+localAddress as Any) // south west delhi
+     print("local address mini ==> "+localAddressMini as Any) // new delhi
+     print("locality ==> "+locality as Any) // sector 10 dwarka
+     
+     print(self.strSaveCountryName as Any) // india
+     print(self.strSaveStateName as Any) // new delhi
+     print(self.strSaveZipcodeName as Any) // 110075
+     
+     //MARK:- STOP LOCATION -
+     self.locationManager.stopUpdatingLocation()
+     
+     let indexPath = IndexPath.init(row: 0, section: 0)
+     let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+     
+     let str_locality = String(self.strSaveLocality)
+     let str_local_address = String(self.strSaveLocalAddress)
+     let str_local_state = String(self.strSaveStateName)
+     let str_local_country = String(self.strSaveCountryName)
+     let str_local_zipcode = String(self.strSaveZipcodeName)
+     
+     cell.lbl_my_full_address.text = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
+     
+     self.loginUserLatitudeTo = String(doubleStringLat)
+     self.loginUserLongitudeTo = String(doubleStringLong)
+     self.loginUserAddressTo = String(self.strSaveLocality)+", "+String(self.strSaveLocalAddress)+" "+String(self.strSaveStateName)+", "+String(self.strSaveCountryName)+" - "+String(self.strSaveZipcodeName)
+     
+     
+     
+     
+     
+     
+     
+     UserDefaults.standard.set(self.strSaveLatitude, forKey: "key_current_latitude")
+     UserDefaults.standard.set(self.strSaveLongitude, forKey: "key_current_latitude")
+     UserDefaults.standard.set(locality+","+localAddress+","+localAddressMini, forKey: "key_current_address")
+     
+     /*print(self.strSaveLocality as Any)
+      print(self.strSaveLocalAddress as Any)
+      print(self.strSaveLocalAddressMini as Any)
+      print(self.strSaveStateName as Any)
+      print(self.strSaveCountryName as Any)*/
+     
+     self.update_token_WB(str_show_loader: "yes")
+     
+     }
+     }*/
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-         _lastContentOffset = scrollView.contentOffset
-      }
-
+        _lastContentOffset = scrollView.contentOffset
+    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-
+        
         // var str_count = "0"
         
         if _lastContentOffset.y < scrollView.contentOffset.y {
-              NSLog("Scrolled Down")
+            NSLog("Scrolled Down")
             // str_count = "1"
         }
-
+        
         else if _lastContentOffset.y > scrollView.contentOffset.y {
             NSLog("Scrolled Up")
             
             // str_count = "1"
         } else {
- 
+            
             let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
             print(pageNumber)
-
+            
             self.strIndex = Int(pageNumber)
             self.tbleView.reloadData()
         }
-       
+        
     }
     
     
@@ -817,12 +940,12 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
             let arr_mut_order_history:NSMutableArray! = []
             arr_mut_order_history.addObjects(from: ar as! [Any])
             
-             if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
-                 print(token_id_is as Any)
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
                 
-                  let headers: HTTPHeaders = [
-                     "token":String(token_id_is),
-                 ]
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
                 
                 parameters = [
                     "action"    : "couponlist",
@@ -859,7 +982,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             
                             ERProgressHud.sharedInstance.hide()
                             self.dismiss(animated: true)
-                           
+                            
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
                             
@@ -886,10 +1009,10 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                         
                     }
                 }
-             }
+            }
         }
     }
-   
+    
     
     
     var token:String = "cIu4OcOD8E3Fhk-Z4Aj8XH:APA91bHI5xX0Vzzdvu-TN2vZjrUCgTLMSy-L4l-SR7WUHZrV0CRYCCMYMBfi_2hm1j73Pp_jZeYD0hligeVI8SksVOOj-fc5ZlhvDYqIdP0l9-CyNiCgqEdpHk4r0KTACFaiMtJt--X-"
@@ -918,9 +1041,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 
             ],
             /*"data":[
-                "message"               : "Incoming Audio Call",
-                "type"                  : "audiocall",
-            ]*/
+             "message"               : "Incoming Audio Call",
+             "type"                  : "audiocall",
+             ]*/
             
         ] as [String : Any]
         

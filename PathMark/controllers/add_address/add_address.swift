@@ -29,6 +29,13 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     var strSaveStateName:String!
     var strSaveZipcodeName:String!
     
+    // new
+    var getLoginUserLatitudeTo:String!
+    var getLoginUserLongitudeTo:String!
+    var getLoginUserAddressTo:String!
+    var getLoginUserLatitudeFrom:String!
+    var getLoginUserLongitudeFrom:String!
+    var getLoginUserAddressFrom:String!
     
     @IBOutlet weak var btn_back:UIButton! {
         didSet {
@@ -377,8 +384,9 @@ class add_address: UIViewController , CLLocationManagerDelegate {
     }
   
     @objc func map_view_click_method() {
+        UserDefaults.standard.set("userLocationTo", forKey: "keyUserSelectWhichProfile")
         
-        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "map_view_add_address_id") as? map_view_add_address
+        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
         self.navigationController?.pushViewController(push!, animated: true)
         
     }
@@ -392,7 +400,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
          UserDefaults.standard.set(completion.title+","+completion.subtitle, forKey: "key_save_full_address_for_address")
          */
         // latitude
-        if let load_latitude = UserDefaults.standard.string(forKey: "key_save_lat_for_address") {
+        /*if let load_latitude = UserDefaults.standard.string(forKey: "key_save_lat_for_address") {
             print(load_latitude)
             
             self.str_save_lat = load_latitude
@@ -419,8 +427,91 @@ class add_address: UIViewController , CLLocationManagerDelegate {
         UserDefaults.standard.set(nil, forKey: "key_save_lat_for_address")
         UserDefaults.standard.set("", forKey: "key_save_long_for_address")
         UserDefaults.standard.set("", forKey: "key_save_full_address_for_address")
-        UserDefaults.standard.set(nil, forKey: "key_save_full_address_for_address")
+        UserDefaults.standard.set(nil, forKey: "key_save_full_address_for_address")*/
+        
+        if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
+            debugPrint(profileUpOrBottom)
+            
+            if (profileUpOrBottom == "userLocationTo") {
+                
+                debugPrint("SET VALUE FOR TO")
+                
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
+                    
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
+                    
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
+                    
+                    self.getLoginUserLatitudeTo = String(name)
+                    self.getLoginUserLongitudeTo = String(surname)
+                    
+                }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
+                    self.txt_house_number.text = String(address)
+                    self.getLoginUserAddressTo = String(address)
+                }
+                
+            } else {
+                
+                debugPrint("set value for from")
+                if let load_latitude = UserDefaults.standard.string(forKey: "key_map_view_lat_long") {
+                    print(load_latitude)
+                    
+                    // self.str_save_lat = load_latitude
+                    let fullName    = load_latitude
+                    let fullNameArr = fullName.components(separatedBy: ",")
+                    
+                    let name    = fullNameArr[0]
+                    let surname = fullNameArr[1]
+                    
+                    self.getLoginUserLatitudeFrom = String(name)
+                    self.getLoginUserLongitudeFrom = String(surname)
+                    
+                }
+                
+                // address
+                if let address = UserDefaults.standard.string(forKey: "key_map_view_address") {
+                    print(address)
+                    
+                     self.txt_house_number.text = String(address)
+                    self.getLoginUserAddressFrom = String(address)
+                }
+            }
+        }
+        
+        self.handleEveythingFromGoogleMapInit()
     }
+    
+    
+    @objc func handleEveythingFromGoogleMapInit() {
+        print(self.getLoginUserLatitudeTo as Any)
+        print(self.getLoginUserLongitudeTo as Any)
+        print(self.getLoginUserAddressTo as Any)
+        
+        print(self.getLoginUserLatitudeFrom as Any)
+        print(self.getLoginUserLongitudeFrom as Any)
+        print(self.getLoginUserAddressFrom as Any)
+        
+        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+        
+        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+        
+        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+        
+        // self.initializeMap()
+    }
+
     
     @objc func save_as_click_method() {
         
@@ -695,7 +786,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "addressId"     : String(self.str_address_id),
                     "address"       : String(self.txt_house_number.text!),
                     "addressType"   : String(self.str_Address_text),
-                    "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
+                    "coordinate"    : String(self.self.getLoginUserLatitudeTo)+","+String(self.self.getLoginUserLongitudeTo),
                     "language"      : String(lan)
                 ]
                 
@@ -848,7 +939,7 @@ class add_address: UIViewController , CLLocationManagerDelegate {
                     "userId"        : String(myString),
                     "address"       : String(self.txt_house_number.text!),
                     "addressType"   : String(self.str_Address_text),
-                    "coordinate"    : String(self.str_save_lat)+","+String(self.str_save_long),
+                    "coordinate"    : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
                     "language"      : String(lan),
                     "address_Info"  : String(self.txt_additional_info.text!),
                     "address_name"  : String(self.txt_enter_name.text!)
