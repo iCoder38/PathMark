@@ -925,19 +925,10 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         mapView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mapView)
         
-        // Add the mapView to the cell's content view
-        
-        
-        // Set up constraints for mapView
         NSLayoutConstraint.activate([
-            // Set mapView's leading and trailing constraints to the view's leading and trailing edges
             mapView.leadingAnchor.constraint(equalTo: cell.customView.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: cell.customView.trailingAnchor),
-            
-            // Set mapView's top constraint to 220 points from the top of the view
             mapView.topAnchor.constraint(equalTo: cell.customView.topAnchor),
-            
-            // Set mapView's bottom constraint to be equal to the view's bottom anchor to make it extend to the bottom
             mapView.bottomAnchor.constraint(equalTo: cell.customView.bottomAnchor)
         ])
         
