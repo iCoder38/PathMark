@@ -334,6 +334,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 cell.lbl_my_full_address.text = "\(addressString)"
                 self!.loginUserAddressTo = "\(addressString)"
                 
+                self!.update_token_WB(str_show_loader: "yes")
             }
         }
     }
@@ -744,8 +745,6 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
     }
     
-    
-    
     @objc func update_token_WB(str_show_loader:String) {
         
         if (str_show_loader == "yes") {
@@ -782,6 +781,10 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 let headers: HTTPHeaders = [
                     "token":String(token_id_is),
                 ]
+                
+                // loginUserLatitudeTo = "\(userLatitude!)"
+                // loginUserLongitudeTo = "\(userLongitude!)"
+                
                 var parameters:Dictionary<AnyHashable, Any>!
                 parameters = [
                     "action"        : "editprofile",
@@ -789,8 +792,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                     "deviceToken"   : String(self.str_token_id),
                     // "latitude"      : "28.663360225298394", // String(self.strSaveLatitude),
                     // "longitude"     : "77.32386478305855", // String(self.strSaveLongitude),
-                    "latitude"      : String(self.strSaveLatitude),
-                    "longitude"     : String(self.strSaveLongitude),
+                    "latitude"      : String(self.loginUserLatitudeTo),
+                    "longitude"     : String(self.loginUserLongitudeTo),
                     "device"        : String("iOS")
                 ]
                 

@@ -554,9 +554,16 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                 
                 var parameters:Dictionary<AnyHashable, Any>!
                 
+                /*
+                 push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+                 push!.my_location_long = String(self.getLoginUserLongitudeTo)
+                 
+                 push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+                 push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
+                 */
                 
-                let request_lat = String(self.strSaveLatitude)
-                let request_long = String(self.strSaveLongitude)
+                let request_lat = String(self.my_location_lat)
+                let request_long = String(self.my_location_long)
                 
                 let drop_lat = String(self.searched_place_location_lat)
                 let drop_long = String(self.searched_place_location_long)
@@ -575,7 +582,7 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     "userId"                : String(myString),
                     "categoryId"            : String(self.str_get_category_id),
                     "RequestPickupAddress"  : String(self.str_from_location),
-                    // "RequestPickupLatLong"  : "28.663360225298394,77.32386478305855",//String(request_lat)+","+String(request_long),
+                     
                     "RequestPickupLatLong"  : String(request_lat)+","+String(request_long),
                     "RequestDropAddress"    : String(self.str_to_location),
                     // "RequestDropLatLong"    : "28.663360225298394,77.32386478305855",// String(drop_lat)+","+String(drop_long),
@@ -908,6 +915,9 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         cell.lblStartingLocation.text = String(self.str_from_location)
         cell.lblEndLocation.text = String(self.str_to_location)
         
+        cell.lbl_from.text = String(self.str_from_location)
+        cell.lbl_to.text = String(self.str_to_location)
+        
         self.doublePlaceStartLat = Double("\(self.searched_place_location_lat!)")
         self.doublePlaceStartLong = Double("\(self.searched_place_location_long!)")
         
@@ -949,7 +959,6 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
         self.navigationController?.pushViewController(push!, animated: true)
-        
     }
     
     func addMarker(at position: CLLocationCoordinate2D, title: String, snippet: String,color: UIColor) {
