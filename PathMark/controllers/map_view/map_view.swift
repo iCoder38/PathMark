@@ -14,7 +14,7 @@ import SDWebImage
 // MARK:- LOCATION -
 import CoreLocation
 import CryptoKit
-import JWTDecode
+// import JWTDecode
 
 import GoogleMaps
 
@@ -1515,14 +1515,29 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                  var getLoginUserLongitudeFrom:String!
                  var getLoginUserAddressFrom:String!
                  */
-                parameters = [
-                    "action"            : "listbyprice",
-                    "TYPE"              : String(self.self.str_user_select_vehicle),
-                    "userId"            : String(myString),
-                    "pickuplatLong"     : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
-                    "droplatLong"       : String(self.getLoginUserLatitudeFrom)+","+String(self.getLoginUserLongitudeFrom),
-                    "language"          : String(lan)
-                ]
+                
+                
+                
+                if (self.str_user_select_vehicle == "INTERCITY") {
+                    parameters = [
+                        "action"            : "listbyprice",
+                        "TYPE"              : String("CAR"),
+                        "userId"            : String(myString),
+                        "pickuplatLong"     : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
+                        "droplatLong"       : String(self.getLoginUserLatitudeFrom)+","+String(self.getLoginUserLongitudeFrom),
+                        "language"          : String(lan)
+                    ]
+                } else {
+                    parameters = [
+                        "action"            : "listbyprice",
+                        "TYPE"              : String(self.str_user_select_vehicle),
+                        "userId"            : String(myString),
+                        "pickuplatLong"     : String(self.getLoginUserLatitudeTo)+","+String(self.getLoginUserLongitudeTo),
+                        "droplatLong"       : String(self.getLoginUserLatitudeFrom)+","+String(self.getLoginUserLongitudeFrom),
+                        "language"          : String(lan)
+                    ]
+                }
+                
                 
                 print(headers)
                 print("parameters-------\(String(describing: parameters))")

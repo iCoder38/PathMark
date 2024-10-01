@@ -9,7 +9,7 @@ import UIKit
 //import CryptoSwift
 //import JWT
 import CommonCrypto
-import JWTDecode
+// import JWTDecode
 
 // MARK:- LOCATION -
 import CoreLocation
@@ -30,7 +30,9 @@ extension Date {
 
 class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate, ASAuthorizationControllerDelegate {
     
+    
     var window: UIWindow?
+    
 
     let locationManager = CLLocationManager()
     
@@ -75,8 +77,6 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
         
 //        let defaults = UserDefaults.standard
@@ -90,13 +90,9 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         // set language
           // UserDefaults.standard.set("bg", forKey: str_language_convert)
         
-        
-        
         self.navigationController?.setNavigationBarHidden(true, animated: false)
          
-        
         self.language_convert()
-        
         
     }
     
@@ -265,7 +261,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                             self.hide_loading_UI()
                             let defaults = UserDefaults.standard
                             defaults.setValue(dict, forKey: str_save_login_user_data)
-                            self.push_to_dashboard()
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                            let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+                            let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+                            let mainRevealController = SWRevealViewController()
+                            mainRevealController.rearViewController = rearViewController
+                            mainRevealController.frontViewController = frontNavigationController
+                            
+                            DispatchQueue.main.async {
+                                UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                            }
                         }
                         
                         
@@ -384,7 +390,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                             ERProgressHud.sharedInstance.hide()
                             
                             self.hide_loading_UI()
-                            self.push_to_dashboard()
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                            let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+                            let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+                            let mainRevealController = SWRevealViewController()
+                            mainRevealController.rearViewController = rearViewController
+                            mainRevealController.frontViewController = frontNavigationController
+                            
+                            DispatchQueue.main.async {
+                                UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                            }
                             
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
@@ -548,8 +564,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         var dict: Dictionary<AnyHashable, Any>
                         dict = JSON["data"] as! Dictionary<AnyHashable, Any>
                         
-                        let defaults = UserDefaults.standard
-                        defaults.setValue(dict, forKey: str_save_login_user_data)
+                        /*let defaults = UserDefaults.standard
+                        defaults.setValue(dict, forKey: str_save_login_user_data)*/
                          
                         let str_token = (JSON["AuthToken"] as! String)
                         UserDefaults.standard.set("", forKey: str_save_last_api_token)
@@ -568,7 +584,13 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         //
                         self.hide_loading_UI()
                         
-                        self.push_to_dashboard()
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "verify_phone_number_id") as! verify_phone_number
+                        
+                        push.strGetLoginUserID = "\(dict["userId"]!)"
+                        push.strGetLoginEmailAddress = "\(dict["email"]!)"
+                        
+                        self.navigationController?.pushViewController(push, animated: true)
+                        
                         
                     }
                     else {
@@ -720,7 +742,17 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         self.hide_loading_UI()
                         
-                        self.push_to_dashboard()
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+                        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+                        let mainRevealController = SWRevealViewController()
+                        mainRevealController.rearViewController = rearViewController
+                        mainRevealController.frontViewController = frontNavigationController
+                        
+                        DispatchQueue.main.async {
+                            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                        }
                         
                     }
                     else {
@@ -755,24 +787,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
     }
     
-    @objc func push_to_dashboard() {
-        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-        // self.navigationController?.pushViewController(push!, animated: true)
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
-        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
-        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
-        let mainRevealController = SWRevealViewController()
-        mainRevealController.rearViewController = rearViewController
-        mainRevealController.frontViewController = frontNavigationController
-        
-        DispatchQueue.main.async {
-            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
-        }
-        
-        window?.makeKeyAndVisible()
-    }
+    
 }
 
 /*extension login: ASAuthorizationControllerDelegate {
@@ -967,7 +982,19 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
                         
                         self.hide_loading_UI()
                          
-                        self.push_to_dashboard()
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+                        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+                        let mainRevealController = SWRevealViewController()
+                        mainRevealController.rearViewController = rearViewController
+                        mainRevealController.frontViewController = frontNavigationController
+                        
+                        DispatchQueue.main.async {
+                            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                        }
+                        
+                        self.window?.makeKeyAndVisible()
                         
                     }
                     else {
@@ -1051,7 +1078,17 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
                         
                         self.hide_loading_UI()
                         
-                        self.push_to_dashboard()
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+                        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+                        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+                        let mainRevealController = SWRevealViewController()
+                        mainRevealController.rearViewController = rearViewController
+                        mainRevealController.frontViewController = frontNavigationController
+                        
+                        DispatchQueue.main.async {
+                            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+                        }
                         
                     }
                     else {

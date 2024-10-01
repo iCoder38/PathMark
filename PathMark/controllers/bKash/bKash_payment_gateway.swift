@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import WebKit
 
-class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
+class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate {
     
     var doublePayment:String!
 
@@ -22,6 +22,9 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
     
     var dict_full:NSDictionary!
     var trxId:String!
+    
+    var getDiscountAmount:String!
+    var getCouponCode:String!
     
     @IBOutlet weak var webView: WKWebView! {
         didSet {
@@ -53,6 +56,7 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        webView.uiDelegate = self
         self.navigationController?.isNavigationBarHidden = true
         // self.btn_pay.addTarget(self, action: #selector(bKash_payment), for: .touchUpInside)
         
@@ -193,6 +197,8 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
                                 self.strPaymentId = (dict["paymentID"] as? String)
                                 self.webView.isHidden = false
                                 let myURLString = (dict["bkashURL"] as! String)
+                                // print(myURLString as Any)
+                                
                                 let url = URL(string: myURLString)
                                 let request = URLRequest(url: url!)
                                 self.webView.navigationDelegate = self
@@ -227,6 +233,7 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
             
             if (self.strLoadWebView == "0") {
                 self.strLoadWebView = "1"
+                print("me called ?")
             } else {
                 self.webView.isHidden = true
                 print(self.strAccessToken as Any)
@@ -235,10 +242,38 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
             }
         }
 
-        func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-            // Called when there's an error during webpage loading
-            print("Failed to load webpage: \(error.localizedDescription)")
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if let url = navigationAction.request.url {
+            print(url as Any)
+            
+            // Check for specific success URLs or custom schemes
+            if url.absoluteString.contains("success") {
+                print("Success URL detected!")
+                // Handle the success event (e.g., dismiss WebView, show a confirmation screen, etc.)
+            } else if url.absoluteString.contains("cancel") {
+                self.navigationController?.popViewController(animated: true)
+            }
+               
         }
+        decisionHandler(.allow)
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("Started provisional navigation")
+    }
+
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        print("Committed navigation")
+    }
+
+    
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        // Called when there's an error during webpage loading
+        print("Failed to load webpage: \(error.localizedDescription)")
+        
+       
+        
+    }
     
     func executeBKashPayment(token:String,payment_id:String) {
         
@@ -390,6 +425,18 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
                     "token":String(token_id_is),
                 ]
                 
+                /*
+                 "action"        : "updatepayment",
+                 "userId"        : String(myString),
+                 "bookingId"     : String(self.str_booking_id2),
+                 "transactionId"  : String("cash_dummy_transaction_id"),
+                 "totalAmount"   : String(self.str_final_amount),
+                 "TIP"           : String("0"),
+                 "discountAmount"    : String(self.discounted_amount),
+                 "couponCode"    : String(self.store_coupon_code),
+                 "paymentMethod" : String("Cash"),
+                 */
+                
                 parameters = [
                     "action"            : "updatepayment",
                     "userId"            : String(myString),
@@ -397,8 +444,8 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate {
                     "transactionId"     : String(self.trxId),
                     "totalAmount"       : String(self.doublePayment),
                     "TIP"               : String("0"),
-                    "discountAmount"    : String(""),
-                    "couponCode"        : String(""),
+                    "discountAmount"    : String(self.getDiscountAmount),
+                    "couponCode"        : String(self.getCouponCode),
                     "paymentMethod"     : String("Card"),
                     "paymentID"         : String(self.strPaymentId)
                 ]

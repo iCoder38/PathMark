@@ -447,21 +447,25 @@ class rating_review_table_cell: UITableViewCell {
             img_star_one.tintColor = .systemYellow
         }
     }
+    
     @IBOutlet weak var img_star_two:UIImageView! {
         didSet {
             img_star_two.tintColor = .systemYellow
         }
     }
+    
     @IBOutlet weak var img_star_three:UIImageView! {
         didSet {
             img_star_three.tintColor = .systemYellow
         }
     }
+    
     @IBOutlet weak var img_star_four:UIImageView! {
         didSet {
             img_star_four.tintColor = .systemYellow
         }
     }
+    
     @IBOutlet weak var img_star_five:UIImageView! {
         didSet {
             img_star_five.tintColor = .systemYellow

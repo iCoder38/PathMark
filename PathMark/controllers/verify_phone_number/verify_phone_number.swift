@@ -10,7 +10,7 @@ import OTPFieldView
 import Alamofire
 
 //import CommonCrypto
-import JWTDecode
+// import JWTDecode
 import CryptoKit
 
 enum DisplayType: Int {
@@ -22,8 +22,12 @@ enum DisplayType: Int {
 }
 
 class verify_phone_number: UIViewController , UITextFieldDelegate {
-
-    var str_get_user_id:String!
+    
+    var window: UIWindow?
+    
+    var strGetLoginUserID:String!
+    var strGetLoginEmailAddress:String!
+    var str_save_otp:String!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
@@ -49,82 +53,91 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
+        print(self.strGetLoginUserID as Any)
+        print(self.strGetLoginEmailAddress as Any)
+        
+        let defaults = UserDefaults.standard
+        defaults.setValue("", forKey: str_save_login_user_data)
+        defaults.setValue("", forKey: str_save_last_api_token)
+        
+        // UserDefaults.standard.set("no", forKey: "key_remember_me")
     }
     
-    @objc func convert_verify_OTP_params_into_encode(otp:String) {
-//        let indexPath = IndexPath.init(row: 0, section: 0)
-//        let cell = self.tbleView.cellForRow(at: indexPath) as! verify_phone_number_table_cell
-        
-        
-        let params = payload_verify_OTP(action: "verifyOTP",
-                                        userId: String(self.str_get_user_id),
-                                        OTP:String(otp))
-        
-        print(params as Any)
-        
-        let secret = sha_token_api_key
-        let privateKey = SymmetricKey(data: Data(secret.utf8))
-
-        let headerJSONData = try! JSONEncoder().encode(Header())
-        let headerBase64String = headerJSONData.urlSafeBase64EncodedString()
-
-        let payloadJSONData = try! JSONEncoder().encode(params)
-        let payloadBase64String = payloadJSONData.urlSafeBase64EncodedString()
-
-        let toSign = Data((headerBase64String + "." + payloadBase64String).utf8)
-
-        let signature = HMAC<SHA512>.authenticationCode(for: toSign, using: privateKey)
-        let signatureBase64String = Data(signature).urlSafeBase64EncodedString()
-        // print(signatureBase64String)
-        
-        let token = [headerBase64String, payloadBase64String, signatureBase64String].joined(separator: ".")
-        print(token)
-        
-        // self.verify_OTP_WB(get_encrpyt_token: token)
-        
-        // decode for testing
-        // decode
-        do {
-            let jwt = try decode(jwt: token)
-            print(jwt)
-
-            print(type(of: jwt))
-
-
-            print(jwt["body"])
-            } catch {
-                print("The file could not be loaded")
-         }
-        
-        // send this token to server
-        // sign_up_WB(get_encrpyt_token: token)
-        
-        
-    }
+    /*@objc func convert_verify_OTP_params_into_encode(otp:String) {
+     //        let indexPath = IndexPath.init(row: 0, section: 0)
+     //        let cell = self.tbleView.cellForRow(at: indexPath) as! verify_phone_number_table_cell
+     
+     if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+     // let str:String = person["role"] as! String
+     
+     let x : Int = person["userId"] as! Int
+     let myString = String(x)
+     
+     let params = payload_verify_OTP(action: "verifyOTP",
+     userId: String(myString),
+     OTP:String(otp))
+     
+     print(params as Any)
+     
+     let secret = sha_token_api_key
+     let privateKey = SymmetricKey(data: Data(secret.utf8))
+     
+     let headerJSONData = try! JSONEncoder().encode(Header())
+     let headerBase64String = headerJSONData.urlSafeBase64EncodedString()
+     
+     let payloadJSONData = try! JSONEncoder().encode(params)
+     let payloadBase64String = payloadJSONData.urlSafeBase64EncodedString()
+     
+     let toSign = Data((headerBase64String + "." + payloadBase64String).utf8)
+     
+     let signature = HMAC<SHA512>.authenticationCode(for: toSign, using: privateKey)
+     let signatureBase64String = Data(signature).urlSafeBase64EncodedString()
+     // print(signatureBase64String)
+     
+     let token = [headerBase64String, payloadBase64String, signatureBase64String].joined(separator: ".")
+     print(token)
+     
+     
+     
+     // decode for testing
+     // decode
+     do {
+     let jwt = try decode(jwt: token)
+     print(jwt)
+     
+     print(type(of: jwt))
+     
+     print(jwt["body"])
+     } catch {
+     print("The file could not be loaded")
+     }
+     }
+     // send this token to server
+     // sign_up_WB(get_encrpyt_token: token)
+     
+     
+     }*/
     
-    @objc func verify_OTP_WB(str_otp:String) {
-        // let indexPath = IndexPath.init(row: 0, section: 0)
-        // let cell = self.tbleView.cellForRow(at: indexPath) as! sign_up_table_cell
+    @objc func verify_OTP_WB(str_show_loader:String) {
         
         self.view.endEditing(true)
         
-         if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+        if (str_show_loader == "yes") {
+            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
                 print(language as Any)
                 
                 if (language == "en") {
                     ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
                 } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
                 }
-                
-             
             }
+        }
         
-        // let params = main_token(body: get_encrpyt_token)
+        
         let params = payload_verify_OTP(action: "verifyOTP",
-                                        userId: String(self.str_get_user_id),
-                                        OTP:String(str_otp))
+                                        userId: String(self.strGetLoginUserID),
+                                        OTP:String(self.str_save_otp))
         
         print(params as Any)
         
@@ -143,21 +156,25 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
                 var strSuccess : String!
                 strSuccess = (JSON["status"]as Any as? String)?.lowercased()
                 
+                var message : String!
+                message = (JSON["msg"]as Any as? String)?.lowercased()
+                
                 print(strSuccess as Any)
                 if strSuccess == String("success") {
                     print("yes")
                     
-                    ERProgressHud.sharedInstance.hide()
+                    self.signInAfterLogin(email: String(self.strGetLoginEmailAddress))
                     
-                    let alert = NewYorkAlertController(title: String("Success").uppercased(), message: (JSON["msg"] as! String), style: .alert)
-                    let cancel = NewYorkButton(title: "Ok", style: .cancel)
-                    alert.addButtons([cancel])
-                    self.present(alert, animated: true)
-                    
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
-                    self.navigationController?.pushViewController(push!, animated: true)
+                } else if message == String(not_authorize_api) {
+                    self.login_refresh_token_wb()
                     
                 } else {
+                    
+                    let defaults = UserDefaults.standard
+                    defaults.setValue("", forKey: str_save_login_user_data)
+                    defaults.setValue("", forKey: str_save_last_api_token)
+                    
+                    UserDefaults.standard.set("no", forKey: "key_remember_me")
                     
                     print("no")
                     ERProgressHud.sharedInstance.hide()
@@ -180,6 +197,172 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
                 
             }
         }
+    }
+    
+    
+    @objc func login_refresh_token_wb() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : String(self.strGetLoginEmailAddress),
+                    "role"      : (person["role"] as! String)
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.verify_OTP_WB(str_show_loader: "no")
+                            
+                        }
+                        else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+            
+        }
+    }
+    
+    @objc func signInAfterLogin(email:String) {
+        
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+            } else {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+            }
+        }
+        
+        self.view.endEditing(true)
+        
+        let params = payload_login(action: "login",
+                                   email: String(email),
+                                   password: "")
+        
+        print(params as Any)
+        
+        AF.request(application_base_url,
+                   method: .post,
+                   parameters: params,
+                   encoder: JSONParameterEncoder.default).responseJSON { response in
+            // debugPrint(response.result)
+            
+            switch response.result {
+            case let .success(value):
+                
+                let JSON = value as! NSDictionary
+                print(JSON as Any)
+                
+                var strSuccess : String!
+                strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                
+                print(strSuccess as Any)
+                if strSuccess == String("success") {
+                    print("yes")
+                    
+                    let defaults = UserDefaults.standard
+                    defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                    
+                    let str_token = (JSON["AuthToken"] as! String)
+                    UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                    UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                    
+                    let custom_email_pass = ["email":String(self.strGetLoginEmailAddress),
+                                             "password":""]
+                    
+                    UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                    
+                    self.hide_loading_UI()
+                    ERProgressHud.sharedInstance.hide()
+                    
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as! dashboard
+                    self.navigationController?.pushViewController(push, animated: true)
+                    
+                } else {
+                    
+                    print("no")
+                    self.dismiss(animated: true)
+                    ERProgressHud.sharedInstance.hide()
+                    
+                    var strSuccess2 : String!
+                    strSuccess2 = JSON["msg"]as Any as? String
+                    
+                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    self.present(alert, animated: true)
+                    
+                }
+                
+            case let .failure(error):
+                print(error)
+                self.dismiss(animated: true)
+                ERProgressHud.sharedInstance.hide()
+                
+                self.please_check_your_internet_connection()
+                
+            }
+        }
+    }
+    
+    
+    @objc func push_to_dashboard() {
+        // let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "dashboard_id") as? dashboard
+        // self.navigationController?.pushViewController(push!, animated: true)
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let destinationController = storyboard.instantiateViewController(withIdentifier:"dashboard_id") as? dashboard
+        let frontNavigationController = UINavigationController(rootViewController: destinationController!)
+        let rearViewController = storyboard.instantiateViewController(withIdentifier:"MenuControllerVCId") as? MenuControllerVC
+        let mainRevealController = SWRevealViewController()
+        mainRevealController.rearViewController = rearViewController
+        mainRevealController.frontViewController = frontNavigationController
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.keyWindow?.rootViewController = mainRevealController
+        }
+        
+        window?.makeKeyAndVisible()
     }
     
 }
@@ -496,7 +679,8 @@ extension verify_phone_number: OTPFieldViewDelegate {
     func enteredOTP(otp otpString: String) {
         print("OTPString: \(otpString)")
         //
-        // self.convert_verify_OTP_params_into_encode(otp: "\(otpString)")
-        self.verify_OTP_WB(str_otp: "\(otpString)")
+        self.str_save_otp = "\(otpString)"
+        self.verify_OTP_WB(str_show_loader: "yes")
     }
 }
+

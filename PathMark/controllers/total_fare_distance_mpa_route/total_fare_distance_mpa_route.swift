@@ -439,6 +439,9 @@ class total_fare_distance_mpa_route: UIViewController , CLLocationManagerDelegat
                     
                     let cancel = NewYorkButton(title: "dismiss", style: .destructive) {
                         _ in
+                        
+                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_history_id") as? ride_history
+                        self.navigationController?.pushViewController(push!, animated: true)
                     }
                     
                     alert.addButtons([ cancel])

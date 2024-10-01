@@ -100,7 +100,7 @@ class success_payment: UIViewController {
     }
     
     @objc func validate_before_submit_wb() {
-        let indexPath = IndexPath.init(row: 0, section: 0)
+        /*let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! success_payment_table_cell
         if (cell.lbl_star_count.text != "5") {
             
@@ -131,9 +131,9 @@ class success_payment: UIViewController {
             
             
             
-        } else {
+        } else {*/
             self.submit_review_WB(str_show_loader: "yes")
-        }
+        // }
         
         
     }

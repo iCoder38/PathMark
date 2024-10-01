@@ -46,8 +46,8 @@
             filePath = "PathMark/controllers/login/login.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1017"
-            endingLineNumber = "1017"
+            startingLineNumber = "1044"
+            endingLineNumber = "1044"
             landmarkName = "social_login_via_apple_one(social_id:email:name:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "PathMark/controllers/login/login.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "927"
-            endingLineNumber = "927"
+            startingLineNumber = "942"
+            endingLineNumber = "942"
             landmarkName = "social_login_via_apple_two(social_id:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -238,8 +238,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "882"
-            endingLineNumber = "882"
+            startingLineNumber = "929"
+            endingLineNumber = "929"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -254,8 +254,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "944"
-            endingLineNumber = "944"
+            startingLineNumber = "991"
+            endingLineNumber = "991"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -270,8 +270,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "934"
-            endingLineNumber = "934"
+            startingLineNumber = "981"
+            endingLineNumber = "981"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -286,8 +286,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "971"
-            endingLineNumber = "971"
+            startingLineNumber = "1018"
+            endingLineNumber = "1018"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -302,8 +302,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "975"
-            endingLineNumber = "975"
+            startingLineNumber = "1022"
+            endingLineNumber = "1022"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -318,8 +318,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "683"
-            endingLineNumber = "683"
+            startingLineNumber = "730"
+            endingLineNumber = "730"
             landmarkName = "bKash_payment_gateway"
             landmarkType = "3">
          </BreakpointContent>
@@ -334,8 +334,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1670"
-            endingLineNumber = "1670"
+            startingLineNumber = "1685"
+            endingLineNumber = "1685"
             landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
          </BreakpointContent>
@@ -375,22 +375,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CBBCE189-4990-4420-AC7F-5A11319A198F"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/before_payment/before_payment.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "419"
-            endingLineNumber = "419"
-            landmarkName = "submit_click_method()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E7175DDA-EC55-4A06-B872-44AD61DA7270"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -401,22 +385,6 @@
             startingLineNumber = "133"
             endingLineNumber = "133"
             landmarkName = "payment_WB(str_show_loader:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2CCF7B7B-6680-4463-868C-584AF0C2276D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "406"
-            endingLineNumber = "406"
-            landmarkName = "update_payment()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -478,8 +446,8 @@
             filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "483"
+            endingLineNumber = "483"
             landmarkName = "update_payment()"
             landmarkType = "7">
          </BreakpointContent>
@@ -542,8 +510,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1991"
-            endingLineNumber = "1991"
+            startingLineNumber = "2006"
+            endingLineNumber = "2006"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -558,8 +526,8 @@
             filePath = "PathMark/controllers/map_view/map_view.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2011"
-            endingLineNumber = "2011"
+            startingLineNumber = "2026"
+            endingLineNumber = "2026"
             landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -574,8 +542,8 @@
             filePath = "PathMark/controllers/total_fare_distance_mpa_route/total_fare_distance_mpa_route.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "683"
-            endingLineNumber = "683"
+            startingLineNumber = "686"
+            endingLineNumber = "686"
             landmarkName = "login_refresh_token_wb()"
             landmarkType = "7">
          </BreakpointContent>
@@ -593,6 +561,22 @@
             startingLineNumber = "525"
             endingLineNumber = "525"
             landmarkName = "schedule_a_ride_click_method()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6D5E23BA-1042-4D2D-9644-A346A63639A1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "PathMark/controllers/bKash/bKash_payment_gateway.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "453"
+            endingLineNumber = "453"
+            landmarkName = "update_payment()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

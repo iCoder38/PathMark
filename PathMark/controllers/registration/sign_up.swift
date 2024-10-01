@@ -9,7 +9,7 @@ import UIKit
 import Alamofire
 import CryptoKit
 import CommonCrypto
-import JWTDecode
+// import JWTDecode
 
 // MARK:- LOCATION -
 import CoreLocation
@@ -21,7 +21,6 @@ import FacebookLogin
 
 // apple
 import AuthenticationServices
-
 
 class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, ASAuthorizationControllerDelegate {
     var window: UIWindow?

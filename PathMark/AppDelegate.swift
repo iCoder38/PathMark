@@ -18,6 +18,7 @@ import FacebookCore
 import AuthenticationServices
 import SwiftyJSON
 
+@available(iOS 14.0, *)
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
 
@@ -197,7 +198,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     // MARK:- WHEN APP IS IN FOREGROUND - ( after click popup ) -
-    @available(iOS 10.0, *)
+    // @available(iOS 13.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         //print("User Info = ",notification.request.content.userInfo)
         // completionHandler([.alert, .badge, .sound])
@@ -497,7 +498,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     // MARK:- WHEN APP IS IN BACKGROUND - ( after click popup ) -
-    @available(iOS 10.0, *)
+    // @available(iOS 13.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         print("User Info = ",response.notification.request.content.userInfo)
         

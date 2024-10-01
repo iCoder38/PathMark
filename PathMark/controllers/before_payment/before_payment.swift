@@ -416,11 +416,53 @@ class before_payment: UIViewController {
             
         } else {
             
-            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
-            push!.doublePayment = "\(self.str_final_amount!)"
-            push!.dict_full = self.get_full_data_for_payment2
-            push!.str_booking_id = String(self.str_booking_id2)
-            self.navigationController?.pushViewController(push!, animated: true)
+            if (self.discounted_amount == nil) {
+                if (self.store_coupon_code == nil) {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+                    push!.doublePayment = "\(self.str_final_amount!)"
+                    push!.dict_full = self.get_full_data_for_payment2
+                    push!.str_booking_id = String(self.str_booking_id2)
+                    push!.getDiscountAmount = String("0")
+                    push!.getCouponCode = String("0")
+                    self.navigationController?.pushViewController(push!, animated: true)
+                } else {
+                    // discounted amount is nil but coupon code not
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+                    push!.doublePayment = "\(self.str_final_amount!)"
+                    push!.dict_full = self.get_full_data_for_payment2
+                    push!.str_booking_id = String(self.str_booking_id2)
+                    push!.getDiscountAmount = String("0")
+                    push!.getCouponCode = String(self.store_coupon_code)
+                    self.navigationController?.pushViewController(push!, animated: true)
+                }
+                
+            } else {
+                // discounted amount is not nil
+                if (self.store_coupon_code == nil) {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+                    push!.doublePayment = "\(self.str_final_amount!)"
+                    push!.dict_full = self.get_full_data_for_payment2
+                    push!.str_booking_id = String(self.str_booking_id2)
+                    push!.getDiscountAmount = String(self.discounted_amount)
+                    push!.getCouponCode = String("0")
+                    self.navigationController?.pushViewController(push!, animated: true)
+                } else {
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "bKash_payment_gateway_id") as? bKash_payment_gateway
+                    push!.doublePayment = "\(self.str_final_amount!)"
+                    push!.dict_full = self.get_full_data_for_payment2
+                    push!.str_booking_id = String(self.str_booking_id2)
+                    push!.getDiscountAmount = String(self.discounted_amount)
+                    push!.getCouponCode = String(self.store_coupon_code)
+                    self.navigationController?.pushViewController(push!, animated: true)
+                }
+                
+            }
+//            else {
+                
+//            }
+            
+            
+            
             
             /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "payment_id") as? payment
             

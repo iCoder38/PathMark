@@ -48,7 +48,7 @@ pod 'OTPFieldView'
 #pod 'CommonCryptoSwift'
 #pod 'JSONWebToken'
 #pod 'CryptoSwift'
-pod 'JWTDecode', '~> 3.1'
+#pod 'JWTDecode', '~> 3.1'
 
 pod 'ZKCarousel'
 
