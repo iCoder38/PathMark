@@ -227,20 +227,20 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
     
     // MARK: - WKNavigationDelegate Methods
 
-        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-            // Called when the webpage finishes loading
-            print("Webpage loaded successfully.")
-            
-            if (self.strLoadWebView == "0") {
-                self.strLoadWebView = "1"
-                print("me called ?")
-            } else {
-                self.webView.isHidden = true
-                print(self.strAccessToken as Any)
-                print(self.strPaymentId as Any)
-                self.executeBKashPayment(token: self.strAccessToken, payment_id: self.strPaymentId)
-            }
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        // Called when the webpage finishes loading
+        print("Webpage loaded successfully.")
+        
+        if (self.strLoadWebView == "0") {
+            self.strLoadWebView = "1"
+            print("me called ?")
+        } else {
+            self.webView.isHidden = true
+            print(self.strAccessToken as Any)
+            print(self.strPaymentId as Any)
+            // self.executeBKashPayment(token: self.strAccessToken, payment_id: self.strPaymentId)
         }
+    }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.url {
@@ -249,7 +249,11 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
             // Check for specific success URLs or custom schemes
             if url.absoluteString.contains("success") {
                 print("Success URL detected!")
-                // Handle the success event (e.g., dismiss WebView, show a confirmation screen, etc.)
+                
+                print(self.strAccessToken as Any)
+                print(self.strPaymentId as Any)
+                self.executeBKashPayment(token: self.strAccessToken, payment_id: self.strPaymentId)
+                
             } else if url.absoluteString.contains("cancel") {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -271,41 +275,50 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
         // Called when there's an error during webpage loading
         print("Failed to load webpage: \(error.localizedDescription)")
         
-       
-        
     }
     
     func executeBKashPayment(token:String,payment_id:String) {
         
         print(payment_id as Any)
         
+        if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+            print(language as Any)
+            
+            if (language == "en") {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+            } else {
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
+            }
+            
+        }
+        
         // Define your API endpoint for creating a payment
         let paymentURL = URL(string: bkash_execute_payment)!
-
+        
         // Create payment request
         var paymentRequest = URLRequest(url: paymentURL)
         paymentRequest.httpMethod = "POST"
-
+        
         // Set headers
         paymentRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         // request.setValue("Basic " + "\(apiKey):\(apiSecret)".data(using: .utf8)!.base64EncodedString(), forHTTPHeaderField: "Authorization")
         paymentRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         paymentRequest.setValue(bkash_app_key, forHTTPHeaderField: "x-app-key")
-
+        
         // Set your payment details
         let paymentDetails: [String: Any] = [
             "paymentID": String(payment_id),
         ]
-
+        
         // Convert payment details to Data
         guard let paymentData = try? JSONSerialization.data(withJSONObject: paymentDetails) else {
             print("Error creating payment data")
             return
         }
-
+        
         // Attach payment data to the request
         paymentRequest.httpBody = paymentData
-
+        
         // Create a URLSessionDataTask to send the payment request
         let paymentTask = URLSession.shared.dataTask(with: paymentRequest) { (data, response, error) in
             // Handle response
@@ -313,12 +326,12 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
                 print("Error: \(error)")
                 return
             }
-
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 print("Invalid response")
                 return
             }
-
+            
             if httpResponse.statusCode == 200 {
                 // Parse and handle successful response
                 if let data = data {
@@ -378,7 +391,7 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
                 // Handle other status codes
             }
         }
-
+        
         // Execute the payment task
         paymentTask.resume()
     }
@@ -386,22 +399,7 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
     @objc func update_payment() {
         // let indexPath = IndexPath.init(row: 0, section: 0)
         // let cell = self.tbleView.cellForRow(at: indexPath) as! payment_table_cell
-        
-         
-             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                print(language as Any)
-                
-                if (language == "en") {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
-                } else {
-                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "ড্রাইভার খোঁজা হচ্ছে")
-                }
-                
-             
-            }
-        
-        
-        
+       
         self.view.endEditing(true)
         
         var parameters:Dictionary<AnyHashable, Any>!
@@ -478,12 +476,8 @@ class bKash_payment_gateway: UIViewController, WKNavigationDelegate,WKUIDelegate
                             
                             ERProgressHud.sharedInstance.hide()
                             
-                            // self.back_click_method()
-                            
                             let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "success_payment_id") as? success_payment
-                            
                             push!.get_booking_details = self.dict_full
-                            
                             self.navigationController?.pushViewController(push!, animated: true)
                             
                         } else if message == String(not_authorize_api) {

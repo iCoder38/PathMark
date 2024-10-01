@@ -24,7 +24,7 @@ enum DisplayType: Int {
 class verify_phone_number: UIViewController , UITextFieldDelegate {
     
     var window: UIWindow?
-    
+    var getOPT:String!
     var strGetLoginUserID:String!
     var strGetLoginEmailAddress:String!
     var str_save_otp:String!
@@ -399,6 +399,9 @@ extension verify_phone_number: UITableViewDataSource  , UITableViewDelegate {
         cell.otpTextFieldView.delegate = self
         cell.otpTextFieldView.initializeUI()
         
+        
+        cell.lblDummyOTP.text = String(self.getOPT)
+        
         return cell
     }
     
@@ -470,7 +473,7 @@ extension verify_phone_number: UITableViewDataSource  , UITableViewDelegate {
 
 
 class verify_phone_number_table_cell: UITableViewCell {
-
+    @IBOutlet weak var lblDummyOTP:UILabel!
     @IBOutlet var otpTextFieldView: OTPFieldView!
 
     
