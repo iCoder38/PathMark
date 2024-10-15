@@ -141,15 +141,15 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        //
-        //        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
-        //        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
-        //
-        //        UserDefaults.standard.set("", forKey: "key_map_view_address")
-        //        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
-        //
-        //        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
-        //        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+        
+        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+
+        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+
+        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
         
         if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
             debugPrint(profileUpOrBottom)
@@ -580,7 +580,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
         push!.str_user_option = String(vehicleOption)
         // self.str_select_option
-        
+        // debugPrint(vehicleOption as Any)
         push!.str_get_user_current_full_address = String(self.loginUserAddressTo)
         // cell.lbl_my_full_address.text
         
@@ -862,6 +862,11 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                 print("no token found")
                 self.login_refresh_token_wb()
             }
+        } else {
+            print("something went very wrong")
+            ERProgressHud.sharedInstance.hide()
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "get_started_id")
+            self.navigationController?.pushViewController(push, animated: true)
         }
     }
     

@@ -477,6 +477,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         UserDefaults.standard.set("userLocationTo", forKey: "keyUserSelectWhichProfile")
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "select_location_via_name_id") as? select_location_via_name
         push!.userSelectOriginOrDestination = "origin"
+        push!.selectedVehicleType = String(self.str_user_select_vehicle)
         self.navigationController?.pushViewController(push!, animated: true)
     }
     
@@ -728,6 +729,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
         
         let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "search_location_id") as? search_location
         push!.userSelectedIs = "1"
+         
         self.navigationController?.pushViewController(push!, animated: true)
         
     }

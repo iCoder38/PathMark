@@ -399,6 +399,7 @@ class search_location: UIViewController, UITextFieldDelegate, CLLocationManagerD
         
         let filter = GMSAutocompleteFilter()
         filter.type = .establishment
+        filter.countries = ["BD"]
         
         placesClient.findAutocompletePredictions(fromQuery: query,
                                                  filter: filter,
@@ -582,6 +583,7 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
                 cell.lbl_sub_title.text = (item!["address"] as! String)
                 
                 return cell
+                
             } else {
                 let cell:search_location_table_cell = tableView.dequeueReusableCell(withIdentifier: "three") as! search_location_table_cell
                 
@@ -596,15 +598,11 @@ extension search_location: UITableViewDataSource , UITableViewDelegate {
                 
                 cell.lbl_recent_address2.text = (item!["address"] as! String)
                 
-                
                 return cell
             }
         }
         
-        
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView .deselectRow(at: indexPath, animated: true)

@@ -592,9 +592,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         self.navigationController?.pushViewController(push, animated: true)
                         
-                        
-                    }
-                    else {
+                    } else {
                         
                         self.hide_loading_UI()
                         

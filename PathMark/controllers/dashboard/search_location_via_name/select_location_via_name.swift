@@ -23,6 +23,8 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
     let locationManager = CLLocationManager()
     var centerPinImageView: UIImageView!
     
+    var selectedVehicleType:String!
+    
     @IBOutlet weak var btnBack:UIButton! {
         didSet {
             btnBack.tintColor = .black
@@ -148,21 +150,204 @@ class select_location_via_name: UIViewController,UITextFieldDelegate, CLLocation
                 let lines = address.lines ?? []
                 let fullAddress = lines.joined(separator: ", ")
                 
+                debugPrint("Center location address: \(address)")
+                
                 debugPrint("Center location address: \(fullAddress)")
                 
-                // Save data in UserDefaults
-                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
-                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
                 
-                self.txtSearchGoogleLocation.text = String(fullAddress)
+                if let country = address.country {
+                    print("Country: \(country)")
+                    
+                    // Check if the country is Bangladesh
+                    if country != "Bangladesh" {
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Service not available outside Bangladesh."), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        return
+                    }
+                    
+                    // If the country is Bangladesh, now check for the city
+                    if let city = address.locality {
+                        print("City: \(city)")
+                        
+                        if city == "Dhaka" {
+                            
+                            if (self.selectedVehicleType == "CAR" || self.selectedVehicleType == "car" || self.selectedVehicleType == "Car") {
+                                print("USER SELECT CAR")
+                                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                                
+                                self.txtSearchGoogleLocation.text = String(fullAddress)
+                                
+                                // Optionally, add data to the database
+                                let randomCGFloat = Int.random(in: 1...1000)
+                                self.db.insert(id: randomCGFloat, name: fullAddress,
+                                               lat_long: "\(latitude),\(longitude)",
+                                               age: 2)
+                                
+                                self.view.bringSubviewToFront(self.btnAddLocation)
+                            } else if (self.selectedVehicleType == "BIKE" || self.selectedVehicleType == "bike" || self.selectedVehicleType == "Bike") {
+                                print("USER SELECT Bike")
+                                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                                
+                                self.txtSearchGoogleLocation.text = String(fullAddress)
+                                
+                                // Optionally, add data to the database
+                                let randomCGFloat = Int.random(in: 1...1000)
+                                self.db.insert(id: randomCGFloat, name: fullAddress,
+                                               lat_long: "\(latitude),\(longitude)",
+                                               age: 2)
+                                
+                                self.view.bringSubviewToFront(self.btnAddLocation)
+                            } else {
+                                if (self.selectedVehicleType == "CAR" || self.selectedVehicleType == "car" || self.selectedVehicleType == "Car") {
+                                    print("USER SELECT Intercity")
+                                    
+                                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Please select different car type inside Dhaka. Please choose Intercity."), style: .alert)
+                                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                    alert.addButtons([cancel])
+                                    self.present(alert, animated: true)
+                                    
+                                }
+                            }
+                            
+                            // print("This place is in Dhaka, Bangladesh.")
+                            
+                        } else {
+                            print("This place is NOT in Dhaka, Bangladesh.")
+                            
+                            if (self.selectedVehicleType == "CAR" || self.selectedVehicleType == "car" || self.selectedVehicleType == "Car") {
+                                print("USER SELECT CAR")
+                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our Car service."), style: .alert)
+                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                alert.addButtons([cancel])
+                                self.present(alert, animated: true)
+                            } else if (self.selectedVehicleType == "BIKE" || self.selectedVehicleType == "bike" || self.selectedVehicleType == "Bike") {
+                                print("USER SELECT Bike")
+                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our Bike service"), style: .alert)
+                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                alert.addButtons([cancel])
+                                self.present(alert, animated: true)
+                            } else {
+                              
+                                    
+                                    if (self.selectedVehicleType == "Intercity" || self.selectedVehicleType == "INTERCITY" || self.selectedVehicleType == "intercity") {
+                                        print("USER SELECT Intercity")
+                                        
+                                        print("Yes, all good")
+                                        UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                                        UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                                        
+                                        self.txtSearchGoogleLocation.text = String(fullAddress)
+                                        
+                                        // Optionally, add data to the database
+                                        let randomCGFloat = Int.random(in: 1...1000)
+                                        self.db.insert(id: randomCGFloat, name: fullAddress,
+                                                       lat_long: "\(latitude),\(longitude)",
+                                                       age: 2)
+                                        
+                                        self.view.bringSubviewToFront(self.btnAddLocation)
+                                        
+                                    }
+                                    
+                               
+                            }
+                            
+                            
+                            
+                        }
+                    } else {
+                        print("City not found.")
+                        /*let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("City not found. Please try again."), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)*/
+                        
+                        if (self.selectedVehicleType == "CAR" || self.selectedVehicleType == "car" || self.selectedVehicleType == "Car") {
+                            print("USER SELECT CAR")
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our Car service."), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                        } else if (self.selectedVehicleType == "BIKE" || self.selectedVehicleType == "bike" || self.selectedVehicleType == "Bike") {
+                            print("USER SELECT Bike")
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our Bike service"), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                        } else {
+                            if (self.selectedVehicleType == "Intercity" || self.selectedVehicleType == "INTERCITY" || self.selectedVehicleType == "intercity") {
+                                print("USER SELECT Intercity")
+                                
+                                print("Yes, all good")
+                                UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                                UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                                
+                                self.txtSearchGoogleLocation.text = String(fullAddress)
+                                
+                                // Optionally, add data to the database
+                                let randomCGFloat = Int.random(in: 1...1000)
+                                self.db.insert(id: randomCGFloat, name: fullAddress,
+                                               lat_long: "\(latitude),\(longitude)",
+                                               age: 2)
+                                
+                                self.view.bringSubviewToFront(self.btnAddLocation)
+                                
+                            }
+                        }
+                        
+                        
+                        
+                    }
+                    
+                } else {
+                    print("Country not found.")
+                    let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Something went wrong. Please try again."), style: .alert)
+                    let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                    alert.addButtons([cancel])
+                    self.present(alert, animated: true)
+                }
+
                 
-                // Optionally, add data to the database
-                let randomCGFloat = Int.random(in: 1...1000)
-                self.db.insert(id: randomCGFloat, name: fullAddress,
-                               lat_long: "\(latitude),\(longitude)",
-                               age: 2)
                 
-                self.view.bringSubviewToFront(self.btnAddLocation)
+                /*if let country = address.country {
+                    print("Country: \(country)")
+                    
+                    if ("\(country)" == "Bangladesh") {
+                        // Save data in UserDefaults
+                        UserDefaults.standard.set("\(latitude),\(longitude)", forKey: "key_map_view_lat_long")
+                        UserDefaults.standard.set(fullAddress, forKey: "key_map_view_address")
+                        
+                        self.txtSearchGoogleLocation.text = String(fullAddress)
+                        
+                        // Optionally, add data to the database
+                        let randomCGFloat = Int.random(in: 1...1000)
+                        self.db.insert(id: randomCGFloat, name: fullAddress,
+                                       lat_long: "\(latitude),\(longitude)",
+                                       age: 2)
+                        
+                        self.view.bringSubviewToFront(self.btnAddLocation)
+                    } else {
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(""), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        return;
+                    }
+                    
+                    
+                    
+                    
+                } else {
+                    print("Country not found.")
+                    return;
+                }*/
+                
+                
+                
+                
             }
         }
     }
