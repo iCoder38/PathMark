@@ -1138,6 +1138,129 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
      
      }*/
     
+    
+    func geocodeAddress(_ address: String) {
+        let apiKey = GOOGLE_MAP_API
+        let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=\(address)&key=\(apiKey)"
+        
+        guard let url = URL(string: geocodeURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) else {
+            print("Invalid URL.")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data, error == nil else {
+                print("Error occurred: \(String(describing: error))")
+                return
+            }
+            
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let results = json["results"] as? [[String: Any]],
+                   let addressComponents = results.first?["address_components"] as? [[String: Any]] {
+                    
+                    print(results as Any)
+                    print(addressComponents as Any)
+                    
+                    var city = ""
+                    var country = ""
+                    
+                    for component in addressComponents {
+                        if let types = component["types"] as? [String], types.contains("locality") {
+                            city = component["long_name"] as? String ?? ""
+                        }
+                        if let types = component["types"] as? [String], types.contains("country") {
+                            country = component["long_name"] as? String ?? ""
+                        }
+                    }
+                    
+                    if city == "Dhaka" && country == "Bangladesh" {
+                        print("The place is in Dhaka, Bangladesh.")
+                        if (self.str_user_select_vehicle != "INTERCITY") {
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                            
+                            debugPrint(self.str_user_select_vehicle as Any)
+                            
+                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                            
+                            push!.str_get_category_id = String(self.str_category_id)
+                            // push!.str_from_location = String(self.lbl_location_from.text!)
+                            // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                            
+                            push!.str_from_location = String(self.getLoginUserAddressTo)
+                            push!.str_to_location = String(self.getLoginUserAddressFrom)
+                            
+                            push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+                            push!.my_location_long = String(self.getLoginUserLongitudeTo)
+                            
+                            push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+                            push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
+                            DispatchQueue.main.async {
+                                ERProgressHud.sharedInstance.hide()
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                ERProgressHud.sharedInstance.hide()
+                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our \(self.str_user_select_vehicle!) service."), style: .alert)
+                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                alert.addButtons([cancel])
+                                self.present(alert, animated: true)
+                            }
+                            
+                        }
+                    } else {
+                        print("The place is not in Dhaka, Bangladesh.")
+                        print(self.str_user_select_vehicle as Any)
+                        
+                        if (self.str_user_select_vehicle == "INTERCITY") {
+                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
+                            
+                            debugPrint(self.str_user_select_vehicle as Any)
+                            
+                            push!.str_vehicle_type = String(self.str_user_select_vehicle)
+                            
+                            push!.str_get_category_id = String(self.str_category_id)
+                            // push!.str_from_location = String(self.lbl_location_from.text!)
+                            // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
+                            
+                            push!.str_from_location = String(self.getLoginUserAddressTo)
+                            push!.str_to_location = String(self.getLoginUserAddressFrom)
+                            
+                            push!.my_location_lat = String(self.getLoginUserLatitudeTo)
+                            push!.my_location_long = String(self.getLoginUserLongitudeTo)
+                            
+                            push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
+                            push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
+                            DispatchQueue.main.async {
+                                ERProgressHud.sharedInstance.hide()
+                                self.navigationController?.pushViewController(push!, animated: true)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                ERProgressHud.sharedInstance.hide()
+                                let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String("Your selected location is out of our \(self.str_user_select_vehicle!) service."), style: .alert)
+                                let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                                alert.addButtons([cancel])
+                                self.present(alert, animated: true)
+                            }
+                            
+                        }
+                        
+                        
+                        
+                    }
+                }
+            } catch let parseError {
+                print("Error parsing response: \(parseError)")
+            }
+        }
+        task.resume()
+    }
+
+    
+
+    
     /// **************************************************************
     /// ************* RIDE NOW CLICK *********************************
     /// **************************************************************
@@ -1182,26 +1305,10 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 
             } else {
                 
-                let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "total_fare_distance_mpa_route_id") as? total_fare_distance_mpa_route
-                
-                debugPrint(self.str_user_select_vehicle as Any)
-                
-                push!.str_vehicle_type = String(self.str_user_select_vehicle)
-                
-                push!.str_get_category_id = String(self.str_category_id)
-                // push!.str_from_location = String(self.lbl_location_from.text!)
-                // push!.str_to_location = String(self.stateAndCountry)+" "+String(self.stateAndCountry)
-                
-                push!.str_from_location = String(self.getLoginUserAddressTo)
-                push!.str_to_location = String(self.getLoginUserAddressFrom)
-                
-                push!.my_location_lat = String(self.getLoginUserLatitudeTo)
-                push!.my_location_long = String(self.getLoginUserLongitudeTo)
-                
-                push!.searched_place_location_lat = String(self.getLoginUserLatitudeFrom)
-                push!.searched_place_location_long = String(self.getLoginUserLongitudeFrom)
-                
-                self.navigationController?.pushViewController(push!, animated: true)
+               
+                ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
+                // Example usage:
+                geocodeAddress(String(self.getLoginUserAddressFrom))
                 
             }
             

@@ -142,14 +142,14 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
-        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
-
-        UserDefaults.standard.set("", forKey: "key_map_view_address")
-        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
-
-        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
-        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+//        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+//        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+//
+//        UserDefaults.standard.set("", forKey: "key_map_view_address")
+//        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+//
+//        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+//        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
         
         if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
             debugPrint(profileUpOrBottom)
@@ -303,7 +303,7 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     
     // Reverse geocoding to get address from coordinates
     private func getAddressFromLocation(_ location: CLLocation) {
-        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+        geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
             if let error = error {
                 print("Failed to reverse geocode location: \(error.localizedDescription)")
                 return
@@ -325,18 +325,22 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                     addressString += country
                 }
                 
-                self?.userAddress = addressString
+                self.userAddress = addressString
                 print("User's Address: \(addressString)")
                 
-                let indexPath = IndexPath.init(row: 0, section: 0)
-                let cell = self!.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
-                
-                cell.lbl_my_full_address.text = "\(addressString)"
-                self!.loginUserAddressTo = "\(addressString)"
-                
-                self!.update_token_WB(str_show_loader: "yes")
+                self.call(addressString: "\(addressString)")
             }
         }
+    }
+    
+    @objc func call(addressString:String){
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! dashboard_table_cell
+        
+        cell.lbl_my_full_address.text = "\(addressString)"
+        self.loginUserAddressTo = "\(addressString)"
+        
+        self.update_token_WB(str_show_loader: "yes")
     }
     
     var _lastContentOffset: CGPoint!
