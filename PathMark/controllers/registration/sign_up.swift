@@ -311,7 +311,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
                     }
                 }
                 
-            }  else */if (cell.txt_phone_number.text!.count == 11) {
+            }  else */if (cell.txt_phone_number.text!.count == 10) {
                 
                 if (self.arr_country_array == nil) {
                     phone_number_code = "+880"
@@ -805,7 +805,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
 
             // make sure the result is under 16 characters
-            return updatedText.count <= 11
+            return updatedText.count <= 10
             
         
         }  else {
@@ -1716,6 +1716,7 @@ class sign_up_table_cell: UITableViewCell {
     @IBOutlet weak var header_half_view_navigation_bar:UIView! {
         didSet {
             header_half_view_navigation_bar.backgroundColor = navigation_color
+            header_half_view_navigation_bar.applyGradient()
         }
     }
     

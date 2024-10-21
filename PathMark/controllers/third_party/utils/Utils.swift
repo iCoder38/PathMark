@@ -21,9 +21,33 @@ class customPin: NSObject, MKAnnotation {
 }
 
  
+// ###########################################################################################
+// ###########################################################################################
+// ###########################################################################################
+
+
+
 
 // MARK:- BASE URL -
-let application_base_url = "https://demo4.evirtualservices.net/pathmark/services/index"
+let application_base_url = "https://demo4.evirtualservices.net/ridewithus/services/index"
+
+var RIDE_WITH_US = ""
+
+let lightOrangeColor = UIColor(red: 255/255, green: 126/255, blue: 0/255, alpha: 1.0)
+let darkOrangeColor = UIColor(red: 255/255, green: 200/255, blue: 0/255, alpha: 1.0)
+
+let buttonColorRed = UIColor(red: 204/255, green: 60/255, blue: 36/255, alpha: 1.0)
+let viewBackgroundColor = UIColor(red: 20/255, green: 19/255, blue: 19/255, alpha: 1.0)
+
+
+
+
+// ###########################################################################################
+// ###########################################################################################
+// ###########################################################################################
+
+
+
 
 // sh 512 token key
 let sha_token_api_key = "68V0zWFrS72GbpPreidkQFLfj4v9m3Ti+DXc8OB0gcM="
@@ -79,13 +103,6 @@ var bkash_password = "sandboxTokenizedUser02@12345"*/
 
 
 
-var RIDE_WITH_US = ""
-
-let lightOrangeColor = UIColor(red: 255/255, green: 126/255, blue: 0/255, alpha: 1.0)
-let darkOrangeColor = UIColor(red: 255/255, green: 200/255, blue: 0/255, alpha: 1.0)
-
-let buttonColorRed = UIColor(red: 204/255, green: 60/255, blue: 36/255, alpha: 1.0)
-let viewBackgroundColor = UIColor(red: 20/255, green: 19/255, blue: 19/255, alpha: 1.0)
 
 
 

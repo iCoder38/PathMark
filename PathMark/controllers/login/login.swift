@@ -543,7 +543,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             parameters = [
                 "action"    : "login",
                 "email"     : String(cell.txtEmailAddress.text!),
-                "password"  : String("")
+                "password"  : String(cell.txtPassword.text!),
             ]
 //        }
         
@@ -591,6 +591,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         push.strGetLoginUserID = "\(dict["userId"]!)"
                         push.strGetLoginEmailAddress = "\(dict["email"]!)"
+                        push.strGetLoginPassword = String(cell.txtPassword.text!)
                         push.getOPT = "" // "\(dict["OTP"]!)"
                         
                         self.navigationController?.pushViewController(push, animated: true)

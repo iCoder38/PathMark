@@ -27,6 +27,7 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
     var getOPT:String!
     var strGetLoginUserID:String!
     var strGetLoginEmailAddress:String!
+    var strGetLoginPassword:String!
     var str_save_otp:String!
     
     @IBOutlet weak var view_navigation_bar:UIView! {
@@ -277,7 +278,7 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
         
         let params = payload_login(action: "login",
                                    email: String(email),
-                                   password: "")
+                                   password: String(self.strGetLoginPassword))
         
         print(params as Any)
         

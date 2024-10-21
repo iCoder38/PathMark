@@ -29,16 +29,15 @@ class success_payment: UIViewController {
     @IBOutlet weak var view_navigation_title:UILabel! {
         didSet {
             if let language = UserDefaults.standard.string(forKey: str_language_convert) {
-                           print(language as Any)
-                           
-                           if (language == "en") {
-                               view_navigation_title.text = "Payment Successful"
-                           } else {
-                               view_navigation_title.text = "পেমেন্ট সফল হয়েছে"
-                           }
-                           
-                        
-                       }
+                print(language as Any)
+                
+                if (language == "en") {
+                    view_navigation_title.text = "Payment Successful"
+                } else {
+                    view_navigation_title.text = "পেমেন্ট সফল হয়েছে"
+                }
+                
+            }
             
             view_navigation_title.textColor = .white
         }
