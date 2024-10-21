@@ -31,7 +31,7 @@ class verify_phone_number: UIViewController , UITextFieldDelegate {
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     

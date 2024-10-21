@@ -50,7 +50,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     
@@ -78,6 +78,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         super.viewDidLoad()
         
         self.btn_back.addTarget(self, action: #selector(back_click_method), for: .touchUpInside)
+         self.view.backgroundColor = viewBackgroundColor
         
 //        let defaults = UserDefaults.standard
 //        defaults.setValue("", forKey: str_save_login_user_data)
@@ -96,6 +97,8 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         
     }
     
+   
+    
     @objc func language_convert() {
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
@@ -106,7 +109,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             if (language == "en") {
                 cell.btnSignIn.setTitle("Sign In", for: .normal)
                 cell.lbl_remember_me.text = "Remember me"
-                cell.lbl_login_with_social_media.text = "Login with Social media"
+                // cell.lbl_login_with_social_media.text = "Login with Social media"
                 // cell.btnForgotPassword.setTitle("Forgot password ? - Click here", for: .normal)
                 cell.btnDontHaveAnAccount.setTitle("Not a member? Register Now", for: .normal)
                 cell.lbl_login_to_continue.text = "Login to Continue"
@@ -862,27 +865,27 @@ extension login: UITableViewDataSource  , UITableViewDelegate{
         cell.btnSignIn.addTarget(self, action: #selector(home_click_method), for: .touchUpInside)
         cell.btnDontHaveAnAccount.addTarget(self, action: #selector(dontHaveAntAccountClickMethod), for: .touchUpInside)
         cell.btn_remember_me.addTarget(self, action: #selector(remember_me_click_method), for: .touchUpInside)
-        cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
-        cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
+        // cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
+        // cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
         
         // facebook
         /*let loginButton = FBLoginButton()
         loginButton.center = cell.center
         cell.addSubview(loginButton)*/
         
-        if let token = AccessToken.current,
+        /*if let token = AccessToken.current,
            !token.isExpired {
             // User is logged in, do work such as go to next view controller.
-        }
+        }*/
         
         // apple
          // func setUpSignInAppleButton() {
-        let authorizationButton = ASAuthorizationAppleIDButton()
+        /*let authorizationButton = ASAuthorizationAppleIDButton()
         authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest), for: .touchUpInside)
         authorizationButton.cornerRadius = 10
         // authorizationButton.center = cell.view_apple.center
           //Add button on some view or stack
-        cell.view_apple.addSubview(authorizationButton)
+        cell.view_apple.addSubview(authorizationButton)*/
          // }
         
         return cell
@@ -1233,7 +1236,7 @@ class login_table_cell: UITableViewCell {
              
             Utils.buttonStyle(button: btnSignIn,
                               bCornerRadius: 12,
-                              bBackgroundColor: UIColor(red: 246.0/255.0, green: 200.0/255.0, blue: 68.0/255.0, alpha: 1),
+                              bBackgroundColor: buttonColorRed,
                               bTitle: "Login",
                               bTitleColor: .black)
             
@@ -1242,7 +1245,6 @@ class login_table_cell: UITableViewCell {
             btnSignIn.layer.shadowOffset =  CGSize.zero
             btnSignIn.layer.shadowOpacity = 0.5
             btnSignIn.layer.shadowRadius = 2
-            
         }
     }
     
@@ -1257,28 +1259,18 @@ class login_table_cell: UITableViewCell {
             Utils.buttonStyle(button: btnSaveAndContinue, bCornerRadius: 6, bBackgroundColor: .black, bTitle: "Sign In", bTitleColor: .white)
         }
     }
-    
-    /*@IBOutlet weak var btnForgotPassword:UIButton! {
-        didSet {
-            Utils.buttonStyle(button: btnForgotPassword,
-                              bCornerRadius: 6,
-                              bBackgroundColor: .clear,
-                              bTitle: "Forgot Password ? - Click here",
-                              bTitleColor: navigation_color)
-        }
-    }*/
-    
+   
     @IBOutlet weak var btnDontHaveAnAccount:UIButton! {
         didSet {
             Utils.buttonStyle(button: btnDontHaveAnAccount, bCornerRadius: 6, bBackgroundColor: .clear, bTitle: "Not a member? Register Now", bTitleColor: UIColor(red: 87.0/255.0, green: 77.0/255.0, blue: 112.0/255.0, alpha: 1))
+            btnDontHaveAnAccount.setTitleColor(UIColor.yellow, for: .normal)
         }
     }
     
     @IBOutlet weak var lbl_remember_me:UILabel!
     @IBOutlet weak var lbl_login_with_social_media:UILabel!
     @IBOutlet weak var lbl_login_to_continue:UILabel!
-    // চালিয়ে যেতে লগইন করুন
-    
+   
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -38,7 +38,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     
@@ -200,7 +200,7 @@ class invoice: UIViewController, CLLocationManagerDelegate , MKMapViewDelegate {
         super.viewDidLoad()
         
         print(self.dict_all_details as Any)
-        
+        self.view.backgroundColor = .black
     
         
         self.lbl_distance.text = "\(self.dict_all_details["totalDistance"]!) km"

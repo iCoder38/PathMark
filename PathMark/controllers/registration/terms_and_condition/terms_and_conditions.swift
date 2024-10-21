@@ -13,7 +13,7 @@ class terms_and_conditions: UIViewController {
 
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     

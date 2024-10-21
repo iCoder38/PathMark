@@ -44,7 +44,7 @@ class sign_up: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     
@@ -1414,17 +1414,17 @@ extension sign_up: UITableViewDataSource  , UITableViewDelegate {
             cell.btnSignUp.isUserInteractionEnabled = false
         }
         
-        cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
-        cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
+        // cell.btn_google.addTarget(self, action: #selector(signInViaGoogle), for: .touchUpInside)
+        // cell.btn_facebook.addTarget(self, action: #selector(signInViaFacebook), for: .touchUpInside)
         
         // apple
          // func setUpSignInAppleButton() {
-        let authorizationButton = ASAuthorizationAppleIDButton()
+        /*let authorizationButton = ASAuthorizationAppleIDButton()
         authorizationButton.addTarget(self, action: #selector(handleAppleIdRequest), for: .touchUpInside)
         authorizationButton.cornerRadius = 10
         // authorizationButton.center = cell.view_apple.center
           //Add button on some view or stack
-        cell.view_apple.addSubview(authorizationButton)
+        cell.view_apple.addSubview(authorizationButton)*/
         
         return cell
     }

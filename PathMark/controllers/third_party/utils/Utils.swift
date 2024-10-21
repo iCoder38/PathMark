@@ -79,9 +79,13 @@ var bkash_password = "sandboxTokenizedUser02@12345"*/
 
 
 
+var RIDE_WITH_US = ""
 
+let lightOrangeColor = UIColor(red: 255/255, green: 126/255, blue: 0/255, alpha: 1.0)
+let darkOrangeColor = UIColor(red: 255/255, green: 200/255, blue: 0/255, alpha: 1.0)
 
-
+let buttonColorRed = UIColor(red: 204/255, green: 60/255, blue: 36/255, alpha: 1.0)
+let viewBackgroundColor = UIColor(red: 20/255, green: 19/255, blue: 19/255, alpha: 1.0)
 
 
 
@@ -252,6 +256,10 @@ class Utils: NSObject {
         button.backgroundColor = bBackgroundColor
         button.setTitle(bTitle, for: .normal)
         button.setTitleColor(bTitleColor, for: .normal)
+//        button.setGradientBackground(
+//            startColor: lightOrangeColor,
+//            endColor: darkOrangeColor
+//        )
     }
     
     // text field
@@ -374,7 +382,46 @@ extension String {
     
 }
 
+extension UIView {
+    
+    /*func applyGradient(colours: [UIColor], cornerRadius: CGFloat?, startPoint: CGPoint, endPoint: CGPoint)  {
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.frame = self.bounds
+        if let cornerRadius = cornerRadius {
+            gradient.cornerRadius = cornerRadius
+        }
+        gradient.startPoint = startPoint
+        gradient.endPoint = endPoint
+        gradient.colors = colours.map { $0.cgColor }
+        self.layer.insertSublayer(gradient, at: 0)
+    }*/
+    
+    func applyGradient(
+            colours: [UIColor] = [lightOrangeColor, darkOrangeColor],
+            cornerRadius: CGFloat? = nil,
+            startPoint: CGPoint? = CGPoint(x: 0.0, y: 0.5),
+            endPoint: CGPoint? = CGPoint(x: 1.0, y: 0.5)
+        ) {
+            let gradient: CAGradientLayer = CAGradientLayer()
+            gradient.frame = self.bounds
+            if let cornerRadius = cornerRadius {
+                gradient.cornerRadius = cornerRadius
+            }
+            gradient.startPoint = startPoint!
+            gradient.endPoint = endPoint!
+            gradient.colors = colours.map { $0.cgColor }
+            
+            self.layer.sublayers?.forEach { if $0 is CAGradientLayer { $0.removeFromSuperlayer() } }
+            self.layer.insertSublayer(gradient, at: 0)
+            
+        }
+        
+}
+    
+ 
+
 extension UIViewController {
+    
     
     func roundToTwoDecimalPlaces(_ number: Double) -> String {
         let roundedNumber = round(100 * number) / 100

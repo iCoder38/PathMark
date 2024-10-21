@@ -148,7 +148,7 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
-            view_navigation_bar.backgroundColor = navigation_color
+            view_navigation_bar.applyGradient()
         }
     }
     
@@ -1259,8 +1259,6 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
     }
 
     
-
-    
     /// **************************************************************
     /// ************* RIDE NOW CLICK *********************************
     /// **************************************************************
@@ -1304,17 +1302,11 @@ class map_view: UIViewController , UITextFieldDelegate, CLLocationManagerDelegat
                 self.navigationController?.pushViewController(push!, animated: true)
                 
             } else {
-                
-               
                 ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "please wait...")
-                // Example usage:
                 geocodeAddress(String(self.getLoginUserAddressFrom))
-                
             }
             
         }
-        
-        
     }
     
     
