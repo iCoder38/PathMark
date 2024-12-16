@@ -1,0 +1,21 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'OWL' do
+
+	pod 'SDWebImage', '~> 5.8.1'
+    pod 'AFNetworking', '2.3.1',:inhibit_warnings => true
+    pod 'SVProgressHUD', '~> 2.2.5' ,:inhibit_warnings => true
+    pod 'Firebase/Core', :inhibit_warnings =>true
+    pod 'Firebase/Auth', :inhibit_warnings=>true
+    pod 'Firebase/Messaging', :inhibit_warnings=>true
+    pod 'Firebase/Database', :inhibit_warnings=>true
+    pod 'Firebase/Analytics'
+    pod 'GoogleTagManager'
+    pod 'UITextView+Placeholder'
+    pod 'BSKeyboardControls'
+    pod 'SWTableViewCell', '~> 0.3.7'
+    pod 'GoogleMaps'
+    pod 'GooglePlaces'
+    pod 'SYPhotoBrowser'
+end

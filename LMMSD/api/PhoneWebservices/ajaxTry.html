@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>AJAX</title>
+</head>
+<body>
+
+<style></style>
+
+<button onclick="Ajax_call()">BUTTON NAME</button>
+
+<script>
+	
+
+
+
+	function Ajax_call(){
+
+		var http=new XMLHttpRequest();
+		console.log("first");
+
+		http.onreadystatechange=function(){
+				if(this.readyState==4 && this.status==200){
+				console.log(this.responseText);
+				
+				}
+				else
+				{
+					console.log("error")
+				}
+			};
+
+ 			
+
+		http.open("GET","https://jsonplaceholder.typicode.com/todos/",true);
+		http.send();
+		console.log("third");
+
+
+
+	}
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
