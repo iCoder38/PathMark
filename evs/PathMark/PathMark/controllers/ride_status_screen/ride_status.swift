@@ -444,75 +444,154 @@ class ride_status: UIViewController , CLLocationManagerDelegate , MKMapViewDeleg
             
             print(self.self.dict_get_all_data_from_notification as Any)
             
-            self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["fullName"] as! String)
-            self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["AVGRating"]!)"
+            if (self.dict_get_all_data_from_notification["fullName"]) == nil {
+                self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["driverName"] as! String)
+            } else {
+                self.lbl_driver_name.text = (self.dict_get_all_data_from_notification["fullName"] as! String)
+            }
             
+            if (self.dict_get_all_data_from_notification["AVGRating"]) == nil {
+                self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["driverRating"]!)"
+                if "\(self.dict_get_all_data_from_notification["driverRating"]!)" == "0" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star")
+                    self.img_star_two.image = UIImage(systemName: "star")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" > "1" &&
+                            "\(self.dict_get_all_data_from_notification["driverRating"]!)" < "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" == "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" > "2" &&
+                            "\(self.dict_get_all_data_from_notification["driverRating"]!)" < "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" == "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" > "3" &&
+                            "\(self.dict_get_all_data_from_notification["driverRating"]!)" < "4" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["driverRating"]!)" == "5" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.fill")
+                    self.img_star_five.image = UIImage(systemName: "star.fill")
+                    
+                }
+
+            } else {
+                self.lbl_driver_rating.text = "\(self.dict_get_all_data_from_notification["AVGRating"]!)"
+                if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "0" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star")
+                    self.img_star_two.image = UIImage(systemName: "star")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "1" &&
+                            "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "2" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "2" &&
+                            "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "3" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "3" &&
+                            "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "4" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
+                    self.img_star_five.image = UIImage(systemName: "star")
+                    
+                } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "5" {
+                    
+                    self.img_star_one.image = UIImage(systemName: "star.fill")
+                    self.img_star_two.image = UIImage(systemName: "star.fill")
+                    self.img_star_three.image = UIImage(systemName: "star.fill")
+                    self.img_star_four.image = UIImage(systemName: "star.fill")
+                    self.img_star_five.image = UIImage(systemName: "star.fill")
+                    
+                }
+
+            }
+            
+            // driverImage
             self.img_profile.sd_imageIndicator = SDWebImageActivityIndicator.whiteLarge
-            self.img_profile.sd_setImage(with: URL(string: (self.dict_get_all_data_from_notification["image"] as! String)), placeholderImage: UIImage(named: "logo"))
+            
+            if (self.dict_get_all_data_from_notification["image"]) == nil {
+                self.img_profile.sd_setImage(with: URL(string: (self.dict_get_all_data_from_notification["driverImage"] as! String)), placeholderImage: UIImage(named: "logo"))
+            } else {
+                self.img_profile.sd_setImage(with: URL(string: (self.dict_get_all_data_from_notification["image"] as! String)), placeholderImage: UIImage(named: "logo"))
+            }
+            
             
             //
             // star manage
-            if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "0" {
-                
-                self.img_star_one.image = UIImage(systemName: "star")
-                self.img_star_two.image = UIImage(systemName: "star")
-                self.img_star_three.image = UIImage(systemName: "star")
-                self.img_star_four.image = UIImage(systemName: "star")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "1" &&
-                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "2" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.leadinghalf.filled")
-                self.img_star_three.image = UIImage(systemName: "star")
-                self.img_star_four.image = UIImage(systemName: "star")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "2" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.fill")
-                self.img_star_three.image = UIImage(systemName: "star")
-                self.img_star_four.image = UIImage(systemName: "star")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "2" &&
-                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "3" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.fill")
-                self.img_star_three.image = UIImage(systemName: "star.leadinghalf.filled")
-                self.img_star_four.image = UIImage(systemName: "star")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "3" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.fill")
-                self.img_star_three.image = UIImage(systemName: "star.fill")
-                self.img_star_four.image = UIImage(systemName: "star")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" > "3" &&
-                        "\(self.dict_get_all_data_from_notification["AVGRating"]!)" < "4" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.fill")
-                self.img_star_three.image = UIImage(systemName: "star.fill")
-                self.img_star_four.image = UIImage(systemName: "star.leadinghalf.filled")
-                self.img_star_five.image = UIImage(systemName: "star")
-                
-            } else if "\(self.dict_get_all_data_from_notification["AVGRating"]!)" == "5" {
-                
-                self.img_star_one.image = UIImage(systemName: "star.fill")
-                self.img_star_two.image = UIImage(systemName: "star.fill")
-                self.img_star_three.image = UIImage(systemName: "star.fill")
-                self.img_star_four.image = UIImage(systemName: "star.fill")
-                self.img_star_five.image = UIImage(systemName: "star.fill")
-                
-            }
             
         } else {
             // print("\(self.dict_get_all_data_from_notification["rideStatus"]!)")

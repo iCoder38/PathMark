@@ -35,6 +35,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     var loginUserLongitudeFrom:String!
     var loginUserAddressFrom:String!
     
+    var strLastBookingId:String!
+    var strLastBookingStatus:String!
+    
     @IBOutlet weak var view_navigation_bar:UIView! {
         didSet {
             view_navigation_bar.backgroundColor = navigation_color
@@ -142,14 +145,14 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-//        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
-//        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
-//
-//        UserDefaults.standard.set("", forKey: "key_map_view_address")
-//        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
-//
-//        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
-//        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
+        //        UserDefaults.standard.set("", forKey: "key_map_view_lat_long")
+        //        UserDefaults.standard.set(nil, forKey: "key_map_view_lat_long")
+        //
+        //        UserDefaults.standard.set("", forKey: "key_map_view_address")
+        //        UserDefaults.standard.set(nil, forKey: "key_map_view_address")
+        //
+        //        UserDefaults.standard.set("", forKey: "keyUserSelectWhichProfile")
+        //        UserDefaults.standard.set(nil, forKey: "keyUserSelectWhichProfile")
         
         if let profileUpOrBottom = UserDefaults.standard.string(forKey: "keyUserSelectWhichProfile") {
             debugPrint(profileUpOrBottom)
@@ -832,6 +835,8 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             
                             self.show_banner_WB()
                             
+                            
+                            self.profileWB()
                             /*let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
                              self.navigationController?.pushViewController(push!, animated: true)*/
                             
@@ -934,6 +939,189 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
     }
     
+    
+    
+    
+    
+    // profile
+    @objc func profileWB() {
+        
+        self.view.endEditing(true)
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            var ar : NSArray!
+            ar = (person["carinfromation"] as! Array<Any>) as NSArray
+            
+            let arr_mut_order_history:NSMutableArray! = []
+            arr_mut_order_history.addObjects(from: ar as! [Any])
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                // loginUserLatitudeTo = "\(userLatitude!)"
+                // loginUserLongitudeTo = "\(userLongitude!)"
+                
+                var parameters:Dictionary<AnyHashable, Any>!
+                parameters = [
+                    "action"        : "profile",
+                    "userId"        : String(myString),
+                ]
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let defaults = UserDefaults.standard
+                            defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            
+                            self.strLastBookingId = "\(dict["Last_booking_id"]!)"
+                            self.strLastBookingStatus = "\(dict["Last_booking_status"]!)"
+                            
+                            if (self.strLastBookingStatus == "1") {
+                                self.booking_history_details_WB(str_show_loader: "yes")
+                            } else if (self.strLastBookingStatus == "2") {
+                                self.booking_history_details_WB(str_show_loader: "yes")
+                            } else if (self.strLastBookingStatus == "3") {
+                                self.booking_history_details_WB(str_show_loader: "yes")
+                            } else if (self.strLastBookingStatus == "4") {
+                                self.booking_history_details_WB(str_show_loader: "yes")
+                            } else {
+                                ERProgressHud.sharedInstance.hide()
+                            }
+                            
+                            
+                        } else if message == String(not_authorize_api) {
+                            self.login_refresh_token_wb2()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            } else {
+                print("no token found")
+                self.login_refresh_token_wb()
+            }
+        } else {
+            print("something went very wrong")
+            ERProgressHud.sharedInstance.hide()
+            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "get_started_id")
+            self.navigationController?.pushViewController(push, animated: true)
+        }
+    }
+    
+    @objc func login_refresh_token_wb2() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : "Member"
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            self.profileWB()
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
+    
     @objc func show_banner_WB() {
         
         self.view.endEditing(true)
@@ -992,9 +1180,9 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
                             
                             self.tbleView.reloadData()
                             
-                            ERProgressHud.sharedInstance.hide()
+                            // ERProgressHud.sharedInstance.hide()
                             self.dismiss(animated: true)
-                            
+                            self.profileWB()
                         } else if message == String(not_authorize_api) {
                             self.login_refresh_token_wb()
                             
@@ -1092,7 +1280,276 @@ class dashboard: UIViewController , CLLocationManagerDelegate {
         
         task.resume()
     }
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    @objc func booking_history_details_WB(str_show_loader:String) {
+        
+        
+//        if (str_show_loader == "yes") {
+//            if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+//                print(language as Any)
+//                
+//                if (language == "en") {
+//                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "Please wait...")
+//                } else {
+//                    ERProgressHud.sharedInstance.showDarkBackgroundView(withTitle: "অপেক্ষা করুন")
+//                }
+//            }
+//        }
+        
+        
+        self.view.endEditing(true)
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        
+        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+            print(person)
+            
+            let x : Int = person["userId"] as! Int
+            let myString = String(x)
+            
+            if let token_id_is = UserDefaults.standard.string(forKey: str_save_last_api_token) {
+                print(token_id_is as Any)
+                
+                let headers: HTTPHeaders = [
+                    "token":String(token_id_is),
+                ]
+                
+                var lan:String!
+                
+                if let language = UserDefaults.standard.string(forKey: str_language_convert) {
+                    print(language as Any)
+                    
+                    if (language == "en") {
+                        lan = "en"
+                    } else {
+                        lan = "bn"
+                    }
+                    
+                    
+                }
+                
+                
+                parameters = [
+                    "action"        : "bookingdetail",
+                    "bookingId"     : String(self.strLastBookingId),
+                    "userId"        : String(myString),
+                    "language"      : String(lan),
+                ]
+                
+                
+                print(parameters as Any)
+                
+                AF.request(application_base_url, method: .post, parameters: parameters as? Parameters,headers: headers).responseJSON {
+                    response in
+                    // debugPrint(response.result)
+                    
+                    switch response.result {
+                    case let .success(value):
+                        
+                        let JSON = value as! NSDictionary
+                        print(JSON as Any)
+                        
+                        var strSuccess : String!
+                        strSuccess = (JSON["status"]as Any as? String)?.lowercased()
+                        
+                        var message : String!
+                        message = (JSON["msg"] as? String)
+                        
+                        print(strSuccess as Any)
+                        if strSuccess == String("success") {
+                            print("yes")
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var dict: Dictionary<AnyHashable, Any>
+                            dict = JSON["data"] as! Dictionary<AnyHashable, Any>
+                            print(dict as Any)
+                            
+                            
+                            let refreshAlert = UIAlertController(title: "On-Going booking", message: "", preferredStyle: UIAlertController.Style.alert)
+                     
+                            
+                            refreshAlert.addAction(UIAlertAction(title: "Track", style: .default, handler: { (action: UIAlertAction!) in
+                                  print("Handle Ok logic here")
+                                
+                                
+                                
+                                
+                                
+                                let item = dict
+                                
+                                if "\(item["bookingTime"]!)" != "" { // schedule
+                                    if "\(item["rideStatus"]!)" == "1" {
+                                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
+                                        push!.dict_get_booking_details = (item as NSDictionary)
+                                        push!.str_from_history = "yes"
+                                        self.navigationController?.pushViewController(push!, animated: true)
+                                    } else if "\(item["rideStatus"]!)" == "5" || "\(item["rideStatus"]!)" == "4" {
+                                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "invoice_id") as? invoice
+                                        push!.dict_all_details = (item as NSDictionary)
+                                        self.navigationController?.pushViewController(push!, animated: true)
+                                    } else if "\(item["rideStatus"]!)" == "3" || "\(item["rideStatus"]!)" == "2" {
+                                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                                        push!.dict_get_all_data_from_notification = (item as NSDictionary)
+                                        push!.str_from_history = "yes"
+                                        
+                                        self.navigationController?.pushViewController(push!, animated: true)
+                                    }
+                                } else {
+                                    
+                                    // RIDE IS COMPLETE BUT PAYMENT IS PENDING
+                                    if "\(item["rideStatus"]!)" == "5" || "\(item["rideStatus"]!)" == "4" {
+                                        
+                                        if "\(item["paymentStatus"]!)" == "" {
+                                            
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "invoice_id") as? invoice
+                                            push!.dict_all_details = (item as NSDictionary)
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                            
+                                        } else {
+                                            
+                                            let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_history_details_id") as? ride_history_details
+                                            push!.dict_get_booking_details = (item as NSDictionary)
+                                            self.navigationController?.pushViewController(push!, animated: true)
+                                            
+                                        }
+                                        
+                                    } else if "\(item["rideStatus"]!)" == "3" || "\(item["rideStatus"]!)" == "1" || "\(item["rideStatus"]!)" == "2" {
+                                        
+                                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "ride_status_id") as? ride_status
+                                        push!.dict_get_all_data_from_notification = (item as NSDictionary)
+                                        push!.str_from_history = "yes"
+                                        
+                                        self.navigationController?.pushViewController(push!, animated: true)
+                                    }
+                                    
+                                }
+
+                                
+                                
+                                
+                                
+                                
+                            }))
+                            refreshAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                            self.present(refreshAlert, animated: true, completion: nil)
+                            
+                            
+                            
+                                                        
+                        } else if message == String(not_authorize_api) {
+                            self.loginRefresh4()
+                            
+                        } else {
+                            
+                            print("no")
+                            ERProgressHud.sharedInstance.hide()
+                            
+                            var strSuccess2 : String!
+                            strSuccess2 = JSON["msg"]as Any as? String
+                            
+                            let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                            let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                            alert.addButtons([cancel])
+                            self.present(alert, animated: true)
+                            
+                        }
+                        
+                    case let .failure(error):
+                        print(error)
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.please_check_your_internet_connection()
+                        
+                    }
+                }
+            }
+        }
+    }
     
+    @objc func loginRefresh4() {
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+        if let get_login_details = UserDefaults.standard.value(forKey: str_save_email_password) as? [String:Any] {
+            print(get_login_details as Any)
+            
+            if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+                
+                let x : Int = person["userId"] as! Int
+                let myString = String(x)
+                
+                parameters = [
+                    "action"    : "gettoken",
+                    "userId"    : String(myString),
+                    "email"     : (get_login_details["email"] as! String),
+                    "role"      : (person["role"] as! String)
+                ]
+            }
+            
+            print("parameters-------\(String(describing: parameters))")
+            
+            AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+                response in
+                
+                switch(response.result) {
+                case .success(_):
+                    if let data = response.value {
+                        
+                        let JSON = data as! NSDictionary
+                        print(JSON)
+                        
+                        var strSuccess : String!
+                        strSuccess = JSON["status"] as? String
+                        
+                        if strSuccess.lowercased() == "success" {
+                            
+                            let str_token = (JSON["AuthToken"] as! String)
+                            UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                            UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                            
+                            let delayInSeconds = Double(500) / 1000.0
+                            DispatchQueue.main.asyncAfter(deadline: .now() + delayInSeconds) {
+                                // Call the hitWebservice function after the delay
+                                self.booking_history_details_WB(str_show_loader: "no")
+                            }
+                            
+                        } else {
+                            ERProgressHud.sharedInstance.hide()
+                        }
+                        
+                    }
+                    
+                case .failure(_):
+                    print("Error message:\(String(describing: response.error))")
+                    ERProgressHud.sharedInstance.hide()
+                    self.please_check_your_internet_connection()
+                    
+                    break
+                }
+            }
+        }
+        
+    }
 }
 
 

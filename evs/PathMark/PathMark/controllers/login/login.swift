@@ -588,7 +588,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         push.strGetLoginUserID = "\(dict["userId"]!)"
                         push.strGetLoginEmailAddress = "\(dict["email"]!)"
-                        push.getOPT = "" // "\(dict["OTP"]!)"
+                        push.getOPT = "\(dict["OTP"]!)"
                         
                         self.navigationController?.pushViewController(push, animated: true)
                         
