@@ -69,6 +69,7 @@ class ride_history_details: UIViewController {
     }
     
     var str_starrating:String!
+    var strTotalTime:String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,7 +178,7 @@ class ride_history_details: UIViewController {
                             
                             // self.dict_get_booking_details = JSON
                             self.str_starrating = "\(dict["bookingrating"]!)"
-                            
+                            self.strTotalTime = "\(dict["totalTime"]!)"
                             
                             // dict = self.dict_get_booking_details as! [AnyHashable : Any]
                             
@@ -316,7 +317,7 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
         print(self.str_starrating as Any)
         // btn_payment_status
        
-        
+        cell.lblTotalTime.text = "Total time: "+String(self.strTotalTime)
         /*// tip
         let i_am_tip:String!
         if "\(self.dict_get_booking_details["TIP"]!)" == "" {
@@ -650,7 +651,7 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
            
-        return 388
+        return 420
     }
     
 }
@@ -731,6 +732,8 @@ class ride_history_details_table_cell: UITableViewCell {
     @IBOutlet weak var lbl_car_driver_name:UILabel!
     @IBOutlet weak var lbl_car_number:UILabel!
     @IBOutlet weak var lbl_car_color:UILabel!
+    
+    @IBOutlet weak var lblTotalTime:UILabel!
     
     @IBOutlet weak var img_car_image:UIImageView! {
         didSet {

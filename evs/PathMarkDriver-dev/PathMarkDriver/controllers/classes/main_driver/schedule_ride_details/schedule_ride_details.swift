@@ -336,7 +336,11 @@ class schedule_ride_details: UIViewController {
          */
         
         if self.dict_get_upcoming_ride_details["fullName"] == nil {
-            self.lbl_name.text = (self.dict_get_upcoming_ride_details["CustomerName"] as! String)
+            if self.dict_get_upcoming_ride_details["userName"] == nil {
+                self.lbl_name.text = (self.dict_get_upcoming_ride_details["CustomerName"] as! String)
+            } else {
+                self.lbl_name.text = (self.dict_get_upcoming_ride_details["userName"] as! String)
+            }
         } else {
             self.lbl_name.text = (self.dict_get_upcoming_ride_details["fullName"] as! String)
         }

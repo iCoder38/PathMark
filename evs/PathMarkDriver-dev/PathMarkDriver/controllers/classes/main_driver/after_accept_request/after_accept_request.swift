@@ -65,9 +65,9 @@ class after_accept_request: UIViewController, CLLocationManagerDelegate , MKMapV
                 print(language as Any)
                 
                 if (language == "en") {
-                    view_navigation_title.text = "DRIVER ARRIVING"
+                    view_navigation_title.text = "DRIVER COMING TO THE LOCATION"
                 } else {
-                    view_navigation_title.text = "ড্রাইভার আসছে"
+                    view_navigation_title.text = "ড্রাইভার লোকেশনে আসছে"
                 }
             }
             view_navigation_title.textColor = .white
@@ -181,6 +181,19 @@ class after_accept_request: UIViewController, CLLocationManagerDelegate , MKMapV
     var str_ride_code_status:String! = "0"
     var str_check_otp:String!
     
+    @IBOutlet weak var btn_star_one:UIButton!
+    @IBOutlet weak var btn_star_two:UIButton!
+    @IBOutlet weak var btn_star_three:UIButton!
+    @IBOutlet weak var btn_star_four:UIButton!
+    @IBOutlet weak var btn_star_five:UIButton!
+    
+    @IBOutlet weak var lbl_rating:UILabel!
+    @IBOutlet weak var img_star_one:UIImageView!
+    @IBOutlet weak var img_star_two:UIImageView!
+    @IBOutlet weak var img_star_three:UIImageView!
+    @IBOutlet weak var img_star_four:UIImageView!
+    @IBOutlet weak var img_star_five:UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -245,9 +258,26 @@ class after_accept_request: UIViewController, CLLocationManagerDelegate , MKMapV
             }
         } else {
             if (self.get_booking_data_for_pickup["CustomerName"] == nil) {
-                self.lbl_passenger_name.text = (self.get_booking_data_for_pickup["fullName"] as! String)
-                self.lbl_passenger_number.text = (self.get_booking_data_for_pickup["contactNumber"] as! String)
-                self.str_phone_number =  (self.get_booking_data_for_pickup["contactNumber"] as! String)
+                
+                if (self.get_booking_data_for_pickup["userName"] == nil) {
+                    self.lbl_passenger_name.text = (self.get_booking_data_for_pickup["fullName"] as! String)
+                } else {
+                    self.lbl_passenger_name.text = (self.get_booking_data_for_pickup["userName"] as! String)
+                }
+                
+                if (self.get_booking_data_for_pickup["userPhone"] == nil) {
+                    self.lbl_passenger_number.text = (self.get_booking_data_for_pickup["contactNumber"] as! String)
+                    self.str_phone_number =  (self.get_booking_data_for_pickup["contactNumber"] as! String)
+                } else {
+                    self.lbl_passenger_number.text = (self.get_booking_data_for_pickup["userPhone"] as! String)
+                    self.str_phone_number =  (self.get_booking_data_for_pickup["userPhone"] as! String)
+                }
+                
+                 
+                
+                
+                
+                
             } else {
                 self.lbl_passenger_name.text = (self.get_booking_data_for_pickup["CustomerName"] as! String)
                 self.lbl_passenger_number.text = (self.get_booking_data_for_pickup["CustomerPhone"] as! String)
@@ -257,6 +287,22 @@ class after_accept_request: UIViewController, CLLocationManagerDelegate , MKMapV
                 self.img_passenger_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
                 self.img_passenger_profile.sd_setImage(with: URL(string: (self.get_booking_data_for_pickup!["CustomerImage"] as! String)), placeholderImage: UIImage(named: "1024"))
                 
+            }
+            
+            
+            print(self.get_booking_data_for_pickup as Any)
+            
+            if (self.get_booking_data_for_pickup["userRating"] == nil) {
+                
+                let userRating = "\(self.get_booking_data_for_pickup["AVGRating"]!)"
+                lbl_rating.text = String(userRating)
+                updateStars(for: userRating)
+                
+            } else {
+                
+                let userRating = "\(self.get_booking_data_for_pickup["userRating"]!)"
+                lbl_rating.text = String(userRating)
+                updateStars(for: userRating)
             }
             
         }
@@ -270,6 +316,63 @@ class after_accept_request: UIViewController, CLLocationManagerDelegate , MKMapV
         
         // self.current_location_click_method()
     }
+    
+    
+    func updateStars(for userRating: String) {
+        // Convert userRating to Double
+        guard let rating = Double(userRating) else {
+            print("Invalid userRating string.")
+            return
+        }
+        
+        // Determine the number of full stars and the presence of a half star
+        let fullStars = Int(rating)           // Number of full stars
+        let hasHalfStar = rating - Double(fullStars) >= 0.5 // Check for a half star
+        
+        // Update each star image individually
+        if fullStars >= 1 {
+            img_star_one.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 0 {
+            img_star_one.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_one.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 2 {
+            img_star_two.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 1 {
+            img_star_two.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_two.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 3 {
+            img_star_three.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 2 {
+            img_star_three.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_three.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 4 {
+            img_star_four.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 3 {
+            img_star_four.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_four.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 5 {
+            img_star_five.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 4 {
+            img_star_five.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_five.image = UIImage(systemName: "star")
+        }
+    }
+
+
+    
     
     /*@objc func current_location_click_method() {
         

@@ -1,4 +1,4 @@
-// Copyright 2024 Google LLC. All rights reserved.
+// Copyright 2023 Google LLC. All rights reserved.
 //
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -38,6 +38,13 @@ class TextSearchViewController: AutocompleteBaseViewController,
     textQueryField.placeholder = "Enter Text Search Query"
     textQueryField.backgroundColor = .secondarySystemBackground
     textQueryField.translatesAutoresizingMaskIntoConstraints = false
+    if UIView.userInterfaceLayoutDirection(
+      for: textQueryField.semanticContentAttribute) == .rightToLeft
+    {
+      textQueryField.textAlignment = .right
+    } else {
+      textQueryField.textAlignment = .left
+    }
     return textQueryField
   }()
 
@@ -122,4 +129,5 @@ class TextSearchViewController: AutocompleteBaseViewController,
     tableView.isHidden = true
     super.autocompleteDidSelectPlace(place)
   }
+
 }

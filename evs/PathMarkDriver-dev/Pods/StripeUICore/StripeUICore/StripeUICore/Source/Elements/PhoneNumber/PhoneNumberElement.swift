@@ -13,7 +13,6 @@ import UIKit
     A simple hstack of  [🇺🇸 + 1] `DropdownElement` and [ Phone number ] `TextFieldElement`
  */
 @_spi(STP) public class PhoneNumberElement: ContainerElement {
-
     // MARK: - ContainerElement protocol
     public lazy var elements: [Element] = { [countryDropdownElement, textFieldElement] }()
     public var delegate: ElementDelegate?
@@ -78,7 +77,7 @@ import UIKit
         isOptional: Bool = false,
         infoView: UIView? = nil,
         locale: Locale = .current,
-        theme: ElementsUITheme = .default
+        theme: ElementsAppearance = .default
     ) {
         self.infoView = infoView
         let defaults = Self.deriveDefaults(countryCode: defaultCountryCode, phoneNumber: defaultPhoneNumber)
@@ -114,6 +113,7 @@ import UIKit
     }
 
     // MARK: - Element protocol
+    public let collectsUserInput: Bool = true
     public func beginEditing() -> Bool {
         return textFieldElement.beginEditing()
     }
@@ -164,7 +164,7 @@ extension DropdownFieldElement {
         countryCodes: [String],
         defaultCountry: String? = nil,
         locale: Locale,
-        theme: ElementsUITheme
+        theme: ElementsAppearance
     ) -> DropdownFieldElement {
         let countryCodes = locale.sortedByTheirLocalizedNames(countryCodes)
         let countryDisplayStrings: [DropdownFieldElement.DropdownItem] = countryCodes.map {

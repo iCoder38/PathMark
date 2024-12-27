@@ -195,6 +195,15 @@ class start_ride_now: UIViewController, CLLocationManagerDelegate , MKMapViewDel
     @IBOutlet weak var lbl_passenger_name:UILabel!
     @IBOutlet weak var lbl_passenger_number:UILabel!
     
+    
+    @IBOutlet weak var lbl_rating:UILabel!
+    @IBOutlet weak var img_star_one:UIImageView!
+    @IBOutlet weak var img_star_two:UIImageView!
+    @IBOutlet weak var img_star_three:UIImageView!
+    @IBOutlet weak var img_star_four:UIImageView!
+    @IBOutlet weak var img_star_five:UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -216,12 +225,33 @@ class start_ride_now: UIViewController, CLLocationManagerDelegate , MKMapViewDel
         
         
         if (self.get_booking_data_for_start_ride["fullName"]) == nil {
-            self.lbl_passenger_name.text = (self.get_booking_data_for_start_ride["CustomerName"] as! String)
-            self.lbl_passenger_number.text = (self.get_booking_data_for_start_ride["CustomerPhone"] as! String)
-            self.str_phone_number = (self.get_booking_data_for_start_ride["CustomerPhone"] as! String)
+            // self.lbl_passenger_name.text = (self.get_booking_data_for_start_ride["CustomerName"] as! String)
             
-            self.img_passenger_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
-            self.img_passenger_profile.sd_setImage(with: URL(string: (self.get_booking_data_for_start_ride!["CustomerImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+            if (self.get_booking_data_for_start_ride["userName"] == nil) {
+                self.lbl_passenger_name.text = (self.get_booking_data_for_start_ride["fullName"] as! String)
+            } else {
+                self.lbl_passenger_name.text = (self.get_booking_data_for_start_ride["userName"] as! String)
+            }
+            
+            // self.lbl_passenger_number.text = (self.get_booking_data_for_start_ride["CustomerPhone"] as! String)
+            // self.str_phone_number = (self.get_booking_data_for_start_ride["CustomerPhone"] as! String)
+            
+            if (self.get_booking_data_for_start_ride["userPhone"] == nil) {
+                self.lbl_passenger_number.text = (self.get_booking_data_for_start_ride["contactNumber"] as! String)
+                self.str_phone_number =  (self.get_booking_data_for_start_ride["contactNumber"] as! String)
+            } else {
+                self.lbl_passenger_number.text = (self.get_booking_data_for_start_ride["userPhone"] as! String)
+                self.str_phone_number =  (self.get_booking_data_for_start_ride["userPhone"] as! String)
+            }
+            
+            if (self.get_booking_data_for_start_ride["userImage"] == nil) {
+                self.img_passenger_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                self.img_passenger_profile.sd_setImage(with: URL(string: (self.get_booking_data_for_start_ride!["CustomerImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+            } else {
+                self.img_passenger_profile.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                self.img_passenger_profile.sd_setImage(with: URL(string: (self.get_booking_data_for_start_ride!["userImage"] as! String)), placeholderImage: UIImage(named: "1024"))
+            }
+            
             
         } else {
             self.lbl_passenger_name.text = (self.get_booking_data_for_start_ride["fullName"] as! String)
@@ -233,10 +263,76 @@ class start_ride_now: UIViewController, CLLocationManagerDelegate , MKMapViewDel
         }
         
         
+        if (self.get_booking_data_for_start_ride["userRating"] == nil) {
+            
+            let userRating = "\(self.get_booking_data_for_start_ride["AVGRating"]!)"
+            lbl_rating.text = String(userRating)
+            updateStars(for: userRating)
+            
+        } else {
+            
+            let userRating = "\(self.get_booking_data_for_start_ride["userRating"]!)"
+            lbl_rating.text = String(userRating)
+            updateStars(for: userRating)
+        }
+        
         self.btn_decline.addTarget(self, action: #selector(cancancel_ride_click_method), for: .touchUpInside)
         
         // self.setupMap()
         // self.current_location_click_method()
+    }
+    
+    func updateStars(for userRating: String) {
+        // Convert userRating to Double
+        guard let rating = Double(userRating) else {
+            print("Invalid userRating string.")
+            return
+        }
+        
+        // Determine the number of full stars and the presence of a half star
+        let fullStars = Int(rating)           // Number of full stars
+        let hasHalfStar = rating - Double(fullStars) >= 0.5 // Check for a half star
+        
+        // Update each star image individually
+        if fullStars >= 1 {
+            img_star_one.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 0 {
+            img_star_one.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_one.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 2 {
+            img_star_two.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 1 {
+            img_star_two.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_two.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 3 {
+            img_star_three.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 2 {
+            img_star_three.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_three.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 4 {
+            img_star_four.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 3 {
+            img_star_four.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_four.image = UIImage(systemName: "star")
+        }
+        
+        if fullStars >= 5 {
+            img_star_five.image = UIImage(systemName: "star.fill")
+        } else if hasHalfStar && fullStars == 4 {
+            img_star_five.image = UIImage(systemName: "star.fill.left")
+        } else {
+            img_star_five.image = UIImage(systemName: "star")
+        }
     }
     
     @objc func dialNumber() {

@@ -1,7 +1,7 @@
 ![JWTDecode.swift](https://cdn.auth0.com/website/sdks/banners/jwtdecode-swift-banner.png)
 
 ![Version](https://img.shields.io/cocoapods/v/JWTDecode.svg?style=flat)
-[![CircleCI](https://img.shields.io/circleci/build/github/auth0/JWTDecode.swift?style=flat)](https://circleci.com/gh/auth0/JWTDecode.swift/tree/master)
+![Build Status](https://img.shields.io/github/actions/workflow/status/auth0/JWTDecode.swift/main.yml?style=flat)
 [![Coverage Status](https://img.shields.io/codecov/c/github/auth0/JWTDecode.swift/master.svg?style=flat)](https://codecov.io/github/auth0/JWTDecode.swift)
 ![License](https://img.shields.io/github/license/auth0/JWTDecode.swift.svg?style=flat)
 
@@ -19,16 +19,16 @@ Migrating from v2? Check the [Migration Guide](V3_MIGRATION_GUIDE.md).
   + [JWTDecodeError](https://auth0.github.io/JWTDecode.swift/documentation/jwtdecode/jwtdecodeerror)
 - [**Auth0 Documentation**](https://auth0.com/docs) - explore our docs site and learn more about Auth0.
 
-> **Note**
+> [!IMPORTANT]
 > Check the [Support Policy](#support-policy) to learn when dropping Xcode, Swift, and platform versions will not be considered a **breaking change**.
 
 ## Getting Started
 
 ### Requirements
 
-- iOS 12.0+ / macOS 10.15+ / tvOS 12.0+ / watchOS 6.2+
-- Xcode 13.x / 14.x
-- Swift 5.5+
+- iOS 14.0+ / macOS 11.0+ / tvOS 14.0+ / watchOS 7.0+
+- Xcode 15.x
+- Swift 5.9+
 
 ### Installation
 
@@ -51,7 +51,7 @@ Then, select the dependency rule and press **Add Package**.
 Add the following line to your `Podfile`:
 
 ```ruby
-pod 'JWTDecode', '~> 3.1'
+pod 'JWTDecode', '~> 3.2'
 ```
 
 Then, run `pod install`.
@@ -61,7 +61,7 @@ Then, run `pod install`.
 Add the following line to your `Cartfile`:
 
 ```text
-github "auth0/JWTDecode.swift" ~> 3.1
+github "auth0/JWTDecode.swift" ~> 3.2
 ```
 
 Then, run `carthage bootstrap --use-xcframeworks`.
@@ -157,15 +157,9 @@ The minimum supported Swift minor version is the one released with the oldest-su
 
 ### Platforms
 
-Only the last 4 major platform versions are supported, starting from:
+We support only the last four major versions of any platform, including the current major version.
 
-- iOS **12**
-- macOS **10.15**
-- macCatalyst **13**
-- tvOS **12**
-- watchOS **6.2**
-
-Once a platform version becomes unsupported, dropping it from JWTDecode.swift **will not be considered a breaking change**, and will be done in a **minor** release. For example, iOS 13 will cease to be supported when iOS 17 gets released, and JWTDecode.swift will be able to drop it in a minor release.
+Once a platform version becomes unsupported, dropping it from JWTDecode.swift **will not be considered a breaking change**, and will be done in a **minor** release. For example, iOS 14 will cease to be supported when iOS 18 gets released, and JWTDecode.swift will be able to drop it in a minor release.
 
 In the case of macOS, the yearly named releases are considered a major platform version for the purposes of this Policy, regardless of the actual version numbers.
 

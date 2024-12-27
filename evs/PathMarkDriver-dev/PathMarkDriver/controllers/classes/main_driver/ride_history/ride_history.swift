@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import SDWebImage
 
 class ride_history: UIViewController {
 
@@ -560,6 +561,7 @@ class ride_history: UIViewController {
         
     }
     
+    
 }
 
 
@@ -967,6 +969,9 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             cell.lbl_status_for_complete.font = UIFont(name:"Poppins-SemiBold", size: 16.0)
             cell.lbl_date_for_complete.text = "\(item!["created"]!)"
             
+            cell.img_profile_for_complete.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.img_profile_for_complete.sd_setImage(with: URL(string: (item!["image"] as! String)), placeholderImage: UIImage(named: "1024"))
+            
             return cell
             
         }
@@ -1038,15 +1043,20 @@ extension ride_history: UITableViewDataSource , UITableViewDelegate {
             } else if "\(item!["rideStatus"]!)" == "1" { // after accept
                 
                 if (item!["bookingTime"] == nil || (item!["bookingTime"] as! String == "")) {
-                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
-                    push!.dict_get_upcoming_ride_details = (item! as NSDictionary)
-                    push!.str_from_noti = "no"
-                    self.navigationController?.pushViewController(push!, animated: true)
-                } else {
+                    
                     let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "after_accept_request_id") as! after_accept_request
                     push.str_from_direct_notification = "yes"
                     push.get_booking_data_for_pickup = (item! as NSDictionary)
                     self.navigationController?.pushViewController(push, animated: true)
+                    
+                } else {
+                    
+                    let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "schedule_ride_details_id") as? schedule_ride_details
+                    push!.dict_get_upcoming_ride_details = (item! as NSDictionary)
+                    push!.str_from_noti = "no"
+                    self.navigationController?.pushViewController(push!, animated: true)
+                    
+                   
                 }
                 
             } else if "\(item!["rideStatus"]!)" == "2" { // if you accepted

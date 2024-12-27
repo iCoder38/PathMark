@@ -39,7 +39,7 @@ import UIKit
         )
     }
 
-    private let theme: ElementsUITheme
+    private let theme: ElementsAppearance
 
 #if !canImport(CompositorServices)
     public var inputAccessoryView: UIView? {
@@ -75,7 +75,7 @@ import UIKit
         let accessoryView: UIView?
         let shouldShowClearButton: Bool
         let isEditable: Bool
-        let theme: ElementsUITheme
+        let theme: ElementsAppearance
     }
 
     var viewModel: ViewModel {
@@ -102,7 +102,7 @@ import UIKit
 
     // MARK: - Initializer
 
-    public required init(configuration: TextFieldElementConfiguration, theme: ElementsUITheme = .default) {
+    public required init(configuration: TextFieldElementConfiguration, theme: ElementsAppearance = .default) {
         self.configuration = configuration
         self.theme = theme
     }
@@ -130,6 +130,7 @@ import UIKit
 // MARK: - Element
 
 extension TextFieldElement: Element {
+    public var collectsUserInput: Bool { true }
     public var view: UIView {
         return textFieldView
     }
@@ -179,5 +180,12 @@ extension TextFieldElement: TextFieldViewDelegate {
     func textFieldViewContinueToNextField(view: TextFieldView) {
         isEditing = view.isEditing
         delegate?.continueToNextField(element: self)
+    }
+}
+
+// MARK: - DebugDescription
+extension TextFieldElement {
+    public var debugDescription: String {
+        return "<TextFieldElement: \(Unmanaged.passUnretained(self).toOpaque())>; label = \(configuration.label); text = \(text); validationState = \(validationState)"
     }
 }
