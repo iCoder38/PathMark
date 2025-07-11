@@ -19,7 +19,8 @@ class customPin: NSObject, MKAnnotation {
 }
 
 // MARK:- BASE URL -
-let application_base_url = "https://demo4.evirtualservices.net/pathmark/services/index"
+let application_base_url = "https://gontobbo.com/services/index/"
+// "https://demo4.evirtualservices.net/pathmark/services/index"
 
 // sh 512 token key
 let sha_token_api_key = "68V0zWFrS72GbpPreidkQFLfj4v9m3Ti+DXc8OB0gcM="
@@ -84,7 +85,8 @@ let str_language_convert = "key_selected_language"
 var countryCodeForGoogleSearch = "BD"
 
 
-var GOOGLE_MAP_API = "AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0"
+var GOOGLE_MAP_API = "AIzaSyDoNoETkr4hc6lOwPTfExIcL3W6NPms3II"
+// "AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0"
 
 // URLs
 let URL_HARILOSS_SUPPORT_GROUP  = "https://www.google.co.in"

@@ -291,7 +291,102 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate 
         
     }*/
     
+    
     @objc func sign_up_WB() {
+        let indexPath = IndexPath.init(row: 0, section: 0)
+        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+        
+//        self.show_loading_UI()
+        
+        var parameters:Dictionary<AnyHashable, Any>!
+//        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
+//            let x : Int = (person["userId"] as! Int)
+//            let myString = String(x)
+            
+            parameters = [
+                "action"    : "login",
+                "email"     : String(cell.txtEmailAddress.text!),
+                "password"  : String(""),
+                "device"    : "iOS",
+                "deviceToken": "",
+                "language"  :"en",
+                "role"      :"Driver"
+            ]
+//        }
+        
+        print("parameters-------\(String(describing: parameters))")
+        
+        AF.request(
+            application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+            response in
+            
+            switch(response.result) {
+            case .success(_):
+                if let data = response.value {
+                    
+                    let JSON = data as! NSDictionary
+                    print(JSON)
+                    
+                    var strSuccess : String!
+                    strSuccess = JSON["status"] as? String
+                    
+                    if strSuccess.lowercased() == "success" {
+                        
+                        let defaults = UserDefaults.standard
+                        defaults.setValue(JSON["data"], forKey: str_save_login_user_data)
+                        
+                        // save token
+                        // print("\(JSON["AuthToken"]!)")
+                        // print(type(of: JSON["AuthToken"]))
+                        
+                        let str_token = (JSON["AuthToken"] as! String)
+                        UserDefaults.standard.set("", forKey: str_save_last_api_token)
+                        UserDefaults.standard.set(str_token, forKey: str_save_last_api_token)
+                        
+                        let indexPath = IndexPath.init(row: 0, section: 0)
+                        let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
+                        
+                        // save email and pass
+                        // email
+                        let custom_email_pass = ["email":cell.txtEmailAddress.text!,
+                                                 "password":""]
+                        
+                        UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
+                        //
+                        
+                        self.hide_loading_UI()
+                        ERProgressHud.sharedInstance.hide()
+                        
+                        self.remember_me()
+                        
+                    } else {
+                        
+                        self.hide_loading_UI()
+                        
+                        var strSuccess2 : String!
+                        strSuccess2 = JSON["msg"] as? String
+                        
+                        let alert = NewYorkAlertController(title: String("Alert").uppercased(), message: String(strSuccess2), style: .alert)
+                        let cancel = NewYorkButton(title: "dismiss", style: .cancel)
+                        alert.addButtons([cancel])
+                        self.present(alert, animated: true)
+                        
+                    }
+                    
+                }
+                
+            case .failure(_):
+                print("Error message:\(String(describing: response.error))")
+                self.hide_loading_UI()
+                self.please_check_your_internet_connection()
+                
+                break
+            }
+        }
+    }
+    
+    
+    @objc func sign_up_WB2() {
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
         

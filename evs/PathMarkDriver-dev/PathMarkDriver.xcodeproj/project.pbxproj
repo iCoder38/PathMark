@@ -1501,7 +1501,7 @@
 				CODE_SIGN_ENTITLEMENTS = PathMarkDriver/PathMarkDriver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = NHVZESNL9B;
+				DEVELOPMENT_TEAM = 8LW9RF96D4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMarkDriver/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Driver";
@@ -1524,7 +1524,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dev.pathmarkDriver.PathMarkDriver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dev.pathmarkDriver.PathMarkDriver1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1548,7 +1548,7 @@
 				CODE_SIGN_ENTITLEMENTS = PathMarkDriver/PathMarkDriver.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = NHVZESNL9B;
+				DEVELOPMENT_TEAM = 8LW9RF96D4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMarkDriver/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Driver";
@@ -1571,7 +1571,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dev.pathmarkDriver.PathMarkDriver;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dev.pathmarkDriver.PathMarkDriver1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

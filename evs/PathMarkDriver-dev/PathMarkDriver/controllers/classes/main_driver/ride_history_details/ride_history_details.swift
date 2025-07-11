@@ -318,6 +318,7 @@ extension ride_history_details: UITableViewDataSource , UITableViewDelegate {
         // btn_payment_status
        
         cell.lblTotalTime.text = "Total time: "+String(self.strTotalTime)
+        
         /*// tip
         let i_am_tip:String!
         if "\(self.dict_get_booking_details["TIP"]!)" == "" {
