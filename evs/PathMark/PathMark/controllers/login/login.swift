@@ -515,9 +515,9 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             case .authorizedAlways, .authorizedWhenInUse:
                 print("Access")
                           
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-                locationManager.startUpdatingLocation()
+                self.locationManager.delegate = self
+                self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                self.locationManager.startUpdatingLocation()
                       
             @unknown default:
                 break
@@ -530,7 +530,7 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         let indexPath = IndexPath.init(row: 0, section: 0)
         let cell = self.tbleView.cellForRow(at: indexPath) as! login_table_cell
         
-        self.show_loading_UI()
+//        self.show_loading_UI()
         
         var parameters:Dictionary<AnyHashable, Any>!
 //        if let person = UserDefaults.standard.value(forKey: str_save_login_user_data) as? [String:Any] {
@@ -540,13 +540,18 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
             parameters = [
                 "action"    : "login",
                 "email"     : String(cell.txtEmailAddress.text!),
-                "password"  : String("")
+                "password"  : String(""),
+                "device"    : "iOS",
+                "deviceToken": "",
+                "language"  :"en",
+                "role"      :"Member"
             ]
 //        }
         
         print("parameters-------\(String(describing: parameters))")
         
-        AF.request(application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
+        AF.request(
+            application_base_url, method: .post, parameters: parameters as? Parameters).responseJSON {
             response in
             
             switch(response.result) {
@@ -582,15 +587,12 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
                         
                         UserDefaults.standard.setValue(custom_email_pass, forKey: str_save_email_password)
                         //
-                        self.hide_loading_UI()
+//                        self.hide_loading_UI()
                         
-                        let push = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "verify_phone_number_id") as! verify_phone_number
+//                        self.view.endEditing(true)
                         
-                        push.strGetLoginUserID = "\(dict["userId"]!)"
-                        push.strGetLoginEmailAddress = "\(dict["email"]!)"
-                        push.getOPT = "\(dict["OTP"]!)"
-                        
-                        self.navigationController?.pushViewController(push, animated: true)
+                        self.pushToHomeAfterLogin(dict: dict as NSDictionary)
+
                         
                     } else {
                         
@@ -618,6 +620,20 @@ class login: UIViewController , UITextFieldDelegate , CLLocationManagerDelegate,
         }
     }
     
+    
+    @objc func pushToHomeAfterLogin(dict:NSDictionary) {
+        DispatchQueue.main.async {
+            let push = UIStoryboard(name: "Main", bundle: .main)
+                .instantiateViewController(withIdentifier: "verify_phone_number_id") as! verify_phone_number
+
+            push.strGetLoginUserID = "\(dict["userId"]!)"
+            push.strGetLoginEmailAddress = "\(dict["email"]!)"
+            push.getOPT = "\(dict["OTP"]!)"
+
+            self.navigationController?.pushViewController(push, animated: true) // ✅ Only this
+        }
+    }
+ 
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)

@@ -1418,13 +1418,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PathMark/PathMark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = NHVZESNL9B;
+				DEVELOPMENT_TEAM = 8LW9RF96D4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Customer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Zarib would like to access your camera to upload profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location. ";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Zarib would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location.";
@@ -1440,8 +1442,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.evs.dev.PathMark;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evs.dev.PathMark4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1462,13 +1465,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = PathMark/PathMark.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 0;
-				DEVELOPMENT_TEAM = NHVZESNL9B;
+				DEVELOPMENT_TEAM = 8LW9RF96D4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PathMark/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Zarib - Customer";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Zarib would like to access your camera to upload profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location. ";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Zarib would like to access your location for Customer's current location.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Zarib would like to access your location for Customer's current location.";
@@ -1484,8 +1489,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.evs.dev.PathMark;
+				PRODUCT_BUNDLE_IDENTIFIER = com.evs.dev.PathMark4;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;

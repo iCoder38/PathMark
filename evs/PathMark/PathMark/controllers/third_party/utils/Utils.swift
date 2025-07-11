@@ -21,9 +21,11 @@ class customPin: NSObject, MKAnnotation {
 }
 
  
-
+ 
 // MARK:- BASE URL -
-let application_base_url = "https://demo4.evirtualservices.net/pathmark/services/index"
+let application_base_url = "https://gontobbo.com/services/index/"
+// "https://gontobbo.com/services/index"
+ // "https://demo4.evirtualservices.net/pathmark/services/index"
 
 // sh 512 token key
 let sha_token_api_key = "68V0zWFrS72GbpPreidkQFLfj4v9m3Ti+DXc8OB0gcM="
@@ -37,7 +39,8 @@ var bkash_call_back_URL = "http://mamtechit.com/callback"
 
 // AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0
 // AIzaSyDlTJ6OLa_sQxzYnWEjgubGlaiM6Wq951s: personal
-var GOOGLE_MAP_API = "AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0"
+var GOOGLE_MAP_API = "AIzaSyDoNoETkr4hc6lOwPTfExIcL3W6NPms3II"
+// "AIzaSyB3sYhSTD7GEn1j6SsH-QL_GVNG6oUsfM0"
 
 
 
