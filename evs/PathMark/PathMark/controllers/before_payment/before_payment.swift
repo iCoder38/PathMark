@@ -196,6 +196,9 @@ class before_payment: UIViewController {
         
         self.total_amount = String(self.str_get_total_price2)
         
+        
+        print(self.get_full_data_for_payment2 as Any)
+        
         let doublePrice2 = Double("\(str_get_total_price2!)")
         let formattedNumber2 = String(format: "%.2f", doublePrice2!)
         
@@ -268,6 +271,7 @@ class before_payment: UIViewController {
                 
                 parameters = [
                     "action"    : "couponlist",
+                    "language":"en"
                 ]
                 
                 print(parameters as Any)
